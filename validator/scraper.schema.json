@@ -4,9 +4,7 @@
   "title": "Stash Scraper",
   "description": "A stash scraper config. Generated from stash v0.31.1.",
   "type": "object",
-  "required": [
-    "name"
-  ],
+  "required": ["name"],
   "additionalProperties": false,
   "properties": {
     "debug": {
@@ -37,12 +35,7 @@
             "queryURLReplace": {
               "type": "object",
               "propertyNames": {
-                "enum": [
-                  "checksum",
-                  "filename",
-                  "title",
-                  "url"
-                ]
+                "enum": ["checksum", "filename", "title", "url"]
               }
             }
           }
@@ -63,9 +56,7 @@
               "queryURLReplace": {
                 "type": "object",
                 "propertyNames": {
-                  "enum": [
-                    "url"
-                  ]
+                  "enum": ["url"]
                 }
               }
             }
@@ -87,9 +78,7 @@
               "queryURLReplace": {
                 "type": "object",
                 "propertyNames": {
-                  "enum": [
-                    "url"
-                  ]
+                  "enum": ["url"]
                 }
               }
             }
@@ -109,12 +98,7 @@
             "queryURLReplace": {
               "type": "object",
               "propertyNames": {
-                "enum": [
-                  "checksum",
-                  "filename",
-                  "title",
-                  "url"
-                ]
+                "enum": ["checksum", "filename", "title", "url"]
               }
             }
           }
@@ -135,9 +119,7 @@
               "queryURLReplace": {
                 "type": "object",
                 "propertyNames": {
-                  "enum": [
-                    "url"
-                  ]
+                  "enum": ["url"]
                 }
               }
             }
@@ -172,9 +154,7 @@
               "queryURLReplace": {
                 "type": "object",
                 "propertyNames": {
-                  "enum": [
-                    "url"
-                  ]
+                  "enum": ["url"]
                 }
               }
             }
@@ -217,9 +197,7 @@
               "queryURLReplace": {
                 "type": "object",
                 "propertyNames": {
-                  "enum": [
-                    "url"
-                  ]
+                  "enum": ["url"]
                 }
               }
             }
@@ -302,9 +280,7 @@
               "queryURLReplace": {
                 "type": "object",
                 "propertyNames": {
-                  "enum": [
-                    "url"
-                  ]
+                  "enum": ["url"]
                 }
               }
             }
@@ -337,18 +313,11 @@
       "title": "Action",
       "description": "The scrape method to use.",
       "type": "string",
-      "enum": [
-        "scrapeJson",
-        "scrapeXPath",
-        "script",
-        "stash"
-      ]
+      "enum": ["scrapeJson", "scrapeXPath", "script", "stash"]
     },
     "byFragment": {
       "type": "object",
-      "required": [
-        "action"
-      ],
+      "required": ["action"],
       "additionalProperties": false,
       "properties": {
         "action": {
@@ -387,18 +356,12 @@
           "if": {
             "properties": {
               "action": {
-                "enum": [
-                  "scrapeXPath",
-                  "scrapeJson"
-                ]
+                "enum": ["scrapeXPath", "scrapeJson"]
               }
             }
           },
           "then": {
-            "required": [
-              "scraper",
-              "queryURL"
-            ],
+            "required": ["scraper", "queryURL"],
             "properties": {
               "queryURL": {
                 "type": "string"
@@ -418,9 +381,7 @@
             }
           },
           "then": {
-            "required": [
-              "script"
-            ],
+            "required": ["script"],
             "properties": {
               "script": {
                 "type": "array",
@@ -436,9 +397,7 @@
     },
     "byName": {
       "type": "object",
-      "required": [
-        "action"
-      ],
+      "required": ["action"],
       "additionalProperties": false,
       "properties": {
         "action": {
@@ -469,18 +428,12 @@
           "if": {
             "properties": {
               "action": {
-                "enum": [
-                  "scrapeXPath",
-                  "scrapeJson"
-                ]
+                "enum": ["scrapeXPath", "scrapeJson"]
               }
             }
           },
           "then": {
-            "required": [
-              "scraper",
-              "queryURL"
-            ],
+            "required": ["scraper", "queryURL"],
             "properties": {
               "queryURL": {
                 "type": "string"
@@ -500,9 +453,7 @@
             }
           },
           "then": {
-            "required": [
-              "script"
-            ],
+            "required": ["script"],
             "properties": {
               "script": {
                 "type": "array",
@@ -518,10 +469,7 @@
     },
     "byURL": {
       "type": "object",
-      "required": [
-        "action",
-        "url"
-      ],
+      "required": ["action", "url"],
       "additionalProperties": false,
       "properties": {
         "action": {
@@ -570,17 +518,12 @@
           "if": {
             "properties": {
               "action": {
-                "enum": [
-                  "scrapeXPath",
-                  "scrapeJson"
-                ]
+                "enum": ["scrapeXPath", "scrapeJson"]
               }
             }
           },
           "then": {
-            "required": [
-              "scraper"
-            ],
+            "required": ["scraper"],
             "properties": {
               "scraper": {
                 "type": "string"
@@ -597,9 +540,7 @@
             }
           },
           "then": {
-            "required": [
-              "script"
-            ],
+            "required": ["script"],
             "properties": {
               "script": {
                 "type": "array",
@@ -615,9 +556,7 @@
     },
     "clickOptions": {
       "type": "object",
-      "required": [
-        "xpath"
-      ],
+      "required": ["xpath"],
       "additionalProperties": false,
       "properties": {
         "sleep": {
@@ -637,10 +576,7 @@
     "commonSelectors": {
       "title": "Common selectors",
       "description": "Selector fragments that can be referenced by name in the selectors below.",
-      "type": [
-        "object",
-        "null"
-      ],
+      "type": ["object", "null"],
       "additionalProperties": false,
       "patternProperties": {
         "^[$].+$": {
@@ -651,11 +587,7 @@
     },
     "cookie": {
       "type": "object",
-      "required": [
-        "Domain",
-        "Path",
-        "Name"
-      ],
+      "required": ["Domain", "Path", "Name"],
       "additionalProperties": false,
       "properties": {
         "Domain": {
@@ -683,9 +615,7 @@
       },
       "oneOf": [
         {
-          "required": [
-            "ValueRandom"
-          ],
+          "required": ["ValueRandom"],
           "properties": {
             "ValueRandom": {
               "type": "integer",
@@ -694,9 +624,7 @@
           }
         },
         {
-          "required": [
-            "Value"
-          ],
+          "required": ["Value"],
           "properties": {
             "Value": {
               "type": "string"
@@ -707,9 +635,7 @@
     },
     "cookieOptions": {
       "type": "object",
-      "required": [
-        "Cookies"
-      ],
+      "required": ["Cookies"],
       "additionalProperties": false,
       "properties": {
         "CookieURL": {
@@ -787,9 +713,7 @@
     "galleryObject": {
       "title": "Gallery",
       "type": "object",
-      "required": [
-        "Title"
-      ],
+      "required": ["Title"],
       "additionalProperties": false,
       "properties": {
         "Code": {
@@ -883,10 +807,7 @@
     },
     "header": {
       "type": "object",
-      "required": [
-        "Key",
-        "Value"
-      ],
+      "required": ["Key", "Value"],
       "additionalProperties": false,
       "properties": {
         "Key": {
@@ -973,17 +894,12 @@
       "oneOf": [
         {
           "title": "Simple selector",
-          "type": [
-            "string",
-            "null"
-          ]
+          "type": ["string", "null"]
         },
         {
           "title": "Fixed value",
           "type": "object",
-          "required": [
-            "fixed"
-          ],
+          "required": ["fixed"],
           "additionalProperties": false,
           "properties": {
             "fixed": {
@@ -1001,9 +917,7 @@
             },
             {
               "type": "object",
-              "required": [
-                "selector"
-              ],
+              "required": ["selector"],
               "properties": {
                 "selector": {
                   "type": "string"
@@ -1011,9 +925,7 @@
               },
               "not": {
                 "type": "object",
-                "required": [
-                  "fixed"
-                ],
+                "required": ["fixed"],
                 "properties": {
                   "fixed": {
                     "type": "string"
@@ -1086,9 +998,7 @@
     "performerObject": {
       "title": "Performer",
       "type": "object",
-      "required": [
-        "Name"
-      ],
+      "required": ["Name"],
       "additionalProperties": false,
       "properties": {
         "Aliases": {
@@ -1277,10 +1187,7 @@
       "minItems": 1,
       "items": {
         "type": "object",
-        "required": [
-          "regex",
-          "with"
-        ],
+        "required": ["regex", "with"],
         "additionalProperties": false,
         "properties": {
           "regex": {
@@ -1290,10 +1197,7 @@
           },
           "with": {
             "title": "Replace matched pattern with",
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": ["string", "null"]
           }
         }
       }
@@ -1375,6 +1279,9 @@
         "Performers": {
           "$ref": "#/definitions/performerObject"
         },
+        "ProductionDate": {
+          "$ref": "#/definitions/nodeSelector"
+        },
         "Studio": {
           "$ref": "#/definitions/studioObject"
         },
@@ -1437,9 +1344,7 @@
       "title": "Stash server configuration",
       "description": "Configures another stash instance as a scraping source.",
       "type": "object",
-      "required": [
-        "url"
-      ],
+      "required": ["url"],
       "additionalProperties": false,
       "properties": {
         "apiKey": {
@@ -1454,9 +1359,7 @@
     "studioObject": {
       "title": "Studio",
       "type": "object",
-      "required": [
-        "Name"
-      ],
+      "required": ["Name"],
       "additionalProperties": false,
       "properties": {
         "Aliases": {
@@ -1489,9 +1392,7 @@
     "tagsObject": {
       "title": "Tags",
       "type": "object",
-      "required": [
-        "Name"
-      ],
+      "required": ["Name"],
       "additionalProperties": false,
       "properties": {
         "Name": {
