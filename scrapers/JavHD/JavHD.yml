@@ -1,0 +1,106 @@
+name: JavHD
+# scrapes: AV69, AVAnal, AVStockings, AVTits, AmateurAV, Ferame, GangAV, HairyAV, Hey Milf, Hey Outdoor, JavHD, LingerieAV, POVAV, PussyAV, SchoolGirls HD, Shiofuky
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - javhd.com/en/id/
+      - javhd.com/en/studio/
+    scraper: hubScraper
+  - action: scrapeXPath
+    url:
+      - amateurav.com/en/
+      - av69.tv/en/
+      - avanal.com/en/
+      - avstockings.com/en/
+      - avtits.com/en/
+      - ferame.com/en/
+      - gangav.com/en/
+      - hairyav.com/en/
+      - heymilf.com/en/
+      - heyoutdoor.com/en/
+      - lingerieav.com/en/
+      - povav.com/en/
+      - pussyav.com/en/
+      - schoolgirlshd.com/en/
+      - shiofuky.com/en/
+    scraper: tourScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - javhd.com/en/model/
+    scraper: hubScraper
+xPathScrapers:
+  hubScraper:
+    common:
+      $script: //script[@type="application/ld+json"]
+    scene:
+      Title: //h1[@class="title"]
+      Details:
+        selector: $script
+        postProcess:
+          - replace:
+              - regex: .+"description":"([^"]+)".+
+                with: $1
+      URLs: //link[@rel="canonical"]/@href
+      Date:
+        selector: $script
+        postProcess:
+          - replace:
+              - regex: .+datePublished":"([^"]+)",.+
+                with: $1
+          - parseDate: "2006-01-02T15:04:05-07:00"
+      Performers:
+        Name: //div[@class="content-info"]/a
+      Tags:
+        Name: //section[contains(@class, "adaptive-page-video__categories")]//a/@title
+      Image:
+        selector: $script
+        postProcess:
+          - replace:
+              - regex: .+thumbnail":"([^"]+)",.+
+                with: $1
+      Studio:
+        Name:
+          fixed: JavHD
+    performer:
+      Name: //h1
+      URLs: //link[@rel="canonical"]/@href
+      Details: //div[@class="info"]/p
+      Images: //div[@class="avatar"]/img/@src
+      Birthdate:
+        selector: //li[strong[contains(., "Birth date")]]/span[not(contains(., "N/A")) and not(contains(., "1 January 1970"))]
+        postProcess:
+          - parseDate: 2 January 2006
+      Height:
+        selector: //li[strong[contains(., "Height")]]/span[not(contains(., "N/A"))]
+        postProcess:
+          - replace:
+              - regex: (\d+).*
+                with: $1
+      Weight: //li[strong[contains(., "Weight")]]/span[not(contains(., "N/A"))]
+  tourScraper:
+    scene:
+      Title: //h1[@itemprop="name"]
+      Details: //div[contains(@class, "set-info__description")]/p
+      URLs: //link[@rel="canonical"]/@href
+      Performers:
+        Name: //div[contains(@class, "set-info__model")]/p/a
+      Tags:
+        Name: //div[contains(@class, "categories-links")]/a
+      Image:
+        selector: //div[contains(@class, "player-container")]/@style
+        postProcess:
+          - replace:
+              - regex: .*?(https?:\/\/\S*\.jpg).*
+                with: $1
+      Studio:
+        Name:
+          selector: //p[contains(@class, "jem-footer__copy")]
+          postProcess:
+            - replace:
+                - regex: ^©\s*\d{4}\s*
+                  with: ""
+            - map:
+                HeyMILF: Hey Milf
+                HeyOutdoor: Hey Outdoor
+                SchoolGirlsHD: SchoolGirls HD
