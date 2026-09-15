@@ -9,8 +9,34 @@ xPathScrapers:
     scene:
       Title: //h2[@class="sunday-funday-video-title"]
       Details:
-        selector: //div[@id="dslc-theme-content-inner"]//p
-        concat: "\n\n"
+        selector: >
+          //div[@id="dslc-theme-content-inner"]
+          |//div[@id="dslc-theme-content-inner"]//p
+          |//div[@id="dslc-theme-content-inner"]//br/following-sibling::node()[1]
+        concat: "\x01"
+        postProcess:
+          - javascript: |
+              if (!value) return "";
+              var parts = value.split("\x01");
+              var full = "";
+              for (var i = 0; i < parts.length; i++) {
+                if (parts[i].length > full.length) full = parts[i];
+              }
+              var cuts = [0];
+              for (var i = 0; i < parts.length; i++) {
+                var anchor = parts[i].trim();
+                if (!anchor || anchor === full) continue;
+                var at = full.indexOf(anchor);
+                if (at > 0 && at === full.lastIndexOf(anchor)) cuts.push(at);
+              }
+              cuts.sort(function (a, b) { return a - b; });
+              var out = [];
+              for (var i = 0; i < cuts.length; i++) {
+                var end = i + 1 < cuts.length ? cuts[i + 1] : full.length;
+                var block = full.slice(cuts[i], end).trim();
+                if (block) out.push(block);
+              }
+              return out.join("\n\n");
       Date:
         selector: //meta[@property="article:published_time"]/@content
         postProcess:
