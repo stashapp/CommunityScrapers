@@ -1,4 +1,5 @@
 name: MadhotX
+# scrapes: Mad Glory Holes, Mad Masseur
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -11,6 +12,7 @@ xPathScrapers:
     scene:
       Title: //div[@class="video-details"]//h1[@class="title"]
       Details: //div[@class="video-details"]//p[@class="desc"]
+      URLs: //link[@rel="canonical"]/@href
       Image: //video[@id="player"]/@data-poster
       Studio:
         Name:
@@ -29,4 +31,3 @@ xPathScrapers:
         Name: //ul[@class="tags"]/li[@class="tag"]/a
       Performers:
         Name: //div[@class="actor"]/a
-# Last Updated May 3, 2025
