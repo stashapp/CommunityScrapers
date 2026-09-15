@@ -30,33 +30,13 @@ sceneByURL:
       - badfamilypov.com/trailers/
       - fullpornnetwork.com/trailers/
 
-      # Old sites that now redirect entirely to a hub domain's channel page:
-      # no scene content of their own anymore, kept for Wayback matching
-      - analviolation.com/trailers/
-      - daughterjoi.com/trailers/
-      - downtofuckdating.com/trailers/
-      - hergape.com/trailers/
-      - homemadeanalwhores.com/trailers/
-      - lesbiananalsluts.com/trailers/
-      - mommyjoi.com/trailers/
-      - mugfucked.com/trailers/
-      - onlyprince.com/trailers/
-      - pervertgallery.com/trailers/
-      - povperverts.net/trailers/
-      - realfuckingdating.com/trailers/
-      - shefucksonthefirstdate.com/trailers/
-      - slutsbts.com/trailers/
-      - teenagecorruption.com/trailers/
-      - wifespov.com/trailers/
-      - yourmomdoesanal.com/trailers/
-
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     common:
       $scene: //div[contains(@class, "video-content")]
     scene:
-      Title: //h1[@class="title_bar trailer_title text-center text-3xl text-accent"]
+      Title: //h1[contains(@class, "trailer_title")]
       Details: $scene//p[@id="description"]
       Date:
         selector: $scene//label[contains(.,"Date Added")]/following-sibling::text()
@@ -92,40 +72,22 @@ xPathScrapers:
                 analamateur: Anal Amateur
                 analbbc: AnalBBC
                 analized: Analized
-                analviolation: Anal Violation
                 baddaddypov: Bad Daddy POV
                 badfamilypov: Bad Family POV
                 badmommypov: Bad Mommy POV
                 brokensluts: Broken Sluts
                 cumdumpsterteens: Cum Dumpster Teens
-                daughterjoi: Daughter JOI
-                downtofuckdating: Down To Fuck Dating
                 dtfsluts: DTF Sluts
                 fullpornnetwork: Full Porn Network
                 girlfaction: Girlfaction
-                hergape: Her Gape
-                homemadeanalwhores: Homemade Anal Whores
                 jamesdeen: James Deen
-                lesbiananalsluts: Lesbian Anal Sluts
-                mommyjoi: Mommy JOI
-                mugfucked: Mug Fucked
-                onlyprince: Only Prince
-                pervertgallery: Pervert Gallery
                 porkvendors: Pork Vendors
                 pornforce: Porn Force
-                povperverts: POV Perverts
                 publicsexdate: Public Sex Date
-                realfuckingdating: Real Fucking Dating
-                shefucksonthefirstdate: She Fucks On The First Date
                 slutinspection: Slut Inspection
-                slutsbts: Sluts BTS
-                slutspov: Sluts POV
                 sluttybbws: Slutty BBWs
                 teasingandpleasing: Teasing and Pleasing
                 teenageanalsluts: Teenage Anal Sluts
-                teenagecorruption: Teenage Corruption
                 teenagetryouts: Teenage Tryouts
                 twistedvisual: Twisted Visual
-                wifespov: Wifes POV
-                yourmomdoesanal: Your Mom Does Anal
                 yourmomdoesporn: Your Mom Does Porn
