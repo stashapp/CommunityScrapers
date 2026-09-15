@@ -38,7 +38,10 @@ xPathScrapers:
       Performers:
         Name: //li[contains(.,'Featuring:')]/a
       Image:
-        selector: //a[text()='Members Login']/@href | //img[contains(@src,'image.php')][1]/@src
+        selector: >-
+          //a[text()='Members Login']/@href
+          | //img[contains(@src,'image.php')
+          and not(preceding::img[contains(@src,'image.php')])]/@src
         concat: "/"
         postProcess:
           - replace:
@@ -55,7 +58,7 @@ xPathScrapers:
           - replace:
               - regex: "('s )?Bio$"
                 with: ""
-      Image:
+      Images:
         selector: //a[text()='Members Login']/@href | //img[contains(@src,'size=3')]/@src
         concat: "/"
         postProcess:
@@ -129,30 +132,30 @@ xPathScrapers:
 
       Details: //div[contains(@class,'contentWrapper')]//div[@class='panel']
 
-# Replace these when the scraper fails
+# curl -s -c - -X POST -d "valid_age=1" https://www.<site>/ageCheck.php | grep PHPSESSID
 driver:
   cookies:
     - CookieURL: "https://bringmeyoursister.com"
       Cookies:
         - Name: PHPSESSID
           Domain: ".bringmeyoursister.com"
-          Value: 84t9dg8lvalnl5gp0kmh68mbh7
+          Value: hg9o7l8rnfsvismlhbfi8s07s1
           Path: "/"
     - CookieURL: "https://glassmannequin.com"
       Cookies:
         - Name: PHPSESSID
           Domain: ".glassmannequin.com"
-          Value: mqk542rm87e209rdoedgp28n55
+          Value: hia3jiieo8km3c2p7lbtl6lfk3
           Path: "/"
     - CookieURL: "https://realcoloradogirls.com"
       Cookies:
         - Name: PHPSESSID
           Domain: ".realcoloradogirls.com"
-          Value: 2gc3qe8pd99mads6irarnb04n0
+          Value: g27qgk9g068e5ul2hnmt8s24v6
           Path: "/"
     - CookieURL: "https://richardnailder.com"
       Cookies:
         - Name: PHPSESSID
           Domain: ".richardnailder.com"
-          Value: q09dhtlvkktkfa9h7fpbfs7h40
+          Value: 66se71lf97d6ao9dd0b98331a4
           Path: "/"
