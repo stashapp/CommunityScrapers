@@ -64,6 +64,7 @@ xPathScrapers:
       $content: //div[@class="video-block"]
     scene:
       Title: &title $content//h1
+      URLs: &urlsField //link[@rel="canonical"]/@href
       Code: &code
         selector: //script[contains(text(), "window.site.setId = ")]/text()
         postProcess:
@@ -94,6 +95,7 @@ xPathScrapers:
         Name: //meta[@property="og:site_name"]/@content
     gallery:
       Title: *title
+      URLs: *urlsField
       Code: *code
       Date: *date
       Details: *details
@@ -123,11 +125,11 @@ xPathScrapers:
               - regex: ^Fair
                 with: Blonde
       EyeColor: $model//dt[contains(text(), "Eyes")]/following-sibling::text()
-      Image:
+      Images:
         selector: $model//img/@src
         postProcess:
           - replace:
               - regex: ^
                 with: https://teenmegaworld.net/
               - regex: -1x
-                with: -2x
+                with: -full
