@@ -20,14 +20,21 @@ xPathScrapers:
       Performers:
         Name: //div[@class="update-info-block models-list-thumbs"]//a
       Details: //div[@class="update-info-block"]/h3[contains(.,"Description:")]/following-sibling::*[1]
+      URLs: //link[@rel="canonical"]/@href
       Tags:
         Name: //ul[@class="tags"]//a
       Image:
         selector: //base/@href | //div[@id="fakeplayer"]//img[@id]/@src0_1x
-        concat: __SEPARATOR__
+        concat: "|"
         postProcess:
           - replace:
-              - regex: __SEPARATOR__
+              - regex: \|https?://[^/]+mjedge\.net/
+                with: "|"
+              - regex: \?[^|]*$
+                with: ""
+              - regex: https?://web\.archive\.org/web/\d+(?:im_)?/
+                with: ""
+              - regex: \|/*
                 with: ""
       Studio:
         Name: //meta[@name="author"]/@content
