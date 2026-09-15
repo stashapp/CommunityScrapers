@@ -2,24 +2,31 @@ name: Femanic
 sceneByURL:
   - action: scrapeXPath
     url:
-      - femanic.com
+      - femanic.com/video.php/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     scene:
-      Title:
-        selector: //div[@class="dis_main_heading"]
-      Performers:
-        Name: //div[@class="main-modals"]/p//a
+      Title: //h1[@class="video-page__title"]
       Details:
-        selector: //div[@class="disc-text"]/p
-      Image:
-        selector: //video[@style="max-width:100%;max-height:100%;"]/@poster|//img[@class="video-container-img"]/@src
+        selector: //div[@class="video-page__description"]/p
+        concat: "\n\n"
+      Date:
+        # the row reads "Level 3, 22 minutes, Jul 6, 2010"
+        selector: //div[@class="video-page__meta-info"]
         postProcess:
           - replace:
-              - regex: ^
-                with: "https://www.femanic.com/"
+              - regex: .*,\s*([A-Z][a-z]{2}\s+\d{1,2},\s+\d{4}).*
+                with: $1
+          - parseDate: Jan 2, 2006
+      Image:
+        selector: >-
+          //video[contains(@class, "video-player__media")]/@poster
+          | //img[contains(@class, "video-player__fallback-image")]/@src
+        postProcess:
+          - replace:
+              - regex: ^/
+                with: https://www.femanic.com/
       Studio:
         Name:
           fixed: Femanic
-# Last Updated May 20, 2021
