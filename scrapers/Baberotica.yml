@@ -53,7 +53,12 @@ xPathScrapers:
               - regex: ... Read More
                 with:
       Image: &Image
-        selector: //div[contains(@class,"pure-u-1")]/meta[@itemprop="thumbnailUrl"]/@content | //div[@id="videohtml5tour"]//img[@class="pure-img"]/@src | //div[@id="videohtml5tour"]/video/@poster | //div[@class="rel"]//img/@src
+        selector: >-
+          //div[contains(@class,"pure-u-1")]/meta[@itemprop="thumbnailUrl"]/@content
+          | //div[@id="videohtml5tour"]//img[@class="pure-img"]/@src
+          | //div[@id="videohtml5tour"]/video/@poster
+          | //div[@class="rel"]//img/@src
+          | //div[contains(@class,"rel")]/video/@poster
         postProcess:
           - replace:
               - regex: ^//
@@ -66,8 +71,11 @@ xPathScrapers:
                 with: $1
       Studio:
         Name:
-          selector: //meta[@itemprop="url"]/@content
+          selector: //meta[@itemprop="url"]/@content | //link[@rel="canonical"]/@href
           postProcess:
+            - replace:
+                - regex: "^(https?://[^/]+/).*"
+                  with: $1
             - map:
                 https://avidolz.com/: AvIdolz
                 https://baberotica.com/: Baberotica
@@ -79,8 +87,7 @@ xPathScrapers:
                 https://vrpornpass.com/: VR PornPass
   altSceneScraper:
     scene:
-      Title:
-        selector: //h1
+      Title: //h1
       Performers:
         Name: //div[@class="model-thumb"]//h5/a/text()
         URLs: //div[@class="model-thumb"]//h5/a/@href
