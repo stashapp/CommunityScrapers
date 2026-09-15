@@ -2,43 +2,54 @@ name: DreamsOfSpanking
 sceneByURL:
   - action: scrapeXPath
     url:
-      - dreamsofspanking.com/scene/item
+      - dreamsofspanking.com/scene/
     scraper: sceneScraper
 galleryByURL:
   - action: scrapeXPath
     url:
-      - dreamsofspanking.com/scene/item
+      - dreamsofspanking.com/scene/
     scraper: galleryScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $post: //div[contains(@class, "elementor-location-single")]
     scene:
       Title: &title
-        selector: //div[@id="product"]/h3/text()
-      Date: &date
-        selector: //div[@class="date"]/text()
+        selector: //meta[@property="og:title"]/@content
         postProcess:
           - replace:
-            - regex: Created\s+(\d{1,2}\s[a-zA-Z]{3}\s\d{4}).*
-              with: $1
-          - parseDate: 2 Jan 2006
-      Details: &details
-        selector: //div[@class="long-description"]/p/text()
+              - regex: \s+-\s+Dreams of Spanking$
+                with: ""
+      URLs: &urls //link[@rel="canonical"]/@href
+      Date: &date
+        selector: //*[contains(@class, "elementor-post-info__item--type-date")]
+        postProcess:
+          - parseDate: January 2, 2006
+      Details:
+        selector: >-
+          ($post//div[contains(@class, "elementor-widget-text-editor")]
+          [string-length(normalize-space(.)) > 200])[1]//p
         concat: "\n\n"
       Performers: &performers
-        Name: //div[@class="performers"][1]/p/a/text()
+        Name: $post//a[contains(@href, "/performers/")][normalize-space()]
       Tags: &tags
-        Name:
-          selector: //p[@class="tags"]/a/text()
+        Name: >-
+          $post//a[contains(@href, "/orientation/")]
+          | $post//a[contains(@href, "/implements/")]
+          | $post//a[contains(@href, "/genres/")]
+          | $post//a[contains(@href, "/atmosphere/")]
+          | $post//a[contains(@href, "/details/")]
       Studio: &studio
-        Name: 
+        Name:
           fixed: Dreams of Spanking
-      Image: //video/@poster|//img[@class="preview"]/@src
+      Image: //meta[@property="og:image"]/@content
   galleryScraper:
+    common:
+      $post: //div[contains(@class, "elementor-location-single")]
     gallery:
       Title: *title
+      URLs: *urls
       Date: *date
-      Details: *details
       Performers: *performers
       Tags: *tags
-      Studio: *studio  
-# Last Updated May 05, 2021
+      Studio: *studio
