@@ -1,9 +1,15 @@
 name: private
+# scrapes: Private, Private Black, Private Castings
 sceneByURL:
   - action: scrapeXPath
     url:
       - private.com
     scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      - privateblack.com/scene/
+      - privatecastings.com/scene/
+    scraper: siteScraper
 groupByURL:
   - action: scrapeXPath
     url:
@@ -21,7 +27,7 @@ performerByURL:
 xPathScrapers:
   movieScraper:
     group:
-      Name: &movieName //div[@class="dvds-wrapper"]/h1/text()
+      Name: &movieName //div[@class="dvds-wrapper"]/h1
       Director: &movieDirector //p[@class="director"]/span[@itemprop="name"]/text()
       Duration:
         selector: &movieDuration //p[em[contains(text(), "Duration:")]]/text()
@@ -29,7 +35,7 @@ xPathScrapers:
           - replace:
               - regex: ^(\d+).+$
                 with: 00:$1:00
-      Date: &movieDate //span[@itemprop="datePublished"]/text()
+      Date: &movieDate //span[@itemprop="datePublished"]
       Studio:
         Name: &movieStudioName //div[@class="dvds-wrapper"]/p[@class="line-dvd"]
       Synopsis: &movieSynopsis //p[@class="sinopsys"]
@@ -59,13 +65,11 @@ xPathScrapers:
               - regex: (?:T.+)
                 with:
           - parseDate: 2006-01-02
-      Details:
-        selector: $content//p[@id="description-section"]/text()
-        concat: "\n"
+      Details: $content//p[@id="description-section"]
       Tags:
-        Name: //li[@class="tag-tags"]//a/text()
+        Name: //li[@class="tag-tags"]//a
       Performers:
-        Name: //li[@class="tag-models"]//a/text()
+        Name: //li[@class="tag-models"]//a
       Groups:
         Name:
           selector: //strong[contains(.,'Full Movie')]/../@href
@@ -94,23 +98,53 @@ xPathScrapers:
 
       Studio:
         Name:
-          selector: //div[@class="title-zone"]//li/a/span[@class="title-site"]/text()|/html/@lang
+          selector: //div[@class="title-zone"]//li/a/span[@class="title-site"] | /html/@lang
           postProcess:
             - replace:
                 - regex: ^en$
                   with: Private
       Image: //meta[@property="og:image"]/@content
+  siteScraper:
+    scene:
+      Title: //meta[@itemprop="name"]/@content
+      Date:
+        selector: //meta[@itemprop="uploadDate"]/@content
+        postProcess:
+          - replace:
+              - regex: (?:T.+)
+                with:
+      URLs: //link[@rel="canonical"]/@href
+      Details: //meta[@itemprop="description"]/@content
+      Performers:
+        Name: //ul[@class="scene-models-list"]//a
+      Tags:
+        Name: //ul[@class="scene-tags"]//li
+      Image: //meta[@itemprop="thumbnailUrl"]/@content
+      Studio:
+        Name:
+          selector: //link[@rel="canonical"]/@href
+          postProcess:
+            - replace:
+                - regex: ^https?://(?:www\.)?([^./]+)\..*$
+                  with: $1
+            - map:
+                privateblack: Private Black
+                privatecastings: Private Castings
   performerScraper:
     common:
       $performerData: //div[contains(concat(' ',normalize-space(@class),' '),' pornstar-wrapper ')]
     performer:
       Name: $performerData//h1
       URLs: //meta[@property="og:url"]/@content
-      Aliases: $performerData//p[@class="aka"]/text()
-      Details: $performerData//li[@class="model-facts-long"]/div
-      Measurements: $performerData//em[text()="Measurements:"]/../text()
+      Aliases: //em[text()="Aka:"]/../text()
+      Details: //li[@class="model-facts-long"]/div
+      Measurements:
+        selector: //em[text()="Measurements:"]/../text()
+        postProcess:
+          - map:
+              -: ""
       Height:
-        selector: $performerData//em[text()="Height:"]/../text()
+        selector: //em[text()="Height:"]/../text()
         postProcess:
           - replace:
               - regex: (\d+)cm.+
@@ -118,33 +152,37 @@ xPathScrapers:
           - map:
               -: ""
       Weight:
-        selector: $performerData//em[text()="Weight:"]/../text()
+        selector: //em[text()="Weight:"]/../text()
         postProcess:
           - replace:
               - regex: (\d+)kg.+
                 with: $1
           - map:
               -: ""
-      Country: $performerData//em[text()="Birth place:"]/../text()
-      HairColor: $performerData//em[text()="Hair Color:"]/../text()
+      Country: //em[text()="Nationality:"]/../text()
+      HairColor: //em[text()="Hair Color:"]/../text()
       EyeColor:
-        selector: $performerData//em[text()="Eye color:"]/../text()
+        selector: //em[text()="Eye color:"]/../text()
         postProcess:
           - map:
               -: ""
       Tattoos:
-        selector: $performerData//em[text()="Tattoos:"]/../text()
+        selector: //em[text()="Tattoos:"]/../text()
         postProcess:
           - map:
               -: ""
       Piercings:
-        selector: $performerData//em[text()="Piercings:"]/../text()
+        selector: //em[text()="Piercings:"]/../text()
         postProcess:
           - map:
               -: ""
-      Images: $performerData//img/@src
+      Images: $performerData//img/@data-src
       Gender:
-        fixed: "Female"
+        selector: //em[text()="Measurements:"] | //html[not(//em[text()="Measurements:"])]/@lang
+        postProcess:
+          - map:
+              "Measurements:": Female
+              en: Male
 driver:
   cookies:
     - CookieURL: https://private.com
