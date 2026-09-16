@@ -89,9 +89,9 @@ xPathScrapers:
         # some tours still render the update_thumb img (first one; the preview strip
         # reuses the class), others now build the player from an inline script
         selector: >-
-          //base/@href |
-          (//img[contains(@class,"update_thumb")][@src0_1x])[1]/@src0_1x |
-          //script[contains(., "src0_1x")]
+          //base[$scene]/@href |
+          (//img[contains(@class,"update_thumb")][@src0_1x][$scene])[1]/@src0_1x |
+          //script[contains(., "src0_1x")][$scene]
         concat: __SEP__
         postProcess:
           - replace:
@@ -110,7 +110,7 @@ xPathScrapers:
                 with: "-full.jpg"
       Studio: &studio
         Name:
-          selector: //base/@href
+          selector: //base[$scene]/@href
           postProcess:
             - replace:
                 - regex: ^https?://(?:www\.)?([^/]+)/?.*
@@ -202,7 +202,7 @@ xPathScrapers:
       Synopsis: //div[@class="profile-about"]/p/text()
       FrontImage:
         selector: >-
-          //base/@href |
+          //base[$scene]/@href |
           //img[contains(@class,"dvd_box")][@src0_1x]/@src0_1x |
           //img[contains(@class,"dvd_box")][@src0_2x]/@src0_2x |
           //img[contains(@class,"dvd_box")][@src0_3x]/@src0_3x |
