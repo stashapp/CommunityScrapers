@@ -6,20 +6,31 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $brand: //div[@data-name="seleccionar_categorias"]//option[@selected][normalize-space()="VR" or normalize-space()="COCK ADDICTION" or normalize-space()="JUST GIRLS"]
     scene:
       Title: (//div[contains(@class, "rowdesktop1nsd")]//div[contains(@class, "et_pb_text_inner")])[1]
       Date:
         selector: //div[@data-date_format]/input[@type='hidden']/@value
         postProcess:
-          - parseDate: '20060102'
+          - parseDate: "20060102"
       Image:
         selector: //div[contains(@style,'background-image')]/@style
         postProcess:
           - replace:
-            - regex: ^.+url\(([^\)]+).+
-              with: $1
+              - regex: ^.+url\(([^\)]+).+
+                with: $1
+      URLs: //link[@rel="canonical"]/@href
       Studio:
-        Name: //meta[@property='og:site_name']/@content
+        Name:
+          selector: $brand | //html[not($brand)]/@lang
+          postProcess:
+            - map:
+                VR: PornBCN VR
+                COCK ADDICTION: Cock Addiction
+                JUST GIRLS: Just Girls
+                en-US: PornBCN
+                es-UY: PornBCN
       Tags:
         Name: //meta[@property='article:tag']/@content
       Performers:
@@ -32,5 +43,3 @@ driver:
   headers:
     - Key: User-Agent
       Value: stash-scraper/1.0.0
-
-# Last Updated April 29, 2024
