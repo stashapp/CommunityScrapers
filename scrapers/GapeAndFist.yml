@@ -1,0 +1,184 @@
+name: GapeAndFist
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - gapeandfist.com
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $text: //article[contains(@class,"fullstory")]//div[@class="text"]
+    scene:
+      URLs: //meta[@property="og:url"]/@content
+      Title:
+        selector: //h1[contains(@class,"title")]
+        postProcess:
+          - replace:
+              - regex: ^\[[^\]]*\]\s*
+                with: ""
+              - regex: ^[A-Za-z0-9.&'-]+\.(?:com|net|tv|xxx|org)\s*[-–—:|]?\s*
+                with: ""
+              - regex: ^[A-Za-z0-9&'.]*[a-z][A-Z][A-Za-z0-9&'.]*\s*[-–—]\s*
+                with: ""
+              - regex: ^[A-Za-z0-9&'. ]{1,30}\s(?:Studios?|Productions)\s*[-–—:|]\s*
+                with: ""
+              - regex: ^v\d+\s+
+                with: ""
+              - regex: ^[-–—:|]\s*
+                with: ""
+      Studio:
+        Name:
+          selector: //li[contains(@class,"meta_cat")]/a[last()]
+          postProcess:
+            - replace:
+                - regex: \.(?:com|net|tv|xxx|org)\s*$
+                  with: ""
+      Date:
+        selector: $text//text() | //time[contains(@class,"date")]/@datetime
+        concat: "\x01"
+        postProcess:
+          - replace:
+              - regex: "^(?:.*\x01)?(?:Date added|Added|Release date|Released|Release)\x01?[^0-9]*(\\d{4}-\\d{2}-\\d{2}).*$"
+                with: "${1}"
+              - regex: "^.*\x01(\\d{4}-\\d{2}-\\d{2})$"
+                with: "${1}"
+      Image:
+        selector: //li/@data-poster | $text//img/@src
+        concat: "\x01"
+        postProcess:
+          - replace:
+              - regex: "(?:^|\x01)[^h][^\x01]*"
+                with: ""
+              - regex: "(?:^|\x01)[^\x01]*gapeandfist\\.com/uploads[^\x01]*"
+                with: ""
+              - regex: "(?i)(?:^|\x01)[^\x01]*(?:download|_nav\\.|/logo)[^\x01]*"
+                with: ""
+              - regex: "^\x01+"
+                with: ""
+              - regex: "\x01.*$"
+                with: ""
+      Details:
+        selector: $text//text()
+        concat: "\x01"
+        postProcess:
+          - replace:
+              - regex: "^(?:.*\x01)?(?:Description|Story|Synopsis)[ :]*\x01(.*)$"
+                with: "\x02${1}"
+              - regex: "^[^\x02](?:.*\x01)?Name[ :]*\x01:?\x01?[^\x01]*\x01(.*)$"
+                with: "\x02${1}"
+              - &cutAtNextLabel
+                regex: "\x01(?:Categories|Category|Genres|Genre|Tags|Description|Story|Synopsis|Directed by|Directors|Director|Date added|Added|Release date|Released|Release|Duration|Runtime|Size|Photoset|Video|Audio|Format|Resolution|Quality|Episode|Name|Starring|Talents|Talent|Models|Model|Cast|Featuring|From Movie|Title)[ :]*\x01.*$"
+                with: ""
+              - &cutAtBoilerplate
+                regex: "\x01(?:Join to|>>|XXX Porn Movie|Warning!|ENTER PROMO|\\+{3,}|-{5,}).*$"
+                with: ""
+              - &blankUnmatched
+                regex: "^[^\x02].*$"
+                with: ""
+              - &dropSentinel
+                regex: "\x02"
+                with: ""
+              - regex: "\x01"
+                with: " "
+              - regex: вЂ™
+                with: ’
+              - regex: вЂ“
+                with: –
+              - regex: вЂ”
+                with: —
+              - regex: вЂ¦
+                with: …
+              - regex: " ([’'])s "
+                with: "${1}s "
+              - regex: " ([,.!?;:])"
+                with: "${1}"
+              - regex: "Starring:\\."
+                with: ""
+              - regex: "  +"
+                with: " "
+              - regex: "^[:. ]+| +$"
+                with: ""
+      Performers:
+        Name:
+          selector: $text//text()
+          concat: "\x01"
+          split: ","
+          postProcess:
+            - replace:
+                - regex: "^(?:.*\x01)?(?:Starring|Talents|Talent|Models|Model|Cast|Featuring)[ :]*\x01(.*)$"
+                  with: "\x02${1}"
+                - regex: "^[^\x02](?:.*\x01)?Name[ :]*\x01:?\x01?([^\x01]*).*$"
+                  with: "\x02${1}"
+                - regex: "^[^\x02][^\x01]*\x01[^\x01]*\x01([A-Za-z0-9.'& \x01,-]*)\x01(?:Categories|Category|Genre)\x01.*$"
+                  with: "\x02${1}"
+                - *cutAtNextLabel
+                - *cutAtBoilerplate
+                - *blankUnmatched
+                - *dropSentinel
+                - &fragToComma
+                  regex: "\x01"
+                  with: ","
+                - &collapseCommas
+                  regex: "(?:,[ .]*)+,"
+                  with: ","
+                - &spaceAfterComma
+                  regex: ", +"
+                  with: ","
+                - &trimCommas
+                  regex: "^[:,. ]+|[,. ]+$"
+                  with: ""
+      Tags:
+        Name:
+          selector: $text//text()
+          concat: "\x01"
+          split: ","
+          postProcess:
+            - replace:
+                - regex: "^(?:.*\x01)?(?:Categories|Category|Genres|Genre|Tags)[ :]*\x01(.*)$"
+                  with: "\x02${1}"
+                - *cutAtNextLabel
+                - *cutAtBoilerplate
+                - *blankUnmatched
+                - *dropSentinel
+                - *fragToComma
+                - *collapseCommas
+                - *spaceAfterComma
+                - *trimCommas
+      Director:
+        selector: $text//text()
+        concat: "\x01"
+        postProcess:
+          - replace:
+              - regex: "^(?:.*\x01)?(?:Directed by|Directors|Director)[ :]*\x01:?\x01?([^\x01]*).*$"
+                with: "\x02${1}"
+              - *blankUnmatched
+              - *dropSentinel
+              - regex: "^[:, ]+"
+                with: ""
+      Groups:
+        Name:
+          selector: $text//text()
+          concat: "\x01"
+          split: "\x01"
+          postProcess:
+            - replace:
+                - regex: "^(?:.*\x01)?From Movie[ :]*\x01([^\x01]*).*$"
+                  with: "\x02${1}"
+                - regex: "^[^\x02](?:.*\x01)?Title\x01[^\x01]*from\x01([^\x01]*)\x01movie\x01.*$"
+                  with: "\x02${1}"
+                - *blankUnmatched
+                - *dropSentinel
+      Code:
+        selector: $text//text()
+        concat: "\x01"
+        postProcess:
+          - replace:
+              - regex: "^(?:.*\x01)?Episode\x01.*?(v\\d{3,}).*$"
+                with: "\x02${1}"
+              - *blankUnmatched
+              - *dropSentinel
