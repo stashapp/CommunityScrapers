@@ -1,20 +1,21 @@
 import json
 import sys
 from typing import Any
-from py_common import log
-from py_common.util import dig, replace_all, replace_at
+
 from AyloAPI.scrape import (
-    gallery_from_url,
     gallery_from_fragment,
-    scraper_args,
+    gallery_from_url,
+    movie_from_url,
+    performer_from_fragment,
+    performer_from_url,
+    performer_search,
+    scene_from_fragment,
     scene_from_url,
     scene_search,
-    scene_from_fragment,
-    performer_from_url,
-    performer_from_fragment,
-    performer_search,
-    movie_from_url,
+    scraper_args,
 )
+from py_common import log
+from py_common.util import dig, replace_all, replace_at
 
 studio_map = {
     "JugFuckers": "Jug Fuckers",
@@ -65,14 +66,12 @@ if __name__ == "__main__":
 
     match op, args:
         case "gallery-by-url", {"url": url} if url:
-            url = url.replace("brazzers.com", "brazzersnetwork.com")
             result = gallery_from_url(url, postprocess=brazzers)
-        case "gallery-by-fragment":
+        case "gallery-by-fragment", args:
             result = gallery_from_fragment(
                 args, search_domains=domains, postprocess=brazzers
             )
         case "scene-by-url", {"url": url} if url:
-            url = url.replace("brazzers.com", "brazzersnetwork.com")
             result = scene_from_url(url, postprocess=brazzers)
         case "scene-by-name", {"name": name} if name:
             result = scene_search(name, search_domains=domains, postprocess=brazzers)
@@ -81,7 +80,6 @@ if __name__ == "__main__":
                 args, search_domains=domains, postprocess=brazzers
             )
         case "performer-by-url", {"url": url}:
-            url = url.replace("brazzers.com", "brazzersnetwork.com")
             result = performer_from_url(url, postprocess=brazzers)
         case "performer-by-fragment", args:
             result = performer_from_fragment(args)
@@ -90,7 +88,6 @@ if __name__ == "__main__":
                 name, search_domains=domains, postprocess=brazzers
             )
         case "movie-by-url", {"url": url} if url:
-            url = url.replace("brazzers.com", "brazzersnetwork.com")
             result = movie_from_url(url, postprocess=brazzers)
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")

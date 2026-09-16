@@ -400,6 +400,9 @@ def to_scraped_scene(scene_from_api: dict) -> ScrapedScene:
     ):
         scene["image"] = re.sub(r"/m=[^/]+", "", image)
 
+    if (length := dig(scene_from_api, "videos", "mediabook", "length")) and length >= 10:
+        scene["duration"] = length
+
     if dig(scene_from_api, "parent", "type") in ("movie", "serie"):
         scene["movies"] = [to_scraped_movie(scene_from_api["parent"])]
 
