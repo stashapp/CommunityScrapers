@@ -82,13 +82,12 @@ xPathScrapers:
                 hotoldermale: Hot Older Male
                 monstercub: Monster Cub
                 myfirstdaddy: My First Daddy
-                naturalbornbreeders: Natural Born Breeders
                 older4me: Older4Me
                 playdaddy: Play Daddy
                 raunchybastards: Raunchy Bastards
                 stockydudes: Stocky Dudes
                 toplatindaddies: Top Latin Daddies
-        URL:
+        URLs:
           selector: *image
           postProcess:
             - replace:
@@ -119,20 +118,20 @@ xPathScrapers:
     common:
       $details: //div[contains(@class, "container_styled_1")]
     scene:
-      Title: //h2[contains(@class, "sectionMainTitle")]
+      Title: //h2[contains(@class, "sectionMainTitle")][$details]
       Code:
-        selector: //link[@rel="canonical"]/@href
+        selector: //link[@rel="canonical"][$details]/@href
         postProcess:
           - replace:
-              - regex: \D*
+              - regex: ^.*/scene/(\d+)-.*$
                 with: $1
       # All of this can be replaced once scrapers get access to the URL they are scraping
       Studio:
         Name:
-          selector: //link[@rel="canonical"]/@href
+          selector: //link[@rel="canonical"][$details]/@href
           postProcess: *studioNameFromURL
-        URL:
-          selector: //link[@rel="canonical"]/@href
+        URLs:
+          selector: //link[@rel="canonical"][$details]/@href
           postProcess:
             - replace:
                 - regex: ^(?:https:\/\/[\w\.]*?)([^.]+)\.com.*$
@@ -146,8 +145,7 @@ xPathScrapers:
       Date:
         selector: ($details//h5[contains(text(), "Details")]/text())[1]
         postProcess: *ppDate
-      Image:
-        selector: //meta[@property="og:image"]/@content
+      Image: //meta[@property="og:image"][$details]/@content
       Tags:
         Name: $details//h5[contains(., "Categories")]/a/text()
   performerScraper:
@@ -175,11 +173,10 @@ xPathScrapers:
               - regex: (\d+)(\.(\d+) inches)
                 with: "0.$1$2"
           - feetToCm: true
-      Circumcised:
-        selector: $modelProfile/div/ul/li[contains(text(),"Cut")]/strong/text()
+      Circumcised: $modelProfile/div/ul/li[contains(text(),"Cut")]/strong/text()
       Tags:
         Name: $modelProfile/div/ul/li[5]/strong/text() |
           $modelProfile//a[@class="tagsRnd"]/text()
-      Image: $modelProfile//div[@class="profile"]//img[contains(@class,"img-responsive")]
-      Twitter: //a[contains(@href,"twitter.com")]/@href
+      Images: $modelProfile//div[@class="profile"]//img[contains(@class,"img-responsive")]
+      URLs: //a[contains(@href,"twitter.com")]/@href
       Details: $modelProfile//div[@class="main_title"]/p[not(@class)]/text()
