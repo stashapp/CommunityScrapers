@@ -1,4 +1,5 @@
-name: 'PureMedia'
+name: "PureMedia"
+# scrapes: Becoming Femme, Pornstar BTS, Pure-BBW, Pure-TS, Pure-XXX, Sissy POV, TSPOV
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -17,6 +18,7 @@ xPathScrapers:
     scene:
       Title: //div[@class='vpTitle']/h1
       Details: //div[@class='description']/p
+      URLs: //link[@rel="canonical"]/@href
       Date:
         selector: $main//h5[contains(.,"Added")]/following-sibling::p
         postProcess:
@@ -29,9 +31,8 @@ xPathScrapers:
         Name: $main//ul[@class='tags']//a
       Image:
         selector: //base/@href|//div[@class='player-thumb']/img/@src0_4x
-        concat: '|'
+        concat: "|"
         postProcess:
           - replace:
               - regex: (?:/tour/\|)
                 with:
-# Last Updated August 10, 2024
