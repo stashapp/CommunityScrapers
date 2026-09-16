@@ -351,7 +351,12 @@ xPathScrapers:
       Performers:
         Name: $scene//a[contains(@class, "infolink")]
       Details: $scene//div[contains(@class, "vidImgContent")]
-      Image: //meta[@name="twitter:image"]/@content
+      Image:
+        selector: //meta[@name="twitter:image"]/@content
+        postProcess:
+          - replace:
+              - regex: (:?-[1-4]x)?\.jpg
+                with: "-full.jpg"
       Studio:
         Name:
           selector: //base/@href
