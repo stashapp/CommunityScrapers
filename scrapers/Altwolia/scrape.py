@@ -2,10 +2,12 @@ import json
 import re
 import sys
 from base64 import b64encode
+from collections.abc import Callable
 from difflib import SequenceMatcher
 from functools import lru_cache
-from typing import Any, Callable
+from typing import Any
 
+from Altwolia import domains
 from py_common import log
 from py_common.deps import ensure_requirements
 from py_common.types import (
@@ -30,8 +32,6 @@ import requests  # noqa: E402
 from algoliasearch.search.client import SearchClientSync  # noqa: E402
 from algoliasearch.search.config import SearchConfig  # noqa: E402
 from bs4 import BeautifulSoup  # noqa: E402
-
-import Altwolia.domains as domains  # noqa: E402
 
 IMAGE_CDN = "https://images03-fame.gammacdn.com"
 TRANSFORM_IMAGE_CDN = "https://transform.gammacdn.com"
@@ -250,6 +250,8 @@ def to_scraped_scene(api_scene: dict[str, Any], site: str) -> ScrapedScene:
         scene["image"] = f"{IMAGE_CDN}/movies{image}"
     if studio_name := api_scene.get("studio_name"):
         scene["studio"] = {"name": studio_name}
+    if (length := api_scene.get("length")) and length >= 10:
+        scene["duration"] = length
     if (movie_id := api_scene.get("movie_id")) and movie_exists(movie_id, site):
         scene["movies"] = [movie_from_api_scene(api_scene, site)]
 
@@ -287,15 +289,16 @@ def to_scraped_gallery(api_hit: dict[str, Any], site: str) -> ScrapedGallery:
         gallery["code"] = str(set_id)
         urls.append(gallery_url(site, url_title, set_id))
     # api photosets can also carry the originating scene's clip_title
-    if scene_data := {
-        k: api_hit[k] for k in ("clip_title", "sitename", "clip_id") if k in api_hit
-    }:
-        if (
-            (clip_title := scene_data.get("clip_title"))
-            and (sitename := scene_data.get("sitename"))
-            and (clip_id := scene_data.get("clip_id"))
-        ):
-            urls.append(scene_url(site, sitename, slugify(clip_title), clip_id))
+    if (
+        scene_data := {
+            k: api_hit[k] for k in ("clip_title", "sitename", "clip_id") if k in api_hit
+        }
+    ) and (
+        (clip_title := scene_data.get("clip_title"))
+        and (sitename := scene_data.get("sitename"))
+        and (clip_id := scene_data.get("clip_id"))
+    ):
+        urls.append(scene_url(site, sitename, slugify(clip_title), clip_id))
     if urls:
         gallery["urls"] = urls
 
@@ -414,7 +417,7 @@ def match_ratio(a: str | None, b: str | None) -> float | None:
     return None
 
 
-def scalar_match(candidate: int | float, reference: int | float) -> float:
+def scalar_match(candidate: float, reference: float) -> float:
     return 1 - abs(candidate - reference) / reference
 
 
@@ -690,7 +693,9 @@ def scene_from_fragment(
         return scene_from_url(urls[0], site, fragment, postprocess)
     if code := fragment.get("code"):
         return scene_from_id(code, site, fragment, postprocess)
-    if (title := fragment.get("title")) and (scenes := scene_search(title, site, fragment, postprocess)):
+    if (title := fragment.get("title")) and (
+        scenes := scene_search(title, site, fragment, postprocess)
+    ):
         # best match is sorted first
         return scenes[0]
     return None
@@ -705,9 +710,10 @@ def gallery_from_fragment(
         return gallery_from_url(url, site, postprocess)
     if code := fragment.get("code"):
         return gallery_from_set_id(code, site, postprocess)
-    if title := fragment.get("title"):
-        if galleries := gallery_search(title, site, fragment, postprocess):
-            return galleries[0]
+    if (title := fragment.get("title")) and (
+        galleries := gallery_search(title, site, fragment, postprocess)
+    ):
+        return galleries[0]
     return None
 
 
