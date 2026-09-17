@@ -8,49 +8,42 @@ sceneByURL:
 
 xPathScrapers:
   sceneScraper:
+    common:
+      $clip: //script[@id="__NEXT_DATA__"][contains(., '"clipData"')]
     scene:
       Title:
-        selector: //script[@id="__NEXT_DATA__"]
+        selector: $clip
         postProcess:
-          - replace:
-              - regex: '(?s).*?"clipData":\{.*?"title":"([^"]+)".*'
-                with: $1
-
+          - javascript: |
+              return JSON.parse(value).props.pageProps.data.clipData.title || "";
       Date:
-        selector: //script[@id="__NEXT_DATA__"]
+        selector: $clip
         postProcess:
-          - replace:
-              - regex: '(?s).*?"clipData":\{.*?"createdAt":"([^"]+)".*'
-                with: $1
+          - javascript: |
+              return JSON.parse(value).props.pageProps.data.clipData.createdAt || "";
           - parseDate: 2006-01-02T15:04:05.000Z
-
-      Details: //meta[@property="og:description"]/@content
-
+      Details:
+        selector: $clip
+        postProcess:
+          - javascript: return JSON.parse(value).props.pageProps.data.clipData.description || "";
+      URLs: //link[@rel="canonical"][$clip]/@href
+      Image: //meta[@property="og:image"]/@content
       Performers:
         Name:
-          selector: //script[@id="__NEXT_DATA__"][contains(., '"models":"')]
+          selector: $clip
           postProcess:
-            - replace:
-                - regex: '(?s).*?"clipData":\{.*?"models":"([^"]+)".*'
-                  with: $1
+            - javascript: return JSON.parse(value).props.pageProps.data.clipData.models || "";
           split: ","
-
       Tags:
         Name:
-          selector: //script[@id="__NEXT_DATA__"]
+          selector: $clip
           postProcess:
-            - replace:
-                - regex: '(?s).*?"clipData":\{.*?"tag":"([^"]+)".*'
-                  with: $1
+            - javascript: return JSON.parse(value).props.pageProps.data.clipData.tag || "";
           split: ","
-
-      Image: //meta[@property="og:image"]/@content
-
       Studio:
         Name:
-          selector: //script[@id="__NEXT_DATA__"]
+          selector: $clip
           postProcess:
-            - replace:
-                - regex: '(?s).*?"clipData":\{.*?"ownerInfo":\{.*?"displayName":"([^"]+)".*'
-                  with: $1
-# Last Updated September 17, 2026
+            - javascript: |
+                var o = JSON.parse(value).props.pageProps.data.clipData.ownerInfo;
+                return o ? o.displayName || "" : "";
