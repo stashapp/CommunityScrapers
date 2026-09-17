@@ -1,0 +1,25 @@
+name: NewMFX
+
+sceneByURL:
+  - action: script
+    url:
+      - newmfx.com/
+    script:
+      - python
+      - NewMFX.py
+      - scene-by-url
+
+sceneByName:
+  action: script
+  script:
+    - python
+    - NewMFX.py
+    - scene-by-name
+
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - NewMFX.py
+    - scene-by-query-fragment
+# Last Updated September 17, 2026
