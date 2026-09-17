@@ -19,42 +19,38 @@ sceneByQueryFragment:
 xPathScrapers:
   sceneSearch:
     common:
-      $card: //article[contains(@class, "elementor-post")]
+      $card: //article[contains(@class, "elementor-post") and contains(@class, "type-post")]
     scene:
       Title: $card//h3[contains(@class, "elementor-post__title")]/a
-
-      URL: $card//h3[contains(@class, "elementor-post__title")]/a/@href
-
+      URLs: $card//h3[contains(@class, "elementor-post__title")]/a/@href
       Date:
         selector: $card//span[contains(@class, "elementor-post-date")]
         postProcess:
           - parseDate: January 2, 2006
-
       Image: $card//div[contains(@class, "elementor-post__thumbnail")]/img/@src
-
       Details: $card//div[contains(@class, "elementor-post__excerpt")]/p
 
   sceneScraper:
+    common:
+      $scene: //body[contains(@class, "single-post")]
     scene:
-      Title: //h1[contains(@class, "elementor-heading-title")]
-
+      Title: $scene//h1[contains(@class, "elementor-heading-title")]
       Date:
-        selector: //meta[@property="article:published_time"]/@content
+        selector: //meta[@property="article:published_time"][$scene]/@content
         postProcess:
           - parseDate: 2006-01-02T15:04:05Z07:00
-
       Details:
-        selector: //div[contains(@class, "elementor-widget-theme-post-content")]//p[1]
-
-      Image: //meta[@property="og:image"]/@content
-
+        selector: $scene//div[contains(@class, "elementor-widget-theme-post-content")]//p[normalize-space()]
+        concat: "\n\n"
+      Image: //meta[@property="og:image"][$scene]/@content
       Performers:
-        Name: //a[contains(@href, "/tag/")]
-
+        Name: $scene//a[contains(@href, "/tag/")]
       Tags:
-        Name: //a[contains(@href, "/category/")]
-
+        Name: $scene//a[contains(@href, "/category/")]
       Studio:
         Name:
-          fixed: Household Fantasy
-# Last Updated September 17, 2026
+          selector: $scene/@class
+          postProcess:
+            - replace:
+                - regex: .+
+                  with: Household Fantasy
