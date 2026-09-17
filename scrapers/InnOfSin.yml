@@ -2,11 +2,10 @@ name: Inn of Sin
 sceneByURL:
   - action: scrapeXPath
     url:
-      - adreenawinters.com
       - bbctitans.com
       - dannyoceansadventures.com
       - mydeepdarksecret.com
-      - puerto-rock.com
+      - richardmannevents.com
       - richardmannsworld.com
       - tatsandtits.com
       - trans4thefans.com
@@ -15,12 +14,22 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $scene: //div[@class="vid-box" or @class="vidBox"]
+      $scene: //div[@class="vid-box" or @class="vidBox" or contains(@class, "video-description")]
     scene:
-      Title: $scene//h1 | $scene//h2
+      Title: $scene//h1 | $scene//h2 | $scene//h4[@class="video-title"]
       Details:
         selector: //*[contains(text(), "About") or contains(text(), "Description")]/following-sibling::p | //span[@itemprop="about"]/p
         concat: "\n\n"
+      Date:
+        selector: //link[@type="application/json"]/@href
+        postProcess:
+          - subScraper:
+              selector: //body
+              postProcess:
+                - replace:
+                    - regex: '(?s).*?"date":"([^"T]+).*'
+                      with: $1
+          - parseDate: "2006-01-02"
       Image: //video/@poster
       URLs: //link[@rel="canonical"]/@href
       Tags:
@@ -38,15 +47,13 @@ xPathScrapers:
           postProcess:
             - replace:
                 # Get the domain name without any subdomains
-                # https://regex101.com/r/JxFd9a/1
-                - regex: ^(?:https:\/\/[\w\.]*?)([^.]+)\.com.*$
+                - regex: ^.*?([\w-]+)\.com.*$
                   with: $1
             - map:
-                adreenawinters: Adreena Winters
                 bbctitans: BBC Titans
                 dannyoceansadventures: Danny Ocean's Adventures
                 mydeepdarksecret: My Deep Dark Secret
-                puerto-rock: Puerto Rock
+                richardmannevents: Richard Mann Events
                 richardmannsworld: Richard Mann's World
                 tatsandtits: Tats and Tits
                 trans4thefans: Trans 4 the Fans
