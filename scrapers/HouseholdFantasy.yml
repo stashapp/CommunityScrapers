@@ -1,0 +1,60 @@
+name: HouseholdFantasy
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - householdfantasy.com/
+    scraper: sceneScraper
+
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://householdfantasy.com/?s={}
+  scraper: sceneSearch
+
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneSearch:
+    common:
+      $card: //article[contains(@class, "elementor-post")]
+    scene:
+      Title: $card//h3[contains(@class, "elementor-post__title")]/a
+
+      URL: $card//h3[contains(@class, "elementor-post__title")]/a/@href
+
+      Date:
+        selector: $card//span[contains(@class, "elementor-post-date")]
+        postProcess:
+          - parseDate: January 2, 2006
+
+      Image: $card//div[contains(@class, "elementor-post__thumbnail")]/img/@src
+
+      Details: $card//div[contains(@class, "elementor-post__excerpt")]/p
+
+  sceneScraper:
+    scene:
+      Title: //h1[contains(@class, "elementor-heading-title")]
+
+      Date:
+        selector: //meta[@property="article:published_time"]/@content
+        postProcess:
+          - parseDate: 2006-01-02T15:04:05Z07:00
+
+      Details:
+        selector: //div[contains(@class, "elementor-widget-theme-post-content")]//p[1]
+
+      Image: //meta[@property="og:image"]/@content
+
+      Performers:
+        Name: //a[contains(@href, "/tag/")]
+
+      Tags:
+        Name: //a[contains(@href, "/category/")]
+
+      Studio:
+        Name:
+          fixed: Household Fantasy
+# Last Updated September 17, 2026
