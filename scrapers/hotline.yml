@@ -1,0 +1,56 @@
+name: hotline
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - gethotline.com/vid/
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //script[@id="__NEXT_DATA__"]
+        postProcess:
+          - replace:
+              - regex: '(?s).*?"clipData":\{.*?"title":"([^"]+)".*'
+                with: $1
+
+      Date:
+        selector: //script[@id="__NEXT_DATA__"]
+        postProcess:
+          - replace:
+              - regex: '(?s).*?"clipData":\{.*?"createdAt":"([^"]+)".*'
+                with: $1
+          - parseDate: 2006-01-02T15:04:05.000Z
+
+      Details: //meta[@property="og:description"]/@content
+
+      Performers:
+        Name:
+          selector: //script[@id="__NEXT_DATA__"][contains(., '"models":"')]
+          postProcess:
+            - replace:
+                - regex: '(?s).*?"clipData":\{.*?"models":"([^"]+)".*'
+                  with: $1
+          split: ","
+
+      Tags:
+        Name:
+          selector: //script[@id="__NEXT_DATA__"]
+          postProcess:
+            - replace:
+                - regex: '(?s).*?"clipData":\{.*?"tag":"([^"]+)".*'
+                  with: $1
+          split: ","
+
+      Image: //meta[@property="og:image"]/@content
+
+      Studio:
+        Name:
+          selector: //script[@id="__NEXT_DATA__"]
+          postProcess:
+            - replace:
+                - regex: '(?s).*?"clipData":\{.*?"ownerInfo":\{.*?"displayName":"([^"]+)".*'
+                  with: $1
+# Last Updated September 17, 2026
