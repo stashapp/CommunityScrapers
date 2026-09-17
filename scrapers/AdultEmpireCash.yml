@@ -33,6 +33,7 @@ sceneByURL:
       - stephousexxx.com/
       - store.evilangel.com/
       - store.evilangelvideo.com/
+      - streaming.iafd.com/
       - thirdworldxxx.com/
       - transationalfantasies.com/
       - wcpclub.com/
@@ -56,6 +57,7 @@ groupByURL:
       # - shemalestrokers.com/ # Scenes published as movies?
       - store.evilangel.com/
       - store.evilangelvideo.com/
+      - streaming.iafd.com/
       - thirdworldxxx.com/
       - transationalfantasies.com/
       - wcpclub.com/
@@ -65,7 +67,7 @@ groupByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: &TitleSel //h1[@class="description"]/text()
+      Title: &TitleSel //h1[@class="description"]
       Date: &DateSel
         selector: //div[@class="release-date"][1]/text()
         postProcess:
@@ -74,14 +76,17 @@ xPathScrapers:
         selector: //div[@class="synopsis"]//text()
         concat: "\n\n"
       Tags:
-        Name: //div[@class="tags"]/a/text()|//div[@class="categories"]/a/text()|//a[@data-label="Attribute"]/text()
+        Name: >-
+          //div[@class="tags"]/a |
+          //div[@class="categories"]/a |
+          //a[@data-label="Attribute"]
       Performers:
         Name: //div[@class="video-performer"]/a//text()
       Studio:
         Name:
           selector: &studioSel >-
-            //div[@id="video-container-details"]//div[@class="studio"]/a/text() |
-            //div[@class="studio"]/span[not(@class)]/text()
+            //div[@id="video-container-details"]//div[@class="studio"]/a |
+            //div[@class="studio"]/span[not(@class)]
           postProcess: &PP # Override studio name only when needed
             - replace:
                 # trim whitespace first so the map below matches exactly
@@ -99,7 +104,7 @@ xPathScrapers:
                   with:
       Image: //link[@rel="image_src"]/@href
       Groups:
-        Name: //h1[@class="description"]/following-sibling::p/a/text()
+        Name: //h1[@class="description"]/following-sibling::p/a
       Director:
         selector: //div[@class="director"]//text()[not(parent::span)]
         concat: " "
@@ -125,7 +130,7 @@ xPathScrapers:
       Synopsis:
         selector: //div[@class="synopsis"]//text()
         concat: "\n\n"
-      Director: //div[@class="director"]/a/text()
+      Director: //div[@class="director"]/a
       Duration:
         selector: //div[@class="release-date"][2]/text()
         postProcess:
