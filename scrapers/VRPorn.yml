@@ -51,5 +51,10 @@ xPathScrapers:
       $card: //article
     scene:
       Title: $card/header/a/@title
-      URL: $card/header/a/@href
-# Last Updated July 13, 2026
+      URL:
+        selector: $card/header/a/@href
+        postProcess:
+          - replace:
+              - regex: ^/
+                with: https://vrporn.com/
+# Last Updated September 17, 2026
