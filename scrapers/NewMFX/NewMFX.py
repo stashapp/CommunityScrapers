@@ -1,5 +1,7 @@
 import json
-from datetime import datetime
+import re
+import time
+from datetime import date
 from urllib.parse import urljoin, urlparse
 
 from py_common import log
@@ -20,6 +22,7 @@ USER_AGENT = (
     "AppleWebKit/537.36 (KHTML, like Gecko) "
     "Chrome/152.0.0.0 Safari/537.36"
 )
+POSTER_RE = re.compile(r"""poster:\s*["']([^"']+)["']""")
 
 def new_session() -> requests.Session:
     """Create a NewMFX session and pass the Laravel age gate."""
@@ -72,7 +75,7 @@ def parse_date(value: str | None) -> str:
 
     value = clean_text(value)
     try:
-        return datetime.strptime(value, "%b %d, %Y").strftime("%Y-%m-%d")
+        return date(*time.strptime(value, "%b %d, %Y")[:3]).isoformat()
     except ValueError:
         log.warning(f"Could not parse NewMFX date: {value}")
         return ""
@@ -92,6 +95,16 @@ def validate_scene_url(url: str) -> bool:
             or parsed.hostname.endswith(".newmfx.com")
         )
     )
+
+def scene_image(soup: BeautifulSoup) -> str | None:
+    for script in soup.find_all("script"):
+        if match := POSTER_RE.search(script.get_text()):
+            return match.group(1)
+
+    if (image := soup.select_one(".movie-image img")) and (src := image.get("src")):
+        return str(src)
+
+    return None
 
 def scene_from_url(url: str) -> ScrapedScene | None:
     """Scrape a complete NewMFX scene page."""
@@ -167,12 +180,11 @@ def scene_from_url(url: str) -> ScrapedScene | None:
     }
     scene["studio"] = studio
 
-    image = soup.select_one(".movie-image img")
-    if image and image.get("src"):
-        scene["image"] = urljoin(BASE_URL, image["src"])
+    if image := scene_image(soup):
+        scene["image"] = urljoin(BASE_URL, image)
 
     return scene
-    
+
 def parse_search_results(html: str) -> list[ScrapedScene]:
     """Parse scene metadata from a NewMFX search-results page."""
     soup = BeautifulSoup(html, "html.parser")
@@ -292,4 +304,3 @@ if __name__ == "__main__":
             log.error(f"Operation {op} not implemented")
 
     print(json.dumps(result))
-# Last Updated September 17, 2026
