@@ -14,7 +14,13 @@ xPathScrapers:
       $movieMeta: //div[contains(@class, "movieMeta")]
     scene:
       Title: //div[contains(@class, "movieTitle")]
-      Details: $movieMeta/div[1]/text()
+      Details:
+        selector: $movieMeta/div[1]/text()
+        postProcess:
+          - replace:
+              - regex: ^[\s,]*$
+                with: ""
+      URLs: //link[@rel="canonical"]/@href
       Studio:
         Name: $movieMeta//a[contains(@href, "/movies/studio/")]
       Date:
