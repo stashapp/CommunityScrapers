@@ -1,4 +1,3 @@
-# yaml-language-server: $schema=../../validator/scraper.schema.json
 name: Arx
 sceneByURL:
   - action: scrapeXPath
@@ -29,44 +28,44 @@ xPathScrapers:
     scene:
       Title: &titleSel //meta[@property="og:title"]/@content
       Date: &date
-        selector: //h1/following-sibling::div[contains(@class, "items-center")]//span[@class="block"]/text()
+        selector: //h1/following-sibling::div[contains(@class, "items-center")]//span[@class="block"]
         postProcess:
           - parseDate: Jan 2, 2006
       Details: &detailsSel //span[text()="Description:"]/following-sibling::span
       Performers:
-        Name: &performersSel //span[text()="Models:"]/following-sibling::div//a//span/text()
+        Name: &performersSel //span[text()="Models:"]/following-sibling::div//a//span
       Tags:
-        Name: &tagsSel //a[contains(@href, "/categories/")]//text()
-      URL: &urlSel //meta[@property="og:url"]/@content
+        Name: &tagsSel //a[contains(@href, "/categories/")]
+      URLs: &urlSel //meta[@property="og:url"]/@content
       Image: &imageSel //meta[@property="og:image"]/@content
       Code: &code
-        selector: *urlSel
+        selector: *imageSel
         postProcess:
-          - replace:
-              - regex: &domainAndCodeRegex 'https?://([^/]+)/scenes/(\d+)/.*'
-                with: $2
+          - javascript: |
+              const m = /\/scene_thumbs\/(.+?)-\d+x\d+-thumb\./.exec(value);
+              return m ? m[1] : "";
       Studio:
         Name: &studioName
-          selector: //img[contains(@alt, "Logo")]/@alt
+          selector: //img[contains(@alt, "Logo") and not(contains(@alt, "Randy Pass"))]/@alt
           postProcess:
             - replace:
                 - regex: \s*Logo
                   with: ""
-        URL:
-          selector: *urlSel
+        URLs:
+          selector: //meta[@property="og:url"][not(contains(@content, "randypass.com"))]/@content
           postProcess:
             - replace:
-                - regex: *domainAndCodeRegex
-                  with: https://www.$1
+                - regex: 'https?://([^/]+)/scenes/\d+/.*'
+                  with: https://$1
     gallery:
       Title:
         selector: *titleSel
         postProcess:
           - replace:
-              - regex: "Photos for Scene \\| "
+              - regex: "^Photos from "
                 with: ""
       Code: *code
-      URL: *urlSel
+      URLs: *urlSel
       Date:
         selector: *urlSel
         postProcess:
@@ -105,7 +104,7 @@ xPathScrapers:
           - subScraper: *detailsSel
     performer:
       Name: //meta[@property="og:image:alt"]/@content
-      Image:
+      Images:
         selector: *imageSel
         postProcess:
           - replace:
@@ -113,4 +112,3 @@ xPathScrapers:
                 with: "${1}0x0${2}"
       Tags:
         Name: *tagsSel
-# Last Updated November 7, 2025
