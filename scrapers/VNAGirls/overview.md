@@ -1,4 +1,4 @@
-Scraper has been tested on 2026-09-11
+Scraper has been tested on 2026-09-17
 
 |   Network | Studio              | URL                                                                                                |
 | --------: | :------------------ | :------------------------------------------------------------------------------------------------- |
@@ -7,6 +7,7 @@ Scraper has been tested on 2026-09-11
 | VNA Girls | Blown By Rone       | https://www.blownbyrone.com/videos/38494/red-panties-sniff-stuff                                   |
 | VNA Girls | Carmen Valentina    | https://www.carmenvalentina.com/videos/34480/kali-roses-carmen-valentina-big-tits-blonde-lesbian   |
 | VNA Girls | Charlee Chase       | https://www.charleechaselive.com/videos/38770/stroke-it-for-my-big-tits                            |
+| VNA Girls | Deauxma Live        | https://deauxmalive.com/videoset/23204/catfight-round-2-with-minka                                 |
 | VNA Girls | FoXXedUp            | https://www.foxxedup.com/videos/38629/stockings-strip-lesbian-feet-fetish                          |
 | VNA Girls | Fucked Feet         | https://www.fuckedfeet.com/videos/39280/katie-kinz-gives-me-a-footjob                              |
 | VNA Girls | Girl Girl Mania     | https://www.girlgirlmania.com/videos/35429/girl-girl-mania-jenevieve-hexxx-janey-doe               |
