@@ -3,26 +3,75 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - tacamateurs.com
-    scraper: sceneScraper
+    scraper: mainScraper
+  - action: scrapeXPath
+    url:
+      - tacamateurs2.com
+    scraper: secondaryScraper
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - tacamateurs2.com
+    scraper: galleryScraper
 xPathScrapers:
-  sceneScraper:
+  mainScraper:
     scene:
-      Title:
-        selector: //div[@id="update_wrapper"]/h1
+      Title: //div[@id="update_wrapper"]/h1
       Date:
         selector: //div[@class="date_wrapper"]
         postProcess:
-          - parseDate: 02-January-2006
+          - parseDate: 02-Jan-2006
       Performers:
         Name: //div[@id="facepic_wrapper"]/h2
       Details:
-        selector: //div[@id="update_wrapper"]/p[not(@class) and not(@align)]
-        concat: "\n\n"
+        selector: //div[@id="update_wrapper"]/p[not(@class) and not(@align)]//text()[not(parent::a)]
+        concat: "\n"
       Tags:
         Name: //p[@class="tags"]/a
-      Image:
-        selector: //meta[@property="og:image"]/@content
+      Image: //meta[@property="og:image"]/@content
       Studio:
         Name:
           fixed: TAC Amateurs
-# Last Updated May 19, 2021
+  secondaryScraper:
+    common:
+      $update: //div[@id="update-wrapper"][.//img[contains(@class, "updatetype")][@alt="Video Update"]]
+    scene:
+      Title: &title //li[meta[@property="position"][@content="4"]][$update]//span[@property="name"]
+      Date: &date
+        selector: $update//span[contains(@class, "date")]
+        postProcess:
+          - parseDate: 02-Jan-2006
+      Details: &details $update//p[not(@class) and not(@style)]
+      Performers: &performers
+        Name: //div[@id="sidenav_left"][$update]/h3
+      Tags: &tags
+        Name:
+          selector: //meta[@name="keywords"][$update]/@content
+          postProcess:
+            - replace:
+                - regex: ",$"
+                  with:
+          split: ","
+      Studio: &studio
+        Name:
+          selector: $update//img[contains(@class, "updatetype")]/@alt
+          postProcess:
+            - replace:
+                - regex: ^.+$
+                  with: TAC Amateurs2
+      Image:
+        selector: $update//a[contains(@title, "Free Pic 1")]/@href
+        postProcess:
+          - replace:
+              - regex: ^/
+                with: https://www.tacamateurs2.com/
+  galleryScraper:
+    common:
+      $update: //div[@id="update-wrapper"][.//img[contains(@class, "updatetype")][@alt="Gallery Update"]]
+    gallery:
+      Title: *title
+      Date: *date
+      Details: *details
+      Performers: *performers
+      Tags: *tags
+      Studio: *studio
