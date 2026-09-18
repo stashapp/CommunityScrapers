@@ -6,14 +6,22 @@ sceneByURL:
     url:
       - vrporn.com/
     scraper: sceneScraper
+
 sceneByName:
   action: scrapeXPath
   queryURL: https://vrporn.com/search/videos/?query={}
   scraper: sceneSearch
+
 sceneByQueryFragment:
   action: scrapeXPath
   queryURL: "{url}"
   scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - vrporn.com/pornstars/
+    scraper: performerScraper
 
 xPathScrapers:
   sceneScraper:
@@ -41,11 +49,18 @@ xPathScrapers:
                   with: Virtual Reality
       Performers:
         Name: //a[@class="ui-card-model__name"]/text()
+        URLs:
+          selector: //a[@class="ui-card-model__name"]/@href
+          postProcess:
+            - replace:
+                - regex: ^/
+                  with: https://vrporn.com/
       Studio:
         Name: //div[contains(@class,"studio")]/a/@title
       Image:
         selector: //meta[@property="og:image:url"]/@content
       URL: //link[@rel="canonical"]/@href
+
   sceneSearch:
     common:
       $card: //article
@@ -57,4 +72,126 @@ xPathScrapers:
           - replace:
               - regex: ^/
                 with: https://vrporn.com/
-# Last Updated September 17, 2026
+
+  performerScraper:
+    common:
+      $json: //script[@type="application/ld+json"][contains(., '"ProfilePage"') and contains(., '"Person"')]
+      $attribute: //div[contains(@class, "ui-detail-star-attributes__item")]
+      $label: span[contains(@class, "ui-detail-star-attributes__item-label")]
+      $value: span[contains(@class, "ui-detail-star-attributes__item-value")]
+
+    performer:
+      Name:
+        selector: $json
+        postProcess:
+          - replace:
+              - regex: '(?s).*?"mainEntity":\{.*?"name":"([^"]+)".*'
+                with: $1
+
+      URLs: //link[@rel="canonical"]/@href
+
+      Birthdate:
+        selector: >
+          $attribute[
+            $label[
+              normalize-space(.)="Birthday:"
+              or normalize-space(.)="Birthday"
+            ]
+          ]/$value
+        postProcess:
+          - replace:
+              - regex: '^(\d{4})(\d{2})(\d{2})$'
+                with: $1-$2-$3
+          - parseDate: 2006-01-02
+
+      Country:
+        selector: >
+          $attribute[
+            $label[
+              normalize-space(.)="Country of origin:"
+              or normalize-space(.)="Country of origin"
+            ]
+          ]/$value
+          |
+          $attribute[
+            $label[
+              normalize-space(.)="Place of Birth:"
+              or normalize-space(.)="Place of Birth"
+              or normalize-space(.)="Birth place:"
+              or normalize-space(.)="Birth place"
+            ]
+          ]/$value
+        postProcess:
+          - replace:
+              - regex: '^(?i:(?:.*,\s*)?US|USA)$'
+                with: United States of America
+              - regex: '^(?i:.*,\s*(?:CA|NY|FL|TX|PA|AZ|NV|WA|OR|IL|OH|MI|GA|NC|SC|VA|MD|NJ|MA|CT|CO|TN|IN|MO|WI|MN|LA|AL|KY|OK|UT|IA|KS|AR|MS|NE|NM|WV|ID|HI|NH|ME|RI|MT|DE|SD|ND|AK|VT|WY|DC))$'
+                with: United States of America
+
+      Ethnicity:
+        selector: >
+          $attribute[
+            $label[
+              normalize-space(.)="Ethnicity:"
+              or normalize-space(.)="Ethnicity"
+            ]
+          ]/$value
+
+      Height:
+        selector: >
+          $attribute[
+            $label[
+              normalize-space(.)="Height:"
+              or normalize-space(.)="Height"
+            ]
+          ]/$value
+        postProcess:
+          - replace:
+              - regex: '.*\((?:or )?(\d+)\s*cm\).*'
+                with: $1
+
+      Weight:
+        selector: >
+          $attribute[
+            $label[
+              normalize-space(.)="Weight:"
+              or normalize-space(.)="Weight"
+            ]
+          ]/$value
+        postProcess:
+          - replace:
+              - regex: '.*\((?:or )?(\d+)\s*kg\).*'
+                with: $1
+
+      Measurements:
+        selector: >
+          $attribute[
+            $label[
+              normalize-space(.)="Measurements:"
+              or normalize-space(.)="Measurements"
+            ]
+          ]/$value
+
+      HairColor:
+        selector: >
+          $attribute[
+            $label[
+              normalize-space(.)="Hair Color:"
+              or normalize-space(.)="Hair Color"
+              or normalize-space(.)="Hair color:"
+              or normalize-space(.)="Hair color"
+            ]
+          ]/$value
+
+      EyeColor:
+        selector: >
+          $attribute[
+            $label[
+              normalize-space(.)="Eye Color:"
+              or normalize-space(.)="Eye Color"
+              or normalize-space(.)="Eyecolor:"
+              or normalize-space(.)="Eyecolor"
+            ]
+          ]/$value
+
+      Images: //meta[@property="og:image"]/@content
