@@ -75,7 +75,8 @@ def clean_text(details: str) -> str:
 
 RESOLUTION_BY_DOMAIN: list[tuple[tuple[str, ...], str]] = [
     (("www.naughtyamericavr.com",), "1000x563"),
-    (("www.tonightsgirlfriend.com",), "1499x944"),
+    # Pretty bad crops at this resolution so we grab the default from `resolution_for` instead
+    # (("www.tonightsgirlfriend.com",), "1499x944"),
     (
         (
             "www.myfriendshotmom.com",
