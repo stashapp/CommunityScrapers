@@ -26,16 +26,9 @@ sceneByURL:
         - regex: '^https?://(?:www\.)?([^/]+)/(?:.*/)?([^/]+)/?$'
           with: https://$1/wp-json/wp/v2/posts?_embed&slug=$2
     scraper: sceneScraper
-  - action: scrapeJson
+  - action: scrapeXPath
     url:
       - toticos.com/
-    queryURL: "{url}"
-    queryURLReplace:
-      url:
-        - regex: "[?#].*$"
-          with: ""
-        - regex: '^https?://(?:www\.)?([^/]+)/(?:.*/)?([^/]+)/?$'
-          with: https://$1/wp-json/wp/v2/posts?_embed&slug=$2
     scraper: toticosScraper
   # Only scrapable through the Wayback Machine
   - action: scrapeXPath
@@ -88,7 +81,7 @@ jsonScrapers:
         selector: 0.content.rendered
         postProcess:
           - *htmlToText
-      Date: &date
+      Date:
         selector: 0.date_gmt
         postProcess:
           - parseDate: "2006-01-02T15:04:05"
@@ -103,7 +96,7 @@ jsonScrapers:
                   .map((name) => name.trim())
                   .join("__SEP__");
           split: "__SEP__"
-      Tags: &tags
+      Tags:
         Name:
           selector: "0._embedded.wp:term|@flatten.#.name"
           postProcess:
@@ -116,7 +109,7 @@ jsonScrapers:
               - regex: '-\d+x\d+(\.[A-Za-z]+)$'
                 with: $1
       URLs: &url 0.link
-      Studio: &studio
+      Studio:
         Name:
           selector: 0.link
           postProcess:
@@ -131,22 +124,6 @@ jsonScrapers:
                 toticos.com: Toticos
                 trikepatrol.com: Trike Patrol
                 tuktukpatrol.com: TukTuk Patrol
-
-  toticosScraper:
-    scene:
-      Title:
-        selector: 0.title.rendered
-        postProcess:
-          - *htmlToText
-      Details:
-        selector: 0.content.rendered
-        postProcess:
-          - *htmlToText
-      Date: *date
-      Tags: *tags
-      Image: "0._embedded.wp:featuredmedia.0.source_url"
-      URLs: *url
-      Studio: *studio
 
   performerScraper:
     performer:
@@ -188,6 +165,32 @@ jsonScrapers:
       URLs: "#.link"
 
 xPathScrapers:
+  toticosScraper:
+    common:
+      $scene: //video[@id="mediabox"]
+    scene:
+      Title: //h1[@class="post-title"][$scene]
+      Date:
+        selector: //meta[@property="article:published_time"][$scene]/@content
+        postProcess:
+          - replace:
+              - regex: T.*$
+                with: ""
+      Details: //span[@class="latest_update_description"]
+      Performers:
+        Name: //div[@class="single-model-head"]/a
+      Tags:
+        Name: //div[contains(@class, "cat_tag")]/a
+      Image: $scene/@poster
+      URLs: //link[@rel="canonical"][$scene]/@href
+      Studio:
+        Name:
+          selector: $scene/@poster
+          postProcess:
+            - replace:
+                - regex: ^.+$
+                  with: Toticos
+
   legacyScraper:
     scene:
       Title: //h1[@class="amp-single-title"]
