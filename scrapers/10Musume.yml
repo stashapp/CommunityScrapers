@@ -36,7 +36,12 @@ jsonScrapers:
         selector: Release
         postProcess:
           - parseDate: 2006-01-02
-      Image: ThumbHigh
+      Image:
+        selector: ThumbHigh
+        postProcess:
+          - replace:
+              - regex: ^https:///
+                with: https://www.10musume.com/
       Performers:
         Name: ActressesEn
       Studio:
@@ -44,7 +49,7 @@ jsonScrapers:
           fixed: 10Musume
       Tags:
         Name: UCNAMEEn
-      URL:
+      URLs:
         selector: MovieID
         postProcess:
           - replace:
@@ -52,4 +57,4 @@ jsonScrapers:
                 with: "https://en.10musume.com/movies/"
               - regex: $
                 with: "/"
-# Last Updated November 09, 2021
+      Code: MovieID
