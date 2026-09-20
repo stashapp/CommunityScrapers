@@ -1,26 +1,59 @@
 name: AbuseMe
 sceneByURL:
+  - action: scrapeJson
+    url:
+      - abuseme.net/
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: https?://(?:www\.)?abuseme\.net/([^/?#]+).*
+          with: https://abuseme.net/wp-json/wp/v2/posts?slug=${1}&_embed
+    scraper: sceneScraper
   - action: scrapeXPath
     url:
       - abuseme.com/video
-    scraper: sceneScraper
-xPathScrapers:
+    scraper: archivedSceneScraper
+jsonScrapers:
   sceneScraper:
     scene:
-      Title: //h1[@class="shoot-title"]/text()
+      Title: 0.title.rendered
+      URLs: 0.link
+      Details: 0.meta.description
+      Date:
+        selector: 0.date
+        postProcess:
+          - parseDate: 2006-01-02T15:04:05
+      Studio:
+        Name:
+          selector: 0.type
+          postProcess:
+            - map:
+                post: Abuse Me
+      Performers:
+        Name: 0._embedded.wp:term.@flatten.#(taxonomy=="post_tag")#.name
+      Image: 0._embedded.wp:featuredmedia.0.source_url
+xPathScrapers:
+  archivedSceneScraper:
+    scene:
+      Title: //h1[@class="shoot-title"]
       Date:
         selector: //div[@class="playerHdr_rgt"]/text()
         postProcess:
           - replace:
-            - regex: (\w+:\s)(.+)
-              with: $2
+              - regex: (\w+:\s)(.+)
+                with: $2
           - parseDate: Jan 2, 2006
       Details: //div[@class="playerTxt"]
       Tags:
-        Name: 
-            selector: //meta[@http-equiv="keywords"]/@content
-            split: ","
-            # Bad way to get tags
+        Name:
+          selector: //meta[@http-equiv="keywords"]/@content
+          postProcess:
+            - replace:
+                - regex: ', abuse ?me(\.com)?'
+                  with: ""
+                - regex: ", "
+                  with: ","
+          split: ","
       Performers:
         Name:
           selector: //script[contains(.,"bbGaParams.shootModels")]/text()
@@ -32,13 +65,15 @@ xPathScrapers:
                   with: $2
           split: ","
       Studio:
-        Name: 
-            fixed: AbuseMe
-      Image: 
+        Name:
+          selector: //h1[@class="shoot-title"]
+          postProcess:
+            - replace:
+                - regex: .+
+                  with: Abuse Me
+      Image:
         selector: //img[@class="playerPic"]/@src
         postProcess:
-           - replace:
-             - regex: ^\/\/
-               with: "https:"
-      
-# Last Updated August 03, 2020
+          - replace:
+              - regex: ^//
+                with: "https://"
