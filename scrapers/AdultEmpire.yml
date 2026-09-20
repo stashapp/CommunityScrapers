@@ -56,7 +56,7 @@ xPathScrapers:
   sceneSearch:
     scene:
       Title: //a[@class="boxcover"]/img/@title
-      URL:
+      URLs:
         selector: //a[@class="boxcover"]/@href
         postProcess:
           - replace:
@@ -120,7 +120,13 @@ xPathScrapers:
         postProcess:
           - parseDate: Jan 02 2006
       Tags:
-        Name: //strong[contains(text(), "Attributes")]/following-sibling::a/text()
+        Name: //a[@label="Clip Attribute"]
+      ProductionDate:
+        selector: //li[strong[contains(text(),"Production Year")]]
+        postProcess:
+          - replace:
+              - regex: .*(\d{4}).*
+                with: $1
       Performers:
         Name: //strong[contains(text(), "Starring")]/following-sibling::a/text()
         URLs:
@@ -134,7 +140,7 @@ xPathScrapers:
         concat: __SEPARATOR__
         postProcess:
           - replace:
-              - regex: (\d+).*/([^/]*\d+)[^/\d]*$
+              - regex: (\d+).*/(\d+)[^/]*$
                 with: https://imgs1cdn.adultempire.com/backdrop/6000/$2%5f$1/scene-1.jpg
   sceneScraper:
     scene:
@@ -142,6 +148,13 @@ xPathScrapers:
       Details:
         selector: //div[contains(@class,"synopsis-content")]//text()
         concat: " "
+        postProcess:
+          - replace:
+              # Intentional: these occasionally show up twice in the markup
+              - regex: "\\s*Show (Less|More)$"
+                with: ""
+              - regex: "\\s*Show (Less|More)$"
+                with: ""
       Date:
         selector: //small[contains(text(), "Released")]/following-sibling::text()
         postProcess:
@@ -149,16 +162,16 @@ xPathScrapers:
       ProductionDate:
         selector: //li[small[text()='Production Year:']]
         postProcess:
-        - replace:
-          - regex: .*(\d{4})$
-            with: $1
+          - replace:
+              - regex: .*(\d{4})$
+                with: $1
       Director: //a[@label="Director"]/text()
       Image: //a[@id="front-cover"]/@data-href
       Studio:
         Name: //small[contains(text(),"Studio")]/following-sibling::a/text()
       Groups:
         Name: //div[contains(@class, "title-rating-section")]//h1/text()
-        URL: //link[@rel="canonical"]/@href
+        URLs: //link[@rel="canonical"]/@href
       Tags:
         Name: //div[h2[contains(.,'Categories')]]//a[@label="Category"]/text()
       Performers:
@@ -169,18 +182,12 @@ xPathScrapers:
             - replace:
                 - regex: ^
                   with: "https://www.adultdvdempire.com"
-      URL: //meta[@name='og:url']/@content
+      URLs: //meta[@name='og:url']/@content
   performerScraper:
     common:
       $modal: //*[@id="profileModal"]
     performer:
       Name: //main//h1
-      Birthdate:
-        selector: $modal//li[contains(text(), 'Born:')]
-        postProcess:
-          - replace:
-              - regex: Born:\s+(.*)
-                with: $1
       Height:
         selector: $modal//li[contains(text(), 'Height:')]
         postProcess:
@@ -188,7 +195,20 @@ xPathScrapers:
               - regex: Height:\s+(.*)
                 with: $1
           - feetToCm: true
-      Image: //*[@id="content"]/section/div/div[1]/a[1] | /img/@src | //*[@id="content"]/section/div/div[1]/img/@src | //section[@class="container-fluid"]//a[@class="fancy"][@label="Headshot"]/@href
+      Weight:
+        selector: $modal//li[contains(text(), 'Weight:')]
+        postProcess:
+          - replace:
+              - regex: Weight:\s+(\d+).*
+                with: $1
+          - lbToKg: true
+      EyeColor:
+        selector: $modal//li[contains(text(), 'Eyes:')]
+        postProcess:
+          - replace:
+              - regex: 'Eyes:\s+(.*?)\s+Eyes'
+                with: $1
+      Image: //a[@label="Headshot"]/@href
       Country:
         selector: $modal//li[contains(text(), 'From:')]
         postProcess:
@@ -207,7 +227,15 @@ xPathScrapers:
           - replace:
               - regex: "Alias: (.*)"
                 with: $1
-      Details: $modal//h2[contains(text(), "Biography")]/following-sibling::p
+      Details:
+        selector: $modal//div[contains(@class,"modal-body")]/node()[self::text() or self::i]
+        concat: " "
+        postProcess:
+          - replace:
+              - regex: '\s+([,.])'
+                with: $1
+              - regex: '\s*Biography Text ©.*$'
+                with: ""
       URLs: //link[@rel='canonical']/@href
 
 driver:
@@ -237,4 +265,3 @@ driver:
           Domain: "www.adultdvdempire.com"
           Value: "" # replace with your account etoken
           Path: "/"
-# Last Updated September 17, 2025
