@@ -39,7 +39,7 @@ performerByURL:
     scraper: performerScraper
   - action: scrapeXPath
     url:
-      - amkingdom/tour/model/
+      - amkingdom.com/tour/model/
       - atkexotics.com/tour/model/
     scraper: performerScraperAlt
 xPathScrapers:
@@ -50,17 +50,20 @@ xPathScrapers:
           selector: //span[@class='login']/a/@href
           postProcess:
             - replace:
-                - regex: .+join\.([^\.]+).+
+                - regex: .*?([a-z0-9]+)\.com.*
                   with: $1
             - map:
+                amkingdom: "ATK Galleria"
+                atkarchives: "ATK Archives"
+                atkgalleria: "ATK Galleria"
+                atkgirlfriends: "ATK Girlfriends"
                 atkhairy: "ATK Natural & Hairy"
                 atkpetites: "ATK Petites"
                 atkpremium: "ATK Premium"
-                atkarchives: "ATK Archives"
       Performers:
         Name: //div[@class='watchName']//text()
       Title: &Title
-        selector: //title/text()
+        selector: //title[//*[contains(@class,"tour_box")]]/text()
         postProcess:
           - replace:
               - regex: '\.$'
@@ -94,16 +97,19 @@ xPathScrapers:
           selector: //span[@class='login']/a/@href
           postProcess:
             - replace:
-                - regex: .+join\.([^\.]+).+
+                - regex: .*?([a-z0-9]+)\.com.*
                   with: $1
             - map:
+                amkingdom: "ATK Galleria"
+                atkarchives: "ATK Archives"
+                atkgalleria: "ATK Galleria"
+                atkgirlfriends: "ATK Girlfriends"
                 atkhairy: "ATK Natural & Hairy"
                 atkpetites: "ATK Petites"
                 atkpremium: "ATK Premium"
-                atkarchives: "ATK Archives"
 
       Title:
-        selector: //title/text()
+        selector: //title[//*[contains(@class,"tour_box")]]/text()
         postProcess:
           - replace:
               - regex: ^ATK.+\:\s
@@ -172,7 +178,7 @@ xPathScrapers:
       Studio:
         Name: *StudioAlt
       Title:
-        selector: //title/text()
+        selector: //title[//*[contains(@class,"tour_box")]]/text()
         postProcess:
           - replace:
               - regex: ^ATK.+\:\s
@@ -281,4 +287,3 @@ driver:
           ValueRandom: 26
           Domain: .atkexotics.com
           Path: /
-# Last Updated December 15, 2024
