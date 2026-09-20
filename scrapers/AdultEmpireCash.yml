@@ -1,5 +1,5 @@
 name: AdultEmpireCash
-# Scrapes: 18Lust, Black Massive Cocks, Brazilian Trans Girls, Brutha's Inc, Concoxxxion, Elegant Angel, Evil Angel, Forbidden Fruits Films, Helix Studios, Horny Household, Hot Wife Fun, Hot Wives Cheating, Jay's POV, Jodi West, Jonathan Jordan XXX, Kings of Fetish, Latino Guys Porn, Only3X, Reagan Foxx, Real Girls Fuck, Rodney Moore, SINematica, Smut Factor, Spankmonster, StepHouseXXX, Third World Media, Transational Fantasies, West Coast Productions
+# Scrapes: 18Lust, Black Massive Cocks, Brazilian Trans Girls, Brutha's Inc, Conor Coxxx, Elegant Angel, Evil Angel, Forbidden Fruits Films, Helix Studios, Horny Household, Hot Wives Cheating, Jay's POV, Jodi West, Jonathan Jordan XXX, Kings of Fetish, Latino Guys Porn, Only3X, Reagan Foxx, Rodney Moore, SINematica, Smut Factor, Spankmonster, StepHouseXXX, Taboolu, Third World Media, Transational Fantasies, West Coast Productions
 # Sites ("Brands") from https://www.adultempirecash.com
 sceneByURL:
   - action: scrapeXPath
@@ -14,7 +14,6 @@ sceneByURL:
       - forbiddenfruitsfilms.com/
       - helixstudios.com/
       - hornyhousehold.com/
-      - hotwifefun.com/
       - hotwivescheating.com/
       - jayspov.net/
       - jodiwest.com/
@@ -23,22 +22,21 @@ sceneByURL:
       - latinoguysporn.com/
       - lewood.com/
       - only3x.com/
-      - pornstarstroker.com/ # aggregator site?
       - reaganfoxx.com/
-      - realgirlsfuck.com
       - rodneymoorestore.com
       - sinematica.com/
-      - smutfactor.com/
       - spankmonster.com/
+      - starstroker.com/
       - stephousexxx.com/
       - store.evilangel.com/
       - store.evilangelvideo.com/
+      - store18.com/
       - streaming.iafd.com/
+      - taboolu.com/
       - thirdworldxxx.com/
       - transationalfantasies.com/
       - wcpclub.com/
       - westcoastproductions.com/
-      - data18.empirestores.co/
 
 groupByURL:
   - action: scrapeXPath
@@ -57,12 +55,12 @@ groupByURL:
       # - shemalestrokers.com/ # Scenes published as movies?
       - store.evilangel.com/
       - store.evilangelvideo.com/
+      - store18.com/
       - streaming.iafd.com/
       - thirdworldxxx.com/
       - transationalfantasies.com/
       - wcpclub.com/
       - westcoastproductions.com/
-      - data18.empirestores.co/
 
 xPathScrapers:
   sceneScraper:
@@ -81,7 +79,9 @@ xPathScrapers:
           //div[@class="categories"]/a |
           //a[@data-label="Attribute"]
       Performers:
-        Name: //div[@class="video-performer"]/a//text()
+        Name: >-
+          //a[@label="Clip Attribute - Performer"] |
+          //div[@class="video-performer"]/a[not(//a[@label="Clip Attribute - Performer"])]
       Studio:
         Name:
           selector: &studioSel >-
@@ -103,6 +103,7 @@ xPathScrapers:
                 - regex: \sClips$
                   with:
       Image: //link[@rel="image_src"]/@href
+      URLs: &urlSel //meta[@name="og:url"]/@content
       Groups:
         Name: //h1[@class="description"]/following-sibling::p/a
       Director:
@@ -145,6 +146,7 @@ xPathScrapers:
           postProcess: *PP
       FrontImage: //link[@rel="image_src"]/@href
       BackImage: //div[@class="carousel-item"]/img/@data-src
+      URLs: *urlSel
 driver:
   headers:
     - Key: "Cookie"
