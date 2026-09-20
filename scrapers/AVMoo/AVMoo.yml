@@ -1,0 +1,32 @@
+# requires: py_common
+name: AVMoo
+sceneByURL:
+  - action: script
+    url:
+      - avmoo.shop/
+      - avsox.click/
+      - avheat.shop/
+    script:
+      - python
+      - AVMoo.py
+      - scene-by-url
+groupByURL:
+  - action: script
+    url:
+      - avmoo.shop/
+      - avsox.click/
+      - avheat.shop/
+    script:
+      - python
+      - AVMoo.py
+      - group-by-url
+performerByURL:
+  - action: script
+    url:
+      - avmoo.shop/
+      - avsox.click/
+      - avheat.shop/
+    script:
+      - python
+      - AVMoo.py
+      - performer-by-url
