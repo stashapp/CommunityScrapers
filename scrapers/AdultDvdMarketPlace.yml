@@ -26,24 +26,30 @@ sceneByQueryFragment:
 xPathScrapers:
   movieScraper:
     group:
-      Name: //meta[@property="og:title"]/@content
-      Director: //span[contains(text(),"Director")]/following-sibling::a/text()
-      Date:
+      Name: &title //meta[@property="og:title"]/@content
+      URLs: &urls //meta[@property="og:url"]/@content
+      Director: &director //span[contains(text(),"Director")]/following-sibling::a/text()
+      Date: &date
         selector: //span[contains(text(),"Released")]/following-sibling::text()
         postProcess:
           - parseDate: 01/2006
-      Synopsis: //h3[contains(text(), "Description")]/following-sibling::p
-      Studio:
+      Synopsis: &details //h3[contains(text(), "Description")]/following-sibling::p
+      Studio: &studio
         Name: //span[@itemprop="brand"]/text()
-      FrontImage: //strong[contains(text(),"Large Front")]/parent::a/@href
-      BackImage: //strong[contains(text(),"Large Back")]/parent::a/@href
+      FrontImage: &frontImage //a[contains(@href,"large_front_image")]/@href
+      BackImage:
+        selector: *frontImage
+        postProcess:
+          - replace:
+              - regex: large_front_image
+                with: large_back_image
 
   sceneSearch:
     common:
       $selection: //div[contains(concat(' ',normalize-space(@class),' '),' product-col ')]
     scene:
       Title: $selection//h4/a
-      URL:
+      URLs:
         selector: $selection//h4/a/@href
         postProcess:
           - replace:
@@ -53,18 +59,12 @@ xPathScrapers:
 
   sceneScraper:
     scene:
-      Title: //meta[@property="og:title"]/@content
-      Details: //h3[contains(text(), "Description")]/following-sibling::p
-      Date:
-        selector: //span[contains(text(),"Released")]/following-sibling::text()
-        postProcess:
-          - parseDate: 01/2006
-      Image: //a[contains(@href, "large_front_image")]/@href
-      Studio:
-        Name: //span[@itemprop="brand"]/text()
-      Groups:
-        Name: //meta[@property="og:title"]/@content
-        URL: //meta[@property="og:url"]/@content
+      Title: *title
+      Details: *details
+      Date: *date
+      Director: *director
+      Image: *frontImage
+      Studio: *studio
       Performers:
         Name: //h3[text()="Cast"]/following-sibling::a
       Tags:
