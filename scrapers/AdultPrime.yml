@@ -17,6 +17,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - adult-prime.com/video.php
+      - adult-prime.com/video/
     scraper: secondarySite
 
 xPathScrapers:
@@ -24,12 +25,12 @@ xPathScrapers:
     common:
       $scenes: //ul[@id="studio-videos-container"]
     scene:
-      Title: //div[@class="ap-breadcrumbs"]//li[contains(@class, "active-crumb")]
+      Title: $scenes//span[contains(@class, "description-title")]
       Date:
         selector: $scenes//span[@class="description-releasedate"]
         postProcess:
           - parseDate: Jan 02, 2006
-      URL:
+      URLs:
         selector: $scenes//a[@class="absolute"]/@href
         postProcess:
           - replace:
@@ -46,7 +47,7 @@ xPathScrapers:
         selector: //div[@id="theatre-row"]//span[@class="description-releasedate"]/text()
         postProcess:
           - parseDate: 02-01-2006
-      URL: &url //link[@rel="canonical"]/@href
+      URLs: &url //link[@rel="canonical"]/@href
       Details: &details
         selector: //p[contains(@class, "ap-limited-description-text")]
         postProcess:
@@ -75,36 +76,25 @@ xPathScrapers:
       Studio:
         Name: $scene//b[contains(.,"Studio")]/a | $scene//b[contains(.,"Studio")]/following-sibling::a
       Tags:
-        Name:
-          selector: $scene//b[contains(.,"Niches")]/following-sibling::a
+        Name: $scene//b[contains(.,"Niches")]/following-sibling::a
 
   secondarySite:
-    common:
-      $scene: //div[@class="content-wrapper"]/div[@class="content-wrapper"]
     scene:
-      Title: $scene//h1
-      Date: ($scene//i[contains(@class, "fa-calendar")]/following-sibling::b)[1]
-      # Secondary site has no canonical URLs so we construct one for the main site
-      URL:
-        selector: $scene//div[contains(@class, "update-info-site")]/a/@href
+      Title: //h1[@class="vhero-title"]
+      URLs: //link[@rel="canonical"]/@href
+      Details: //p[@class="vhero-desc"]
+      Date:
+        selector: //span[@class="vhero-meta-item"][contains(.,",")]
+        postProcess:
+          - parseDate: January 2, 2006
+      Image: &heroImage //img[@class="vhero-bg"]/@src
+      Code:
+        selector: *heroImage
         postProcess:
           - replace:
-              - regex: .+?(\d+)$
-                with: https://adultprime.com/studios/video?id=$1
-      Details: *details
-      Image: $scene//div[@data-image]/@data-image
+              - regex: .*/(\d+)/[^/]*$
+                with: $1
       Studio:
-        Name:
-          selector: //meta[@name="Keywords"]/@content
-          postProcess:
-            - replace: # get the last keyword in a list
-                - regex: ^.*,\s*
-                  with: ""
+        Name: //a[@class="vhero-eyebrow"]/img/@alt
       Performers:
-        Name:
-          selector: $scene//b[contains(.,"Performer")]/following-sibling::text()
-          split: ", "
-      Tags:
-        Name:
-          selector: $scene//b[contains(.,"Niche")]/following-sibling::text()
-          split: ", "
+        Name: //a[contains(@class, "video-model-chip")]/span
