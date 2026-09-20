@@ -1,71 +1,67 @@
 name: AVEntertainments-JP
 sceneByFragment:
   action: scrapeXPath
-  queryURL: https://www.aventertainments.com/search_Products.aspx?languageID=2&dept_id=29&keyword={filename}&searchby=keyword
+  queryURL: https://www.aventertainments.com/dvd/search?lang=2&cat=29&culture=ja-JP&searchby=keyword&page=1&keyword={filename}
   queryURLReplace:
     filename:
       - regex: \..+$
         with: ""
-  scraper: sceneQueryScraper
+  scraper: sceneSearch
 sceneByURL:
   - action: scrapeXPath
     url:
       - aventertainments.com/
     scraper: sceneScraper
-    queryURL: "{url}"
-    #queryURLReplace:
-      #url:
-        #- regex: avsox.com
-          #with: "avsox.click"
-        #- regex: /en/
-          #with: "/cn/"
 sceneByName:
   action: scrapeXPath
-  queryURL: https://www.aventertainments.com/search_Products.aspx?languageID=2&dept_id=29&keyword={}&searchby=keyword
+  queryURL: https://www.aventertainments.com/dvd/search?lang=2&cat=29&culture=ja-JP&searchby=keyword&page=1&keyword={}
   scraper: sceneSearch
 sceneByQueryFragment:
   action: scrapeXPath
   queryURL: "{url}"
   scraper: sceneScraper
-
 xPathScrapers:
   sceneSearch:
     common:
       $videoItem: //div[@class="single-slider-product grid-view-product"]
     scene:
       Title: $videoItem/div[@class="single-slider-product__content"]/p/a
-      URL: 
-        selector: $videoItem/div[@class="single-slider-product__content"]/p/a/@href
+      URLs: $videoItem/div[@class="single-slider-product__content"]/p/a/@href
       Image: $videoItem/div[@class="single-slider-product__image"]/a/img/@src
-  sceneQueryScraper:
-    common:
-      $videoItem: //div[@class="single-slider-product grid-view-product"]
-    scene:
-      Title: $videoItem/div[@class="single-slider-product__content"]/p/a
-      URL: 
-        selector: $videoItem/div[@class="single-slider-product__content"]/p/a/@href
-      Image: $videoItem/div[@class="single-slider-product__image"]/a/img/@src
-        # If you don't support cookie you can use this regex.
-        #    - regex: $
-        #      with: "?locale=en"
   sceneScraper:
+    common:
+      $singleInfo: //div[@class="single-info"]
+      $performer: //div[@class="single-info"][contains(span,"主演女優") or contains(span,"Starring")]/span[@class="value"]/a
     scene:
-      Title: //meta[@property="og:title"]/@content
+      Title:
+        selector: //div[@class="section-title"]/h3
+        postProcess:
+          - replace:
+              - regex: (?i)\s*\(\s*(?:full\s*hd|blu-?ray[^)]*)\s*\)\s*$
+                with: ""
+      URLs: //meta[@property="og:url"]/@content
+      Code: $singleInfo[contains(span,"商品番号") or contains(span,"Item")]/span[@class="tag-title"]
       Date:
-        selector: //div[@class="container mt-30"]//span[contains(.,"発売日")]/following-sibling::span
+        selector: $singleInfo[contains(span,"発売日") or contains(span,"Date")]/span[@class="value"]
         postProcess:
           - replace:
               - regex: (\d{1,2}\/\d{1,2}\/\d{4}).*
                 with: $1
           - parseDate: 1/2/2006
-      Code: //div[@class="container mt-30"]//span[contains(.,"商品番号")]/following-sibling::span
-      Tags:
-        Name: //div[@class="container mt-30"]//span[contains(.,"カテゴリ")]/following-sibling::span/a
+      Details:
+        selector: //div[contains(@class,"product-description")]
+        postProcess:
+          - replace:
+              - regex: \s*\.+\s*(?:すべて読む|Read More)
+                with: ""
       Performers:
-        Name: //div[@class="container mt-30"]//span[contains(.,"主演女優")]/following-sibling::span/a
+        Name: $performer
+        URLs: $performer/@href
+      Tags:
+        Name: $singleInfo[contains(span,"カテゴリ") or contains(span,"Category")]/span[@class="value-category"]/a
       Studio:
-        Name: 
-          selector: //div[@class="container mt-30"]//span[contains(.,"スタジオ")]/following-sibling::span
+        Name:
+          selector: $singleInfo[contains(span,"スタジオ") or contains(span,"Studio")]/span[@class="value"]/a
           postProcess:
             - map:
                 ムゲンエンターテインメント: MUGEN Entertainment
@@ -79,75 +75,4 @@ xPathScrapers:
                 キャットウォーク: Catwalk
                 ステージ 2 メディア: Stage 2 Media
                 スカイハイエンターテインメント: Sky High Entertainment
-      #Image: //meta[@property="og:image"]/@content
-      Image: 
-        selector: //*[@class='compare-button d-inline-block mr-25']/a/@href
-          #//mediaelementwrapper[@id="player1"]/video[@id="player1_native_hls"]/@poster
-          #//div[@id="PlayerCover"]/img/@src
-        postProcess:
-          - replace:
-              - regex: .*item_no=(.*)&qty.*
-                with: $1.webp
-              - regex: A
-                with: a
-              - regex: B
-                with: b
-              - regex: C
-                with: c
-              - regex: D
-                with: d
-              - regex: E
-                with: e
-              - regex: F
-                with: f
-              - regex: G
-                with: g
-              - regex: H
-                with: h
-              - regex: I
-                with: i
-              - regex: J
-                with: j
-              - regex: K
-                with: k
-              - regex: L
-                with: l
-              - regex: M
-                with: m
-              - regex: N
-                with: n
-              - regex: O
-                with: o
-              - regex: P
-                with: p
-              - regex: Q
-                with: q
-              - regex: R
-                with: r
-              - regex: S
-                with: s
-              - regex: T
-                with: t
-              - regex: U
-                with: u
-              - regex: V
-                with: v
-              - regex: W
-                with: w
-              - regex: X
-                with: x
-              - regex: Y
-                with: y
-              - regex: Z
-                with: z
-              - regex: ^
-                with: "https://imgs02.aventertainments.com/new/bigcover/"
-      Details: //div[@class="product-description mt-20"]
-      URL: 
-        selector: //meta[@property="og:url"]/@content
-debug:
-  printHTML: false
-driver:
-  useCDP: false
-  sleep: 1
-# Last Updated Jan 11, 2024
+      Image: //span[@class="grid-gallery"]/a/@href|//div[@id="PlayerCover"]/img/@src
