@@ -12,28 +12,37 @@ sceneByQueryFragment:
   action: scrapeXPath
   queryURL: "{url}"
   scraper: sceneScraper
-
 xPathScrapers:
   chSearch:
     common:
       $card: //*[@id="main-content"]//article[contains(@class, "item-list")]
     scene:
       Title: $card/h2[@class="post-title"]/a
-      URL: $card/h2[@class="post-title"]/a/@href
-      Image: $card//div[@class="mlib-list-image"]/img/@src
-
+      URLs: $card/h2[@class="post-title"]/a/@href
+      Image:
+        selector: $card//div[@class="mlib-list-image"]/img/@src
+        postProcess: &fullSizeImage
+          # the CDN renders any size on request; the page only ever asks for a
+          # 256x144 thumbnail
+          - replace:
+              - regex: /256x144/
+                with: /1280x720/
   sceneScraper:
     common:
       $id: //*[@id="the-post"]
     scene:
       Title: $id/div/h1/span
+      URLs: //link[@rel="canonical"][$id]/@href
       Date:
         selector: $id/div/p/span[@class="tie-date"]
         postProcess:
           - parseDate: January _2, 2006
-      Image: $id//div[@class="mlib-list-image"]/img/@src
+      # TODO: enable when scrape dialog can show durations
+      # Duration: $id//span[@class="icon time"]
+      Image:
+        selector: $id//div[@class="mlib-list-image"]/img/@src
+        postProcess: *fullSizeImage
       Studio:
-        Name: $id//li[div="Author"]/div[contains(@class,"value")]/a
+        Name: $id//li[div="Author"]/div[contains(@class, "value")]/a
       Tags:
-        Name: //*[@id="main-content"]//p[@class="post-tag"]/a
-# Last Updated November 11, 2022
+        Name: //*[@id="main-content"]//p[@class="post-tag"][$id]/a
