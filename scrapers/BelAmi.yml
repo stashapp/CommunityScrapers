@@ -22,20 +22,46 @@ xPathScrapers:
     scene:
       Title: $scene
       Details:
-        selector: '//p[span[@id="ContentPlaceHolder1_LabelDescription"]]/following-sibling::p/text() | //span[@id="ContentPlaceHolder1_LabelDescription"][normalize-space()]/text()'
-        concat: "\n\n"
+        selector: >-
+          //p[span[@id="ContentPlaceHolder1_LabelDescription"]]/following-sibling::p
+          | //span[@id="ContentPlaceHolder1_LabelDescription"][normalize-space()]
+          | //p[span[@id="ContentPlaceHolder1_LabelDescription"]]/following-sibling::p//br/following-sibling::node()[1]
+          | //span[@id="ContentPlaceHolder1_LabelDescription"]//br/following-sibling::node()[1]
+        concat: "\x01"
         postProcess:
-          - replace:
-            - regex: '[ \t\xa0]+'
-              with: ' '
-            - regex: '[\x{2018}\x{2019}]'
-              with: "'"
-            - regex: '[\x{201C}\x{201D}]'
-              with: '"'
-            - regex: '\n{3,}'
-              with: "\n\n"
-            - regex: '^\s+|\s+$'
-              with: ''
+          # Because Stash doesn't respect internal whitespace when it converts
+          # nodes to text we need to do our own little hack to reconstruct the details
+          - javascript: |
+              if (!value) return "";
+              var parts = [];
+              value.split("\x01").forEach(function (p) {
+                p = p.trim();
+                if (p) parts.push(p);
+              });
+              // a part wholly inside a longer one is a <br> anchor, not a block
+              var blocks = parts.filter(function (p) {
+                return !parts.some(function (q) {
+                  return q.length > p.length && q.indexOf(p) !== -1;
+                });
+              });
+              var anchors = parts.filter(function (p) {
+                return blocks.indexOf(p) === -1;
+              });
+              var out = [];
+              blocks.forEach(function (full) {
+                var cuts = [0];
+                anchors.forEach(function (a) {
+                  var at = full.indexOf(a);
+                  if (at > 0 && at === full.lastIndexOf(a)) cuts.push(at);
+                });
+                cuts.sort(function (a, b) { return a - b; });
+                for (var i = 0; i < cuts.length; i++) {
+                  var end = i + 1 < cuts.length ? cuts[i + 1] : full.length;
+                  var block = full.slice(cuts[i], end).trim();
+                  if (block) out.push(block);
+                }
+              });
+              return out.join("\n\n");
       Date:
         selector: //*[@id="ContentPlaceHolder1_LabelReleased"]
         postProcess:
