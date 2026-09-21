@@ -17,42 +17,50 @@ sceneByFragment:
   scraper: vodSearch
   queryURL: https://www.clubdom.com/vod/search.php?st=advanced&qex={title}
   queryURLReplace:
-     title:
-       - regex: " "
-         with: "+"
+    title:
+      - regex: " "
+        with: "+"
 sceneByQueryFragment:
   action: scrapeXPath
   queryURL: "{url}"
   scraper: vodScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $trailer: //strong[contains(., "Release date:")]
     scene:
-      Title:
-        selector: //span[@class="left"]/h1
+      Title: //span[@class="left"]/h1[$trailer]
       Date:
-        selector: //strong[contains(.,"Release date:")]/following-sibling::text()
+        selector: $trailer/following-sibling::text()
         postProcess:
           - parseDate: 01/02/2006
+      # TODO: enable when scrape dialog can show durations
+      # Duration: //strong[contains(., "Runtime:")]/following-sibling::text()
       Performers:
         Name: //span[@class="models_list"]//a
       Tags:
         Name: //span[@class="categories"]//a
-      Details:
-        selector: //strong[contains(.,"Description:")]/following-sibling::text()
       Image:
-        selector: //div[@class='videoplayer']/img/@src0_3x | //div[@class='videoplayer']/img/@src0_2x | //div[@class='videoplayer']/img/@src0_1x
+        # src0_2x/3x/4x are plain upscales of src0_1x, at 5-6x the bytes
+        selector: //div[@class="videoplayer"]/img[$trailer]/@src0_1x
         postProcess:
           - replace:
               - regex: ^
                 with: "https:"
       Studio:
         Name:
-          fixed: Club Dom
+          selector: //span[@class="left"]/h1[$trailer]
+          postProcess:
+            - replace:
+                - regex: ^.+$
+                  with: Club Dom
+  # This could be in Andomark but we'd lose the sceneByName functionality
   vodScraper:
+    common:
+      $vod: //div[@id="download_form"]
     scene:
-      URL: //div[@class='cell content_tab_current']/a/@href
-      Title:
-        selector: //span[@class="title_bar_hilite"]
+      Title: //span[@class="title_bar_hilite"][$vod]
+      URLs: //div[@class="cell content_tab_current"][$vod]/a/@href
       Date:
         selector: //div[@class="gallery_info"]/div[1]//div[@class="cell update_date"]
         postProcess:
@@ -61,30 +69,34 @@ xPathScrapers:
         Name: //div[@class="gallery_info"]/span[@class="update_models"]/a
       Tags:
         Name: //span[@class="update_tags"]/a
-      Details:
-        selector: //span[@class="update_description"]
+      Details: //div[@class="gallery_info"]//span[@class="update_description"]
       Image:
-        selector: //base/@href|//div[@id="download_form"]/following-sibling::script
+        selector: //base[$vod]/@href|//div[@id="download_form"]/following-sibling::script
         concat: "|"
         postProcess:
           - replace:
-              - regex: '(.*)/vod/\|.*thumbnail:"(.*)",vtt_file:.*'
+              - regex: (.*)/vod/\|.*thumbnail:"(.*)",vtt_file:.*
                 with: $1$2
+              # scenes with no thumbnail leave the concat unreplaced: drop it
+              - regex: (?s)^.*\|.*$
+                with: ""
       Studio:
         Name:
-          fixed: Club Dom
+          selector: //span[@class="title_bar_hilite"][$vod]
+          postProcess:
+            - replace:
+                - regex: ^.+$
+                  with: Club Dom
   vodSearch:
     common:
       $update-details: //div[@class="update_details"]
     scene:
-      Title:
-        selector: $update-details/a[2]/text()
-      URL:
-        selector: $update-details/a[2]/@href
+      Title: $update-details/a[2]/text()
+      URLs: $update-details/a[2]/@href
       Image:
-        selector: $update-details/a[1]/img/@src
+        # search thumbs are lazy-loaded: no @src, and the path is root-relative
+        selector: $update-details/a[1]/img/@src0_1x
         postProcess:
           - replace:
               - regex: ^
-                with: "https:"
-# Last Updated December 15, 2024
+                with: "https://www.clubdom.com"
