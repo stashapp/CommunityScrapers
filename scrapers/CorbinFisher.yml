@@ -10,13 +10,13 @@ performerByURL:
   - action: scrapeXPath
     url:
       - corbinfisher.com/sfw/models
+      - corbinfisher.com/tour/models
     scraper: performerScraper
 
 xPathScrapers:
   sceneScraper:
     scene:
-      Title:
-        selector: //h1
+      Title: //h1
       Date:
         selector: //div[@class="added"]
         postProcess:
@@ -32,13 +32,11 @@ xPathScrapers:
         concat: "\n\n"
         postProcess:
           - replace:
-              - regex: <br\s*\/?> 
+              - regex: <br\s*\/?>
                 with: "\n"
-      # Intentionally disabled
-      # https://github.com/stashapp/CommunityScrapers/pull/2496
-      # https://discourse.stashapp.cc/t/sfw-vs-nsfw-covers/3712
-      # Image:
-      #   selector: //img[@height="815"]/@src0_1x
+      # player-thumb is the scene's own cover; item-thumb is "more episodes"
+      Image:
+        selector: //div[@class="player-thumb"]//img/@src0_1x
       Studio:
         Name:
           fixed: Corbin Fisher
@@ -47,11 +45,12 @@ xPathScrapers:
           selector: //head/link[@rel="canonical"]/@href
           postProcess:
             - replace:
-              - regex: .*-(remastered|REMASTERED)\..*
-                with: "Remaster,Re-Release"
+                # Remasters are flagged only by the URL slug, -remastered or -rm
+                - regex: (?i).*-(remastered|rm)-?\.html.*
+                  with: "Remaster,Re-Release"
             - replace:
-              - regex: ^http.*
-                with: ""
+                - regex: ^http.*
+                  with: ""
           split: ","
 
   performerScraper:
@@ -77,26 +76,29 @@ xPathScrapers:
                 with: "0'"
           - feetToCm: true
       Measurements: //span[contains(text(),"COCK THICKNESS:")]/following-sibling::text()
-      Circumcised:  
-        selector: //span[contains(text(),"CUT:")]/following-sibling::text() | //span[contains(text(),"AGE:")]/following-sibling::text()
+      Circumcised:
+        # `CUT:` is only ever present when the performer is circumsized, so if it's missing
+        # that means uncut EXCEPT when scraping the sfw pages: these have removed all mention
+        # of cocks, so if we're not careful we'll scrape a CUT performer as UNCUT
+        selector: >-
+          //span[contains(text(),"CUT:")]/following-sibling::text() |
+          //span[contains(text(),"AGE:")][//span[contains(text(),"COCK SIZE:")]][not(//span[contains(text(),"CUT:")])]/following-sibling::text()
         postProcess:
           - javascript: |
-              if (!value || value.match(/^\d+$/)) {  // Se è vuoto o contiene solo numeri (è l'età)
-                return "UNCUT"
-              }
+              if (value.match(/^\d+$/)) return "UNCUT"; // matched AGE:, i.e. no CUT: row on a page that lists genital data
               return value.toUpperCase().includes("YES") ? "CUT" : "UNCUT"
-      Details:  
+      Details:
         selector: //div[@class="modelContent"]/node()
         concat: "\n"
         postProcess:
           - replace:
-              - regex: <br\s*\/?> 
+              - regex: <br\s*\/?>
                 with: "\n"
       Disambiguation:
         fixed: Corbin Fisher
       FakeTits:
         fixed: Natural
-      Image: //div[@class="modelBioPic"]/img/@src0_1x
+      Images: //div[@class="modelBioPic"]/img/@src0_1x
       Tags:
         Name:
           selector: |
@@ -106,8 +108,8 @@ xPathScrapers:
             //span[contains(text(),"EYES:")]/following-sibling::text()|
             //span[contains(text(),"HAIR COLOR:")]/text()|
             //span[contains(text(),"HAIR COLOR:")]/following-sibling::text()|
-            //span[contains(text(),"CUT:")]/text() | //span[contains(text(),"AGE:")][not(//span[contains(text(),"CUT:")])]/text()|
-            //span[contains(text(),"CUT:")]/following-sibling::text() | //span[contains(text(),"AGE:")][not(//span[contains(text(),"CUT:")])]/following-sibling::text()|
+            //span[contains(text(),"CUT:")]/text() | //span[contains(text(),"AGE:")][//span[contains(text(),"COCK SIZE:")]][not(//span[contains(text(),"CUT:")])]/text()|
+            //span[contains(text(),"CUT:")]/following-sibling::text() | //span[contains(text(),"AGE:")][//span[contains(text(),"COCK SIZE:")]][not(//span[contains(text(),"CUT:")])]/following-sibling::text()|
             //span[contains(text(),"COCK THICKNESS:")]/text()|
             //span[contains(text(),"COCK THICKNESS:")]/following-sibling::text()
           concat: ","
@@ -115,22 +117,22 @@ xPathScrapers:
             - javascript: |
                 let pairs = [];
                 const values = value.split(",").map(v => v.trim()).filter(v => v);
-                
+
                 // Aggiungiamo subito il tag Corbin Fisher
                 pairs.push("Corbin Fisher");
-                
+
                 for(let i = 0; i < values.length; i += 2) {
                   const label = values[i];
                   const val = values[i+1];
                   if(!val) continue;
-                  
+
                   const firstPart = val.toLowerCase().charAt(0).toUpperCase() + val.toLowerCase().slice(1);
-                  
+
                   if(label.includes("AGE:")) {
                     pairs.push("Uncircumcised");
                     continue;
                   }
-                  
+
                   if(label.includes("EYES:")) {
                     pairs.push(firstPart + " Eyes");
                   }
@@ -156,7 +158,3 @@ xPathScrapers:
                 }
                 return pairs.join(",");
           split: ","
-
-driver:
-  useCDP: true
-# Last Updated September 25, 2025
