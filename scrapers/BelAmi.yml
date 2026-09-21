@@ -22,8 +22,20 @@ xPathScrapers:
     scene:
       Title: $scene
       Details:
-        selector: //p[span[@id="ContentPlaceHolder1_LabelDescription"]]/following-sibling::p
+        selector: '//p[span[@id="ContentPlaceHolder1_LabelDescription"]]/following-sibling::p/text() | //span[@id="ContentPlaceHolder1_LabelDescription"][normalize-space()]/text()'
         concat: "\n\n"
+        postProcess:
+          - replace:
+            - regex: '[ \t\xa0]+'
+              with: ' '
+            - regex: '[\x{2018}\x{2019}]'
+              with: "'"
+            - regex: '[\x{201C}\x{201D}]'
+              with: '"'
+            - regex: '\n{3,}'
+              with: "\n\n"
+            - regex: '^\s+|\s+$'
+              with: ''
       Date:
         selector: //*[@id="ContentPlaceHolder1_LabelReleased"]
         postProcess:
