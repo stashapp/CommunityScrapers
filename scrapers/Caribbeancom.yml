@@ -26,14 +26,14 @@ xPathScrapers:
     scene:
       Title: //div[contains(@class,"heading")]/h1/text()
       Details: $movieinfo/p
-      URL:
-        selector: //link[@hreflang="ja-JP"]/@href
+      URLs:
+        selector: &movieLink //a[contains(@href,"/member/movies/")]/@href
         postProcess:
           - replace:
-              - regex: "https://www.caribbeancom.com"
-                with: "https://en.caribbeancom.com/eng"
+              - regex: '.*//[^/]*\.(caribbeancompr|caribbeancom)\.com/member/movies/([^/]+)/.*'
+                with: "https://en.${1}.com/eng/moviepages/${2}/index.html"
       Date:
-        selector: //link[@hreflang="ja-JP"]/@href
+        selector: *movieLink
         postProcess:
           - replace:
               - regex: .*(\d{6}).*
@@ -42,16 +42,12 @@ xPathScrapers:
       Performers:
         Name:
           selector: //ul/li/span[contains(.,"Starring")]/..//a
-          concat: "," # caribbeancom splits name/surname for some performers
+          concat: ", "
           postProcess:
             - replace:
-                - regex: "&" # in some cases & is used instead of , to split performers
-                  with: ","
-                - regex: "([^,]),([^,])"
-                  with: "$1 $2"
-                - regex: ",,"
-                  with: ","
-          split: ","
+                - regex: '\s*&\s*'
+                  with: ", "
+          split: ", "
       Tags:
         Name: //ul/li/span[contains(.,"Tags")]/../span/a[contains(@class,"spec")]
       Image:
@@ -72,4 +68,3 @@ xPathScrapers:
             - map:
                 caribbeancompr: Caribbeancom Premium
                 caribbeancom: Caribbeancom
-# Last Updated May 20, 2021
