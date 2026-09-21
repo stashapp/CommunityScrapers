@@ -94,31 +94,24 @@ xPathScrapers:
         selector: >
           $attribute[
             $label[
-              normalize-space(.)="Birthday:"
-              or normalize-space(.)="Birthday"
+              starts-with(normalize-space(.), "Birthday")
             ]
           ]/$value
         postProcess:
           - replace:
               - regex: '^(\d{4})(\d{2})(\d{2})$'
                 with: $1-$2-$3
+              - regex: '^(\d{2})/(\d{2})/(\d{4})$'
+                with: $3-$1-$2
           - parseDate: 2006-01-02
 
       Country:
         selector: >
           $attribute[
             $label[
-              normalize-space(.)="Country of origin:"
-              or normalize-space(.)="Country of origin"
-            ]
-          ]/$value
-          |
-          $attribute[
-            $label[
-              normalize-space(.)="Place of Birth:"
-              or normalize-space(.)="Place of Birth"
-              or normalize-space(.)="Birth place:"
-              or normalize-space(.)="Birth place"
+              starts-with(normalize-space(.), "Country of origin")
+              or starts-with(normalize-space(.), "Place of Birth")
+              or starts-with(normalize-space(.), "Birth place")
             ]
           ]/$value
         postProcess:
@@ -132,8 +125,7 @@ xPathScrapers:
         selector: >
           $attribute[
             $label[
-              normalize-space(.)="Ethnicity:"
-              or normalize-space(.)="Ethnicity"
+              starts-with(normalize-space(.), "Ethnicity")
             ]
           ]/$value
 
@@ -141,8 +133,7 @@ xPathScrapers:
         selector: >
           $attribute[
             $label[
-              normalize-space(.)="Height:"
-              or normalize-space(.)="Height"
+              starts-with(normalize-space(.), "Height")
             ]
           ]/$value
         postProcess:
@@ -154,8 +145,7 @@ xPathScrapers:
         selector: >
           $attribute[
             $label[
-              normalize-space(.)="Weight:"
-              or normalize-space(.)="Weight"
+              starts-with(normalize-space(.), "Weight")
             ]
           ]/$value
         postProcess:
@@ -167,8 +157,7 @@ xPathScrapers:
         selector: >
           $attribute[
             $label[
-              normalize-space(.)="Measurements:"
-              or normalize-space(.)="Measurements"
+              starts-with(normalize-space(.), "Measurements")
             ]
           ]/$value
 
@@ -176,10 +165,8 @@ xPathScrapers:
         selector: >
           $attribute[
             $label[
-              normalize-space(.)="Hair Color:"
-              or normalize-space(.)="Hair Color"
-              or normalize-space(.)="Hair color:"
-              or normalize-space(.)="Hair color"
+              starts-with(normalize-space(.), "Hair Color")
+              or starts-with(normalize-space(.), "Hair color")
             ]
           ]/$value
 
@@ -187,10 +174,8 @@ xPathScrapers:
         selector: >
           $attribute[
             $label[
-              normalize-space(.)="Eye Color:"
-              or normalize-space(.)="Eye Color"
-              or normalize-space(.)="Eyecolor:"
-              or normalize-space(.)="Eyecolor"
+              starts-with(normalize-space(.), "Eye Color")
+              or starts-with(normalize-space(.), "Eyecolor")
             ]
           ]/$value
 
