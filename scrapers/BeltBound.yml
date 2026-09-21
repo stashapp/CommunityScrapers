@@ -4,32 +4,63 @@ sceneByURL:
     url:
       - beltbound.com
     scraper: sceneScraper
-
+sceneByName:
+  action: scrapeJson
+  queryURL: https://www.beltbound.com/wp-json/wp/v2/posts?per_page=20&search={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+jsonScrapers:
+  sceneSearch:
+    scene:
+      Title:
+        selector: "#.title.rendered"
+        postProcess:
+          - javascript: |
+              return value.replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(+n));
+      URLs: "#.link"
+      Date:
+        selector: "#.date"
+        postProcess:
+          - parseDate: 2006-01-02T15:04:05
 xPathScrapers:
   sceneScraper:
+    common:
+      $post: //div[@class="post"][//link[@rel="canonical"]][.//a[@rel="bookmark"]]
     scene:
-      Title: 
-        selector: //a[@rel="bookmark"]/text()
+      Title: $post//a[@rel="bookmark"]
+      URLs: $post//a[@rel="bookmark"]/@href
       Code:
-        selector: '//div[@class="post"]/a/img/@src'
+        selector: $post/a/img/@src
         postProcess:
           - replace:
-              - regex: '.*\/updates\/bb(\d+)\/.*'
+              - regex: .*/updates/bb(\d+)/.*
                 with: BB$1
       Date:
-        selector: //div[@class="post"]/*[starts-with(text(), "Posted on ")]
+        selector: $post/*[starts-with(text(), "Posted on ")]
         postProcess:
           - replace:
-              - regex: 'Posted on ([A-Z]\w+) (\d{1,2})([a-z]{2})?, (\d{4})'
-                with: "$1 $2, $4"
+              - regex: Posted on ([A-Z]\w+) (\d{1,2})([a-z]{2})?, (\d{4})
+                with: $1 $2, $4
           - parseDate: January 2, 2006
-      Details:
-        selector: '//div[@class="post"]/p[2]'
+      Details: $post/p[2]
+      # TODO: enable when scrape dialog can show durations
+      # Duration:
+      #   selector: $post/p[contains(., "mins HD video")]
+      #   postProcess:
+      #     - javascript: |
+      #         const m = /(\d+)(?::(\d+))?\s*mins/.exec(value);
+      #         if (!m) return "";
+      #         return "00:" + m[1].padStart(2, "0") + ":" + (m[2] || "0").padStart(2, "0");
       Performers:
-        Name: '//a[@rel="tag"]'
-      Image: '//div[@class="post"]/a/img/@src'
+        Name: $post//a[@rel="tag"]
+      Image: $post/a/img/@src
       Studio:
         Name:
-          fixed: "BeltBound"
-
-# Last Updated June 19, 2023
+          selector: $post//a[@rel="bookmark"]
+          postProcess:
+            - replace:
+                - regex: ^.+$
+                  with: BeltBound
