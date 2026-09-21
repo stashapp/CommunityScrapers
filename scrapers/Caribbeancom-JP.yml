@@ -18,53 +18,46 @@ sceneByFragment:
       - regex: .+[^index.html]$$ # if no valid ID found in filename
         with: .com/404.html # clear filename
   scraper: sceneScraper
-
 xPathScrapers:
   sceneScraper:
     common:
-      $movieinfo: //div[@class="movie-info section"]
+      $movieinfo: //div[contains(@class, "movie-info")]
     scene:
-      Title: //div[@id="moviepages"]//div[@class="heading"]/h1/text()
-      Details: //div[contains(@class,"movie-info")]//p
-      URL:
-        selector: //link[@hreflang="en-US"]/@href|//script[contains(.,"posterImage = '/moviepages/'+movie_id+'/images/")]
+      Title: //div[@id="moviepages"]//div[contains(@class, "heading")]/h1
+      Details: $movieinfo//p
+      URLs:
+        selector: &movieLink //a[contains(@href, "/member/movies/")]/@href
+        concat: "|"
         postProcess:
           - replace:
-              - regex: index\.html$
-                with: index.html
-              - regex: en\.caribbeancom
-                with: www.caribbeancom
-              - regex: eng/moviepages
-                with: moviepages
-              - regex: .*posterImage\s*=\s*\'/moviepages/\'\+movie_id\+\'/images/([^\']+)\'(.|\s)*MoviePlayer\.setImage..movie_id\s.*:\s\'(\d+_\d+)\'.*
-                with: https://www.caribbeancompr.com/moviepages/$3/index.html
+              - regex: .*?//[^/]*\.(caribbeancompr|caribbeancom)\.com/member/movies/([^/]+)/.*
+                with: https://www.${1}.com/moviepages/${2}/index.html
       Date:
-        selector: //link[@hreflang="en-US"]/@href
+        selector: *movieLink
         postProcess:
           - replace:
-              - regex: .*(\d{6})-\d{3}.*
+              - regex: .*/member/movies/(\d{6})[-_]\d+/.*
                 with: $1
           - parseDate: "010206"
-      Performers:
-        Name:
-          selector: //ul/li/span[contains(.,"出演")]/..//a
-      Tags:
-        Name: //ul/li/span[contains(.,"タグ")]/../span/a[contains(@class,"spec")]
-      Image:
-        selector: //link[@hreflang="en-US"]/@href|//script[contains(.,"posterImage = '/moviepages/'+movie_id+'/images/")]
+      Code:
+        selector: *movieLink
         postProcess:
           - replace:
-              - regex: index\.html$
-                with: images/l_l.jpg
-              - regex: en\.caribbeancom
-                with: www.caribbeancom
-              - regex: eng/moviepages
-                with: moviepages
-              - regex: .*posterImage\s*=\s*\'/moviepages/\'\+movie_id\+\'/images/([^\']+)\'(.|\s)*MoviePlayer\.setImage..movie_id\s.*:\s\'(\d+_\d+)\'.*
-                with: https://www.caribbeancompr.com/moviepages/$3/images/$1
+              - regex: .*/member/movies/([^/]+)/.*
+                with: $1
+      Image:
+        selector: *movieLink
+        postProcess:
+          - replace:
+              - regex: .*?//[^/]*\.(caribbeancompr|caribbeancom)\.com/member/movies/([^/]+)/.*
+                with: https://www.${1}.com/moviepages/${2}/images/l_l.jpg
+      Performers:
+        Name: //ul/li/span[contains(., "出演")]/..//a
+      Tags:
+        Name: //ul/li/span[contains(., "タグ")]/../span/a[contains(@class, "spec")]
       Studio:
         Name:
-          selector: //ul[@class="footer-copyright"]/li[contains(.,"©")]
+          selector: //ul[@class="footer-copyright"]/li[contains(., "©")]
           postProcess:
             - replace:
                 - regex: .*\s([\w]+)\.com.*
@@ -72,25 +65,12 @@ xPathScrapers:
             - map:
                 caribbeancompr: Caribbeancom Premium
                 caribbeancom: Caribbeancom
-      Code:
-        selector: //link[@hreflang="en-US"]/@href|//script[contains(.,"posterImage = '/moviepages/'+movie_id+'/images/")]
-        postProcess:
-          - replace:
-              - regex: index\.html$
-                with: index.html
-              - regex: en\.caribbeancom
-                with: www.caribbeancom
-              - regex: eng/moviepages
-                with: moviepages
-              - regex: .*?(\d+-\d+).*
-                with: $1
-              - regex: .*posterImage\s*=\s*\'/moviepages/\'\+movie_id\+\'/images/([^\']+)\'(.|\s)*MoviePlayer\.setImage..movie_id\s.*:\s\'(\d+_\d+)\'.*
-                with: $3
-
 driver:
+  # caribbeancompr.com sends no charset header and puts <meta charset> past the
+  # 1024-byte prescan window, so a plain fetch decodes EUC-JP as mojibake
+  useCDP: true
   cookies:
-    - CookieURL: "https://www.caribbeancompr.com"
-      Cookies:
+    - Cookies:
         - Name: "cebsp_"
           Domain: ".caribbeancompr.com"
           Value: "3"
