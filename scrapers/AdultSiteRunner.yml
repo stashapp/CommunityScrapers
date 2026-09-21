@@ -1,5 +1,5 @@
 name: AdultSiteRunner
-# scrapes: Black Boy Addictionz, Blacks on Daddies, Bound Jocks, Boys Halfway House, Colt Studio Group, Daddy Carl, Hot Older Male, Monster Cub, My First Daddy, Older4Me, Play Daddy, Raunchy Bastards, Stocky Dudes, Top Latin Daddies
+# scrapes: Black Boy Addictionz, Blacks on Daddies, Bound Jocks, Boys Halfway House, Colt Studio Group, Daddy Carl, Daddy Luiggi, Daddy Raw, Hot Older Male, Monster Cub, My First Daddy, My Step Fucker, Older4Me, Play Daddy, Raunchy Bastards, Stocky Dudes, Top Latin Daddies
 performerByURL:
   - action: scrapeXPath
     scraper: performerScraper
@@ -29,9 +29,12 @@ sceneByURL:
       - boundjocks.com/scene/
       - boyshalfwayhouse.com/scene/
       - coltstudiogroup.com/scene/
+      - daddyluiggi.com/scene/
+      - daddyraw.com/scene/
       - hotoldermale.com/scene/
       - monstercub.com/scene/
       - myfirstdaddy.com/scene/
+      - mystepfucker.com/scene/
       - older4me.com/scene/
       - playdaddy.com/scene/
       - raunchybastards.com/scene/
@@ -79,9 +82,12 @@ xPathScrapers:
                 boyshalfwayhouse: Boys Halfway House
                 coltstudiogroup: Colt Studio Group
                 daddycarl: Daddy Carl
+                daddyluiggi: Daddy Luiggi
+                daddyraw: Daddy Raw
                 hotoldermale: Hot Older Male
                 monstercub: Monster Cub
                 myfirstdaddy: My First Daddy
+                mystepfucker: My Step Fucker
                 older4me: Older4Me
                 playdaddy: Play Daddy
                 raunchybastards: Raunchy Bastards
@@ -97,9 +103,14 @@ xPathScrapers:
         Name: >
           $scene//div[contains(@class, "scenePerformers")]/a
           | $scene//div[@class="scenePerf"]/span[@class="perfName"]
-        URLs: >
-          $scene//div[contains(@class, "scenePerformers")]/a/@href
-          | $scene//div[@class="scenePerf"]/@data-href
+        URLs:
+          selector: >
+            $scene//div[contains(@class, "scenePerformers")]/a/@href
+            | $scene//div[@class="scenePerf"]/@data-href
+          postProcess:
+            - replace:
+                - regex: ^/
+                  with: https://www.daddycarl.com/
       Tags:
         Name: $scene//a[@class="sceneTagsLnk"]/text()
       Details:
@@ -138,7 +149,22 @@ xPathScrapers:
                   with: https://$1.com
       Performers:
         Name: $details//span[contains(@class, "perfImage")]/a
-        URLs: $details//span[contains(@class, "perfImage")]/a/@href
+        URLs:
+          selector: >-
+            //link[@rel="canonical"][$details]/@href |
+            $details//span[contains(@class, "perfImage")]/a/@href
+          concat: "|"
+          postProcess:
+            - javascript: |
+                var parts = value.split("|");
+                var origin = parts[0].replace(/^(https?:\/\/[^\/]+).*$/, "$1");
+                return parts
+                  .slice(1)
+                  .map(function (p) {
+                    return p.indexOf("http") === 0 ? p : origin + p;
+                  })
+                  .join("|");
+          split: "|"
       Details:
         selector: $details//p/text()
         concat: "\n\n"
@@ -177,6 +203,6 @@ xPathScrapers:
       Tags:
         Name: $modelProfile/div/ul/li[5]/strong/text() |
           $modelProfile//a[@class="tagsRnd"]/text()
-      Images: $modelProfile//div[@class="profile"]//img[contains(@class,"img-responsive")]
-      URLs: //a[contains(@href,"twitter.com")]/@href
+      Images: $modelProfile//div[@class="profile"]//img[contains(@class,"img-responsive")]/@src
+      URLs: $modelProfile//a[contains(@href,"twitter.com")]/@href
       Details: $modelProfile//div[@class="main_title"]/p[not(@class)]/text()
