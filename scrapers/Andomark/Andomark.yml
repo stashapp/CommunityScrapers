@@ -329,6 +329,9 @@ xPathScrapers:
               # Bypass the CDN (which is protected by a token) and grab it direct from the site
               - regex: (.+)(cdn\.)([^?]+).+
                 with: $1$3
+              # Clear the URL if it's still incomplete
+              - regex: ^https?://[^/]+/?$
+                with: ""
       URLs: &canonical //link[@rel="canonical"]/@href
   newStyle:
     common:
