@@ -1,4 +1,4 @@
-Scraper has been tested on 2026-09-11
+Scraper has been tested on 2026-09-22
 
 | Studio              | URL                                                                                                       |
 | ------------------- | --------------------------------------------------------------------------------------------------------- |
@@ -45,6 +45,7 @@ Scraper has been tested on 2026-09-11
 | Monster Cock Gang   | https://monstercockgang.com/video/145-inch-dick-in-anal/                                                  |
 | Movie Porn          | https://movieporn.com/video/edward-cumminghands/                                                          |
 | Perverse Family     | https://perversefamily.com/tour/preview/unexpected-breakfast                                              |
+| Power Fetish        | https://powerfetish.com/video/foot-worship/                                                               |
 | R51.com             | https://r51.com/video/day-2-morning-sex/                                                                  |
 | Redneck John        | https://redneckjohn.com/video/nigerian-bombshell-part-1/                                                  |
 | Unreal Porn         | https://unrealporn.com/tour/preview/hairdresser/                                                          |

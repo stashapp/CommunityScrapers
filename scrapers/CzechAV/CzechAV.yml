@@ -72,11 +72,15 @@ xPathScrapers:
                 with: ""
       URLs: //link[@rel="canonical"]/@href
       Code:
+        # "Czech Casting 7460:" -> 7460, but "Power Fetish 12 - PART 5:" needs
+        # the part too: episode alone collides across every part of an episode
         selector: //h1/span[@class="visually-hidden"]
         postProcess:
-          - replace:
-              - regex: \D*(\d+).*
-                with: $1
+          - javascript: |
+              var part = /(\d+)\s*-\s*PART\s*(\d+)/i.exec(value);
+              if (part) return part[1] + "-" + part[2];
+              var episode = /(\d+)/.exec(value);
+              return episode ? episode[1] : "";
       Details:
         selector: //div[contains(@class,"read-more ")]/div/p/text() | //div[@class="desc-text"]/p
         concat: "\n\n"
