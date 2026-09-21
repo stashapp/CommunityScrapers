@@ -1,20 +1,26 @@
-name: "BelAmi"
+name: BelAmi
 sceneByURL:
   - action: scrapeXPath
     url:
       - belamionline.com
     scraper: sceneScraper
-    
+groupByURL:
+  - action: scrapeXPath
+    url:
+      - belamionline.com/movie_detail.aspx
+    scraper: movieScraper
 performerByURL:
   - action: scrapeXPath
     url:
       - belamionline.com
     scraper: performerScraper
-
 xPathScrapers:
   sceneScraper:
+    common:
+      $performer: //div[@class="actors_list"]//a[div[@class="name"]]
+      $scene: //*[@id="ContentPlaceHolder1_LabelTitle"]
     scene:
-      Title: //*[@id="ContentPlaceHolder1_LabelTitle"]
+      Title: $scene
       Details:
         selector: //p[span[@id="ContentPlaceHolder1_LabelDescription"]]/following-sibling::p
         concat: "\n\n"
@@ -22,18 +28,30 @@ xPathScrapers:
         selector: //*[@id="ContentPlaceHolder1_LabelReleased"]
         postProcess:
           - parseDate: 1/2/2006
+      URLs: //link[@rel="canonical"][$scene]/@href
+      Image: //meta[@property="og:image"][$scene]/@content
       Studio:
         Name:
-          fixed: BelAmi
+          selector: $scene
+          postProcess:
+            - replace:
+                - regex: ^.+$
+                  with: BelAmi
       Performers:
-        Name:
-          selector: //div[@class="actors_list"]//text()[not(contains(.,"Show more actors"))]
-      Image:
-          selector: //meta[@property="og:image"]/@content
+        Name: $performer/div[@class="name"]
+        URLs:
+          selector: //meta[@property="og:url"][$scene]/@content | $performer/@href
+          concat: "|"
+          postProcess:
+            - javascript: |
+                const [page, ...models] = value.split("|");
+                const base = page.replace(/[^/]*$/, "");
+                return models.map((m) => base + m).join("|");
+          split: "|"
       Tags:
         Name:
           selector: //*[@id="ContentPlaceHolder1_LabelTags"]/a
-          postProcess:
+          postProcess: &tagMap
             - map:
                 Castings: "Casting"
                 Condom Free: "No Condom"
@@ -47,28 +65,63 @@ xPathScrapers:
                 Sex Scenes: "Gay"
                 Three Way: "Threesome (Gay)"
       Code:
-        selector: //form[@method="post"]/@action
+        selector: //form[@method="post"][$scene]/@action
         postProcess:
           - replace:
-              - regex: ^.*\=\s*
-                with:
+              - regex: .*VideoID=(\d+).*
+                with: $1
+  movieScraper:
+    common:
+      $movie: //div[@class="movie_h"]
+    group:
+      Name: $movie/h1
+      Synopsis: $movie/p
+      Date:
+        selector: //script[@type="application/ld+json"][contains(., "datePublished")]
+        postProcess:
+          - replace:
+              - regex: .*"datePublished":"(\d{4}-\d{2}-\d{2})".*
+                with: $1
+      Duration:
+        selector: $movie/small
+        postProcess:
+          - javascript: |
+              const h = /(\d+)\s*h/.exec(value);
+              const m = /(\d+)\s*m/.exec(value);
+              if (!h && !m) return "";
+              return [h ? h[1] : 0, m ? m[1] : 0, 0]
+                .map((n) => String(n).padStart(2, "0"))
+                .join(":");
+      URLs: //meta[@property="og:url"][$movie]/@content
+      Tags:
+        Name:
+          selector: //div[contains(@class, "tags")][$movie]/a
+          postProcess: *tagMap
+      Studio:
+        Name:
+          selector: $movie/h1
+          postProcess:
+            - replace:
+                - regex: ^.+$
+                  with: BelAmi
+      FrontImage: //div[@class="movie_poster"]/img[not(contains(@class, "poster_back"))]/@src
+      BackImage: //div[@class="movie_poster"]/img[contains(@class, "poster_back")]/@src
   performerScraper:
+    common:
+      $model: //div[@class="head top_head"]/h1
     performer:
-      Name: //div[@class="head top_head"]//h1/text()
+      Name: $model
+      URLs: //link[@rel="canonical"][$model]/@href
       Gender:
-        fixed: Male
-      HairColor:
-        selector: //td[contains(text(),"Hair color:")]/following-sibling::td/text()
-      EyeColor:
-        selector: //td[contains(text(),"Eye color:")]/following-sibling::td/text()
-      Weight:
-        selector: //td[contains(text(),"Weight:")]/following-sibling::td/text()
-      Height:
-        selector: //td[contains(text(),"Height:")]/following-sibling::td/text()
-      PenisLength:
-        selector: //td[contains(text(),"Dick size:")]/following-sibling::td/text()
-      Details:  
-        selector: //div[@class="model_des"]/p
-      Image: //div[@class="main_card"]/div[@class="left"]/div[@class="img"]/img/@src
-      
-# Last Updated September 6, 2026
+        selector: $model
+        postProcess:
+          - replace:
+              - regex: ^.+$
+                with: Male
+      HairColor: //td[contains(text(), "Hair color:")]/following-sibling::td
+      EyeColor: //td[contains(text(), "Eye color:")]/following-sibling::td
+      Weight: //td[contains(text(), "Weight:")]/following-sibling::td
+      Height: //td[contains(text(), "Height:")]/following-sibling::td
+      PenisLength: //td[contains(text(), "Dick size:")]/following-sibling::td
+      Details: //div[@class="model_des"]
+      Images: //div[@class="main_card"]//div[@class="img"]/img[$model]/@src
