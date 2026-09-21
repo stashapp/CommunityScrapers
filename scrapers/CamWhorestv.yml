@@ -1,4 +1,4 @@
-name: "CamWhores.tv"
+name: CamWhores.tv
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -6,22 +6,20 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $info: //div[@id="tab_video_info"]
     scene:
-      Title: //meta[@property="og:title"]/@content
-      Image: //meta[@property="og:image"]/@content
+      Title: //meta[@property="og:title"][$info]/@content
+      URLs: //link[@rel="canonical"][$info]/@href
+      Image: //meta[@property="og:image"][$info]/@content
+      Details: //meta[@property="og:description"][$info]/@content
+      # TODO: enable when scrape dialog can show durations
+      # Duration: $info//span[starts-with(normalize-space(), "Duration")]/em
       Tags:
-        Name: //div[@class="item"]//a[contains(@href,"/tags/")]/text()
+        Name: $info//a[contains(@href, "/tags/")] | $info//a[contains(@href, "/categories/")]
       Performers:
-        Name: //div[@class="item"]//a[contains(@href,"/models/")]/text()
-      Details: //meta[@property="og:description"]/@content
-      Code:
-        selector: //meta[@property="og:image"]/@content
-        postProcess:
-          - replace:
-              - regex: .+/videos_screenshots/(\d+)/.+?$
-                with: $1
+        Name: $info//a[contains(@href, "/models/")]
 driver:
   headers:
     - Key: User-Agent
       Value: stash-scraper
-# Last Updated November 27, 2024
