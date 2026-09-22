@@ -28,6 +28,8 @@ sceneByURL:
       - femdomempire.com/tour/trailers/
       - feminized.com/tour/trailers/
       - hookuphotshot.com/trailers/
+      - bathroomcreepers.com/creeper/trailers/
+      - selfiesuck.com/tour/trailers/
       - hotandtatted.com/trailers/
       - hussiepass.com/trailers/
       - seehimfuck.com/trailers/
@@ -38,11 +40,6 @@ sceneByURL:
       - emilyaddison.com/trailers/
       - brandnewamateurs.com/trailers/
     scraper: sceneScraper
-  - action: scrapeXPath
-    url:
-      - bathroomcreepers.com/creeper/trailers
-      - selfiesuck.com/tour/trailers/
-    scraper: hiddenDateScraper
   - action: scrapeXPath
     url:
       - filthyfemdom.com/trailers/
@@ -74,18 +71,20 @@ xPathScrapers:
       # is a no-op for sites that do it correctly so this is safe
       Details: &details $scene/p[last()]
       Date: &date
-        selector: //span[contains(., "Date Added")]/following-sibling::text()
+        selector: >-
+          //span[contains(., "Date Added")]/following-sibling::text() |
+          //comment()[contains(., "Date Added")]
         postProcess:
           - replace:
-              - regex: ^\s*
-                with: ""
+              - regex: '(?s).*?(\w+ \d{1,2}, \d{4}).*'
+                with: $1
           - parseDate: January 2, 2006
       Performers: &performers
         Name: //li[@class="update_models"]/a
         URLs: //li[@class="update_models"]/a/@href
       Tags: &tags
         Name: //li[contains(text(), "Tags:") or contains(text(), "Categories:")]/following-sibling::li/a/text()
-      Image: &image
+      Image:
         # some tours still render the update_thumb img (first one; the preview strip
         # reuses the class), others now build the player from an inline script
         selector: >-
@@ -154,25 +153,6 @@ xPathScrapers:
                 emilyaddison.com: Emily Addison
                 brandnewamateurs.com: Brand New Amateurs
 
-  hiddenDateScraper:
-    common:
-      $scene: //div[@class="videoDetails clear"]
-    scene:
-      Title: *title
-      Details: *details
-      # Different from other studios in that it hides the date inside a comment
-      Date:
-        selector: //comment()[contains(., "Date Added")]
-        postProcess:
-          - replace:
-              - regex: '.*?(\w+ \d{1,2}, \d{4}).*'
-                with: $1
-          - parseDate: January 2, 2006
-      Performers: *performers
-      Tags: *tags
-      Image: *image
-      Studio: *studio
-
   hiddenImageScraper:
     common:
       $scene: //div[@class="videoDetails clear"]
@@ -233,7 +213,7 @@ xPathScrapers:
           - replace:
               - regex: "^Mistress (.*)$"
                 with: Female
-      Image:
+      Images:
         selector: //base/@href|(//div[@class="flexslider-carousel"]//img/@src0_1x)[1]
         concat: "|"
         postProcess:
@@ -266,7 +246,7 @@ xPathScrapers:
               - regex: ^
                 with: "0'"
           - feetToCm: true
-      Image:
+      Images:
         selector: //div[@class="profile-pic"]/img/@src0_2x
         postProcess:
           - replace:
