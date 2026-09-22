@@ -2,66 +2,67 @@ name: DartTechStudios
 sceneByURL:
   - action: scrapeXPath
     url:
-      - darttechstudios.com/Media.php
+      - darttechstudios.com/media.php
     scraper: sceneScraper
-
 sceneByFragment:
   action: scrapeXPath
-  queryURL: https://www.darttechstudios.com/Media.php?ID={filename}
+  queryURL: https://darttechstudios.com/media.php?id={filename}
   queryURLReplace:
     filename:
-      # the filename of the file downloaded from the site is the ID with an mp4 extension
-      - regex: (.*).mp4 # support filenames in the form 12345_performer_other_data.mp4
-        with: $1
+      - regex: \.[^.]+$
+        with: ""
   scraper: sceneScraper
-
 xPathScrapers:
   sceneScraper:
+    common:
+      $ld: //script[@type="application/ld+json"][not(//script[@type="application/ld+json"][2])]
     scene:
       Title:
-        selector: &titledateSelector //font[@size="+1"]/b/text()
+        selector: $ld
         postProcess:
-          - replace:
-            - regex: ([^-]+).*
-              with: $1
-      Date:
-        selector: *titledateSelector
-        postProcess:
-          - replace:
-              - regex: .*([0-9]{2}/[0-9]{2}/[0-9]{4})
-                with: $1
-          - parseDate: 01/02/2006
-      Performers:
-        Name: //div[@class="item2"]/a[contains(@href, '/Videos.php?Model=')]
-      Tags:
-        Name: //div[@class="item2"]/a[contains(@href, '/Videos.php?Fetish=')]
+          - javascript: |
+              try { return JSON.parse(value)["name"] || ""; } catch (e) { return ""; }
       Details:
-        selector: //div[@class="item2"]/text()
-        concat: "\n\n"
+        selector: $ld
         postProcess:
-          - replace: 
-            - regex: "\n\n,"
-              with: ""
-      Image:
-        #selector: //div[@class="galleryEntry_UpdatePage"][1]//img/@src
-        selector: &imgSelector //img[@alt="Main Image"]/@src
+          - javascript: |
+              try { return JSON.parse(value)["description"] || ""; } catch (e) { return ""; }
+      Date:
+        selector: $ld
         postProcess:
-          - replace: 
-            - regex: (.*)
-              with: https://www.darttechstudios.com$1
-      Code:  
-        selector: *imgSelector
+          - javascript: |
+              try { return JSON.parse(value)["datePublished"] || ""; } catch (e) { return ""; }
+      # TODO: enable when scrape dialog can show durations
+      # Duration:
+      #   selector: $ld
+      #   postProcess:
+      #     - javascript: |
+      #         try { return JSON.parse(value)["duration"] || ""; } catch (e) { return ""; }
+      Tags:
+        Name:
+          selector: $ld
+          postProcess:
+            - javascript: |
+                try {
+                  return (JSON.parse(value)["keywords"] || "")
+                    .split(",").map(function (t) { return t.trim(); })
+                    .filter(Boolean).join(",");
+                } catch (e) { return ""; }
+          split: ","
+      Performers:
+        Name: //a[contains(@href, "tracks.php?artist=")][$ld]
+      Image: //meta[@property="og:image"][$ld]/@content
+      URLs: //link[@rel="canonical"][$ld]/@href
+      Code:
+        selector: //meta[@property="og:image"][$ld]/@content
         postProcess:
           - replace:
-            - regex: &codeRegex /Content/[0-9]{4}_(.*)/Main.jpg
-              with: $1
-      URL:
-        selector: *imgSelector
-        postProcess:
-          - replace:
-            - regex: *codeRegex
-              with: https://www.darttechstudios.com/Media.php?ID=$1
+              - regex: .*/content/(\d+)_.*
+                with: $1
       Studio:
-        Name: 
-          fixed: Dart_Tech Studios
-# Last Updated October 08, 2023
+        Name:
+          selector: //link[@rel="canonical"][$ld]/@href
+          postProcess:
+            - replace:
+                - regex: ^.+$
+                  with: Dart_Tech Studios
