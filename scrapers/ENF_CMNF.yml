@@ -1,0 +1,98 @@
+name: "ENF-CMNF.cc"
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - enf-cmnf.cc/20
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: '^.*/\d{4}/\d{2}/([^/?#]+).*$'
+          with: "https://enf-cmnf.cc/wp-json/wp/v2/posts?_embed=wp:term&_fields=title,content,date,link,jetpack_featured_media_url,_links,_embedded&slug=${1}"
+    scraper: sceneScraper
+sceneByName:
+  action: scrapeJson
+  queryURL: "https://enf-cmnf.cc/wp-json/wp/v2/posts?_fields=title,date,link,jetpack_featured_media_url&search={}"
+  scraper: searchScraper
+sceneByQueryFragment:
+  action: scrapeJson
+  queryURL: "{url}"
+  queryURLReplace:
+    url:
+      - regex: '^.*/\d{4}/\d{2}/([^/?#]+).*$'
+        with: "https://enf-cmnf.cc/wp-json/wp/v2/posts?_embed=wp:term&_fields=title,content,date,link,jetpack_featured_media_url,_links,_embedded&slug=${1}"
+  scraper: sceneScraper
+jsonScrapers:
+  searchScraper:
+    scene:
+      Title:
+        selector: "#.title.rendered"
+        postProcess:
+          - &stripTags
+            replace:
+              - regex: <[^>]+>
+                with: ""
+          - &decodeEntities
+            javascript: |
+              var entities = {
+                "&#8216;": "‘",
+                "&#8217;": "’",
+                "&#8220;": "“",
+                "&#8221;": "”",
+                "&#8211;": "–",
+                "&#8212;": "—",
+                "&#8230;": "…",
+                "&hellip;": "…",
+                "&#39;": "'",
+                "&#039;": "'",
+                "&apos;": "'",
+                "&quot;": "\"",
+                "&#160;": " ",
+                "&nbsp;": " ",
+                "\u00A0": " ",
+                "&#038;": "&",
+                "&amp;": "&"
+              };
+              return value.replace(/&#?\w+;|\u00A0/g, function (m) {
+                return entities[m] || m;
+              });
+      URLs: "#.link"
+      Image: "#.jetpack_featured_media_url"
+      Date:
+        selector: "#.date"
+        postProcess:
+          - parseDate: 2006-01-02T15:04:05
+
+  sceneScraper:
+    scene:
+      Title:
+        selector: 0.title.rendered
+        postProcess:
+          - *stripTags
+          - *decodeEntities
+      Details:
+        selector: 0.content.rendered
+        postProcess:
+          - replace:
+              - regex: "(?s)<!--more.*$"
+                with: ""
+              - regex: "</p>"
+                with: "\n\n"
+          - *stripTags
+          - *decodeEntities
+          - replace:
+              - regex: '[^\S\n]+'
+                with: " "
+              - regex: '\n{3,}'
+                with: "\n\n"
+      Date:
+        selector: 0.date
+        postProcess:
+          - parseDate: 2006-01-02T15:04:05
+      Image: 0.jetpack_featured_media_url
+      URLs: 0.link
+      Tags:
+        Name: "0._embedded.wp:term.0.#.name"
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0
