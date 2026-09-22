@@ -23,6 +23,8 @@ xPathScrapers:
       Tags:
         Name: //div[contains(@class, "categories")]/a[not (contains(@href, "pornstars") or contains(@href, "studios"))]
       Studio:
-        Name: //a[contains(@class, "studio-link")]
+        Name: >-
+          //a[contains(@class,"studio-link--without-after-point")] |
+          //a[contains(@class,"studio-link")]
       Image: //meta[@property="og:image"]/@content
-# Last Updated December 31, 2023
+      URLs: //link[@rel="canonical"]/@href
