@@ -1,0 +1,47 @@
+name: "ENFHub"
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - enfhub.com/20 # scene URLs are /<year>/<month>/<slug>
+    scraper: sceneScraper
+
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://enfhub.com/search?query={}
+  scraper: searchScraper
+
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+xPathScrapers:
+  searchScraper:
+    common:
+      $row: //div[contains(@class,"group flex min-w-0 gap-4")]
+    scene:
+      Title: $row//h3
+      URLs:
+        selector: $row/a/@href
+        postProcess:
+          - replace:
+              - regex: ^/
+                with: "https://enfhub.com/"
+      Image: $row//img/@src
+
+  sceneScraper:
+    scene:
+      Title: //h1
+      Details: //p[contains(@class,"whitespace-pre-wrap")]
+      Image: //meta[@property="og:image"]/@content
+      URLs: //meta[@property="og:url"]/@content
+      Tags:
+        Name: //div[contains(@class,"flex flex-wrap gap-2 mt-2")]/a[contains(@href,"/tags/")]
+      Date:
+        selector: //script[@type="application/ld+json"][contains(.,"uploadDate")]
+        postProcess:
+          - replace:
+              - regex: '^[\s\S]*"uploadDate":"(\d{4}-\d{2}-\d{2})[\s\S]*'
+                with: "$1"
+          - parseDate: "2006-01-02"
