@@ -106,8 +106,8 @@ xPathScrapers:
       URLs: &urlSel //meta[@name="og:url"]/@content
       Groups:
         Name: //h1[@class="description"]/following-sibling::p/a
-      Director:
-        selector: //div[@class="director"]//text()[not(parent::span)]
+      Director: &directorSel
+        selector: //div[@class="director"]/node()[self::a or self::text()]
         concat: " "
         postProcess:
           - replace:
@@ -131,7 +131,7 @@ xPathScrapers:
       Synopsis:
         selector: //div[@class="synopsis"]//text()
         concat: "\n\n"
-      Director: //div[@class="director"]/a
+      Director: *directorSel
       Duration:
         selector: //div[@class="release-date"][2]/text()
         postProcess:
