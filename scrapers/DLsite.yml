@@ -44,8 +44,15 @@ xPathScrapers:
   sceneQueryScraper:
     scene:
       Title: //dd[@class='work_name']/div[@class='multiline_truncate']/a/text()
-      URL: //dd[@class='work_name']/div[@class='multiline_truncate']/a/@href
-      Image: //a[@class='work_thumb_inner']/img/@src
+      URLs: //dd[@class='work_name']/div[@class='multiline_truncate']/a/@href
+      Image:
+        selector: //thumb-with-ng-filter-block/@*[contains(name(), 'thumb-candidates')]
+        postProcess:
+          - javascript: |
+              const m = /'(\/\/[^']*_img_main)_\d+x\d+\.jpg'/.exec(value);
+              if (!m) return "";
+              // the listing only links a 240px thumb; modpub holds the full size
+              return "https:" + m[1].replace("/resize/", "/modpub/") + ".jpg";
   sceneScraper:
     scene:
       Title: &titleSel //h1[@id='work_name']/text()
@@ -92,13 +99,8 @@ xPathScrapers:
         Name: "//th[text() = '声優']/following-sibling::td/a/text()|//th[text() = 'Voice Actor']/following-sibling::td/a/text()|//th[text() = 'イラスト']/following-sibling::td/a/text()|//th[text() = 'Illustration']/following-sibling::td/a/text()"
       Studio: &studioSel
         Name: //span[@class='maker_name']/a/text()
-      Image:
-        selector: //li[@class='slider_item active']/picture/img/@srcset
-        postProcess:
-          - replace:
-              - regex: ^
-                with: "https:"
-      URL: &urlSel //meta[@property='og:url']/@content
+      Image: //meta[@property='og:image']/@content
+      URLs: &urlSel //meta[@property='og:url']/@content
   galleryManiaxScraper:
     gallery:
       Title: *titleSel
@@ -109,7 +111,7 @@ xPathScrapers:
       Performers:
         Name: "//th[text() = 'イラスト']/following-sibling::td/a/text()|//th[text() = 'Illustration']/following-sibling::td/a/text()"
       Studio: *studioSel
-      URL: *urlSel
+      URLs: *urlSel
   galleryBookScraper:
     gallery:
       Title: *titleSel
@@ -120,5 +122,4 @@ xPathScrapers:
         # for maniax author is the writer, for books this is illustrators
         Name: "//th[text() = '著者']/following-sibling::td/a/text()|//th[text() = 'Author']/following-sibling::td/a/text()"
       Studio: *studioSel
-      URL: *urlSel
-# Last Updated June 19, 2022
+      URLs: *urlSel
