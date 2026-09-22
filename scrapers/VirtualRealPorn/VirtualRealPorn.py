@@ -5,6 +5,8 @@ from typing import Any
 from urllib.parse import unquote, urlparse
 
 import requests
+from py_common.deps import ensure_requirements
+ensure_requirements("algoliasearch")
 from algoliasearch.search.client import SearchClientSync
 from algoliasearch.search.config import SearchConfig
 from algoliasearch.search.models.search_response import SearchResponse
