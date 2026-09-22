@@ -2,26 +2,26 @@ name: EricJohnsSexAdventures
 sceneByURL:
   - action: scrapeXPath
     url:
-      - ericjohnssexadventures.com
+      - ericjohnssexadventures.com/trailers/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     scene:
-      Title:
-        selector: //h2[@class="section-title"]
+      Title: //h2[@class="section-title"]
+      URLs: //link[@rel="canonical"]/@href
+      Details: //h3[contains(.,"Description:")]/following-sibling::text()
       Performers:
-        Name: //li/a/span
-      Details:
-        selector: //h3[contains(text(),"Description:")]/following-sibling::text()
+        Name: //div[contains(@class,"models-list-thumbs")]//a/span
       Tags:
         Name: //ul[@class="tags"]/li/a
       Image:
-        selector: //img[@class="update_thumb thumbs stdimage"]/@src0_1x
+        selector: //img[contains(@class,"update_thumb")]/@src0_1x
         postProcess:
           - replace:
+              - regex: '(-[1-4]x)?\.jpg$'
+                with: "-full.jpg"
               - regex: ^
-                with: "https://ericjohnssexadventures.com"
+                with: "https://www.ericjohnssexadventures.com"
       Studio:
         Name:
-          fixed: EricJohnsSexAdventures
-# Last Updated July 01, 2021
+          fixed: Eric John's Sex Adventures
