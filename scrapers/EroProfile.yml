@@ -8,14 +8,24 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //h1[@class="capMultiLine"]/text() | //div[@class="pageTitle"]/text()
-      Image: //video[@id="vidVideoViewPlayer"]/@poster | //video[@id="vidPlayer"]/@poster
-      Date: 
-        selector: //div[@class="col-xs-3 col-sm-2 colEmp"][contains(text(),"Upload date")]/following-sibling::div/text() | //table[@class="data marT"]//tbody//tr//th[contains(text(),"Uploaded:")]/following::td/text()
+      Title: //h1[contains(@class,"cap-multi-line")] | //div[@class="pageTitle"]
+      URLs:
+        selector: //link[@rel="canonical"]/@href
         postProcess:
           - replace:
-              - regex: (.+)\s\((.+)ago\)
-                with: $1
+              - regex: '\?lang=.*$'
+                with: ""
+      Details: >-
+        //h1[contains(@class,"cap-multi-line")]/following-sibling::div[contains(@class,"box-cnt")]/text()
+        | //th[contains(.,"Description:")]/following-sibling::td
+      Date:
+        selector: >-
+          //td[contains(@class,"pr-s") and contains(.,"Upload date")]/following-sibling::td/text()
+          | //th[contains(.,"Uploaded:")]/following-sibling::td
+        postProcess:
           - parseDate: 2 January 2006
-      Details: //h1[@class="capMultiLine"]/following-sibling::p/text() | //table[@class="data marT"]//tbody//tr//th[contains(text(),"Description:")]/following::td/text()
-# Last Updated September 09, 2023
+      Tags:
+        Name: >-
+          //td[contains(@class,"pr-s") and contains(.,"Niche")]/following-sibling::td/a
+          | //th[contains(.,"Niche:")]/following-sibling::td/a
+      Image: //video[@id="vidVideoViewPlayer"]/@poster | //video[@id="vidPlayer"]/@poster
