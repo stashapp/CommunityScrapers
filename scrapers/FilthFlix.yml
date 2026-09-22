@@ -7,21 +7,18 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title:
-        selector: //h2[@class="video__headline"]
+      Title: //h2[@class="video__headline"]
       Date:
         selector: //strong[contains(text(),"Published:")]/following-sibling::text()
         postProcess:
           - parseDate: 02 Jan 2006
       Performers:
-        Name: //p[@class="video__text"]//a[contains(@href,"/models/")]
+        Name: //div[contains(@class,"video__pornstars")]/a[contains(@href,"/models/")]
       Tags:
-        Name: //p[@class="video__text"]//a[contains(@href,"/movies/")]
-      Details:
-        selector: //p[@class="video__text"]/text()[1]
-      Image:
-        selector: //div[@class="video__player"]/img/@src
+        Name: //div[@class="video__tags"]/a
+      Details: //p[@class="video__text"]/text()[1]
+      Image: >-
+        //div[@class="video__player"]/video/@poster |
+        //div[@class="video__player"]/img/@src
       Studio:
-        Name:
-          selector: //div[@class="video__top__item"]/a/img/@alt
-# Last Updated July 22, 2021
+        Name: //div[@class="video__top__item"]/a/img/@alt
