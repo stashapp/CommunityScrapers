@@ -1,0 +1,386 @@
+name: FoToRo
+# scrapes: Belt Bound, Bound Life, Breasts in Pain, Chastity Babes, Cuffed In Uniform, Cuffed Outdoors, CuffGirl, Girl Asylum, Girls In Cuffs, Hogtie-Bondage, HuCows, Metal Bondage, Natalia Forrest XXX, Shock Challenge, Sybian1, Tieable, TOAXXX
+
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - breastsinpain.com/20
+      - cuffedinuniform.com/20
+      - cuffedoutdoors.com/20
+      - hogtie-bondage.com/20
+      - hucows.com/20
+      - shockchallenge.com/20
+      - tieable.com/20
+      - toaxxx.com/20
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: '^(https?://[^/]+)/\d{4}/\d{2}(?:/\d{2})?/([^/?#]+).*$'
+          with: "${1}/wp-json/wp/v2/posts?_embed=wp:term,wp:featuredmedia&_fields=title,date,link,content,_links,_embedded&slug=${2}"
+    scraper: apiScene
+  - action: scrapeJson
+    url:
+      - chastitybabes.com/archives/
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: '^(https?://[^/]+)/archives/(\d+).*$'
+          with: "${1}/wp-json/wp/v2/posts?_embed=wp:term,wp:featuredmedia&_fields=title,date,link,content,_links,_embedded&include=${2}"
+    scraper: apiScene
+  - action: scrapeJson
+    url:
+      - cuffgirl.com/20
+      - nataliaforrestxxx.com/20
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: '^(https?://[^/]+)/\d{4}/\d{2}(?:/\d{2})?/([^/?#]+).*$'
+          with: "${1}/wp-json/wp/v2/posts?_embed=wp:term,wp:featuredmedia&_fields=title,date,link,content,_links,_embedded&slug=${2}"
+    scraper: apiSceneNoPerformers
+  - action: scrapeXPath
+    url:
+      - girlasylum.com
+    scraper: girlAsylumScene
+  - action: scrapeXPath
+    url:
+      - girlsincuffs.com
+    scraper: girlsInCuffsScene
+  - action: scrapeXPath
+    url:
+      - metalbondage.com
+    scraper: metalBondageScene
+  - action: scrapeXPath
+    url:
+      - sybian1.com
+    scraper: sybian1Scene
+  - action: scrapeXPath
+    url:
+      - beltbound.com
+    scraper: beltBoundScene
+  - action: scrapeXPath
+    url:
+      - boundlife.com
+    scraper: boundLifeScene
+
+jsonScrapers:
+  apiScene:
+    scene:
+      Title:
+        selector: 0.title.rendered
+        postProcess:
+          - &stripTags
+            replace:
+              - regex: <[^>]+>
+                with: ""
+          - &decodeEntities
+            javascript: |
+              var entities = {
+                "&#8216;": "\u2018",
+                "&#8217;": "\u2019",
+                "&#8220;": "\u201c",
+                "&#8221;": "\u201d",
+                "&#8211;": "\u2013",
+                "&#8212;": "\u2014",
+                "&#8230;": "\u2026",
+                "&hellip;": "\u2026",
+                "&#39;": "'",
+                "&#039;": "'",
+                "&apos;": "'",
+                "&quot;": "\"",
+                "&#160;": " ",
+                "&nbsp;": " ",
+                "\u00A0": " ",
+                "&#038;": "&",
+                "&amp;": "&"
+              };
+              return value.replace(/&#?\w+;|\u00A0/g, function (m) {
+                return entities[m] || m;
+              });
+      URLs: 0.link
+      Date:
+        selector: 0.date
+        postProcess:
+          - parseDate: 2006-01-02T15:04:05
+      Details:
+        selector: 0.content.rendered
+        postProcess:
+          - replace:
+              - regex: "</p>"
+                with: "\n\n"
+          - *stripTags
+          - *decodeEntities
+          - replace:
+              - regex: '[^\S\n]+'
+                with: " "
+              - regex: '\n{3,}'
+                with: "\n\n"
+      Tags:
+        Name:
+          selector: "0._embedded.wp:term.0.#.name"
+          postProcess:
+            - &dropUpdates
+              replace:
+                - regex: ^Updates$
+                  with: ""
+      Performers:
+        Name: "0._embedded.wp:term.1.#.name"
+      Image: "0._embedded.wp:featuredmedia.0.source_url"
+      Code:
+        selector: "0._embedded.wp:featuredmedia.0.source_url"
+        postProcess:
+          - replace:
+              - regex: '^.*/([A-Za-z]+\d+).*$'
+                with: $1
+              - regex: "^.*/.*$"
+                with: ""
+              - regex: '(?i)^bip(\d+)$'
+                with: BIP${1}
+              - regex: '(?i)^cb(\d+)$'
+                with: CB${1}
+              - regex: '(?i)^ciu(\d+)$'
+                with: CIU${1}
+              - regex: '(?i)^cod(\d+)$'
+                with: COD${1}
+              - regex: '(?i)^sc(\d+)$'
+                with: SC${1}
+              - regex: '(?i)^tx(\d+)$'
+                with: TX${1}
+      Studio:
+        Name:
+          selector: 0.link
+          postProcess:
+            - replace:
+                - regex: '^https?://(?:www\.)?([^/]+)/.*$'
+                  with: $1
+            - map:
+                breastsinpain.com: Breasts in Pain
+                chastitybabes.com: Chastity Babes
+                cuffedinuniform.com: Cuffed In Uniform
+                cuffedoutdoors.com: Cuffed Outdoors
+                hogtie-bondage.com: Hogtie-Bondage
+                hucows.com: HuCows
+                shockchallenge.com: Shock Challenge
+                tieable.com: Tieable
+                toaxxx.com: TOAXXX
+
+  apiSceneNoPerformers:
+    scene:
+      Title:
+        selector: 0.title.rendered
+        postProcess:
+          - *stripTags
+          - *decodeEntities
+      URLs: 0.link
+      Date:
+        selector: 0.date
+        postProcess:
+          - parseDate: 2006-01-02T15:04:05
+      Details:
+        selector: 0.content.rendered
+        postProcess:
+          - replace:
+              - regex: "</p>"
+                with: "\n\n"
+          - *stripTags
+          - *decodeEntities
+          - replace:
+              - regex: '[^\S\n]+'
+                with: " "
+              - regex: '\n{3,}'
+                with: "\n\n"
+      Tags:
+        Name:
+          selector: "0._embedded.wp:term|@flatten|#.name"
+          postProcess:
+            - *dropUpdates
+      Image: "0._embedded.wp:featuredmedia.0.source_url"
+      Code:
+        selector: "0._embedded.wp:featuredmedia.0.source_url"
+        postProcess:
+          - replace:
+              - regex: '^.*/([A-Za-z]+\d+).*$'
+                with: $1
+              - regex: "^.*/.*$"
+                with: ""
+      Studio:
+        Name:
+          selector: 0.link
+          postProcess:
+            - replace:
+                - regex: '^https?://(?:www\.)?([^/]+)/.*$'
+                  with: $1
+            - map:
+                cuffgirl.com: CuffGirl
+                nataliaforrestxxx.com: Natalia Forrest XXX
+
+xPathScrapers:
+  metalBondageScene:
+    scene:
+      Title: //title/text()
+      Date:
+        selector: //div[@class="metabar"]//text()
+        postProcess:
+          - replace:
+              - regex: '(.*\d{1,2}, \d{4}).*'
+                with: $1
+          - parseDate: January 2, 2006
+      Details:
+        selector: //div[@class="textcontent"]/p
+        concat: "\n\n"
+      Code:
+        selector: //div[@class="post-title fix"]//a/text()
+        postProcess:
+          - replace:
+              - regex: '(MB\d+)\s([\w-].*)'
+                with: $1
+      Performers:
+        Name: //div[@class="tags"]//a[@rel="tag"]/text()
+      Tags:
+        Name:
+          selector: //div[@class="tags"]//a[@rel="category tag"]/text()
+          postProcess:
+            - *dropUpdates
+      Image: //div[@class="textcontent"]//img/@src
+      Studio:
+        Name:
+          fixed: "Metal Bondage"
+      URLs: //link[@rel="canonical"]/@href
+
+  beltBoundScene:
+    common:
+      $post: //div[@class="post"][//link[@rel="canonical"]][.//a[@rel="bookmark"]]
+    scene:
+      Title: $post//a[@rel="bookmark"]
+      URLs: $post//a[@rel="bookmark"]/@href
+      Code:
+        selector: $post/a/img/@src
+        postProcess:
+          - replace:
+              - regex: .*/updates/bb(\d+)/.*
+                with: BB$1
+      Date:
+        selector: $post/*[starts-with(text(), "Posted on ")]
+        postProcess:
+          - replace:
+              - regex: Posted on ([A-Z]\w+) (\d{1,2})([a-z]{2})?, (\d{4})
+                with: $1 $2, $4
+          - parseDate: January 2, 2006
+      Details: $post/p[2]
+      Performers:
+        Name: $post//a[@rel="tag"]
+      Image: $post/a/img/@src
+      Studio:
+        Name:
+          selector: $post//a[@rel="bookmark"]
+          postProcess:
+            - replace:
+                - regex: ^.+$
+                  with: BeltBound
+
+  boundLifeScene:
+    common:
+      $performerTitleDate: //div[@class="post-title"]
+    scene:
+      Title: $performerTitleDate/h2
+      URLs: //link[@rel="canonical"]/@href
+      Code: $performerTitleDate/h3/span[1]
+      Date:
+        selector: $performerTitleDate/h3/span[3]/text()
+        postProcess:
+          - parseDate: 02 January 2006
+      Details: //div[@class="entry"]/p
+      Performers:
+        Name: $performerTitleDate/h3/span[2]/text()
+      Studio:
+        Name:
+          fixed: Bound Life
+      Image: //meta[@property="og:image"]/@content[not(contains(.,"blank.jpg"))]|(//a/img[@border="1"])[1]/@src
+
+  girlAsylumScene:
+    common:
+      $meta: //ul[contains(@class,"post-meta")]
+    scene:
+      Title: //h1[@class="post-title"]
+      URLs: //link[@rel="canonical"]/@href
+      Date:
+        selector: $meta
+        postProcess:
+          - replace:
+              - regex: '(?s).*?([A-Z][a-z]+ \d{1,2}, \d{4}).*'
+                with: $1
+          - parseDate: January 2, 2006
+      Performers:
+        Name: $meta//a[@rel="tag"]
+      Tags:
+        Name:
+          selector: $meta//a[@rel="category tag"]
+          postProcess:
+            - *dropUpdates
+      Image: //div[@class="entry"]//img/@src
+      Code: //a[contains(@href,"?add-to-cart")]/@data-product_sku
+      Studio:
+        Name:
+          fixed: Girl Asylum
+
+  girlsInCuffsScene:
+    scene:
+      Title: //div[@class="posttitle"]/h2
+      URLs: //link[@rel="canonical"]/@href
+      Date:
+        selector: //div[@class="date"]/strong
+        postProcess:
+          - replace:
+              - regex: '(\d{1,2})(?:st|nd|rd|th)'
+                with: $1
+          - parseDate: January 2, 2006
+      Details:
+        selector: //div[@class="posttext"]/p
+        concat: "\n\n"
+      Performers:
+        Name: //div[@class="posttitle"]//a[@rel="tag"]
+      Tags:
+        Name:
+          selector: //a[@rel="category tag"]
+          postProcess:
+            - *dropUpdates
+      Image: //div[@class="posttext"]//img/@src
+      Code: //a[contains(@href,"?add-to-cart")]/@data-product_sku
+      Studio:
+        Name:
+          fixed: Girls In Cuffs
+
+  sybian1Scene:
+    common:
+      $shot: //img[contains(@src,"/trailer_images/")]
+    scene:
+      Title: //h1
+      URLs: //link[@rel="canonical"]/@href
+      Date:
+        selector: //span[contains(@class,"meta-date")]
+        postProcess:
+          - replace:
+              - regex: '(?s).*?([A-Z][a-z]+ \d{1,2}, \d{4}).*'
+                with: $1
+          - parseDate: January 2, 2006
+      Details:
+        selector: //div[@class="post-contents"]/p
+        concat: "\n\n"
+      Performers:
+        Name: //a[@rel="tag"]
+      Tags:
+        Name:
+          selector: //div[@class="meta-category"]/a
+          postProcess:
+            - *dropUpdates
+      Image: $shot/@src
+      Code:
+        selector: $shot/@src
+        postProcess:
+          - replace:
+              - regex: '^.*/([a-z0-9]+(?:-[a-z0-9]+)*)-\d+\.jpg$'
+                with: $1
+              - regex: "^.*/.*$"
+                with: ""
+      Studio:
+        Name:
+          fixed: Sybian1
