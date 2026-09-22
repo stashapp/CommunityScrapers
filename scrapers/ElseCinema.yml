@@ -2,41 +2,76 @@ name: ElseCinema
 sceneByURL:
   - action: scrapeXPath
     url:
-      - elsecinema.com
+      - elsecinema.com/movies/
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: "^(.*/movies/[^/?#]+).*$"
+          with: ${1}
     scraper: sceneScraper
+
+groupByURL:
+  - action: scrapeXPath
+    url:
+      - elsecinema.com/series/
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: "^(.*/series/[^/?#]+).*$"
+          with: ${1}
+    scraper: groupScraper
 
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //div[contains(@class,"my-3")]/img/@name
+      Title: //h1
+      URLs: //link[@rel="canonical"]/@href
       Date:
-        selector: //script[@type='application/ld+json' and contains(., 'dateCreated')]/text()
+        selector: //script[@type="application/ld+json"][contains(.,"dateCreated")]
         postProcess:
           - replace:
-              - regex: .*dateCreated(?:[\"\s:])+(\d+-\d+-\d+) .*
+              - regex: '^[\s\S]*"dateCreated":"(\d{4}-\d{2}-\d{2})[\s\S]*$'
                 with: $1
           - parseDate: 2006-01-02
-      Details:
-        selector: //script[contains(.,"window.__NUXT")]/text()
-        postProcess:
-          - replace:
-              - regex: .*,synopsis_clean(?:[\s:])+\"(.*)\",short_synopsis.*
-                with: $1
-              - regex: \\
-                with:
+      Details: //p[contains(@class,"ef__text-placeholder")]
       Performers:
-        Name: //a[contains(@href,'/performers')]/li
+        Name: //ul/a[contains(@href,"/performers/")]/li
+        # Intentionally uses the old singular URL format to avoid
+        # a single performer getting every URL and the rest getting nothing
+        URL:
+          selector: //ul/a[contains(@href,"/performers/")]/@href
+          postProcess:
+            - replace:
+                - regex: ^/
+                  with: "https://elsecinema.com/"
       Tags:
-        Name: //ul/a[contains(@href,'/categories')]/li
+        Name: //ul/a[contains(@href,"/categories/")]/li
       Image:
-        selector: //link/@imagesrcset
+        selector: //link[@as="image"]/@imagesrcset
         postProcess:
           - replace:
-              - regex: '^([^\?]+).+'
+              - regex: "^([^?]+).+"
                 with: $1
-      Director: //span/a[contains(@href,'/directors/')]
+      Director: //span/a[contains(@href,"/directors/")]
       Studio:
         Name:
           fixed: Else Cinema
 
-# Last Updated June 1, 2025
+  groupScraper:
+    group:
+      Name: //h1
+      URLs: //link[@rel="canonical"]/@href
+      Synopsis: //p[contains(@class,"ef__text-placeholder")]
+      Date: //span[contains(@class,"text-primary-brand")]
+      Director: //span[@class="director"]/a
+      Tags:
+        Name: //ul/a[contains(@href,"/categories/")]/li
+      FrontImage:
+        selector: //link[@as="image"]/@imagesrcset
+        postProcess:
+          - replace:
+              - regex: "^([^?]+).+"
+                with: $1
+      Studio:
+        Name:
+          fixed: Else Cinema
