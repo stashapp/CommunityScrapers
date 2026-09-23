@@ -5,6 +5,12 @@ sceneByURL:
       - gasm.com/post/details/
       - harmonyvision.com/post/details/
     scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      - gasm.com/dvd/
+      - gasm.com/movies/
+      - harmonyvision.com/movies/
+    scraper: dvdSceneScraper
 groupByURL:
   - action: scrapeXPath
     url:
@@ -17,20 +23,21 @@ xPathScrapers:
     common:
       $details: //div[@class="post_details_main"]
       $dvd: //div[@class="post_item dvd"]
+      $cover: //meta[@name="twitter:image"]/@content
     scene:
       Title: $details/h1[@class="post_title"]/span
+      Image: $cover
       Date:
         selector: $details/h3[@class="post_date"]/span
         postProcess:
-          - parseDate: Jan 02, 2006
+          - parseDate: Jan 2, 2006
       Performers:
         Name: $details/a[@class="tags"][contains(@href, '/models/')]
       Tags:
-        Name: $details/a[@class="tags"][contains(@href, '/search?s=')]/text()
-      Details:
-        selector: $details/h2[@class="post_description"]/text()
+        Name: $details/a[@class="tags"][contains(@href, '/search?s=')]
+      Details: $details/h2[@class="post_description"]
       Groups:
-        Name: $dvd/h1/a/text()
+        Name: $dvd/h1/a
         FrontImage: $dvd/div[@class="post_image"]/a/img[@class="item_cover"]/@src
         URLs:
           selector: $dvd/h1/a/@href
@@ -38,17 +45,41 @@ xPathScrapers:
             - replace:
                 - regex: ^
                   with: https://www.gasm.com
-      # Image is not accessible from the /post page
       Studio:
         Name: $details/a[@class="tags" and contains(@href, '/studio/profile/')]
+  dvdSceneScraper:
+    common:
+      $details: //div[@class="post_details"]/div[@class="post_details_main"]
+      $postdate: //div[@class="post_details"]/div[@class="post_details_main"]/h3[@class="post_date"]
+      $cover: //meta[@name="twitter:image"]/@content
+    scene:
+      Title: $details/h1[@class="post_title"]/span
+      Image: $cover
+      Details: $details/h2[@class="post_description"]
+      Date:
+        selector: $postdate/span[1]
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Performers:
+        Name: $details/a[@class="tags"][contains(@href, '/models/')]
+      Tags:
+        Name: $details/a[@class="tags"][contains(@href, '/search?s=')]
+      Studio:
+        Name:
+          selector: //meta[@name="twitter:image"]/@content
+          postProcess:
+            - javascript: |
+                const m = value.match(/\/studios\/([^/]+)\//);
+                return m ? m[1] : "";
+
   movieScraper:
     common:
       $details: //div[@class="post_details"]/div[@class="post_details_main"]
       $postdate: //div[@class="post_details"]/div[@class="post_details_main"]/h3[@class="post_date"]
     group:
-      Name: $details/h1[@class="post_title"]/span/text()
+      Name: $details/h1[@class="post_title"]/span
       Duration:
-        selector: $postdate/span[2]/text()
+        selector: $postdate/span[2]
         postProcess:
           - replace:
               - regex: '^\| '
@@ -58,4 +89,11 @@ xPathScrapers:
         postProcess:
           - parseDate: Jan 2, 2006
       Synopsis: $details/h2[@class="post_description"]
+      Studio:
+        Name:
+          selector: //meta[@name="twitter:image"]/@content
+          postProcess:
+            - javascript: |
+                const m = value.match(/\/studios\/([^/]+)\//);
+                return m ? m[1] : "";
       FrontImage: //div[@class="post_details"]/div[@class="post_details_left"]/img[@class="item_cover"]/@src
