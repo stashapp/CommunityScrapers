@@ -91,8 +91,8 @@ def get_scene_title(tree: html.HtmlElement) -> str | None:
         log.warning("Could not load title page")
         return None
     
-    number_portion = extract_text_with_linebreaks(title_page_tree.xpath("//span[contains(@class, 'scene')]")[0])
-    title_portion = extract_text_with_linebreaks(title_page_tree.xpath("//span[contains(@class, 'title')]")[0])
+    number_portion = extract_text_whitespace_normalized(title_page_tree.xpath("//span[contains(@class, 'scene')]")[0])
+    title_portion = extract_text_whitespace_normalized(title_page_tree.xpath("//span[contains(@class, 'title')]")[0])
     if number_portion and title_portion:
         return f"{number_portion}: {title_portion}"
     else:
@@ -174,6 +174,16 @@ def extract_text_with_linebreaks(element: html.HtmlElement) -> str:
 
     sentinels_reversed = "\n".join(x.strip() for x in collapsed.split(sentinel_token)).strip()
     return sentinels_reversed
+
+
+def extract_text_whitespace_normalized(element: html.HtmlElement) -> str:
+    """ Extracts text comment, converting <br> tags to space chars and collapsing
+    all whitespace into single spaces.
+    """
+    for br in element.xpath(".//br"):
+        br.tail = " " + (br.tail or "")
+
+    return " ".join(element.text_content().split())
 
 
 def get_description(tree: html.HtmlElement) -> str | None:
