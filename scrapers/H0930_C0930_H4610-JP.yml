@@ -18,25 +18,22 @@ sceneByFragment:
 
 xPathScrapers:
   sceneScraper:
+    common:
+      $poster: //*[@id="moviePlayer"]/img/@src | //*[@id="moviePlayer"]//video/@poster
     scene:
-      Title: 
-        selector: //*[@id="moviePlay"]//span[@class="style1"]
-        #postProcess:
-         # - replace:
-          #    - regex: (\s|\S)*actor":"(.*?)",(\s|\S)*provider":"(.*?)"(\s|\S)*
-           #     with: $4 $2
-      URL: 
-        selector: //*[@id="moviePlayer"]/img/@src
+      Title: //*[@id="moviePlay"]//span[@class="style1"]
+      URLs:
+        selector: $poster
         postProcess:
           - replace:
               - regex: .*www\.(.*?)\.com\/moviepages\/(.*?)\/images.*
                 with: https://www.$1.com/moviepages/$2/index.html
-      Details: //*[@id="movieInfo"]//div[@class="row"]
+      Details: //*[@id="movieInfo"]//div[@class="row"]/div[1]//p
       Date:
         selector: //*[@id="movieInfo"]//dt[contains(.,"Released") or contains(., "公開日")]/following-sibling::dd[1]/text()
         postProcess:
           - parseDate: 2006-01-02
-      Performers: 
+      Performers:
         Name:
           selector: //*[@id="moviePlay"]//span[@class="style1"]
           postProcess:
@@ -44,28 +41,34 @@ xPathScrapers:
                 - regex: (.*?)\s(.*?)\s.*
                   with: $1 $2
       Code:
-         selector: //*[@id="moviePlayer"]/img/@src
-         postProcess:
-           - replace:
-               - regex: .*www\.(.*?)\.com\/moviepages\/(.*?)\/images.*
-                 with: $1-$2
+        selector: $poster
+        postProcess:
+          - replace:
+              - regex: .*www\.(.*?)\.com\/moviepages\/(.*?)\/images.*
+                with: $1-$2
       Tags:
-        Name: 
+        Name:
           selector: //*[@id="movieInfo"]//dt[contains(., "プレイ内容")]/following-sibling::dd/text()
-          split: " "  # 这里是非中断空格，确保它是UTF-8编码的非中断空格
+          postProcess:
+            - replace:
+                - regex: "\t+"
+                  with: ""
+          split: " " # non-breaking space
 
       Image:
-        selector: //*[@id="moviePlayer"]/img/@src
+        selector: $poster
         postProcess:
           - replace:
               - regex: .*(www.*jpg).*
                 with: https://$1
       Studio:
         Name:
-          selector: //*[@id="moviePlayer"]/img/@src
+          selector: $poster
           postProcess:
             - replace:
                 - regex: .*www\.(.*?)\.com\/moviepages\/(.*?)\/images.*
                   with: $1
-
-# Last Updated Jan 11, 2024
+            - map:
+                c0930: C0930
+                h0930: H0930
+                h4610: H4610
