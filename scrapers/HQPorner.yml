@@ -7,13 +7,13 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      #Title: //h1[@class='main-h1']/text()
       Title:
         selector: //title
         postProcess:
           - replace:
               - regex: (.*)-.*
                 with: $1
+      URLs: //link[@rel="canonical"]/@href
       Tags:
         Name: //a[@class='tag-link click-trigger']/text()
       Performers:
@@ -39,5 +39,6 @@ xPathScrapers:
                       with: $1
                 - replace: *https
 driver:
-  useCDP: true
-# Last Updated March 15, 2024
+  headers:
+    - Key: Referer
+      Value: https://hqporner.com/
