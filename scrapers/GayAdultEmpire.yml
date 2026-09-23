@@ -5,17 +5,32 @@ groupByURL:
     url:
       - gaydvdempire.com
       - gayempire.com
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: ^(https?://(?:www\.)?)gayempire\.com
+          with: ${1}gaydvdempire.com
     scraper: movieScraper
 sceneByURL:
   - action: scrapeXPath
     url:
       - gaydvdempire.com/clip/
       - gayempire.com/clip/
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: ^(https?://(?:www\.)?)gayempire\.com
+          with: ${1}gaydvdempire.com
     scraper: clipScraper
   - action: scrapeXPath
     url:
       - gaydvdempire.com
       - gayempire.com
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: ^(https?://(?:www\.)?)gayempire\.com
+          with: ${1}gaydvdempire.com
     scraper: sceneScraper
 sceneByName:
   action: scrapeXPath
@@ -31,7 +46,7 @@ xPathScrapers:
   sceneSearch:
     scene:
       Title: //a[@class="boxcover"]/img/@title
-      URL:
+      URLs:
         selector: //a[@class="boxcover"]/@href
         postProcess:
           - replace:
@@ -41,8 +56,8 @@ xPathScrapers:
 
   movieScraper:
     group:
-      Name: &name //h1/text()
-      Director: &director //a[@label="Director"]/text()
+      Name: &name //h1[contains(@class, "movie-page__heading__title")]/text()
+      Director: &director //a[@label="Director"]
       Duration:
         selector: //small[contains(text(), "Length")]/following-sibling::text()
         postProcess:
@@ -56,41 +71,54 @@ xPathScrapers:
         postProcess:
           - parseDate: Jan 02 2006
       Synopsis: &details
-        selector: //h4[contains(@class,"synopsis")]//text()
-        concat: " "
+        selector: //div[@class="synopsis-content"]/p
+        concat: "\n\n"
       Studio: &studio
-        Name: //a[@label="Studio"]/text()
+        Name: //a[@label="Studio"]
+      Tags: &tags
+        Name: //div[h2[contains(.,'Categories')]]//a[@label="Category"]
       FrontImage: &image //a[@id="front-cover"]/@data-href
       BackImage: //a[@id="back-cover"]/@href
-      URL: &url //meta[@name='og:url']/@content
+      URLs: &url //link[@rel="canonical"]/@href
 
   sceneScraper:
+    common:
+      $performer: //a[@label="Performer"]
     scene:
       Title: *name
       Director: *director
       Details: *details
       Date: *date
+      ProductionDate:
+        selector: //li[small[contains(text(), "Production Year")]]
+        postProcess:
+          - replace:
+              - regex: .*(\d{4}).*
+                with: $1
       Image: *image
       Studio: *studio
       Groups:
         Name: *name
-        URL: *url
-      Tags:
-        Name: //div[h2[contains(.,'Categories')]]//a[@label="Category"]
+        URLs: *url
+      Tags: *tags
       Performers:
-        Name: //a[@label="Performer"]
+        Name: $performer
         URLs:
-          selector: //a[@label="Performer"]/@href
+          selector: $performer/@href
           postProcess:
             - replace:
                 - regex: ^
                   with: "https://www.gaydvdempire.com"
-      URL: *url
+      URLs: *url
 
   clipScraper:
+    common:
+      $byStudio: //a[@label="Studio" and preceding-sibling::text()[normalize-space(.)="by"]]
+      $fromMovie: //a[@label="Studio" and preceding-sibling::text()[normalize-space(.)="from"]]
+      $clipPerformer: //a[@label="Clip Performer"]
     scene:
       Title:
-        selector: //h1[contains(@class, "clip-page__detail__title__primary")]/text() | //a[@label="Studio" and preceding-sibling::text()[normalize-space(.)="from"]]
+        selector: //h1[contains(@class, "clip-page__detail__title__primary")] | $fromMovie
         concat: __SEP__
         postProcess:
           - replace:
@@ -101,19 +129,19 @@ xPathScrapers:
               - regex: (.*)__SEP__.*
                 with: $1
       Studio:
-        Name: //a[@label="Studio" and preceding-sibling::text()[normalize-space(.)="by"]]
+        Name: $byStudio
       Groups:
-        Name: //a[@label="Studio" and preceding-sibling::text()[normalize-space(.)="from"]]
-        URL:
-          selector: //a[@label="Studio" and preceding-sibling::text()[normalize-space(.)="from"]]/@href
+        Name: $fromMovie
+        URLs:
+          selector: $fromMovie/@href
           postProcess:
             - replace:
                 - regex: ^
                   with: https://www.gaydvdempire.com
       Performers:
-        Name: //a[@label="Clip Performer"]
+        Name: $clipPerformer
         URLs:
-          selector: //a[@label="Clip Performer"]/@href
+          selector: $clipPerformer/@href
           postProcess:
             - replace:
                 - regex: ^
@@ -123,7 +151,7 @@ xPathScrapers:
         concat: __SEP__
         postProcess:
           - replace:
-              - regex: (\d+).*/([^/]*\d+)[^/\d]*$
+              - regex: (\d+).*/(\d+)[^/]*$
                 with: https://imgs1cdn.adultempire.com/backdrop/6000/$2%5f$1/scene-1.jpg
 driver:
   cookies:
@@ -152,4 +180,3 @@ driver:
           Domain: "www.gayempire.com"
           Value: "" # replace with your account etoken
           Path: "/"
-# Last Updated September 17, 2025
