@@ -31,6 +31,7 @@ ensure_requirements("algoliasearch", "requests", "bs4:beautifulsoup4")
 import requests  # noqa: E402
 from algoliasearch.search.client import SearchClientSync  # noqa: E402
 from algoliasearch.search.config import SearchConfig  # noqa: E402
+from algoliasearch.search.models.search_response import SearchResponse  # noqa: E402
 from bs4 import BeautifulSoup  # noqa: E402
 
 IMAGE_CDN = "https://images03-fame.gammacdn.com"
@@ -59,26 +60,50 @@ def clean_text(text: str) -> str:
     return BeautifulSoup(text, "html.parser").get_text("", strip=False)
 
 
-def get_search_client(site: str) -> SearchClientSync | None:
-    def fetch_instance_token(url: str) -> tuple[str, str] | None:
-        r = requests.get(url, headers=headers_for_homepage(url), timeout=10)
-        if not (script_tag := re.search(r"window\.env\s*=\s*(.+);", r.text)):
-            log.error(f"Failed to get app_id/key from '{url}': not an Algolia site?")
-            return None
-        page_json = json.loads(script_tag.group(1))
-        return dig(page_json, "api", "algolia", "applicationID"), dig(
-            page_json, "api", "algolia", "apiKey"
-        )
+def token_from_window_env(url: str) -> tuple[str, str] | None:
+    r = requests.get(url, headers=headers_for_homepage(url), timeout=10)
+    if not (script_tag := re.search(r"window\.env\s*=\s*(.+);", r.text)):
+        log.error(f"Failed to get app_id/key from '{url}': not an Algolia site?")
+        return None
+    page_json = json.loads(script_tag.group(1))
+    return dig(page_json, "api", "algolia", "applicationID"), dig(
+        page_json, "api", "algolia", "apiKey"
+    )
 
-    pair = domains.get_auth_for(site, fallback=fetch_instance_token)
+
+def get_search_client(
+    site: str,
+    fetch_token: Callable[[str], tuple[str, str] | None] = token_from_window_env,
+    homepage: str | None = None,
+) -> SearchClientSync | None:
+    pair = domains.get_auth_for(site, fallback=fetch_token)
     if pair is None:
         log.error(f"Unable to get Algolia authentication for '{site}'")
         return None
 
     app_id, api_key = pair
     config = SearchConfig(app_id, api_key)
-    config.headers.update(headers_for_homepage(f"https://www.{site}.com"))
+    config.headers.update(headers_for_homepage(homepage or f"https://www.{site}.com"))
     return SearchClientSync(config=config)
+
+
+def multi_search(
+    client: SearchClientSync, index_names: list[str], params: dict[str, Any]
+) -> list[dict[str, Any]]:
+    "Runs a multi-index search, ignoring any non-scene/performer (facet-value) responses"
+    responses = client.search(
+        search_method_params={
+            "requests": [
+                {"indexName": index_name, **params} for index_name in index_names
+            ]
+        },
+    )
+    hits: list[dict[str, Any]] = []
+    for result in responses.results:
+        instance = result.actual_instance
+        if isinstance(instance, SearchResponse) and instance.hits:
+            hits.extend(hit.to_dict() for hit in instance.hits)
+    return hits
 
 
 def id_from_url(url: str) -> str | None:

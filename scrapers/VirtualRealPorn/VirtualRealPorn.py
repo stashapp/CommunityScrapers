@@ -5,13 +5,17 @@ from typing import Any
 from urllib.parse import unquote, urlparse
 
 import requests
-from algoliasearch.search.client import SearchClientSync
-from algoliasearch.search.config import SearchConfig
-from algoliasearch.search.models.search_response import SearchResponse
-
 from Altwolia import domains
-from Altwolia.scrape import clean_text, headers_for_homepage, match_ratio, sort_by_match
-
+from Altwolia.scrape import (
+    clean_text,
+    headers_for_homepage,
+    match_ratio,
+    multi_search,
+    sort_by_match,
+)
+from Altwolia.scrape import (
+    get_search_client as algolia_search_client,
+)
 from py_common import log
 from py_common.types import (
     Gender,
@@ -105,38 +109,14 @@ def fetch_instance_token(url: str) -> tuple[str, str] | None:
     return match.group(1), match.group(2)
 
 
-def get_search_client() -> SearchClientSync | None:
+def get_search_client():
     # The whole network shares one Algolia app/key, fetched from any one
     # site's homepage - cached under a single "virtualrealporn" key
-    pair = domains.get_auth_for("virtualrealporn", fallback=fetch_instance_token)
-    if pair is None:
-        log.error(
-            "Unable to get Algolia authentication for the VirtualRealPorn network"
-        )
-        return None
-    app_id, api_key = pair
-    config = SearchConfig(app_id, api_key)
-    config.headers.update(headers_for_homepage("https://virtualrealporn.com"))
-    return SearchClientSync(config=config)
-
-
-def multi_search(
-    client: SearchClientSync, index_names: list[str], params: dict[str, Any]
-) -> list[dict[str, Any]]:
-    "Runs a multi-index search, ignoring any non-scene/performer (facet-value) responses"
-    responses = client.search(
-        search_method_params={
-            "requests": [
-                {"indexName": index_name, **params} for index_name in index_names
-            ]
-        },
+    return algolia_search_client(
+        "virtualrealporn",
+        fetch_token=fetch_instance_token,
+        homepage="https://virtualrealporn.com",
     )
-    hits: list[dict[str, Any]] = []
-    for result in responses.results:
-        instance = result.actual_instance
-        if isinstance(instance, SearchResponse) and instance.hits:
-            hits.extend(hit.to_dict() for hit in instance.hits)
-    return hits
 
 
 def sort_scenes_by_match(
@@ -335,9 +315,10 @@ def scene_from_fragment(
         return scene_from_url(url, site)
     if code := fragment.get("code"):
         return scene_from_id(code, sites, fragment)
-    if title := fragment.get("title"):
-        if scenes := scene_search(title, sites, fragment):
-            return scenes[0]
+    if (title := fragment.get("title")) and (
+        scenes := scene_search(title, sites, fragment)
+    ):
+        return scenes[0]
     return None
 
 
@@ -398,9 +379,8 @@ def performer_from_fragment(
 ) -> ScrapedPerformer | None:
     if url := fragment.get("url"):
         return performer_from_url(url)
-    if name := fragment.get("name"):
-        if performers := performer_search(name, sites):
-            return performers[0]
+    if (name := fragment.get("name")) and (performers := performer_search(name, sites)):
+        return performers[0]
     return None
 
 
