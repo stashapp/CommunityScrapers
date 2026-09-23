@@ -1,0 +1,77 @@
+name: Bondage Kitties
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - bondagekitties.com/product/
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: ^https?://(?:www\.)?bondagekitties\.com/product/([^/?#]+).*$
+          with: https://www.bondagekitties.com/wp-json/wp/v2/product?slug=${1}&_embed
+    scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - bondagekitties.com/kitties/
+    scraper: performerScraper
+
+xPathScrapers:
+  performerScraper:
+    performer:
+      Name: //h1
+      Details:
+        selector: //script[@type="application/ld+json"][contains(., "ProfilePage")]
+        postProcess:
+          - javascript: |
+              const data = JSON.parse(value);
+              const nodes = data["@graph"] ?? [data];
+              const profile = nodes.find((n) => n["@type"] === "ProfilePage");
+              return profile?.mainEntity?.description ?? "";
+      URLs: //link[@rel="canonical"]/@href
+      Images:
+        selector: >-
+          //img[contains(@class, "bk-profile-photo")]/@data-lazy-src
+          |
+          //img[contains(@class, "bk-profile-photo") and not(starts-with(@src, "data:"))]/@src
+        postProcess:
+          - replace:
+              # drop wordpress' resize suffix for the original upload
+              - regex: -\d+x\d+(\.\w+)$
+                with: $1
+
+jsonScrapers:
+  sceneScraper:
+    common:
+      $terms: 0._embedded.wp:term|@flatten
+    scene:
+      Title:
+        selector: 0.title.rendered
+        postProcess:
+          - javascript: &fromHtml |
+              const entities = { amp: "&", lt: "<", gt: ">", quot: '"', nbsp: " " };
+              return value
+                .replace(/<\/p>\s*<p[^>]*>/g, "\n\n")
+                .replace(/<br\s*\/?>/g, "\n")
+                .replace(/<[^>]+>/g, "")
+                .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(n))
+                .replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCodePoint(parseInt(n, 16)))
+                .replace(/&(\w+);/g, (m, n) => entities[n] ?? m)
+                .trim();
+      Details:
+        selector: 0.content.rendered
+        postProcess:
+          - javascript: *fromHtml
+      Date:
+        selector: 0.date
+        postProcess:
+          - parseDate: 2006-01-02T15:04:05
+      URLs: 0.link
+      Image: 0._embedded.wp:featuredmedia.0.source_url
+      Studio:
+        Name:
+          fixed: Bondage Kitties
+      Tags:
+        Name: $terms|#(taxonomy=="product_cat")#.name
+      Performers:
+        Name: $terms|#(taxonomy=="product_tag")#.name
