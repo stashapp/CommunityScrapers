@@ -10,11 +10,12 @@ sceneByFragment:
   # constructs the movie URL from the filename, provided that the filename includes the movie id
   queryURLReplace:
     filename:
-      - regex: (.*[^a-zA-Z\d])*(\d+)[^a-zA-Z\d].*
-        # heyzo uses a 4 digit number for ids, here we take a series of numbers just to be safe
-        with: $2
-      - regex: $
-        with: /index.html
+      # heyzo uses a 4 digit number for ids, preferred next to the brand token
+      # so a resolution or year elsewhere in the name cannot win
+      - regex: (?i).*heyzo\D*(\d{4}).*
+        with: $1/index.html
+      - regex: (.*[^a-zA-Z\d])*(\d{4})[^a-zA-Z\d].*
+        with: $2/index.html
   scraper: sceneScraper
 
 xPathScrapers:
@@ -24,11 +25,11 @@ xPathScrapers:
       $metadata: //div[@id="movie"]/script[@type="application/ld+json"]
     scene:
       Title:
-        selector: $metadata/text()
+        selector: $metadata
         postProcess:
           - javascript: |
               return JSON.parse(value)?.name ?? null;
-      URL:
+      URLs:
         selector: /html/head/meta[@property="og:url"]/@content
         postProcess:
           - replace:
@@ -36,7 +37,7 @@ xPathScrapers:
                 with: "https:"
       Details: //p[@class="memo"]
       Date:
-        selector: $table/td[contains(.,"Released") or contains(., "公開日")]/following-sibling::td/text()
+        selector: $table/td[contains(.,"Released") or contains(., "公開日")]/following-sibling::td
         postProcess:
           - parseDate: 2006-01-02
       Performers:
@@ -58,4 +59,3 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Heyzo
-# Last Updated Jan 11, 2024

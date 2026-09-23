@@ -22,7 +22,10 @@ sceneByFragment:
   # Constructs the movie URL from the filename, provided that the filename includes the movie ID.
   queryURLReplace:
     filename:
-      # Heyzo uses a 4 digit number for movie IDs.
+      # Heyzo uses a 4 digit number for movie IDs, preferred next to the brand
+      # token so a resolution or year elsewhere in the name cannot win
+      - regex: (?i).*heyzo\D*(\d{4}).*
+        with: $1/index.html
       - regex: (.*[^a-zA-Z\d])*(\d{4})[^a-zA-Z\d].*
         with: $2/index.html
   scraper: sceneScraper
@@ -62,7 +65,7 @@ xPathScrapers:
               - regex: .*movieId\s*=\s*"([^"]+).*
                 with: $1
 
-      URL:
+      URLs:
         selector: $movieObject
         postProcess:
           - replace:
@@ -77,34 +80,36 @@ xPathScrapers:
           fixed: Heyzo
 
   sceneSearch:
+    common:
+      $card: //div[@id="movies"]/div[contains(@class,"movie")]
     scene:
       Code:
-        selector: //div[@id="movies"]/div[contains(@class,"movie")]/a[1]/@href
+        selector: $card/a[1]/@href
         postProcess:
           - replace:
               - regex: '.*/moviepages/(\d{4})/index\.html.*'
                 with: $1
 
-      URL:
-        selector: //div[@id="movies"]/div[contains(@class,"movie")]/a[1]/@href
+      URLs:
+        selector: $card/a[1]/@href
         postProcess:
           - replace:
-              - regex: '^/'
+              - regex: "^/"
                 with: https://en.heyzo.com/
 
       Image:
-        selector: //div[@id="movies"]/div[contains(@class,"movie")]/a[1]/img/@data-original
+        selector: $card/a[1]/img/@data-original
         postProcess:
           - replace:
-              - regex: '^/'
+              - regex: "^/"
                 with: https://en.heyzo.com/
 
       Date:
-        selector: //div[@id="movies"]/div[contains(@class,"movie")]//p[contains(@class,"release")]/text()
+        selector: $card//p[contains(@class,"release")]/text()
         postProcess:
           - replace:
               - regex: '^\s*Release:\s*'
-                with: ''
+                with: ""
           - parseDate: 2006-01-02
 
       Studio:
