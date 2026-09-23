@@ -163,7 +163,7 @@ xPathScrapers:
         selector: //div[@class="trailerpage_info"]/p/text()
         concat: " "
       Performers: &performers
-        Name: //div[@class="setdesc"]//a[contains(@href, "models")]/text()
+        Name: //div[@class="setdesc"]//a[contains(@href, "models") and not(contains(@class, "read-more"))]/text()
       Studio: &studioClub
         Name: //div[@class="sitename"]/a/text() | //meta[@name="author"]/@content
       URLs: &url //link[@rel="canonical"]/@href
@@ -174,7 +174,7 @@ xPathScrapers:
               - regex: ^//
                 with: https://
       Tags:
-        Name: &tagsSel //div[@class="set_tags"]/ul/li//a/text()
+        Name: &tagsSel //div[@class="set_tags"]/ul/li//a[not(contains(@href,"/all.html"))]/text()
     gallery:
       Title: *title
       Date: *date
@@ -199,13 +199,16 @@ xPathScrapers:
       # if we want to be able to scrape more than just a single field
       # TODO: write a python scraper, merge with the rest of this file?
       Tags:
-        Name:
+        Name: &tagsViaClub
           selector: //link[@rel="canonical"]/@href
           postProcess:
             - replace:
                 - regex: ^.+/tour
                   with: https://grooby.club/tour
-            - subScraper: *tagsSel
+            - subScraper:
+                selector: *tagsSel
+                concat: "|"
+          split: "|"
     gallery:
       Title: *title
       Date: *date
@@ -213,7 +216,7 @@ xPathScrapers:
       Performers: *performers
       Studio: *studioSub
       Tags:
-        Name: *tagsSel
+        Name: *tagsViaClub
 
   sceneScraper:
     scene:
@@ -274,7 +277,7 @@ xPathScrapers:
               - regex: \s*Read More in Members Area\s*$
                 with: ""
       Performers: &performersMain
-        Name: //div[@class="setdesc"]//a/text()
+        Name: //div[@class="setdesc"]//a[contains(@href, "models") and not(contains(@class, "read-more"))]/text()
       Studio: &studio
         Name:
           # A handful of sites echo their own TLD onto the end of an
@@ -289,7 +292,7 @@ xPathScrapers:
             # exactly) - the generic strip above wrongly reduces it to "T"
             - map:
                 T: T.Porn
-        URL:
+        URLs:
           selector: //link[@rel="canonical"]/@href
           postProcess:
             - replace:
@@ -309,12 +312,17 @@ xPathScrapers:
           |
           //div[@class="trailer_video"]//video/@data-poster
           |
-          //script[contains(., "player.poster")]/text()
+          //script[contains(., "player.poster") and not(contains(., "membersonly"))]/text()
+          |
+          //meta[@property="og:image"][//script[contains(., "membersonly")]]/@content
         concat: __SEPARATOR__
         postProcess:
           - replace:
               - regex: (__SEPARATOR__).*player\.poster\s*=\s*['"]([^'"]+)['"].*$
                 with: __SEPARATOR__$2
+              # og:image is absolute, so drop the canonical we only needed for its host
+              - regex: ^https://[^/]+/.*?__SEPARATOR__(https://.+)$
+                with: $1
               - regex: ^.*__SEPARATOR__// # img urls without protocol, but with domain, e.g. //bobstgirls.com/whatever
                 with: "https://"
               - regex: ^(https://[^/]*)/.*(__SEPARATOR__.*)$ # remove any path part from canonical URL
@@ -325,9 +333,13 @@ xPathScrapers:
                 with: ""
               - regex: (\d+).jpg
                 with: $1-full.jpg # get the highest res version of the image
+              # nothing but the canonical matched, so there is no image to take
+              - regex: ^.*\.html$
+                with: ""
+      URLs: *url
       Tags:
         Name:
-          selector: &tagsSelMain //div[@class="set_tags"]/ul/li//a/text()
+          selector: &tagsSelMain //div[@class="set_tags"]/ul/li//a[not(contains(@href,"/all.html"))]/text()
   galleryScraper:
     gallery:
       Title: *titleMain
@@ -366,6 +378,7 @@ xPathScrapers:
                 with: $1$2
               - regex: ^\/\/
                 with: "https://"
+      URLs: *url
 
   sceneScraperGroobyVR:
     scene:
@@ -408,6 +421,7 @@ xPathScrapers:
               # the full variant should be the original unscaled image
               - regex: (\d+)(-\dx)?\.(jpg|jpeg|png|gif)$
                 with: $1-full.$3
+      URLs: *url
       Tags: &tagsVR
         Name:
           selector: >-
@@ -459,6 +473,7 @@ xPathScrapers:
                 with: $1/tour/$2
               - regex: content//
                 with: content/
+      URLs: *url
       Tags: *tagsVR
 
   sceneSearchResultsScraper:

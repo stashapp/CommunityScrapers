@@ -1,8 +1,10 @@
-Scraper has been tested on 2026-09-04
+Scraper has been tested on 2026-09-23
 
 | Studio                 | URL                                                                                        |
 | :--------------------- | :----------------------------------------------------------------------------------------- |
 | Russian TGirls         | https://www.grooby.club/tour/trailers/The-Half-Time-Break.html                             |
+| Hazel Tucker           | https://www.hazel-tucker.com/tour/trailers/hazel-tucker-cassie-in-the-afternoon.html       |
+| Kelly Quell XXX        | https://www.kellyquellxxx.com/tour/trailers/Big-Butt-Tgirls-Love-to-Cum-Hard.html          |
 | TGirl Japan            | https://www.tgirljapan.com/tour/trailers/Megumis-Sexy-Strip-Show.html                      |
 | Krissy 4U              | https://www.krissy4u.com/tour/trailers/Gloryhole-Blowjob.html                              |
 | TS Casting Couch       | https://www.ts-castingcouch.com/tour/trailers/Stunning-Grooby-Newbie-Mychelle.html         |
