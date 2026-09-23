@@ -2,19 +2,28 @@ name: JAVDatabase
 
 sceneByName:
   action: scrapeXPath
-  queryURL: https://www.javdatabase.com/movies/{}
+  queryURL: "https://www.javdatabase.com/?post_type=movies&s={}"
   scraper: sceneSearch
 
 sceneByQueryFragment:
   action: scrapeXPath
   queryURL: "{url}"
-  scraper: sceneSearch
+  scraper: sceneScraper
 
 sceneByURL:
   - action: scrapeXPath
     url:
-      - javdatabase.com
-    scraper: sceneSearch
+      - javdatabase.com/movies/
+    scraper: sceneScraper
+
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: "https://www.javdatabase.com/?post_type=movies&s={filename}"
+  queryURLReplace:
+    filename:
+      - regex: (.*@|.*[\s|\[|\(]|\b)(\w+-\d+)([\s|\]|\)]+.*|.*|\.\w+)
+        with: $2
+  scraper: sceneSearch
 
 groupByURL:
   - action: scrapeXPath
@@ -25,25 +34,25 @@ groupByURL:
 performerByURL:
   - action: scrapeXPath
     url:
-      - javdatabase.com
+      - javdatabase.com/idols/
     scraper: performerScraper
 
-sceneByFragment: # Scrape all scene info if JAV code is in the filename (path)
+performerByName:
   action: scrapeXPath
-  queryURL: https://www.javdatabase.com/movies/{filename}
-  queryURLReplace:
-    filename:
-      - regex: (.*@|.*[\s|\[|\(]|\b)(\w+-\d+)([\s|\]|\)]+.*|.*|\.\w+) # Match all text before and after JAV Code, including JAV code
-        with: $2 # Replace all text in filename with just the JAV Code for this search
-  scraper: sceneSearch
+  queryURL: "https://www.javdatabase.com/?post_type=idols&s={}"
+  scraper: performerSearch
 
 xPathScrapers:
   movieScraper:
     common:
-      $infobox: //div[@class="movietable"]/div[@class="row"][1]
+      $infobox: //div[contains(@class,'movietable')]
+
     group:
-      Name: //h1
-      Synopsis: $infobox/div[2]/p[1]/text()
+      Name: //header[contains(@class,'entry-header')]/h1
+
+      Synopsis:
+        selector: $infobox//p[b[contains(.,'Title:')]]/text()
+
       Date:
         selector: $infobox//p[b[contains(.,'Release Date:')]]/text()
         postProcess:
@@ -53,6 +62,7 @@ xPathScrapers:
           - replace:
               - regex: '^\s+|\s+$'
                 with: ''
+
       Duration:
         selector: $infobox//p[b[contains(.,'Runtime:')]]/text()
         postProcess:
@@ -66,26 +76,26 @@ xPathScrapers:
               - regex: 'min\.?'
                 with: ':00'
           - replace:
-              - regex: 'HD:?'
-                with: ''
-          - replace:
               - regex: '\s+:'
                 with: ':'
           - replace:
               - regex: '^\s+|\s+$'
                 with: ''
-      Director: //td[contains(.,'Director:')]/following-sibling::td
+
+      Director:
+        selector: $infobox//p[b[contains(.,'Director:')]]/a/text()
+
       FrontImage: //meta[@property='og:image']/@content
+
       Studio:
         Name:
           selector: $infobox//p[b[contains(.,'Studio:')]]//a/text()
         URL:
           selector: $infobox//p[b[contains(.,'Studio:')]]//a/@href
-      URLs: //div[h2[contains(.,'/Idols')]]//a/@href
+
+      URLs: //link[@rel='canonical']/@href
 
   performerScraper:
-    common:
-      $avatar: //div[@class='avatar-box']
     performer:
       Name:
         selector: //h1[@class='idol-name']
@@ -93,48 +103,139 @@ xPathScrapers:
           - replace:
               - regex: '(.+)\s*-\s*JAV\sProfile$'
                 with: '$1'
+
+      Aliases:
+        selector: //b[normalize-space(.)='JP:']/following-sibling::text()[1]
+        postProcess:
+          - replace:
+              - regex: '^\s+|\s+$'
+                with: ''
+
       Gender:
         fixed: Female
-      Image: //div[@class='idol-portrait']//img/@data-src
-      Birthdate: //b[contains(.,'DOB:')]/following-sibling::a
-      HairColor: //b[contains(.,'Hair Color(s):')]/following-sibling::a
+
+      Image: //div[contains(@class,'idol-portrait')]//img/@src
+
+      Birthdate:
+        selector: //b[normalize-space(.)='DOB:']/following-sibling::a[1]/text()
+        postProcess:
+          - replace:
+              - regex: '^(\d{4})-\?\?-\?\?$'
+                with: '$1'
+          - replace:
+              - regex: '^(\d{4}-\d{2})-\?\?$'
+                with: '$1'
+
+      HairColor:
+        selector: //b[normalize-space(.)='Hair Color(s):']/following-sibling::a[1]/text()
+
       Tags:
-        Name: //b[contains(.,'Tags:')]/following-sibling::a/text()
+        Name: //p[b[normalize-space(.)='Tags:']]//a[@class='idol-box-link']/text()
+
       Height:
-        selector: //b[contains(.,'Height:')]/following-sibling::a
+        selector: //b[normalize-space(.)='Height:']/following-sibling::a[1]/text()
         postProcess:
           - replace:
               - regex: '[^\d]'
                 with: ''
+
       Measurements:
-        selector: //b[contains(.,'Measurements:')]/following-sibling::text()
+        selector: //b[normalize-space(.)='Measurements:']/following-sibling::text()[1]
         postProcess:
           - replace:
-              - regex: '.+?[^\d-]([\d-]+)[^\d-].+'
+              - regex: '^.*?(\d+-\d+-\d+).*$'
                 with: '$1'
-          # remove any trailing dash
           - replace:
-              - regex: '-$'
+              - regex: '^.*\?.*$'
                 with: ''
-  sceneSearch:
+          - replace:
+              - regex: '^\s+|\s+$'
+                with: ''
+
+  sceneScraper:
     common:
-      $videoPosterItem: /html/body/div[@id="page"]/div[@id="content"]/div[@id="primary"]/main/div[@class="entry-content"]/table/tbody/tr[@class="moviecovertb"]/td/div[@id="poster-container"]/a/img/@src
-      $videoItem: /html/body/div[@id="page"]/div[@id="content"]/div[@id="primary"]/main/div[@class="entry-content"]/div[@class="movietable"]/div[@class="row"]/div[2]
-      $videoDetailsItem: /html/body/div[@id="page"]/div[@id="content"]/div[@id="primary"]/main/div[@class="entry-content"]/div[@class="movietable"]/div/h4[@class='subhead']/../text()
+      $movie: //div[contains(@class,'movietable')]
+
     scene:
-      Title: $videoItem/p[b[contains(.,'Title:')]]/text()
-      Code: $videoItem/p[b[contains(.,'DVD ID:')]]/text()
-      URL: /html/head/link[@rel="canonical"]/@href
-      Date: $videoItem/p[b[contains(.,'Release Date:')]]/text()
-      Director: $videoItem/p/span[../b[contains(.,'Director:')]]/a[@rel='tag']/text()
+      Title:
+        selector: //header[contains(@class,'entry-header')]/h1/text()
+        postProcess:
+          - replace:
+              - regex: '^\s*[A-Za-z0-9]+-\d+\s*-\s*'
+                with: ''
+          - replace:
+              - regex: '^\s+|\s+$'
+                with: ''
+
+      Code:
+        selector: $movie//p[b[contains(.,'DVD ID:')]]/text()
+        postProcess:
+          - replace:
+              - regex: '^\s+|\s+$'
+                with: ''
+
+      URL: //link[@rel='canonical']/@href
+
+      Date:
+        selector: $movie//p[b[contains(.,'Release Date:')]]/text()
+        postProcess:
+          - replace:
+              - regex: '^\s+|\s+$'
+                with: ''
+
+      Director:
+        selector: $movie//p[b[contains(.,'Director:')]]//a/text()
+
       Studio:
-        Name: $videoItem/p/span[../b[contains(.,'Studio:')]]/a[@rel='tag']/text()
+        Name:
+          selector: $movie//p[b[contains(.,'Studio:')]]//a/text()
+        URL:
+          selector: $movie//p[b[contains(.,'Studio:')]]//a/@href
+
       Performers:
         Name:
-          selector: $videoItem/p/span[../b[contains(.,'Idol(s)/Actress(es):')]]/a/text()
-        URLs: $videoItem/p/span[../b[contains(.,'Idol(s)/Actress(es):')]]/a/@href
-      Image: /html/head/meta[@property='og:image']/@content
+          selector: $movie//p[b[contains(.,'Idol(s)/Actress(es):')]]//a/text()
+        URLs:
+          selector: $movie//p[b[contains(.,'Idol(s)/Actress(es):')]]//a/@href
+
+      Image: //div[@id='poster-container']//img/@src
+
       Tags:
-        Name: $videoItem/p/span[../b[contains(.,'Genre(s):')]]/a[@rel='tag']/text()
-      Details: $videoDetailsItem
-# Last Updated November 29, 2025
+        Name:
+          selector: $movie//p[b[contains(.,'Genre(s):')]]//a/text()
+
+      Details:
+        selector: $movie//p[b[contains(.,'Title:')]]/text()
+        postProcess:
+          - replace:
+              - regex: '^\s+|\s+$'
+                with: ''
+
+  sceneSearch:
+    scene:
+      Title:
+        selector: //div[contains(@class,'card-body')]//div[contains(@class,'mt-auto')]/a/text()
+        postProcess:
+          - replace:
+              - regex: '^\s+|\s+$'
+                with: ''
+                
+      Code:
+        selector: //div[contains(@class,'card-body')]//p[contains(@class,'pcard')]/a/text()
+        postProcess:
+          - replace:
+              - regex: '^\s+|\s+$'
+                with: ''
+
+      URL: //div[contains(@class,'card-body')]//p[contains(@class,'pcard')]/a/@href
+
+      Image: //div[contains(@class,'card-body')]//div[contains(@class,'movie-cover-thumb')]/a/img/@src
+
+      Studio:
+        Name: //div[contains(@class,'card-body')]/span[contains(@class,'btn')]//a/text()
+        URL: //div[contains(@class,'card-body')]/span[contains(@class,'btn')]//a/@href
+
+  performerSearch:
+    performer:
+      Name: //p[contains(@class,'pcard')]/a/text()
+      URLs: //p[contains(@class,'pcard')]/a/@href
