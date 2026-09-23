@@ -1,53 +1,112 @@
 name: Heyzo
+
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://en.heyzo.com/search/{}/1.html?sort=pop
+  scraper: sceneSearch
+
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
 sceneByURL:
   - action: scrapeXPath
     url:
       - en.heyzo.com/moviepages
     scraper: sceneScraper
+
 sceneByFragment:
   action: scrapeXPath
   queryURL: https://en.heyzo.com/moviepages/{filename}
-  # constructs the movie URL from the filename, provided that the filename includes the movie id
+  # Constructs the movie URL from the filename, provided that the filename includes the movie ID.
   queryURLReplace:
     filename:
-      # heyzo uses a 4 digit number for ids, here we take a series of numbers just to be safe
-      - regex: (.*[^a-zA-Z\d])*(\d+)[^a-zA-Z\d].*
+      # Heyzo uses a 4 digit number for movie IDs.
+      - regex: (.*[^a-zA-Z\d])*(\d{4})[^a-zA-Z\d].*
         with: $2/index.html
   scraper: sceneScraper
 
 xPathScrapers:
   sceneScraper:
     common:
-      $table: //div[@class="info-bg"]/table/tbody/tr
+      $table: //div[@class="info-bg"]//table[contains(@class,"movieInfo")]//tr
       $movieObject: //script[contains(.,"movie_obj")]/text()
     scene:
       Date:
         selector: $table/td[contains(.,"Released")]/following-sibling::td/text()
         postProcess:
           - parseDate: 2006-01-02
+
       Performers:
         Name: $table/td[contains(.,"Actress")]/following-sibling::td/a/text()
+
       Image:
         selector: $movieObject
         postProcess:
           - replace:
-              - regex: .*thumbnail"\s*:\s*"([^"]+).*
+              - regex: .*"image"\s*:\s*"([^"]+).*
                 with: https:$1
+
       Title:
         selector: $movieObject
         postProcess:
           - replace:
-              - regex: .*name"\s*:\s*"([^"]+).*
+              - regex: .*"@type"\s*:\s*"Movie"\s*,\s*"name"\s*:\s*"([^"]+).*
                 with: $1
+
       Code:
         selector: //script[contains(.,"movieId")]/text()
         postProcess:
           - replace:
               - regex: .*movieId\s*=\s*"([^"]+).*
                 with: $1
+
+      URL:
+        selector: $movieObject
+        postProcess:
+          - replace:
+              - regex: '.*"thumbnailUrl"\s*:\s*"([^"]+)".*'
+                with: https:$1
+
       Tags:
-        Name: $table/td[contains(.,"Type") or contains(.,"Sex Styles") or contains(.,"Theme") ]/following-sibling::td/a/text()
+        Name: $table/td[contains(.,"Type") or contains(.,"Sex Styles") or contains(.,"Theme")]/following-sibling::td/a/text()
+
       Studio:
         Name:
           fixed: Heyzo
-# Last Updated January 16, 2024
+
+  sceneSearch:
+    scene:
+      Code:
+        selector: //div[@id="movies"]/div[contains(@class,"movie")]/a[1]/@href
+        postProcess:
+          - replace:
+              - regex: '.*/moviepages/(\d{4})/index\.html.*'
+                with: $1
+
+      URL:
+        selector: //div[@id="movies"]/div[contains(@class,"movie")]/a[1]/@href
+        postProcess:
+          - replace:
+              - regex: '^/'
+                with: https://en.heyzo.com/
+
+      Image:
+        selector: //div[@id="movies"]/div[contains(@class,"movie")]/a[1]/img/@data-original
+        postProcess:
+          - replace:
+              - regex: '^/'
+                with: https://en.heyzo.com/
+
+      Date:
+        selector: //div[@id="movies"]/div[contains(@class,"movie")]//p[contains(@class,"release")]/text()
+        postProcess:
+          - replace:
+              - regex: '^\s*Release:\s*'
+                with: ''
+          - parseDate: 2006-01-02
+
+      Studio:
+        Name:
+          fixed: Heyzo
