@@ -2,7 +2,7 @@ name: FreeonesCommunity
 
 performerByName:
   action: scrapeXPath
-  queryURL: https://www.freeones.com/babes?q={}&v=teasers&s=relevance&l=96&m%5BcanPreviewFeatures%5D=0
+  queryURL: https://www.freeones.com/performers?q={}&v=teasers&s=relevance&l=96&m%5BcanPreviewFeatures%5D=0
   scraper: performerSearch
 
 performerByURL:
@@ -63,15 +63,17 @@ xPathScrapers:
     common:
       $commonRoot: //*[@id="description"]
       $performerName: //a[@data-test="link_Cast"]
+      $canonical: //link[@rel="alternate" and @hreflang="x-default"]/@href
     scene:
       Title: //h1
-      URLs: //link[@rel="alternate"][1]/@href
+      URLs: $canonical
+      Image: //*[@id="fxgp-gallery"]/a[1]/@href
       Details: $commonRoot//div[contains(concat(' ',normalize-space(@class),' '),' pb-2 ')]
       Studio:
         Name: $commonRoot//span[@data-test="link_span_Studio"]
       Director: $commonRoot//span[@data-test="link_span_Director"]
       Date:
-        selector: //div[contains(concat(' ',normalize-space(@class),' '),' uploaded-date ')]/text()
+        selector: //div[contains(concat(' ',normalize-space(@class),' '),' mid-content-pr-past-date ')]
         postProcess:
           - replace:
               - regex: .+?(\w+\s\d{1,2},\s\d{4}).+
@@ -79,7 +81,7 @@ xPathScrapers:
           - parseDate: January 2, 2006
       Groups:
         Name: //h1
-        URLs: //link[@rel="alternate"][1]/@href
+        URLs: $canonical
       Performers:
         Name: $performerName/span
       Tags:
@@ -135,56 +137,48 @@ xPathScrapers:
         postProcess:
           - map:
               United States: "USA"
-      EyeColor: //span[text()='Eye Color:']/following-sibling::span/a/span/text()
+      EyeColor: //span[@data-test="link_span_eye_color"]
       Height:
-        selector: //span[text()='Height:']/following-sibling::span/a
+        selector: //span[@data-test="link_span_height"]
         postProcess:
           - replace:
               - regex: \scm
                 with: ""
           - map:
               Unknown: ""
+              "12": ""
       Measurements:
         selector: //span[(@data-test='link_span_bra') or (@data-test='link_span_waist') or (@data-test='link_span_hip')]
-        concat: " - "
+        concat: "|"
         postProcess:
-          - replace:
-              - regex: \sIn
-                with: ""
-          - map:
-              Unknown: ""
+          - javascript: |
+              return value
+                .split("|")
+                .map((part) => {
+                  const cm = part.trim().match(/^(\d+)\s*cm$/);
+                  return cm ? String(Math.round(Number(cm[1]) / 2.54)) : part.trim();
+                })
+                .filter((part) => part && part !== "Unknown")
+                .join("-");
       FakeTits:
-        selector: //span[text()='Boobs:']/following-sibling::span/a
+        selector: //span[@data-test="link_span_boobs"]
         postProcess:
           - map:
               Unknown: ""
               Fake: "Yes"
               Natural: "No"
-      CareerStart:
-        selector: //div[contains(@class,'timeline-horizontal')]//p[@class='m-0']
-        concat: "-"
-        postProcess:
-          - javascript: |
-              const m = value.match(/\d{4}/);
-              return m ? m[0] : "";
-      CareerEnd:
-        selector: //div[contains(@class,'timeline-horizontal')]//p[@class='m-0']
-        concat: "-"
-        postProcess:
-          - javascript: |
-              // only a real second year counts as an end - "Present"/"-" mean ongoing
-              const years = value.match(/\d{4}/g) || [];
-              return years.length > 1 ? years[years.length - 1] : "";
+      CareerStart: //span[@data-test="link_span_careerStart"]
+      CareerEnd: //span[@data-test="link_span_careerEnd"][not(normalize-space(//span[@data-test="link_span_careerStatus"])="Active")]
       Aliases:
         selector: //span[@data-test='link_span_aliases']/text()
         concat: ", "
       Tattoos:
-        selector: //span[text()='Tattoo locations:']/following-sibling::span
+        selector: //span[@data-test="link_span_tattooLocations"]
         postProcess:
           - map:
               Unknown: ""
       Piercings:
-        selector: //span[text()='Piercing locations:']/following-sibling::span
+        selector: //span[@data-test="link_span_piercingLocations"]
         postProcess:
           - map:
               Unknown: ""
