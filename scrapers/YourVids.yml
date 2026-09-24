@@ -32,7 +32,12 @@ xPathScrapers:
       Code:
         selector: (//button[contains(@data-likeable-type, "Video")]/@data-likeable-id)[1]
       Studio:
-        Name: $creator//h3/text()
+        Name:
+          selector: $creator//h3/text()
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: "YourVids: "
         URLs: $creator//a[contains(@class, "video-creator-identity")]/@href
       Performers:
         Name: $creator//h3/text()
