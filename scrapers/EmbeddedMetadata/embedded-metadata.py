@@ -225,6 +225,7 @@ def process_image(image_path: str):
 			for list_value in value:
 				value_parts.extend(list_value.split(','))
 		else:
+			value_parts = []
 			value_parts.extend(value.split(','))
 
 		for value_part in value_parts:
