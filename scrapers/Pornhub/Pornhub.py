@@ -1,6 +1,7 @@
 import json
 import re
 import sys
+from urllib.parse import urlparse
 
 from py_common import log
 from py_common.deps import ensure_requirements
@@ -28,7 +29,11 @@ session.cookies.set("accessAgeDisclaimerPH", "1", domain=".pornhub.com")
 
 
 def get_token() -> str | None:
-    result = session.get("https://www.pornhub.com")
+    try:
+        result = session.get("https://www.pornhub.com", timeout=15)
+    except Exception as e:
+        log.error(f"Failed to fetch Pornhub token page: {e}")
+        return None
     # regex extract
     data_token = re.search(r'data-token="([^"]+)"', result.text)
     return data_token.group(1) if data_token else None
@@ -37,19 +42,25 @@ def get_token() -> str | None:
 def performer_by_name(name: str) -> list[PerformerSearchResult]:
     token = get_token()
     if not token:
-        raise Exception("Failed to retrieve token")
+        log.warning("Failed to retrieve token for performer search")
+        return []
 
-    response = session.get(
-        "https://www.pornhub.com/api/v1/video/search_autocomplete",
-        params={
-            "q": name,
-            "token": token,
-            "pornstars": "true",
-            "alt": 0,  # hardcoded
-        },
-    )
+    try:
+        response = session.get(
+            "https://www.pornhub.com/api/v1/video/search_autocomplete",
+            params={
+                "q": name,
+                "token": token,
+                "pornstars": "true",
+                "alt": 0,  # hardcoded
+            },
+            timeout=15,
+        )
+        data = response.json()
+    except Exception as e:
+        log.warning(f"Failed to fetch or parse Pornhub performer autocomplete: {e}")
+        return []
 
-    data = response.json()
     results: list[PerformerSearchResult] = []
     for model in data.get("models", []):
         results.append(
@@ -76,7 +87,15 @@ def clean_search_query(name: str) -> str:
 
 
 def parse_scene_search_results(html_content: str) -> list[SceneSearchResult]:
-    tree = lxml.html.fromstring(html_content)
+    if not html_content or not html_content.strip():
+        return []
+
+    try:
+        tree = lxml.html.fromstring(html_content)
+    except Exception as e:
+        log.error(f"Failed to parse Pornhub HTML: {e}")
+        return []
+
     results: list[SceneSearchResult] = []
 
     # Match search video list items excluding bottom recommendations
@@ -121,6 +140,8 @@ def parse_scene_search_results(html_content: str) -> list[SceneSearchResult]:
                 or img.get("data-image")
                 or img.get("src")
             )
+            if image_url and image_url.startswith("//"):
+                image_url = f"https:{image_url}"
 
         # Studio / Channel / Model
         studio_nodes = item.xpath(
@@ -171,7 +192,8 @@ def scene_by_name(name: str) -> list[SceneSearchResult]:
         log.warning(f"Pornhub search returned status code {response.status_code}")
         return []
 
-    if response.url.rstrip("/").endswith("pornhub.com"):
+    parsed_url = urlparse(response.url)
+    if parsed_url.path in ("", "/"):
         log.warning(
             f"Pornhub search was redirected to homepage: {response.url}"
         )
