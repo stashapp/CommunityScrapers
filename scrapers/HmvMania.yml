@@ -19,30 +19,35 @@ xPathScrapers:
     common:
       $searchItem: //div[contains(@class,"main-container")]//div[contains(@class,"video-item-horizontal")]
     scene:
-      Title: $searchItem//h4/text()
-      URL: $searchItem//a[h4]/@href
+      Title:
+        selector: $searchItem//h4/text()
+        postProcess: &stripMaker
+          - replace:
+              - regex: '^\[.+\]\s(.+)'
+                with: $1
+      URLs: $searchItem//a[h4]/@href
       Image: $searchItem//img[not(@class)]/@data-src
-      Details: $searchItem//p/text()
+      Studio:
+        Name:
+          selector: $searchItem//h4[starts-with(normalize-space(.), "[")]/text()
+          postProcess: &onlyMaker
+            - replace:
+                - regex: '^\[(.+)\]\s.+'
+                  with: $1
   sceneScraper:
     common:
       $infoNode: //div[@class="main-container"]//div[@class="row"]/div[1]
     scene:
-      URL: //link[@rel="canonical"]/@href|//meta[@property="og:url"]/@content
+      URLs: //link[@rel="canonical"]/@href|//meta[@property="og:url"]/@content
       Image: //meta[@property="og:image"]/@content
       Title:
         selector: $infoNode//h1[@class="video-entry-title"]/text()
-        postProcess:
-          - replace:
-              - regex: '^\[.+\]\s(.+)'
-                with: $1
+        postProcess: *stripMaker
       Studio:
         Name:
-          selector: $infoNode//h1[@class="video-entry-title"]/text()
-          postProcess:
-            - replace:
-                - regex: '^\[(.+)\]\s.+'
-                  with: $1
-        URL: $infoNode//div[contains(@class,"content-creator")]/div/a/@href
+          selector: $infoNode//h1[@class="video-entry-title" and starts-with(normalize-space(.), "[")]/text()
+          postProcess: *onlyMaker
+        URLs: $infoNode//div[contains(@class,"content-creator")]/div/a/@href
       Details:
         selector: $infoNode//div[contains(@class,"entry-content")]/p/text()
         concat: "\n"
@@ -56,4 +61,3 @@ xPathScrapers:
         selector: $infoNode//ul[contains(@class,"video-meta")]/li[i[contains(@class,"fa-calendar-alt")]]/text()
         postProcess:
           - parseDate: "Jan 02 2006"
-# Last Updated December 16, 2022
