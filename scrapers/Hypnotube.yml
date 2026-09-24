@@ -10,12 +10,12 @@ xPathScrapers:
     common:
       $studio: //a[starts-with(@href,'https://hypnotube.com/user/')]
     scene:
-      Title: //div[@class='item-tr-inner-col inner-col']/h1/text()
-      Details: //div[@class='main-description']/text()
+      Title: //div[@class='item-tr-inner-col inner-col']/h1
+      Details: //div[@class='main-description']
       Image: //meta[@property='og:image']/@content
       Studio:
         Name: $studio/@title
-        URL: $studio/@href
+        URLs: $studio/@href
       Date:
         selector: //li/span[@class="icon i-calendar"]/following-sibling::span
         postProcess:
@@ -23,6 +23,5 @@ xPathScrapers:
               - regex: \s.*$
                 with: ""
       Tags:
-        Name: //div[@class='tags-block']/a/text()
-      URL: //link[@rel='canonical']/@href
-# Last Updated April 29, 2023
+        Name: //div[@class='tags-block']/a
+      URLs: //link[@rel='canonical']/@href
