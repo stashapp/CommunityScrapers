@@ -8,8 +8,8 @@ from py_common.types import PerformerSearchResult, SceneSearchResult
 from py_common.util import scraper_args
 
 ensure_requirements("requests", "lxml")
-import lxml.html
-import requests
+import lxml.html  # noqa: E402
+import requests  # noqa: E402
 
 session = requests.Session()
 session.headers.update(
