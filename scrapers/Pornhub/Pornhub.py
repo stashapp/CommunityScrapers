@@ -1,10 +1,6 @@
 import json
-import os
 import re
 import sys
-
-# Ensure parent directory is in sys.path so py_common can be imported
-sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
 from py_common import log
 from py_common.deps import ensure_requirements
@@ -12,7 +8,6 @@ from py_common.types import PerformerSearchResult, SceneSearchResult
 from py_common.util import scraper_args
 
 ensure_requirements("requests", "lxml")
-
 import lxml.html
 import requests
 
