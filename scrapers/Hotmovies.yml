@@ -28,39 +28,57 @@ performerByName:
   scraper: performerSearch
 xPathScrapers:
   sceneScraper:
+    common:
+      $clipCover: //a[@id="front-cover"][//meta[@name="og:url" and contains(@content, "/adult-clips/")]]
     scene:
-      Title: //h1
+      Title: //h1/text()
       Tags:
         Name: //meta[@property="og:video:tag"]/@content
       Performers:
         Name: //meta[@property="og:video:actor"]/@content
-      URL: //meta[@name="og:url"]/@content
-      Groups:
-        Name: //a[@id="front-cover"]/img/@title
-        URL:
-          selector: //a[@id="front-cover"]/@href
+        URLs:
+          selector: //a[@label="Performer"]/@href
           postProcess: &baseUrl
             - replace:
                 - regex: ^/
                   with: https://www.hotmovies.com/
-        FrontImage: //a[@id="front-cover"]/img/@src
+      URLs: //meta[@name="og:url"]/@content
+      ProductionDate:
+        selector: //li[strong[contains(text(), "Production Year")]]
+        postProcess:
+          - replace:
+              - regex: .*(\d{4}).*
+                with: $1
+      Groups:
+        Name: $clipCover/img/@title
+        URLs:
+          selector: $clipCover/@href
+          postProcess: *baseUrl
+        FrontImage:
+          selector: $clipCover/img/@src
+          postProcess: &fullCover
+            - replace:
+                - regex: ([?&])w=\d+&h=\d+
+                  with: ${1}w=500&h=700
         BackImage:
-          selector: //a[@id="front-cover"]/img/@src
+          selector: $clipCover/img/@src
           postProcess:
             - replace:
-                - regex: h\.
-                  with: bh\.
+                - regex: ([?&])w=\d+&h=\d+
+                  with: ${1}w=500&h=700
+                - regex: $
+                  with: "&v=back"
       Studio:
         Name: //a[@data-tl="studio"]
-        URL:
+        URLs:
           selector: //a[@data-tl="studio"]/@href
           postProcess: *baseUrl
       Image: //meta[@property="og:image"]/@content
       Date: //meta[@property="og:video:release_date"]/@content
   movieScraper:
     group:
-      Name: //h1
-      URLs: 
+      Name: //h1/text()
+      URLs:
         selector: //meta[@name="og:url"]/@content
         postProcess:
           - replace:
@@ -77,19 +95,23 @@ xPathScrapers:
                 with: ":00"
       Studio:
         Name: //a[@label="Studio"][1]
-        URL:
+        URLs:
           selector: //a[@label="Studio"][1]/@href
           postProcess: *baseUrl
       Synopsis: //article
-      FrontImage: //a[@id="front-cover"]/img/@src
+      FrontImage:
+        selector: //a[@id="front-cover"]/img/@src
+        postProcess: *fullCover
       BackImage:
         selector: //a[@id="front-cover"]/img/@src
         postProcess:
           - replace:
-              - regex: h\.
-                with: bh.
+              - regex: ([?&])w=\d+&h=\d+
+                with: ${1}w=500&h=700
+              - regex: $
+                with: "&v=back"
       Date: //meta[@property="og:video:release_date"]/@content
-      Tags: 
+      Tags:
         Name: //strong[contains(text(), "Categories:")]/following-sibling::a
   performerSearch:
     performer:
@@ -157,13 +179,13 @@ xPathScrapers:
   sceneSearch:
     scene:
       Title: //div[@class="animated-scene-title"]
-      URL:
+      URLs:
         selector: //a[@class="animated-screen"]/@href
         postProcess: *baseUrl
       Image: //img[@class="animate screenshot"]/@src
       Groups:
         Name: //div[@class="animated-scene-hiddentxt"]/a/i
-        URL:
+        URLs:
           selector: //div[@class="animated-scene-hiddentxt"]/a/@href
           postProcess: *baseUrl
 
@@ -173,4 +195,3 @@ driver:
       Value: stash-scraper
     - Key: Cookie
       Value: ageConfirmed=true
-# Last Updated September 17, 2025
