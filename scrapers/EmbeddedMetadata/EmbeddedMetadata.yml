@@ -4,5 +4,5 @@ imageByFragment:
   action: script
   script:
   - python3
-  - embedded-metadata.py
+  - embedded_metadata.py
   - image-by-fragment

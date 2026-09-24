@@ -1,7 +1,5 @@
 from datetime import datetime
-import hashlib
 import json
-import os
 import sys
 
 from py_common import graphql, log
@@ -10,9 +8,9 @@ from py_common.util import dig, scraper_args
 
 # try importing config
 try:
-    import config
+	import config
 except:
-    config = object()
+	config = object()
 
 skip_ensure_requirements = config.skip_ensure_requirements if hasattr(config, 'skip_ensure_requirements') else False
 
@@ -20,15 +18,20 @@ if not skip_ensure_requirements:
 	ensure_requirements("pyexiv2", "pyexiftool")
 
 try:
-    import pyexiv2
-# might fail due to old GLIBC, fall back to exiftool
+	import pyexiv2
+# might fail due to old GLIBC
 except:
-	try:
-		import exiftool
-	except:
-		log.error("You need to install the pyexiv2 or exiftool module.")
-		log.error("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install pyexiv2 exiftool")
-		sys.exit()
+	pass
+
+try:
+	import exiftool
+except:
+	pass
+
+if "pyexiv2" not in locals() and "exiftool" not in locals():
+	log.error("You need to install the pyexiv2 or exiftool module.")
+	log.error("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install pyexiv2 exiftool")
+	sys.exit()
 
 details_date_fields = config.details_date_fields if hasattr(config, 'details_date_fields') else False
 details_title_fields = config.details_title_fields if hasattr(config, 'details_title_fields') else False
@@ -40,10 +43,10 @@ details_upprocessed_fields_ignored = config.details_upprocessed_fields_ignored i
 details_upprocessed_fields_unignored = config.details_upprocessed_fields_unignored if hasattr(config, 'details_upprocessed_fields_unignored') else []
 
 details_ignored_labels = {
-	'ExifTag', 'Orientation', 'PhotometricInterpretation', 'ResolutionUnit', 'Contrast', 'CustomRendered', 'DigitalZoomRatio', 'ExposureBiasValue', 'ExposureMode', 'ExposureProgram', 'ExposureTime', 'ExposureCompensation', 
+	'ExifTag', 'Orientation', 'PhotometricInterpretation', 'ResolutionUnit', 'Contrast', 'CustomRendered', 'DigitalZoomRatio', 'ExposureBiasValue', 'ExposureMode', 'ExposureProgram', 'ExposureTime', 'ExposureCompensation',
 	'ColorSpace', 'ComponentsConfiguration', 'CompressedBitsPerPixel', 'ExifVersion', 'FlashpixVersion', 'YCbCrPositioning', 'JPEGInterchangeFormat', 'JPEGInterchangeFormatLength', 'BaselineExposureOffset',
 	'FNumber', 'FileSource', 'Flash', 'FocalLength', 'FocalLengthIn35mmFilm', 'GainControl', 'ISOSpeedRatings', 'LightSource', 'MaxApertureValue', 'MeteringMode', 'Saturation', 'SceneCaptureType', 'SensingMethod', 'BaselineExposure',
-	'Sharpness', 'WhiteBalance', 'ShutterSpeedValue', 'ApertureValue', 'FocalLength', 'FocalLengthIn35mmFilm', 'FocalLengthIn35mmFormat', 'ExposureTime', 'ExposureProgram', 'ExposureBiasValue', 'MaxApertureValue', 'ShutterSpeedValue', 
+	'Sharpness', 'WhiteBalance', 'ShutterSpeedValue', 'ApertureValue', 'FocalLength', 'FocalLengthIn35mmFilm', 'FocalLengthIn35mmFormat', 'ExposureTime', 'ExposureProgram', 'ExposureBiasValue', 'MaxApertureValue', 'ShutterSpeedValue',
 	'ExposureIndex', 'FocalPlaneResolutionUnit', 'FocalPlaneXResolution', 'FocalPlaneYResolution', 'AFAreaMode', 'AFPoint', 'AFPointsInFocus', 'Focus', 'FlashSetting', 'DigitalZoom', 'ISOSelection', 'ISOSpeed',
 	'ToneComp', 'Quality', 'RetouchHistory', 'Saturation2', 'ScanIFD', 'SceneAssist', 'SceneMode', 'Sharpening', 'ShotInfo', 'ToneComp',
 	'PixelXDimension', 'PixelYDimension', 'XResolution', 'YResolution', 'ExifImageWidth', 'ExifImageHeight', 'ImageHeight', 'ImageWidth', 'RelatedImageHeight', 'RelatedImageWidth', 'ImageLength', 'ByteOrder', 'Offset',
@@ -54,20 +57,36 @@ details_ignored_labels = {
 details_ignored_labels.update(details_upprocessed_fields_ignored)
 details_ignored_labels.difference_update(details_upprocessed_fields_unignored)
 
+def _read_data_pyexiv2(image_path: str):
+	data: dict[str, str] = {}
+
+	with pyexiv2.Image(image_path) as img:
+		data.update(img.read_exif())
+		data.update(img.read_iptc())
+		data.update(img.read_xmp())
+
+	return data
+
+def _read_data_exiftool(image_path: str):
+	data: dict[str, str] = {}
+
+	with exiftool.ExifToolHelper() as et:
+		metadata = et.get_metadata(image_path)
+		log.debug(f"exiftool metadata {metadata}")
+		data.update(metadata[0])
+
+	return data
 
 def process_image(image_path: str):
-	data: dict[str, str] = {}
-	
-	try:
-		with pyexiv2.Image(image_path) as img:
-			data.update(img.read_exif())
-			data.update(img.read_iptc())
-			data.update(img.read_xmp())
-	except:
-		with exiftool.ExifToolHelper() as et:
-			metadata = et.get_metadata(image_path)
-			log.debug(f"exiftool metadata {metadata}")
-			data.update(metadata[0])
+	if hasattr(config, 'FORCE_METHOD') and config.FORCE_METHOD == 'pyexiv2':
+		data = _read_data_pyexiv2(image_path)
+	elif hasattr(config, 'FORCE_METHOD') and config.FORCE_METHOD == 'exiftool':
+		data = _read_data_exiftool(image_path)
+	else:
+		try:
+			data = _read_data_pyexiv2(image_path)
+		except:
+			data = _read_data_exiftool(image_path)
 
 	ret = {}
 
@@ -113,7 +132,7 @@ def process_image(image_path: str):
 	date_details = ''
 	for field in ['EXIF:CreateDate', 'Iptc.Application2.DateCreated', 'IPTC:DateCreated', 'Exif.Image.DateTime', 'Exif.Photo.DateTime',  'EXIF:DateTime', 
 			'Iptc.Application2.DigitizationDate', 'IPTC:DigitizationDate', 'Exif.Photo.DateTimeDigitized', 'EXIF:DateTimeDigitized', 
-			'Exif.Image.DateTimeOriginal', 'Exif.Photo.DateTimeOriginal', 'EXIF:DateTimeOriginal']:
+			'Exif.Image.DateTimeOriginal', 'Exif.Photo.DateTimeOriginal', 'EXIF:DateTimeOriginal', 'EXIF:ModifyDate']:
 		if field not in data:
 			continue
 		value = data[field]
@@ -148,7 +167,9 @@ def process_image(image_path: str):
 	# title
 	#
 	title_details = ''
-	for field in ['Exif.Image.DocumentName', 'EXIF:DocumentName', 'Exif.Image.XPTitle', 'EXIF:XPTitle', 'Exif.Photo.ImageTitle', 'EXIF:ImageTitle', 'Iptc.Application2.Headline', 'IPTC:Headline','Xmp.dc.title', 'XMP:Title', 'Xmp.dc.headline', 'XMP:Headline']:
+	for field in ['Exif.Image.DocumentName', 'EXIF:DocumentName', 'Exif.Image.XPTitle', 'EXIF:XPTitle', 'Exif.Photo.ImageTitle', 'EXIF:ImageTitle',
+				  'Iptc.Application2.Headline', 'IPTC:Headline', 'Xmp.dc.title', 'XMP:Title', 'Xmp.dc.headline', 'XMP:Headline',
+				  'Iptc.Application2.ObjectName', 'IPTC:ObjectName']:
 		if field not in data:
 			continue
 		value = data[field]
@@ -209,7 +230,7 @@ def process_image(image_path: str):
 	#
 	# tags
 	#
-	for field in ['Exif.Image.XPKeywords', 'EXIF:XPKeywords', 'Iptc.Application2.Keywords', 'IPTC:Keywords']:
+	for field in ['Exif.Image.XPKeywords', 'EXIF:XPKeywords', 'Iptc.Application2.Keywords', 'IPTC:Keywords', 'Xmp.pdf.Keywords', 'XMP:Keywords']:
 		if field not in data:
 			continue
 		value = data[field]
@@ -225,6 +246,7 @@ def process_image(image_path: str):
 			for list_value in value:
 				value_parts.extend(list_value.split(','))
 		else:
+			value_parts = []
 			value_parts.extend(value.split(','))
 
 		for value_part in value_parts:
@@ -405,6 +427,6 @@ if __name__ == "__main__":
 		case _:
 			log.error(f"Not Implemented: Operation: {op}, arguments: {json.dumps(args)}")
 			sys.exit(1)
-	
-print(json.dumps({}))
-sys.exit(1)
+
+	print(json.dumps({}))
+	sys.exit(1)
