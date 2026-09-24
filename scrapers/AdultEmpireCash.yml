@@ -105,7 +105,14 @@ xPathScrapers:
                 # 'Jane Doe Clips' => 'Jane Doe'
                 - regex: \sClips$
                   with:
-      Image: //link[@rel="image_src"]/@href
+      Image:
+        selector: >-
+          //style[contains(.,"empire-player-video-container") and contains(.,"url(")] |
+          //link[@rel="image_src"][not(//style[contains(.,"empire-player-video-container") and contains(.,"url(")])]/@href
+        postProcess:
+          - replace:
+              - regex: '(?s).*?\.empire-player-video-container\s*\{[^}]*background(?:-image)?:\s*url\([''"]?([^''"\)]+)[''"]?\).*'
+                with: $1
       URLs: &urlSel //meta[@name="og:url"]/@content
       Groups:
         Name: //h1[@class="description"]/following-sibling::p/a
