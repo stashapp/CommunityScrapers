@@ -79,6 +79,10 @@ for f in ./scrapers/*.yml; do
 done
 
 find ./scrapers/ -mindepth 2 -name *.yml -print0 | while read -d $'\0' f; do
+    # a folder with a package file is published as one package, not per yml
+    if [ -f "$(dirname "$f")/package" ]; then
+        continue
+    fi
     buildScraper "$f"
 done
 

@@ -1,0 +1,3 @@
+# whole-network package: one install covers every D2PASS (DTI) site
+# requires: py_common
+name: D2PASS

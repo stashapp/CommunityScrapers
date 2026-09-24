@@ -66,11 +66,12 @@ xPathScrapers:
                 with: $1
 
       URLs:
-        selector: $movieObject
+        selector: //script[contains(.,"movieId")]/text()
         postProcess:
           - replace:
-              - regex: '.*"thumbnailUrl"\s*:\s*"([^"]+)".*'
-                with: https:$1
+              - regex: .*movieId\s*=\s*"([^"]+).*
+                with: https://www.heyzo.com/moviepages/$1/index.html|https://en.heyzo.com/moviepages/$1/index.html
+        split: "|"
 
       Tags:
         Name: $table/td[contains(.,"Type") or contains(.,"Sex Styles") or contains(.,"Theme")]/following-sibling::td/a/text()

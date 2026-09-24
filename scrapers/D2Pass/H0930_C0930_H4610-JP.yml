@@ -20,22 +20,26 @@ xPathScrapers:
   sceneScraper:
     common:
       $poster: //*[@id="moviePlayer"]/img/@src | //*[@id="moviePlayer"]//video/@poster
+      $title: //*[@id="moviePlay"]//span[@class="style1"]
     scene:
-      Title: //*[@id="moviePlay"]//span[@class="style1"]
+      Title: $title
       URLs:
         selector: $poster
         postProcess:
           - replace:
-              - regex: .*www\.(.*?)\.com\/moviepages\/(.*?)\/images.*
-                with: https://www.$1.com/moviepages/$2/index.html
-      Details: //*[@id="movieInfo"]//div[@class="row"]/div[1]//p
+              - regex: .*//(www|en)\.(h0930|c0930|h4610)\.com/moviepages/([^/]+)/images.*
+                with: https://www.$2.com/moviepages/$3/index.html|https://en.$2.com/moviepages/$3/index.html
+        split: "|"
+      Details:
+        # the English pages have no description, only the performer's name in its place
+        selector: //*[@id="movieInfo"][not(.//dt[normalize-space()="Age"])]//div[@class="row"]/div[1]//p
       Date:
-        selector: //*[@id="movieInfo"]//dt[contains(.,"Released") or contains(., "公開日")]/following-sibling::dd[1]/text()
+        selector: //*[@id="movieInfo"]//dt[contains(., "Release") or contains(., "公開日")]/following-sibling::dd[1]/text()
         postProcess:
           - parseDate: 2006-01-02
       Performers:
         Name:
-          selector: //*[@id="moviePlay"]//span[@class="style1"]
+          selector: $title
           postProcess:
             - replace:
                 - regex: (.*?)\s(.*?)\s.*
@@ -44,30 +48,24 @@ xPathScrapers:
         selector: $poster
         postProcess:
           - replace:
-              - regex: .*www\.(.*?)\.com\/moviepages\/(.*?)\/images.*
-                with: $1-$2
+              - regex: .*//(www|en)\.(h0930|c0930|h4610)\.com/moviepages/([^/]+)/images.*
+                with: $3
       Tags:
         Name:
-          selector: //*[@id="movieInfo"]//dt[contains(., "プレイ内容")]/following-sibling::dd/text()
+          selector: //*[@id="movieInfo"]//dt[contains(., "プレイ内容") or contains(., "Plays")]/following-sibling::dd/text()
           postProcess:
             - replace:
                 - regex: "\t+"
                   with: ""
-          split: " " # non-breaking space
-
-      Image:
-        selector: $poster
-        postProcess:
-          - replace:
-              - regex: .*(www.*jpg).*
-                with: https://$1
+          split: " "
+      Image: $poster
       Studio:
         Name:
           selector: $poster
           postProcess:
             - replace:
-                - regex: .*www\.(.*?)\.com\/moviepages\/(.*?)\/images.*
-                  with: $1
+                - regex: .*//(www|en)\.(h0930|c0930|h4610)\.com/moviepages/([^/]+)/images.*
+                  with: $2
             - map:
                 c0930: C0930
                 h0930: H0930

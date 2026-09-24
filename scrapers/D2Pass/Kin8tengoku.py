@@ -22,9 +22,22 @@ session.headers.update(
 )
 
 STUDIOS = {
-    "en.kin8tengoku.com": "Kinpatsutengoku",
-    "enasianmusume.kin8tengoku.com": "Exotic Babes",
+    "en.kin8tengoku.com": "kin8tengoku",
     "enexbabes.kin8tengoku.com": "Exotic Babes",
+}
+
+# retired hosts redirect every path to the live site's front page, and the
+# Japanese sites serve the same bilingual data as their English twins
+HOST_ALIASES = {
+    "enasianmusume.kin8tengoku.com": "enexbabes.kin8tengoku.com",
+    "www.kin8tengoku.com": "en.kin8tengoku.com",
+    "exbabes.kin8tengoku.com": "enexbabes.kin8tengoku.com",
+}
+
+# each English site has a Japanese twin serving the same movie ids
+JAPANESE_HOSTS = {
+    "en.kin8tengoku.com": "www.kin8tengoku.com",
+    "enexbabes.kin8tengoku.com": "exbabes.kin8tengoku.com",
 }
 
 RSC_CHUNK_RE = re.compile(r'self\.__next_f\.push\(\[1,\s*"((?:[^"\\]|\\.)*)"\]\)', re.DOTALL)
@@ -38,15 +51,12 @@ def _movie_id_from_url(url: str) -> str | None:
     return None
 
 
-def _fetch_movie_page(host: str, movie_id: str) -> str | None:
-    # The site's URL scheme differs per sub-brand (en.kin8tengoku.com uses
-    # /movie/{id}, sibling sites use a bare /{id}), so just try both
-    for path in (f"/movie/{movie_id}", f"/{movie_id}"):
-        url = f"https://{host}{path}"
-        log.debug(f"Fetching '{url}'")
-        response = session.get(url, timeout=(3, 6))
-        if response.status_code == 200:
-            return response.text
+def _fetch_movie_page(host: str, movie_id: str) -> tuple[str, str] | None:
+    url = f"https://{host}/movie/{movie_id}"
+    log.debug(f"Fetching '{url}'")
+    response = session.get(url, timeout=(3, 6))
+    if response.status_code == 200:
+        return url, response.text
     log.error(f"Could not find a working page for movie {movie_id} on {host}")
     return None
 
@@ -79,20 +89,22 @@ def _strip_rsc_date(value: str | None) -> str | None:
 
 def scene_from_url(url: str) -> ScrapedScene:
     host = urlparse(url).netloc
+    host = HOST_ALIASES.get(host, host)
 
     if not (movie_id := _movie_id_from_url(url)):
         log.error(f"Could not find a movie ID in '{url}'")
         sys.exit(1)
 
-    if not (html := _fetch_movie_page(host, movie_id)):
+    if not (page := _fetch_movie_page(host, movie_id)):
         sys.exit(1)
+    url, html = page
 
     if not (movie := _extract_movie_data(html)):
         log.error(f"Could not extract movie data from '{url}'")
         sys.exit(1)
 
     scraped: ScrapedScene = {
-        "urls": [url],
+        "urls": [f"https://{JAPANESE_HOSTS[host]}/movie/{movie_id}", url],
         "studio": ScrapedStudio(name=STUDIOS.get(host, host)),
     }
 

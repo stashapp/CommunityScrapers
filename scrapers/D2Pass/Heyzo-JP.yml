@@ -22,19 +22,21 @@ xPathScrapers:
   sceneScraper:
     common:
       $table: //div[@class="info-bg"]/table/tbody/tr
-      $metadata: //div[@id="movie"]/script[@type="application/ld+json"]
     scene:
       Title:
-        selector: $metadata
-        postProcess:
-          - javascript: |
-              return JSON.parse(value)?.name ?? null;
-      URLs:
-        selector: /html/head/meta[@property="og:url"]/@content
+        # the heading is "<title> - <performer>"
+        selector: //div[@id="movie"]/h1
         postProcess:
           - replace:
-              - regex: ^
-                with: "https:"
+              - regex: ^(.*?)\s+-\s+[^-]*$
+                with: $1
+      URLs:
+        selector: //script[contains(.,"movieId =")]
+        postProcess:
+          - replace:
+              - regex: .*movieId\s=\s\'(\d+)\'.*
+                with: https://www.heyzo.com/moviepages/$1/index.html|https://en.heyzo.com/moviepages/$1/index.html
+        split: "|"
       Details: //p[@class="memo"]
       Date:
         selector: $table/td[contains(.,"Released") or contains(., "公開日")]/following-sibling::td
@@ -47,11 +49,11 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: .*movieId\s=\s\'(\d+)\'.*
-                with: Heyzo-$1
+                with: $1
       Tags:
         Name: //tr[@class="table-tag-keyword-small"]//ul[@class="tag-keyword-list"]/li
       Image:
-        selector: /html/head/meta[@property="og:image"]/@content
+        selector: //meta[@property="og:image"]/@content
         postProcess:
           - replace:
               - regex: .*(www.*jpg).*

@@ -31,7 +31,8 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: .*?//[^/]*\.(caribbeancompr|caribbeancom)\.com/member/movies/([^/]+)/.*
-                with: https://www.${1}.com/moviepages/${2}/index.html
+                with: https://www.${1}.com/moviepages/${2}/index.html|https://en.${1}.com/eng/moviepages/${2}/index.html
+        split: "|"
       Date:
         selector: *movieLink
         postProcess:

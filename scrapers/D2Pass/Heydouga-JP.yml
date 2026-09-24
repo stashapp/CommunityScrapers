@@ -1,0 +1,72 @@
+name: Heydouga-JP
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - www.heydouga.com/moviepages
+    scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      - av9898.heydouga.com/monthly/av9898/moviepages
+    scraper: sceneScraper
+    # av9898 is Heydouga provider 4030; its own tour pages lack og: tags and the provider name
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: .*/moviepages/(\d+)/.*
+          with: https://www.heydouga.com/moviepages/4030/$1/index.html
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://www.heydouga.com/moviepages/{filename}
+  # constructs the movie URL from the filename, provided that the filename includes the movie id
+  queryURLReplace:
+    filename:
+      - regex: .*(\d{4})[_\s-](\d{3,4}).*
+        # heydouga uses a 4+3 digit number for ids
+        with: $1/$2/index.html
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $canonical: //link[@rel="canonical"]/@href
+    scene:
+      Title:
+        # og:title is "<title> - <performer>"
+        selector: //meta[@property="og:title"]/@content
+        postProcess:
+          - replace:
+              - regex: ^(.*) - [^-]*$
+                with: $1
+      URLs: $canonical
+      Details: //*[@id="movie-detail-mobile"]/div
+      Date:
+        selector: //*[@id="movie-info"]//span[contains(.,"配信日")]/following-sibling::span/text()
+        postProcess:
+          - parseDate: 2006-01-02
+      Image: //meta[@property="og:image"]/@content
+      Performers:
+        Name: //*[@id="movie-info"]//span[contains(.,"主演")]/following-sibling::span/a/text()
+      Code:
+        selector: $canonical
+        postProcess:
+          - replace:
+              - regex: .*/(\d+)/(\d+)/.*
+                with: Heydouga-$1-$2
+      Tags:
+        # the tag list is populated by an ajax call the scraper has to repeat
+        Name:
+          selector: //script[contains(., "get_movie_tag_all")]
+          postProcess:
+            - replace:
+                - regex: (?s).*movie_seq\s*:\s*(\d+).*
+                  with: https://www.heydouga.com/get_movie_tag_all/?movie_seq=$1
+            - subScraper:
+                selector: //body
+                postProcess:
+                  - javascript: |
+                      return (JSON.parse(value).tag || [])
+                        .map((t) => t.tag_name)
+                        .join("|");
+          split: "|"
+      Studio:
+        Name: //*[@id="movie-info"]//span[contains(.,"提供元")]/following-sibling::span/a/text()
