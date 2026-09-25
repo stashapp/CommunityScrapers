@@ -46,6 +46,14 @@ sceneByQueryFragment:
     - LetsDoeIt.py
     - scene-by-query-fragment
 performerByURL:
+  - action: scrapeXPath
+    url:
+      - amateureuro.com/models/
+      - doe-tv.com/models/
+      - mamacitaz.com/models/
+      - transbella.com/models/
+      - vipsexvault.com/models/
+    scraper: performerScraper
   - action: script
     url:
       - letsdoeit.com/model/
@@ -92,31 +100,24 @@ xPathScrapers:
                 with: $1
           - parseDate: Jan 2, 2006
           - parseDate: 2006-01-02T15:04:05-07:00
-      Image: //div[@class='video-container']//img/@src
+      Image:
+        selector: //div[@class='video-container']//img[not(contains(@src, '.svg'))]/@src
+        postProcess:
+          - replace:
+              - regex: ^/web/
+                with: https://web.archive.org/web/
       Tags:
         #Name: //div[@class='-mvd-grid-more-title' and contains(text(),'Information')]/following-sibling::div//a
         Name: //a[contains(@href,'/categories/')]
       Studio:
-        Name: $actors//a[contains(@href,'/channels/')]
+        Name:
+          selector: $actors//a[contains(@href,'/channels/')]
+          postProcess:
+            - map:
+                Trans Bella: TransBella
       Performers:
         URLs: &performerURL $actors//a[contains(@href,'/models/')]/@href
         Name: $actors//a[contains(@href,'/models/')]
-        Gender:
-          # The performer pages don't have a Gender tag, so the best we can do is use the
-          # Tits Type field, and where this is present assume "Female" and where it's not use "Male".
-          # This does, unfortunately, tag all Trans performers with a gender that, while accurate,
-          # is not as precise as many might wish.
-          selector: *performerURL
-          postProcess:
-            - subScraper: &performerGender
-                selector: //div(@class='-api-list-item' and contains(.,'Tits Type')]/span
-                #selector: //meta/@charset
-                postProcess:
-                  - replace:
-                      - regex: .+?Tits.*$
-                        with: Female
-                      - regex: ^[^F].+
-                        with: Male
         FakeTits:
           selector: *performerURL
           postProcess:
@@ -147,7 +148,10 @@ xPathScrapers:
   performerScraper:
     performer:
       Name: //h1
-      Gender: *performerGender
+      Birthdate:
+        selector: //div[contains(@class,'-api-list-item') and contains(.,'Birth Date')]/span[@class='-api-list-text']
+        postProcess:
+          - parseDate: Jan 2, 2006
       Country: *performerCountry
       FakeTits: *performerTits
       Details: *performerDetails
@@ -198,4 +202,3 @@ xPathScrapers:
                   with: $1
       Performers:
         Name: //div[span[contains(.,'Model')]//a[contains(@href,'/models/')]
-# Last Updated September 17, 2025
