@@ -86,7 +86,7 @@ xPathScrapers:
       Image: //div[contains(@class,'idol-portrait')]//img/@src
 
       Birthdate:
-        selector: //b[normalize-space(.)='DOB:']/following-sibling::a[1]
+        selector: //b[normalize-space(.)='DOB:']/following-sibling::*[1]/self::a
         postProcess:
           - replace:
               - regex: '^(\d{4})-\?\?-\?\?$'
@@ -95,13 +95,13 @@ xPathScrapers:
               - regex: '^(\d{4}-\d{2})-\?\?$'
                 with: "$1"
 
-      HairColor: //b[normalize-space(.)='Hair Color(s):']/following-sibling::a[1]
+      HairColor: //b[normalize-space(.)='Hair Color(s):']/following-sibling::*[1]/self::a
 
       Tags:
         Name: //p[b[normalize-space(.)='Tags:']]//a[@class='idol-box-link']
 
       Height:
-        selector: //b[normalize-space(.)='Height:']/following-sibling::a[1]
+        selector: //b[normalize-space(.)='Height:']/following-sibling::*[1]/self::a
         postProcess:
           - replace:
               - regex: '[^\d]'
