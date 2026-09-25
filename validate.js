@@ -1,1 +1,3 @@
-import "./validator/index.mjs"
+import { main } from "./validator/validator.ts";
+
+main();
