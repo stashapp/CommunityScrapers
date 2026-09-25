@@ -82,7 +82,7 @@ def performer_by_name(name: str) -> list[PerformerSearchResult]:
 
 
 def clean_search_query(name: str) -> str:
-    cleaned = re.sub(r"[^a-zA-Z0-9]+", " ", name)
+    cleaned = re.sub(r"[\W_]+", " ", name)
     return " ".join(cleaned.split())
 
 
