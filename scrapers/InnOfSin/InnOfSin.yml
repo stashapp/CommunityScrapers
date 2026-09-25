@@ -21,7 +21,7 @@ xPathScrapers:
         selector: //*[contains(text(), "About") or contains(text(), "Description")]/following-sibling::p | //span[@itemprop="about"]/p
         concat: "\n\n"
       Date:
-        selector: //link[@type="application/json"]/@href
+        selector: //link[@type="application/json" and contains(@href, "/wp/v2/posts/")]/@href
         postProcess:
           - subScraper:
               selector: //body
@@ -33,13 +33,17 @@ xPathScrapers:
       Image: //video/@poster
       URLs: //link[@rel="canonical"]/@href
       Tags:
-        Name: $scene//span[@itemprop="keywords"]/a
+        Name: $scene//span[@itemprop="keywords"]/a[not(contains(@href, "/videos/") or contains(@href, "/scenes/"))]
       Performers:
         Name:
-          selector: $scene//a[contains(@href, "/pornstars/")] | $scene//span[@itemprop="pornstars"]/text()
+          selector: $scene//a[contains(@href, "/pornstars/")] | $scene//span[@itemprop="pornstars"]/text() | $scene//p[span[contains(text(), "Pornstar")]]/span[@class="video-info"]
           # Some sites have no performer profiles so we get a string like "A, B" while others get "A", "B"
           # so we need to concat and split to get the same results across all sites
           concat: ", "
+          postProcess:
+            - replace:
+                - regex: ",$"
+                  with: ""
           split: ", "
       Studio:
         Name:
@@ -51,10 +55,10 @@ xPathScrapers:
                   with: $1
             - map:
                 bbctitans: BBC Titans
-                dannyoceansadventures: Danny Ocean's Adventures
+                dannyoceansadventures: Danny Ocean’s Adventures
                 mydeepdarksecret: My Deep Dark Secret
                 richardmannevents: Richard Mann Events
                 richardmannsworld: Richard Mann's World
                 tatsandtits: Tats and Tits
                 trans4thefans: Trans 4 the Fans
-                wefuckin: We Fuckin
+                wefuckin: weFuckin
