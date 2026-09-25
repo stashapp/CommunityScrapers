@@ -30,7 +30,7 @@ xPathScrapers:
           - javascript: |
               return value
                 .replace(/^"|"$/g, "")
-                .replace(/([.!?…]["”]?)(?=\p{Lu})/gu, "$1\n\n");
+                .replace(/([\p{Ll}\d)][.!?…]["”]?)(?=\p{Lu})/gu, "$1\n\n");
       Image: //meta[@property="og:image"]/@content
       Studio:
         Name: //meta[@property="og:site_name"]/@content
