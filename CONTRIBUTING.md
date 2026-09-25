@@ -13,11 +13,11 @@ The scrapers in this repository can be validated against a schema and checked fo
 
 ```sh
 # check all scrapers
-deno run -R=scrapers -R="validator\scraper.schema.json" validate.js
+deno task validate
 # check specific scraper
-deno run -R=scrapers -R="validator\scraper.schema.json" validate.js scrapers/foo.yml scrapers/bar.yml
+deno task validate scrapers/foo.yml scrapers/bar.yml
 ```
-Deno asks for env and sys permissions from [chalk](https://www.npmjs.com/package/chalk)
+The Deno version used in CI is pinned in `.dvmrc`
 
 #### Docker option
 

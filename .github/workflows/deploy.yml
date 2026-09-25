@@ -23,10 +23,14 @@ jobs:
         path: develop
         ref: master
         fetch-depth: 0
+    - uses: denoland/setup-deno@v2
+      with:
+        deno-version-file: develop/.dvmrc
+        cache: true
     - name: Build develop
       run: |
         cd develop
-        ./build_site.sh ../_site/develop
+        deno task build ../_site/develop
     - name: copy develop to stable
       run: |
         cp -r _site/develop _site/stable

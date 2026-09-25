@@ -13,5 +13,9 @@ jobs:
     - uses: actions/checkout@v6
     - uses: denoland/setup-deno@v2
       with:
+        deno-version-file: .dvmrc
         cache: true
     - run: deno -R -E ./validate.js --ci
+    - run: deno task test
+    # catches packaging errors before they reach the deploy
+    - run: deno task build
