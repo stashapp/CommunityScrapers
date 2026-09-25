@@ -12,19 +12,18 @@ xPathScrapers:
       Title: //h1[@itemprop='headline']
       Details:
         selector: //div[@itemprop='articleBody']/p
-        concat: '\n\n'      
-      Code:
+        concat: "\n\n"
+      URLs:
         selector: //link[@rel='canonical']/@href
         postProcess:
           - replace:
-            - regex: ^https://www.laralarsen.com/[a-z]+/([^/]+)$
-              with: $1
-      URL: //link[@rel='canonical']/@href
+              - regex: ^https?://web\.archive\.org/web/\d+[a-z_]*/
+                with: ""
       Date:
         selector: //time[@itemprop='datePublished']/@content
         postProcess:
-          - parseDate: '2006-01-02'
-      Image: //div[@itemprop='video']/video/@poster
+          - parseDate: "2006-01-02"
+      Image: //div[@itemprop='video']/video/@poster | //meta[@property='og:image']/@content
       Studio:
         Name:
           fixed: Lara Larsen
@@ -32,4 +31,3 @@ xPathScrapers:
         Name: //ol[@class='tags']/li/a[@rel='tag']
       Performers:
         Name: //span[@itemprop='author']
-# Last Updated May 24, 2024
