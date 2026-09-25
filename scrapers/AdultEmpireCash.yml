@@ -107,8 +107,8 @@ xPathScrapers:
                   with:
       Image:
         selector: >-
-          //style[contains(.,"empire-player-video-container") and contains(.,"url(")] |
-          //link[@rel="image_src"][not(//style[contains(.,"empire-player-video-container") and contains(.,"url(")])]/@href
+          //style[contains(.,"empire-player-video-container") and contains(.,"-custom-default.")] |
+          //link[@rel="image_src"][not(//style[contains(.,"empire-player-video-container") and contains(.,"-custom-default.")])]/@href
         postProcess:
           - replace:
               - regex: '(?s).*?\.empire-player-video-container\s*\{[^}]*background(?:-image)?:\s*url\([''"]?([^''"\)]+)[''"]?\).*'
