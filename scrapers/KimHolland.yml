@@ -48,11 +48,7 @@ xPathScrapers:
               - regex: ^/images/front/(\d+)/.*$
                 with: https://www.kimholland.nl/images/${1}/1920x1080.jpg
       Tags:
-        Name:
-          selector: //a[@class="player-cat-link"][$scene]
-          postProcess:
-            - javascript: |
-                return value.replace(/(^|\s)\S/g, (c) => c.toUpperCase());
+        Name: //a[@class="player-cat-link"][$scene]
       Studio:
         Name: //a[@id="logo"][$scene]/@title
   sceneSearch:

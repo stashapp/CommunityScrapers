@@ -1,0 +1,91 @@
+name: Blue Donkey Media
+# scrapes: Meiden van Holland, Vurig Vlaanderen
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - meidenvanholland.nl/sexfilms/
+    scraper: meidenVanHollandScene
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: ^.*/sexfilms/([^/?#]+).*$
+          with: https://apiv2.sysero.nl/api/mvh/resource/${1}/nl?query=(content%3Avideo%2Cinclude%3A((resources%3A(filters%3A((types%3A(0%3Acategory%2C1%3Amodel)%2Cstatus%3Apublished)))%2Cimages%3A())))
+  - action: scrapeJson
+    url:
+      - vurigvlaanderen.be/sexfilms/
+    scraper: vurigVlaanderenScene
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: ^.*/sexfilms/([^/?#]+).*$
+          with: https://apiv2.sysero.nl/api/vv/resource/${1}/nl?query=(content%3Avideo%2Cinclude%3A((resources%3A(filters%3A((types%3A(0%3Acategory%2C1%3Amodel)%2Cstatus%3Apublished)))%2Cimages%3A())))
+
+jsonScrapers:
+  meidenVanHollandScene:
+    scene:
+      Title: &title data.title
+      Details: &details
+        selector: data.description
+        postProcess:
+          - javascript: |
+              const entities = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " " };
+              return value
+                .replace(/<\/p>\s*<p[^>]*>/gi, "\n\n")
+                .replace(/<br\s*\/?>/gi, "\n")
+                .replace(/<[^>]+>/g, "")
+                .replace(/&(#x?[0-9a-f]+|\w+);/gi, (m, e) =>
+                  e[0] === "#"
+                    ? String.fromCodePoint(e[1].toLowerCase() === "x" ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10))
+                    : entities[e.toLowerCase()] ?? m)
+                .trim();
+      Date: &date
+        selector: data.active_from
+        postProcess:
+          - replace:
+              - regex: ^(\S+).*$
+                with: $1
+      Image: &image
+        selector: data.images.data.thumb.0.path
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://cdndo.sysero.nl
+      Performers: &performers
+        Name: data.resources.data.#(type=="model")#.title
+      Tags: &tags
+        Name: data.resources.data.#(type=="category")#.title
+      URLs:
+        selector: data.slug
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://meidenvanholland.nl/sexfilms/
+      Studio:
+        Name:
+          fixed: Meiden van Holland
+  vurigVlaanderenScene:
+    scene:
+      Title: *title
+      Details: *details
+      Date: *date
+      Image: *image
+      Performers: *performers
+      Tags: *tags
+      URLs:
+        selector: data.slug
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://vurigvlaanderen.be/sexfilms/
+      Studio:
+        Name:
+          fixed: Vurig Vlaanderen
+
+driver:
+  headers:
+    - Key: credentials
+      Value: sysero 1-3dc13a570ff233c78a3fef0b887ad44f279683fe036ccbac8e494bb89422ed77-mvh
+    - Key: checkdomain-header
+      Value: https://meidenvanholland.nl
+    - Key: User-Agent
+      Value: stash-scraper/1.0
