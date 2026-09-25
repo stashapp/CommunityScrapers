@@ -1,0 +1,7 @@
+name: Network A
+# scrapes: A Studio
+sceneByURL:
+  - action: script
+    url:
+      - a.com/
+    script: [python, network.py]

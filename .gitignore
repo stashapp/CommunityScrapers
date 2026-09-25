@@ -12,6 +12,7 @@ yarn-error.log
 **/__pycache__/
 *.ini
 *.json
+!/deno.json
 *.log
 
 # Build artifacts

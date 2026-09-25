@@ -1,0 +1,25 @@
+{
+  "tasks": {
+    "validate": "deno run -R -E validate.js",
+    "build": "deno run -R -W -E --allow-run=git,zip build.ts",
+    "test": "deno test -R -E lib/",
+    "fmt": "deno run -A npm:prettier@3 --write lib validator/*.ts build.ts validate.js"
+  },
+  "imports": {
+    "@std/assert": "jsr:@std/assert@^1.0.0",
+    "@std/path": "jsr:@std/path@^1.0.0",
+    "ajv": "npm:ajv@^8.17.0",
+    "ajv-formats": "npm:ajv-formats@^3.0.0",
+    "better-ajv-errors": "npm:better-ajv-errors@^2.0.0",
+    "chalk": "npm:chalk@^5.4.0",
+    "yaml": "npm:yaml@^2.8.3"
+  },
+  "lint": {
+    "include": [
+      "lib/",
+      "validator/*.ts",
+      "build.ts",
+      "validate.js"
+    ]
+  }
+}

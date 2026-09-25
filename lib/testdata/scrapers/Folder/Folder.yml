@@ -1,0 +1,7 @@
+name: Folder
+# requires: py_common, AyloAPI
+sceneByURL:
+  - action: script
+    url:
+      - folder.com/scene/
+    script: [python, Folder.py]

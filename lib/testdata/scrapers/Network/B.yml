@@ -1,0 +1,7 @@
+name: Network B
+# scrapes: B Studio, A Studio
+galleryByURL:
+  - action: script
+    url:
+      - b.com/gallery/
+    script: [python, network.py]

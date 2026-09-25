@@ -1,0 +1,18 @@
+name: Single
+# scrapes: Site A, Site B
+sceneByURL:
+  - action: scrapeXPath
+    url: &urls
+      - sitea.com/video/
+      - siteb.com/video/
+    scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url: *urls
+    scraper: performerScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - sitea.com/dvd/
+    scraper: groupScraper
+xPathScrapers: {}
