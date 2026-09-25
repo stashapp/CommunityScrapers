@@ -1,0 +1,86 @@
+name: "YourVids"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - yourvids.com/vids/
+    scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - yourvids.com/
+      - yourvids.com/creators/
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $richText: //div[@id="desktopDescriptionFull"]/div[contains(@class, "rich-text-content")] | //div[not(//div[@id="desktopDescriptionFull"])]//div[@id="desktopDescriptionPreview"]/div[contains(@class, "rich-text-content")]
+      $creator: //div[contains(@class, "video-creator-group")]
+    scene:
+      Title: //div[contains(@class, "video-details")]//h1/text()
+      Details: $richText
+      Date:
+        selector: //meta[@property="video:release_date"]/@content
+        postProcess:
+          - replace:
+              - regex: ^(\d{4}-\d{2}-\d{2}).*
+                with: $1
+          - parseDate: "2006-01-02"
+      Image: //meta[@property="og:image"]/@content
+      URL: //link[@rel="canonical"]/@href
+      Studio:
+        Name:
+          selector: $creator//h3/text()
+        URLs: $creator//a[contains(@class, "video-creator-identity")]/@href
+      Performers:
+        Name: $creator//h3/text()
+        URLs: $creator//a[contains(@class, "video-creator-identity")]/@href
+      Tags:
+        Name:
+          selector: //a[contains(@href, "/vids?tag")]/text()
+          postProcess:
+            - replace:
+                - regex: ^#
+                  with: ""
+
+  performerScraper:
+    common:
+      $bio: //div[@id="content-bio"]
+    performer:
+      Name: //h1[@id="creatorName"]/text()
+      Disambiguation: //p[@id="creatorSubtitle"]/text()
+      Details: $bio//div[contains(@class, "rich-text-content")]//p/text()
+      Country: //p[text()="Location"]/following-sibling::p/text()
+      Ethnicity: //p[text()="Ethnicity"]/following-sibling::p/text()
+      Gender:
+        selector: //p[text()="Pronouns"]/following-sibling::p/text()
+        postProcess:
+          - map:
+              She/Her: female
+              she/her: female
+              He/Him: male
+              he/him: male
+              They/Them: non_binary
+              they/them: non_binary
+      URLs: //link[@rel="canonical"]/@href | $bio//a[starts-with(@href, "http") and not(contains(@href, "yourvids.com"))]/@href
+      Images: (//div[contains(@class, "skeleton-avatar")]/img/@src)[1]
+      Tags:
+        Name:
+          selector: $bio//a[contains(@href, "/creators?tag")]/text()
+          postProcess:
+            - replace:
+                - regex: ^#
+                  with: ""
+
+driver:
+  headers:
+    - Key: User-Agent
+      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36
+  cookies:
+    - CookieURL: "https://yourvids.com/"
+      Cookies:
+        - Name: ageVerified
+          Domain: yourvids.com
+          Value: "true"
+          Path: /
