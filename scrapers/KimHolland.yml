@@ -3,8 +3,16 @@ name: Kim Holland
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://www.kimholland.com
+      - kimholland.com
+      - kimholland.nl
     scraper: sceneScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url: &toDutchSite
+        - regex: ^https?://(?:www\.)?kimholland\.com/video/(\d+).*$
+          with: https://www.kimholland.nl/-${1}.html
+        - regex: ^(https?://(?:www\.)?kimholland\.nl/[^?#]+\.html).*$
+          with: ${1}?lang=en
 sceneByName:
   action: scrapeXPath
   queryURL: https://www.kimholland.com/search/{}/
@@ -12,6 +20,8 @@ sceneByName:
 sceneByQueryFragment:
   action: scrapeXPath
   queryURL: "{url}"
+  queryURLReplace:
+    url: *toDutchSite
   scraper: sceneScraper
 sceneByFragment:
   action: scrapeXPath
@@ -20,34 +30,38 @@ sceneByFragment:
 
 xPathScrapers:
   sceneScraper:
+    common:
+      $scene: //h1[@id="player-title"]
     scene:
-      Title: //span[@class="front-newest-item-info-title"]
-      Details: //div[@class="front-newest-item-info"]/p
+      Title: $scene
+      Details: //div[@class="player-description"][$scene]
+      URLs:
+        selector: //a[contains(@href, "web.whatsapp.com/send?text=")][$scene]/@href
+        postProcess:
+          - replace:
+              - regex: ^.*?text=
+                with: ""
       Image:
-        selector: //div[@class="video-thumbnail fas fa-play"]/img/@src
+        selector: //video[@id="myvideo"][$scene]/@poster
         postProcess:
           - replace:
-              - regex: "^/images"
-                with: https://www.kimholland.com/images
-      Studio:
+              - regex: ^/images/front/(\d+)/.*$
+                with: https://www.kimholland.nl/images/${1}/1920x1080.jpg
+      Tags:
         Name:
-          fixed: Kim Holland
-      URL:
-        selector: //div[@class="video-thumbnail fas fa-play"]/@href
-        postProcess:
-          - replace:
-              - regex: "/images"
-                with: https://www.kimholland.com/video
-          - replace:
-              - regex: '\d{4}x\d{4}.jpg'
-                with:
+          selector: //a[@class="player-cat-link"][$scene]
+          postProcess:
+            - javascript: |
+                return value.replace(/(^|\s)\S/g, (c) => c.toUpperCase());
+      Studio:
+        Name: //a[@id="logo"][$scene]/@title
   sceneSearch:
     scene:
       Image:
         selector: //a[@class="movie-item-search-image"]/img/@src
         postProcess:
           - replace:
-              - regex: "^/images"
+              - regex: ^/images
                 with: https://www.kimholland.com/images
       Title: //a[@class="movie-item-search-text-link"]
       Details: //div[@class="movie-item-description"]/p
@@ -55,10 +69,9 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Kim Holland
-      URL:
+      URLs:
         selector: //a[@class="movie-item-search-text-link"]/@href
         postProcess:
           - replace:
-              - regex: "/video"
+              - regex: ^/video
                 with: https://www.kimholland.com/video
-# Last updated February 29, 2024
