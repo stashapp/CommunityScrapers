@@ -92,26 +92,37 @@ def xpath_texts(tree, expr: str) -> list[str]:
     return texts
 
 
+DATE_FORMATS = (
+    ("%B %d, %Y", "%Y-%m-%d"),
+    ("%B %Y", "%Y-%m"),
+    ("%Y", "%Y"),
+)
+
+
 def parse_date(text: str) -> str | None:
-    # e.g. "December 25, 2003 (United States)" or just "2003"
+    # e.g. "December 25, 2003 (United States)", "December 2003" or just "2003"
     text = re.sub(r"\s*\(.+$", "", text).strip()
-    if re.fullmatch(r"\d{4}", text):
-        return f"{text}-01-01"
-    try:
-        return time.strftime("%Y-%m-%d", time.strptime(text, "%B %d, %Y"))
-    except ValueError:
-        log.warning(f"Could not parse date: {text}")
-        return None
+    for in_format, out_format in DATE_FORMATS:
+        try:
+            return time.strftime(out_format, time.strptime(text, in_format))
+        except ValueError:
+            continue
+    log.warning(f"Could not parse date: {text}")
+    return None
 
 
 def date_from_components(components) -> str | None:
-    # __NEXT_DATA__ dateComponents: {"day": 27, "month": 11, "year": 1985}
-    year = dig(components, "year")
-    if not year:
-        return None
-    month = dig(components, "month") or 1
-    day = dig(components, "day") or 1
-    return f"{year:04d}-{month:02d}-{day:02d}"
+    # __NEXT_DATA__ dateComponents: {"day": 27, "month": 11, "year": 1985},
+    # with day and month left null when unknown
+    match dig(components, "year"), dig(components, "month"), dig(components, "day"):
+        case int(year), int(month), int(day):
+            return f"{year:04d}-{month:02d}-{day:02d}"
+        case int(year), int(month), _:
+            return f"{year:04d}-{month:02d}"
+        case int(year), _, _:
+            return f"{year:04d}"
+        case _:
+            return None
 
 
 def og_image(tree) -> str | None:
