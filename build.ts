@@ -3,13 +3,12 @@
  * <outdir>/index.yml plus one <id>.zip per package
  */
 import { join } from "@std/path";
+import { mapConcurrent } from "./lib/concurrent.ts";
 import { lastCommit } from "./lib/git.ts";
 import { type IndexEntry, renderIndex } from "./lib/index.ts";
 import { packageMetadata } from "./lib/metadata.ts";
 import { discoverPackages, type ScraperPackage } from "./lib/package.ts";
 import { sha256, zipPackage } from "./lib/zip.ts";
-
-const CONCURRENCY = 8;
 
 async function buildPackage(
   pkg: ScraperPackage,
@@ -32,29 +31,12 @@ async function buildPackage(
   };
 }
 
-async function mapConcurrent<T, R>(
-  items: T[],
-  limit: number,
-  fn: (item: T) => Promise<R>,
-): Promise<R[]> {
-  const results: R[] = new Array(items.length);
-  let next = 0;
-  const worker = async () => {
-    while (next < items.length) {
-      const i = next++;
-      results[i] = await fn(items[i]);
-    }
-  };
-  await Promise.all(Array.from({ length: limit }, worker));
-  return results;
-}
-
 const outdir = Deno.args[0] ?? "_site";
 await Deno.remove(outdir, { recursive: true }).catch(() => {});
 await Deno.mkdir(outdir, { recursive: true });
 
 const packages = discoverPackages();
-const entries = await mapConcurrent(packages, CONCURRENCY, (pkg) =>
+const entries = await mapConcurrent(packages, (pkg) =>
   buildPackage(pkg, outdir),
 );
 await Deno.writeTextFile(join(outdir, "index.yml"), renderIndex(entries));

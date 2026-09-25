@@ -1,4 +1,4 @@
-import type { ScraperPackage } from "./package.ts";
+import type { ScraperFile, ScraperPackage } from "./package.ts";
 
 /**
  * Must stay flat string lists: Stash decodes the index with yaml.v2, whose
@@ -26,10 +26,13 @@ const urlKeys: Record<ContentType, string[]> = {
 
 const sortedUnique = (values: string[]) => [...new Set(values)].sort();
 
-/** URL patterns a package matches, by content type, using Stash's substring semantics */
-export function urlPatterns(pkg: ScraperPackage, type: ContentType): string[] {
+/** URL patterns the scrapers match, by content type, using Stash's substring semantics */
+export function urlPatterns(
+  scrapers: ScraperFile[],
+  type: ContentType,
+): string[] {
   return sortedUnique(
-    pkg.scrapers.flatMap(({ data }) =>
+    scrapers.flatMap(({ data }) =>
       urlKeys[type].flatMap((key) => {
         const definitions = data[key];
         if (!Array.isArray(definitions)) return [];
@@ -48,7 +51,7 @@ export function packageMetadata(pkg: ScraperPackage): PackageMetadata {
     scrapes: sortedUnique(pkg.headers.scrapes),
   };
   for (const type of contentTypes) {
-    metadata[`${type}_urls`] = urlPatterns(pkg, type);
+    metadata[`${type}_urls`] = urlPatterns(pkg.scrapers, type);
   }
   return Object.fromEntries(
     Object.entries(metadata).filter(([, values]) => values.length > 0),

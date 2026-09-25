@@ -2,13 +2,16 @@
   "version": "5",
   "specifiers": {
     "jsr:@std/assert@1": "1.0.19",
+    "jsr:@std/fs@1": "1.0.24",
     "jsr:@std/internal@^1.0.12": "1.0.14",
     "jsr:@std/internal@^1.0.14": "1.0.14",
     "jsr:@std/path@1": "1.1.6",
+    "jsr:@std/path@^1.1.5": "1.1.6",
     "npm:ajv-formats@3": "3.0.1_ajv@8.20.0",
     "npm:ajv@^8.17.0": "8.20.0",
     "npm:better-ajv-errors@2": "2.0.3_ajv@8.20.0",
     "npm:chalk@^5.4.0": "5.6.2",
+    "npm:fuse.js@7.2.0": "7.2.0",
     "npm:prettier@3": "3.9.9",
     "npm:yaml@^2.8.3": "2.9.0"
   },
@@ -17,6 +20,13 @@
       "integrity": "eaada96ee120cb980bc47e040f82814d786fe8162ecc53c91d8df60b8755991e",
       "dependencies": [
         "jsr:@std/internal@^1.0.12"
+      ]
+    },
+    "@std/fs@1.0.24": {
+      "integrity": "f3061b45b81673a2bece689da041df32d174be064c89eb6397fb5718d3fb7877",
+      "dependencies": [
+        "jsr:@std/internal@^1.0.14",
+        "jsr:@std/path@^1.1.5"
       ]
     },
     "@std/internal@1.0.14": {
@@ -104,6 +114,9 @@
     "fast-uri@3.1.5": {
       "integrity": "sha512-gHwA1O9LDIcKunMKhObS/HimwtehO1nPUECKAu5TpKgaO19fcWEl4bliWe1jWxVFvIXztJjjQ4L8XQ1EU9f7Jw=="
     },
+    "fuse.js@7.2.0": {
+      "integrity": "sha512-zf4vdcIGpjNKTuXwug33Hm2okqX6a0t2ZEbez+o9oBJQSNhVJ5AqERfeiRD3r8HcLqP66MrjdkmzxrncbAOTUQ=="
+    },
     "has-flag@4.0.0": {
       "integrity": "sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ=="
     },
@@ -143,11 +156,13 @@
   "workspace": {
     "dependencies": [
       "jsr:@std/assert@1",
+      "jsr:@std/fs@1",
       "jsr:@std/path@1",
       "npm:ajv-formats@3",
       "npm:ajv@^8.17.0",
       "npm:better-ajv-errors@2",
       "npm:chalk@^5.4.0",
+      "npm:fuse.js@7.2.0",
       "npm:yaml@^2.8.3"
     ]
   }

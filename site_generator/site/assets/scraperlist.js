@@ -1,4 +1,5 @@
 import Fuse from "https://cdn.jsdelivr.net/npm/fuse.js@7.2.0/dist/fuse.basic.min.mjs";
+import { keys } from "./fuse-keys.js";
 import ago from "./ago.js";
 // constant elements
 const searchInput = document.querySelector("#search");
@@ -114,29 +115,6 @@ const setTable = (scrapers, searchValue = "") => {
     row.insertCell(9).textContent = ago(new Date(scp.lastUpdate));
   });
 };
-
-const keys = [
-  {
-    name: "filename",
-    weight: 2,
-  },
-  {
-    name: "name",
-    weight: 20,
-  },
-  {
-    name: "sites",
-    weight: 2,
-  },
-  {
-    name: "scrapes",
-    weight: 10,
-  },
-  {
-    name: "hosts",
-    weight: 10,
-  },
-];
 
 // fuse config
 const fuseConfig = {
