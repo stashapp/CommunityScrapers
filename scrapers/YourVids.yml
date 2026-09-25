@@ -29,15 +29,9 @@ xPathScrapers:
           - parseDate: "2006-01-02"
       Image: //meta[@property="og:image"]/@content
       URL: //link[@rel="canonical"]/@href
-      Code:
-        selector: (//button[contains(@data-likeable-type, "Video")]/@data-likeable-id)[1]
       Studio:
         Name:
           selector: $creator//h3/text()
-          postProcess:
-            - replace:
-                - regex: ^
-                  with: "YourVids: "
         URLs: $creator//a[contains(@class, "video-creator-identity")]/@href
       Performers:
         Name: $creator//h3/text()
@@ -90,4 +84,3 @@ driver:
           Domain: yourvids.com
           Value: "true"
           Path: /
-# Last Updated September 24, 2026
