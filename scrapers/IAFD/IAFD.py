@@ -212,12 +212,28 @@ def performer_aliases(tree):
     return ", ".join([y for x in aliases for y in [clean_alias(x.strip())] if y])
 
 
+def clean_careerlength(c: str) -> str | None:
+    # Remove parenthetical info like "(Started around 25 years old)"
+    cleaned = re.sub(r"\s*\(.*$", "", c).strip()
+    parts = [p.strip() for p in cleaned.split("-") if p.strip()]
+    if not parts:
+        return None
+
+    current_year = str(datetime.now().year)
+    start = parts[0]
+    end = parts[1] if len(parts) > 1 else parts[0]
+
+    if end == current_year:
+        return f"{start} -"
+    return f"{start} - {end}"
+
+
 def performer_careerlength(tree):
     return maybe(
         tree.xpath(
             '//div/p[@class="bioheading"][contains(text(), "Active")][1]/following-sibling::p[1]/text()'
         ),
-        lambda c: " - ".join(re.sub(r"(\D+\d\d\D+)$", "", c.strip()).split("-")),
+        clean_careerlength,
     )
 
 
@@ -377,12 +393,6 @@ def performer_query(query):
 
 
 def performer_from_tree(tree):
-    # handle career length seperately (#2584)
-    career_length = performer_careerlength(tree)
-    current_year = str(datetime.now().year)
-    if career_length and career_length.endswith(current_year):
-        # use rfind to replace
-        career_length = career_length[:career_length.rfind(current_year)]
     return {
         "name": performer_name(tree),
         "gender": performer_gender_map(tree),
@@ -397,7 +407,7 @@ def performer_from_tree(tree):
         "weight": performer_weight(tree),
         "hair_color": performer_haircolor(tree),
         "measurements": performer_measurements(tree),
-        "career_length": career_length,
+        "career_length": performer_careerlength(tree),
         "aliases": performer_aliases(tree),
         "tattoos": performer_tattoos(tree),
         "piercings": performer_piercings(tree),
