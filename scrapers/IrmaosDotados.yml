@@ -23,16 +23,17 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //meta[@property="og:title"]/@content
+      URLs: //meta[@property="og:url"]/@content
       Details:
         selector: //div[@class="mt-0 text-white"]
         postProcess:
-          - replace:
-              - regex: ^"|"$
-                with: ""
+          - javascript: |
+              return value
+                .replace(/^"|"$/g, "")
+                .replace(/([.!?…]["”]?)(?=\p{Lu})/gu, "$1\n\n");
       Image: //meta[@property="og:image"]/@content
       Studio:
-        Name:
-          fixed: "Irmãos Dotados"
+        Name: //meta[@property="og:site_name"]/@content
   performerScraper:
     performer:
       Name:
@@ -66,7 +67,7 @@ xPathScrapers:
               - regex: '.*Dick size:\s*([\d.]+).*'
                 with: "$1"
       Details:
-        selector: //div[@class="text-white"]/li[contains(.,"Age") or contains(.,"Position")]
+        selector: //div[@class="text-white"]/li[contains(.,"Age") or contains(.,"Position")][normalize-space(substring-after(., ":"))]
         concat: "\n"
 
 # CDP is required so the redirect through idioma.php (which sets the English
