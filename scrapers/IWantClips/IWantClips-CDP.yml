@@ -1,21 +1,12 @@
-# NOTE: this duplicates the sceneScraper from IWantClips.yml
-# in order to offer scene/performer search because those require
-# CDP which is quite expensive for regular scraping by URL
+# Search half of the IWantClips package. sceneScraper is duplicated from
+# IWantClips-NoCDP.yml because sceneByQueryFragment needs it when a search
+# result is picked; URL scraping itself is left to the NoCDP file, since
+# driver.useCDP is file-wide and a browser is expensive for that.
 name: IWantClips (Search via CDP)
 performerByName:
   action: scrapeXPath
   queryURL: https://iwantclips.com/artists?query={}
   scraper: performerSearch
-performerByURL:
-  - action: scrapeXPath
-    url:
-      - iwantclips.com/store
-    scraper: performerScraper
-sceneByURL:
-  - action: scrapeXPath
-    url:
-      - iwantclips.com/store
-    scraper: sceneScraper
 sceneByName:
   action: scrapeXPath
   queryURL: https://iwantclips.com/search/advsearch?query={}
@@ -32,7 +23,7 @@ xPathScrapers:
       $clip: //li[contains(concat(' ', normalize-space(@class), ' '), ' ais-Hits-item ')]/div[contains(concat(' ', normalize-space(@class), ' '), ' clip ')]
     scene:
       Title: $clip//div[contains(concat(' ', normalize-space(@class), ' '), ' clip-thumb-16-9 ') and contains(concat(' ', normalize-space(@class), ' '), ' visible-xs ')]/a/img/@alt
-      URL: $clip//div[contains(concat(' ', normalize-space(@class), ' '), ' clip-thumb-16-9 ') and contains(concat(' ', normalize-space(@class), ' '), ' visible-xs ')]/a/@href
+      URLs: $clip//div[contains(concat(' ', normalize-space(@class), ' '), ' clip-thumb-16-9 ') and contains(concat(' ', normalize-space(@class), ' '), ' visible-xs ')]/a/@href
       Image: $clip//div[contains(concat(' ', normalize-space(@class), ' '), ' clip-thumb-16-9 ') and contains(concat(' ', normalize-space(@class), ' '), ' visible-xs ')]/a/img/@data-original
       Details: $clip//div[contains(concat(' ', normalize-space(@class), ' '), ' content-extended ')]//div[contains(concat(' ', normalize-space(@class), ' '), ' content-description ')]/p
       Studio:
@@ -46,7 +37,7 @@ xPathScrapers:
       $model: //a[@class="modelLink"]
     scene:
       Title: //h1[@class='no-style']
-      URL: //link[@rel="canonical"]/@href
+      URLs: //link[@rel="canonical"]/@href
       Date:
         selector: //div[@class="col-xs-12 date fix"]/span/em
         postProcess:
@@ -64,7 +55,7 @@ xPathScrapers:
           postProcess:
             - replace:
                 - regex: "Keywords:"
-                  with: $1
+                  with: ""
                 - regex: ',\s+'
                   with: ","
           split: ","
@@ -81,13 +72,6 @@ xPathScrapers:
         Name: $model
       Performers:
         Name: $model
-  performerScraper:
-    performer:
-      Name: //div[@class="controls-box"]/p
-      Details:
-        selector: //div[@id="section-about"]/p
-        concat: "\n\n"
-      Image: //div[@class="avatar-box"]/img/@src
   performerSearch:
     common:
       $artist: //li[@class="ais-Hits-item grid-artist-item"]

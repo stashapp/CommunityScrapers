@@ -1,6 +1,6 @@
 # This is the "cheaper" option for scraping IWC URLs
 # that do not require CDP. Users who want scene/performer
-# search should use IWantClips-Search.yml
+# search should use IWantClips-CDP.yml
 name: IWantClips (No CDP)
 performerByURL:
   - action: scrapeXPath
@@ -13,17 +13,12 @@ sceneByURL:
       - iwantclips.com/store
     scraper: sceneScraper
 xPathScrapers:
-  sceneSearch:
-    scene:
-      Title: //div[@class='tittle-price d-flex flex-column text-ellipsis']//div[@class='content-title']//a/text()
-      URL: //div[@class='tittle-price d-flex flex-column text-ellipsis']//div[@class='content-title']//a/@href
-      Image: //div[@class='clip-thumb-16-9 visible-xs']//img[@class='lazy']/@data-original
   sceneScraper:
     common:
       $model: //a[@class="modelLink"]
     scene:
       Title: //h1[@class='no-style']
-      URL: //link[@rel="canonical"]/@href
+      URLs: //link[@rel="canonical"]/@href
       Date:
         selector: //div[@class="col-xs-12 date fix"]/span/em
         postProcess:
@@ -41,7 +36,7 @@ xPathScrapers:
           postProcess:
             - replace:
                 - regex: "Keywords:"
-                  with: $1
+                  with: ""
                 - regex: ',\s+'
                   with: ","
           split: ","
@@ -65,3 +60,4 @@ xPathScrapers:
         selector: //div[@id="section-about"]/p
         concat: "\n\n"
       Image: //div[@class="avatar-box"]/img/@src
+      URLs: //link[@rel="canonical"]/@href

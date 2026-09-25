@@ -1,0 +1,3 @@
+# one install covers both: NoCDP scrapes URLs cheaply, CDP adds scene/performer
+# search (driver.useCDP is file-wide, so the two cannot be one file)
+name: IWantClips
