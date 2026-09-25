@@ -23,53 +23,52 @@ xPathScrapers:
   movieScraper:
     group:
       Name: &title
-        selector: //title/text()
+        selector: //title
         postProcess:
           - replace:
               - regex: ((DVD|HD\-DVD|VHS\-Video)\s+\-\s+Porn\s+Movies\s+Streams\s+and\s+Downloads|\s+Stream\s+&\s+Download)
                 with: ""
       Date: &date
-        selector: //b[contains(text(), "Release date:")]/following-sibling::text() or //div[contains(text()[2],"Release date:")]/text()[2] or //div[contains(text(),"released on")]/text()
+        selector: //div[contains(text()[2], "Release date:")]/text()[2] | //td[@class="de1"][contains(., "released on")]/following-sibling::td
         postProcess:
-          - replace:
-              - regex: 'Release date:'
-                with: ""
-              - regex: "released on "
-                with: ""
-          - parseDate: January 2, 2006
-          - parseDate: 01/02/2006
+          - javascript: |
+              const months = ["January", "February", "March", "April", "May", "June", "July",
+                "August", "September", "October", "November", "December"];
+              const v = value.replace(/^\s*Release date:\s*/, "").trim();
+              let m;
+              if ((m = v.match(/^(\d{2})\/(\d{2})\/(\d{4})$/))) return `${m[3]}-${m[1]}-${m[2]}`;
+              if ((m = v.match(/^(\w+) (\d{1,2}), (\d{4})$/)) && months.includes(m[1])) {
+                const month = String(months.indexOf(m[1]) + 1).padStart(2, "0");
+                return `${m[3]}-${month}-${m[2].padStart(2, "0")}`;
+              }
+              return "";
       Studio: &studio
-        Name: //a[@data-original-title="Label" or @title="Label"]/text()
-      Synopsis: &details
-        selector: //meta[@property="og:description"]/@content
+        Name: //div[@class="undertitle"]//a[contains(@href, "?label=")]
+      Synopsis: &details //meta[@property="og:description"]/@content
       FrontImage: //img[contains(@class,"mainimage")][@rel="1"]/@src
       BackImage: //img[contains(@class,"mainimage")][@rel="2"]/@src
-      URL: &url
+      URLs: &url //link[@rel="alternate"][@hreflang="en"]/@href
       Tags: &tags
-        Name: //a[@title="Categorie / Genre"]/text()
-      Director: &director
-        selector: //a[@title="Director"]/text()
-      Duration: &duration
-        selector: //div[contains(text(),"Length:")]/text()[1]
+        Name: //a[@title="Categorie / Genre"]
+      Director: &director //a[@title="Director"]
+      Duration:
+        selector: //div[contains(text(),"Length:")]/text()[1] | //td[@class="de1"][contains(., "Length:")]/following-sibling::td
         postProcess:
           - replace:
-              - regex: ^\[(.+)\]$ # handle movies with proper [xx:xx:xx] duration
+              - regex: ^\[(.+)\]$
                 with: $1
-              - regex: ^[^\d]*(\d+)\s*min.* # handle movies with only xx mins duration
+              - regex: ^[^\d]*(\d+)\s*min.*
                 with: "$1:00"
   sceneScraper:
     scene:
       Title: *title
-      URL: *url
+      URLs: *url
       Date: *date
       Studio: *studio
       Details: *details
-      Groups:
-        Name: *title
-        URL: *url
       Image: //img[contains(@class,"mainimage")][@rel="1"]/@src
       Performers:
-        Name: //a[@title="Cast"]/text()
+        Name: //a[@title="Cast"]
         URLs:
           selector: //a[@title="Cast"]/@href
           postProcess:
@@ -82,12 +81,16 @@ xPathScrapers:
     common:
       $searchItem: //a[contains(@href,"/product/")]/img/..
     scene:
-      Title: $searchItem/img/@alt
-      URL:
+      Title:
+        selector: $searchItem/img/@alt
+        postProcess:
+          - replace:
+              - regex: ^(DVD|HD-DVD|Blu-ray|VHS-Video)\s+
+                with: ""
+      URLs:
         selector: $searchItem/@href
         postProcess:
           - replace:
               - regex: ^
                 with: "https://www.jeedoo.com"
       Image: $searchItem/img/@data-src
-# Last Updated April 30, 2026
