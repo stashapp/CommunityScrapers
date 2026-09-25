@@ -22,10 +22,6 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - https://www.javbus.com
-      - https://www.seejav.bid
-      - https://www.cdnbus.lol
-      - https://www.dmmbus.lol
-      - https://www.seedmm.cfd
     scraper: sceneScraper
 sceneByName:
   action: scrapeXPath
@@ -36,84 +32,113 @@ sceneByQueryFragment:
   queryURL: "{url}"
   scraper: sceneScraper
 
-performerByURL: 
+performerByURL:
   - action: scrapeXPath
-    url: 
+    url:
       - https://www.javbus.com
-      - https://www.seejav.bid
-      - https://www.cdnbus.lol
-      - https://www.dmmbus.lol
-      - https://www.seedmm.cfd
     scraper: performerScraper
-performerByName: 
+performerByName:
   action: scrapeXPath
   queryURL: https://www.javbus.com/searchstar/{}&type=&parent=ce
   scraper: performerSearch
 
-xPathScrapers: 
-  performerSearch: 
+xPathScrapers:
+  performerSearch:
     performer:
-      Name: //span[@class="mleft"]
+      Name: //span[@class="mleft"]/text()
       URLs: //*[@id="waterfall"]/div/a/@href
-  performerScraper: 
-    performer: 
-      Name: //*[@id="waterfall"]/div[1]/div/div[2]/span
+  performerScraper:
+    common:
+      $info: //*[@id="waterfall"]/div[1]//div[@class="photo-info"]
+    performer:
+      Name: $info/span
       Birthdate:
-        selector: //*[@id="waterfall"]/div[1]/div/div[2]/p[contains(text(), '生日')]
+        selector: $info/p[contains(., "生日")]
         postProcess:
           - replace:
-            - regex: ^(.*? ){1}
-              with:
-      Height: 
-        selector: //*[@id="waterfall"]/div[1]/div/div[2]/p[contains(text(), '身高')]
+              - regex: ^[^:]+:\s*
+                with: ""
+      Height:
+        selector: $info/p[contains(., "身高")]
         postProcess:
           - replace:
-            - regex: ^(.*? ){1}
-              with:
-      # Measurements: //*[@id="waterfall"]/div[1]/div/div[2]/p[contains(text(), '胸圍')]//*[@id="waterfall"]/div[1]/div/div[2]/p[contains(text(), '腰圍')]//*[@id="waterfall"]/div[1]/div/div[2]/p[contains(text(), '臀圍')]//*[@id="waterfall"]/div[1]/div/div[2]/p[contains(text(), '罩杯')]
-      Image: 
-        selector: //*[@id="waterfall"]/div[1]/div/div[1]/img/@src
+              - regex: ^[^:]+:\s*(\d+)cm$
+                with: $1
+      Measurements:
+        selector: $info/p[contains(., "罩杯") or contains(., "胸圍") or contains(., "腰圍") or contains(., "臀圍")]
+        concat: "|"
+        postProcess:
+          - javascript: |
+              const f = {};
+              for (const p of value.split("|")) {
+                const m = p.match(/^(\S+?):\s*(\S+?)(cm)?$/);
+                if (m) f[m[1]] = m[2];
+              }
+              if (!f["胸圍"] || !f["腰圍"] || !f["臀圍"]) return "";
+              return `${f["胸圍"]}${f["罩杯"] || ""}-${f["腰圍"]}-${f["臀圍"]}`;
+      Images:
+        selector: //*[@id="waterfall"]/div[1]//div[@class="photo-frame"]/img/@src
         postProcess:
           - replace:
-            - regex: ^/
-              with: https://www.javbus.com/
+              - regex: ^/
+                with: https://www.javbus.com/
 
-  sceneSearch: 
-    scene: 
-      Title: //div[@class="photo-info"]/span
-      URL: //*[@id="waterfall"]/div/a/@href
+  sceneSearch:
+    common:
+      $item: //*[@id="waterfall"]/div/a[@class="movie-box"]
+    scene:
+      Title: $item//div[@class="photo-info"]/span/text()[1]
+      Code: $item//div[@class="photo-info"]/span/date[1]
+      Date: $item//div[@class="photo-info"]/span/date[2]
+      URLs: $item/@href
+      Image:
+        selector: $item//div[@class="photo-frame"]/img/@src
+        postProcess:
+          - replace:
+              - regex: ^/
+                with: https://www.javbus.com/
   sceneScraper:
+    common:
+      $info: //div[@class="col-md-3 info"]
     scene:
       Title:
-        selector: //div[@class="col-md-3 info"]//span[contains(text(), '識別碼')]/../span[2]/text()
-      URL:
-        selector: /html/head/link[@hreflang="zh"]/@href
-      Date:
-        selector: //div[@class="col-md-3 info"]//span[contains(text(), '發行日期')]/../text()
-      Details:
-        selector: //div[@class="container"]/h3/text()
+        selector: //div[@class="container"]/h3 | //div[@class="star-name"]/a
+        concat: "\x01"
         postProcess:
-          - replace:
-            - regex: ^(.*? ){1}
-              with:
+          - javascript: |
+              const [heading, ...names] = value.split("\x01");
+              let title = heading.replace(/^\S+\s+/, "");
+              let trimmed = true;
+              while (trimmed) {
+                trimmed = false;
+                for (const name of names) {
+                  if (title.endsWith(" " + name)) {
+                    title = title.slice(0, -(name.length + 1));
+                    trimmed = true;
+                  }
+                }
+              }
+              return title;
+      Code: $info/p[span[contains(., "識別碼")]]/span[2]
+      URLs: /html/head/link[@hreflang="zh"]/@href
+      Date: $info/p[span[contains(., "發行日期")]]/text()
       Tags:
-        Name: //div[@class="col-md-3 info"]//span[@class="genre"]/label/a/text()
+        Name: $info//span[@class="genre"]/label/a
       Performers:
         Name: //div[@class="star-name"]/a
-      Director: //div[@id='video_director']/table/tbody/tr/td[@class="text"]/span/a/text()
+      Director: $info/p[span[contains(., "導演")]]/a
       Image:
         selector: //div[@class="row movie"]/div[@class="col-md-9 screencap"]/a[@class="bigImage"]/img/@src
         postProcess:
           - replace:
-            - regex: ^/
-              with: https://www.javbus.com/
+              - regex: ^/
+                with: https://www.javbus.com/
       Studio:
-        Name: //div[@class="col-md-3 info"]//span[contains(text(), '發行商')]/../a/text()
+        Name: $info/p[span[contains(., "發行商")]]/a | $info[not(p/span[contains(., "發行商")])]/p[span[contains(., "製作商")]]/a
 
 driver:
   headers:
     - Key: User-Agent
-      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36
+      Value: stash-scraper/1.0
     - Key: Accept-Language
       Value: zh-cn
-# Last Updated September 17, 2025
