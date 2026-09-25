@@ -407,13 +407,11 @@ xPathScrapers:
               - regex: \\"
                 with: '"'
       Image:
-        selector: //div[@data-setup]/@data-setup
+        selector: //head/script[@type='application/ld+json' and contains(text(), '"@type":"VideoObject"')]
         postProcess:
           - replace:
-              - regex: ^.*"posterUrl":"([^"]+).*$
+              - regex: '^.*"thumbnailUrl":"([^"]+)".*$'
                 with: $1
-              - regex: "\\?.*$"
-                with: ""
       # Pages do not include canonical URL links as of 2024
       # but I'm leaving this in case they change that back
       URL: //link[@rel="canonical"]/@href
