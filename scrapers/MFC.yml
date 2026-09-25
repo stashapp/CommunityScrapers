@@ -16,67 +16,78 @@ performerByURL:
     scraper: performerScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $creator: //a[contains(@class, "user-link")]
     scene:
-      Title: //h3/text()
-      Studio:
+      Title: &title //h3
+      URLs: &urls //meta[@property="og:url"]/@content
+      Date: &date
+        selector: //script[@type="application/ld+json"][contains(., "datePublished")] | //span[contains(@class, "album-at")]
+        postProcess:
+          - javascript: |
+              const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+              let m;
+              if ((m = value.match(/"datePublished"\s*:\s*"(\d{4}-\d{2}-\d{2})/))) return m[1];
+              if ((m = value.trim().match(/^(\w{3}) (\d{1,2}), (\d{4})$/)) && months.includes(m[1])) {
+                const month = String(months.indexOf(m[1]) + 1).padStart(2, "0");
+                return `${m[3]}-${month}-${m[2].padStart(2, "0")}`;
+              }
+              return "";
+      Details: &details //div[@class="description-view"]
+      Tags: &tags
         Name:
-          fixed: "MFC Share"
-      Date: //span[@class[contains(., "album-at")]]/@title
-      Details: //div[@class="description-view"]/text()
-      Tags:
-        Name:
-          selector: //div[@class[contains(., "tags-container")]]/a/text()
+          selector: //div[contains(@class, "tags-container")]/a
           postProcess:
             - replace:
-              - regex: ^#
-                with: ""
-      Performers:
-        Name: //a[@class="user-link"]
-      Image:
-        selector: //meta[@name="twitter:image"]/@content
+                - regex: ^#
+                  with: ""
+      Studio: &studio
+        Name: $creator
+        URLs:
+          selector: $creator/@href
+          postProcess:
+            - replace:
+                - regex: ^/
+                  with: https://share.myfreecams.com/
+      Performers: &performers
+        Name: $creator
+      Image: //meta[@name="twitter:image"]/@content
   galleryScraper:
+    common:
+      $creator: //a[contains(@class, "user-link")]
     gallery:
-      Title: //h3/text()
-      Studio:
-        Name:
-          fixed: "MFC Share"
-      Date: //span[@class[contains(., "album-at")]]/@title
-      Details: //div[@class="description-view"]/text()
-      Tags:
-        Name:
-          selector: //div[@class[contains(., "tags-container")]]/a/text()
-          postProcess:
-            - replace:
-              - regex: ^#
-                with: ""
-      Performers:
-        Name: //a[@class="user-link"]
+      Title: *title
+      URLs: *urls
+      Date: *date
+      Details: *details
+      Tags: *tags
+      Studio: *studio
+      Performers: *performers
   performerScraper:
     performer:
-      Name: //span[@id="username_value"]/text()
-      Country: //span[@id="country_value"]/text()
-      Ethnicity: //span[@id="ethnicity_value"]/text()
-      Gender: //span[@id="gender_value"]/text()
-      HairColor: //span[@id="hair_value"]/text()
-      EyeColor: //span[@id="eyes_value"]/text()
+      Name: //span[@id="username_value"]
+      Country: //span[@id="country_value"]
+      Ethnicity: //span[@id="ethnicity_value"]
+      Gender: //span[@id="gender_value"]
+      HairColor: //span[@id="hair_value"]
+      EyeColor: //span[@id="eyes_value"]
       Height:
-        selector: //span[@id="height_value"][contains(text(), "centimeters")]/text() # only get metric because we can't handle both; it's one or the other
+        selector: //span[@id="height_value"][contains(text(), "centimeters")] # only get metric because we can't handle both; it's one or the other
         postProcess:
           - replace:
-            - regex: ((\d+)\s(.*))
-              with: $2
+              - regex: ((\d+)\s(.*))
+                with: $2
       Weight:
-        selector: //span[@id="weight_value"][contains(text(), "kilos")]/text() # only get metric because we can't handle both; it's one or the other
+        selector: //span[@id="weight_value"][contains(text(), "kilos")] # only get metric because we can't handle both; it's one or the other
         postProcess:
           - replace:
-            - regex: ((\d+)\s(.*))
-              with: $2
+              - regex: ((\d+)\s(.*))
+                with: $2
       Image:
         selector: //img[@id="main_photo"]/@src | //img[@id="profile_avatar"]/@src
         postProcess:
           - replace: # main photo 250px size modifier can be removed to get full size image; 300px avatar can be fetched instead of the 90px one
-            - regex: \.250\.jpg
-              with: .jpg
-            - regex: \.90x90\.jpg
-              with: .300x300.jpg
-# Last Updated December 13, 2023
+              - regex: \.250\.jpg
+                with: .jpg
+              - regex: \.90x90\.jpg
+                with: .300x300.jpg
