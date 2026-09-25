@@ -1,29 +1,19 @@
 import json
 import re
 import sys
+import time
 import urllib.parse
-from datetime import datetime
 from html import unescape
 
 from lxml import html
-
-try:
-    import py_common.log as log
-    from py_common import proxy
-    from py_common.util import scraper_args
-    from py_common.types import (
-        PerformerSearchResult,
-        ScrapedGroup,
-        ScrapedPerformer,
-        ScrapedScene,
-    )
-except ModuleNotFoundError:
-    print(
-        "You need to download the folder 'py_common' from the community repo! "
-        "(CommunityScrapers/tree/master/scrapers/py_common)",
-        file=sys.stderr,
-    )
-    sys.exit()
+from py_common import log, proxy
+from py_common.types import (
+    PerformerSearchResult,
+    ScrapedGroup,
+    ScrapedPerformer,
+    ScrapedScene,
+)
+from py_common.util import dig, scraper_args
 
 scraper = proxy.StashRequests()
 
@@ -40,32 +30,29 @@ def is_waf_challenged(res) -> bool:
     return not res.text.strip()
 
 
-def get_tree(url: str):
-    res = None
+def send(request, url: str, **kwargs):
     try:
-        # Plain request first: py_common's cookie cache replays the
-        # aws-waf-token cookie + user agent from a previous FlareSolverr
-        # solve, so most requests never need the browser.
-        res = scraper.get(url, timeout=15)
-    except Exception as e:
-        log.debug(f"plain request failed for {url}: {e}")
+        return request(url, **kwargs)
+    except Exception as e:  # noqa: BLE001 - py_common.proxy raises nothing more specific
+        log.debug(f"Request failed for {url}: {e}")
+        return None
+
+
+def get_tree(url: str) -> html.HtmlElement | None:
+    # Plain request first: py_common's cookie cache replays the
+    # aws-waf-token cookie + user agent from a previous FlareSolverr
+    # solve, so most requests never need the browser
+    res = send(scraper.get, url, timeout=15)
     if res is None or is_waf_challenged(res):
         log.info(f"AWS WAF challenge on {url}, solving via FlareSolverr")
-        res = proxy.flaresolverr_req(url, proxy=proxy.PROXY_URL)
+        res = send(proxy.flaresolverr_req, url, proxy=proxy.PROXY_URL)
+    if res is None or is_waf_challenged(res):
+        log.error(f"AWS WAF challenge unsolved for {url}")
+        return None
     if res.status_code >= 400:
-        raise Exception(f"HTTP {res.status_code} fetching {url}")
+        log.error(f"HTTP {res.status_code} fetching {url}")
+        return None
     return html.fromstring(res.text)
-
-
-def dig(obj, *keys):
-    for key in keys:
-        if isinstance(obj, dict):
-            obj = obj.get(key)
-        elif isinstance(obj, list) and isinstance(key, int) and key < len(obj):
-            obj = obj[key]
-        else:
-            return None
-    return obj
 
 
 def next_data_props(tree) -> dict:
@@ -111,7 +98,7 @@ def parse_date(text: str) -> str | None:
     if re.fullmatch(r"\d{4}", text):
         return f"{text}-01-01"
     try:
-        return datetime.strptime(text, "%B %d, %Y").date().isoformat()
+        return time.strftime("%Y-%m-%d", time.strptime(text, "%B %d, %Y"))
     except ValueError:
         log.warning(f"Could not parse date: {text}")
         return None
@@ -244,15 +231,19 @@ def country_from_location(location: str) -> str | None:
     return COUNTRY_CODES.get(country.lower(), country)
 
 
-def performer_from_url(url: str) -> ScrapedPerformer:
-    tree = get_tree(url)
+def performer_from_url(url: str) -> ScrapedPerformer | None:
+    if (tree := get_tree(url)) is None:
+        return None
     props = next_data_props(tree)
     atf = props.get("aboveTheFold") or {}
     main = props.get("mainColumnData") or {}
 
-    name = dig(atf, "nameText", "text") or xpath_text(tree, '//*[@data-testid="hero__primary-text"]')
+    name = dig(atf, "nameText", "text") or xpath_text(
+        tree, '//*[@data-testid="hero__primary-text"]'
+    )
     if not name:
-        raise Exception(f"Could not find performer name at {url}")
+        log.error(f"Could not find performer name at {url}")
+        return None
     performer: ScrapedPerformer = {
         "name": name,
         "urls": [url],
@@ -269,15 +260,18 @@ def performer_from_url(url: str) -> ScrapedPerformer:
         performer["death_date"] = death_date
 
     # actress/actor credit category is the only gender signal IMDB exposes
-    professions = [dig(p, "category", "id") for p in atf.get("primaryProfessions") or []]
+    professions = [
+        dig(p, "category", "id") for p in atf.get("primaryProfessions") or []
+    ]
     if "actress" in professions:
         performer["gender"] = "FEMALE"
     elif "actor" in professions:
         performer["gender"] = "MALE"
 
-    if birth_location := dig(main, "birthLocation", "text"):
-        if country := country_from_location(birth_location):
-            performer["country"] = country
+    if (birth_location := dig(main, "birthLocation", "text")) and (
+        country := country_from_location(birth_location)
+    ):
+        performer["country"] = country
 
     if bio := dig(atf, "bio", "text", "plainText"):
         performer["details"] = bio
@@ -286,28 +280,38 @@ def performer_from_url(url: str) -> ScrapedPerformer:
     if image:
         performer["images"] = [image]
 
-    external_links = [dig(edge, "node", "url") for edge in dig(main, "personalDetailsExternalLinks", "edges") or []]
+    external_links = [
+        dig(edge, "node", "url")
+        for edge in dig(main, "personalDetailsExternalLinks", "edges") or []
+    ]
     external_links = [link for link in external_links if link] or tree.xpath(
         '//li[@data-testid="details-officialsites"]//a[@target="_blank"]/@href'
     )
     performer["urls"].extend(external_links)
 
-    alias_texts = [dig(nick, "displayableProperty", "value", "plainText") for nick in main.get("nickNames") or []]
+    alias_texts = [
+        dig(nick, "displayableProperty", "value", "plainText")
+        for nick in main.get("nickNames") or []
+    ]
     alias_texts += [
-        dig(edge, "node", "displayableProperty", "value", "plainText") or dig(edge, "node", "text")
+        dig(edge, "node", "displayableProperty", "value", "plainText")
+        or dig(edge, "node", "text")
         for edge in dig(main, "akas", "edges") or []
     ]
     alias_texts = [a for a in alias_texts if a] or xpath_texts(
         tree,
-        '//li[@data-testid="nm_pd_ans"]//li' ' | //span[contains(text(), "Nicknames")]/following-sibling::*//li/span',
+        '//li[@data-testid="nm_pd_ans"]//li'
+        ' | //span[contains(text(), "Nicknames")]/following-sibling::*//li/span',
     )
-    aliases = sorted({a.strip() for text in alias_texts for a in text.split(",") if a.strip()})
+    aliases = sorted(
+        {a.strip() for text in alias_texts for a in text.split(",") if a.strip()}
+    )
     if aliases:
         performer["aliases"] = ", ".join(aliases)
 
-    height = dig(main, "height", "displayableProperty", "value", "plainText") or xpath_text(
-        tree, '//li[@data-testid="nm_pd_he"]//li'
-    )
+    height = dig(
+        main, "height", "displayableProperty", "value", "plainText"
+    ) or xpath_text(tree, '//li[@data-testid="nm_pd_he"]//li')
     if height and (parsed := parse_height(height)):
         performer["height"] = parsed
 
@@ -316,7 +320,8 @@ def performer_from_url(url: str) -> ScrapedPerformer:
 
 def performer_by_name(name: str) -> list[PerformerSearchResult]:
     query = urllib.parse.quote(name)
-    tree = get_tree(f"{BASE_URL}/search/name/?name={query}")
+    if (tree := get_tree(f"{BASE_URL}/search/name/?name={query}")) is None:
+        return []
 
     # The search page is client-side rendered: the server HTML carries the
     # results only in the embedded __NEXT_DATA__ JSON.
@@ -378,7 +383,9 @@ def title_common(tree, url: str) -> dict:
 
     date = ld.get("datePublished")
     if not date:
-        raw = xpath_text(tree, "//li[@data-testid='title-details-releasedate']/div/ul/li/a/text()")
+        raw = xpath_text(
+            tree, "//li[@data-testid='title-details-releasedate']/div/ul/li/a/text()"
+        )
         date = parse_date(raw) if raw else None
     if date:
         common["date"] = date
@@ -393,7 +400,9 @@ def title_common(tree, url: str) -> dict:
     if image and not re.search(r"/imdb[^/]*\.png", image):
         common["image"] = image
 
-    if studio := xpath_text(tree, '(//li[@data-testid="title-details-companies"]/div//a)[1]'):
+    if studio := xpath_text(
+        tree, '(//li[@data-testid="title-details-companies"]/div//a)[1]'
+    ):
         common["studio"] = {"name": studio}
 
     if directors := ld_names(ld.get("director")):
@@ -404,45 +413,59 @@ def title_common(tree, url: str) -> dict:
         '//div[@data-testid="interests"]//a | //div[@data-testid="genres"]/a/span',
     )
     genres = [unescape(g) for g in ld.get("genre") or []]
-    seen = set()
-    common["tags"] = [t for t in tags + genres if t.lower() not in seen and not seen.add(t.lower())]
+    unique_tags = {}
+    for tag in tags + genres:
+        unique_tags.setdefault(tag.lower(), tag)
+    common["tags"] = list(unique_tags.values())
 
     common["ld"] = ld
     common["atf"] = atf
     return common
 
 
-def scene_from_url(url: str) -> ScrapedScene:
-    tree = get_tree(url)
-    common = title_common(tree, url)
+def title_page(url: str) -> tuple[html.HtmlElement, dict] | None:
+    if (tree := get_tree(url)) is None:
+        return None
+    if "title" not in (common := title_common(tree, url)):
+        log.error(f"Could not find a title at {url}")
+        return None
+    return tree, common
 
-    scene: ScrapedScene = {"urls": [common["url"]]}
+
+def scene_from_url(url: str) -> ScrapedScene | None:
+    if not (page := title_page(url)):
+        return None
+    tree, common = page
+
+    scene: ScrapedScene = {
+        "title": common["title"],
+        "urls": [common["url"]],
+        "groups": [{"name": common["title"], "urls": [common["url"]]}],
+    }
     if code := re.search(r"/title/(tt\d+)", common["url"]):
         scene["code"] = code.group(1)
-    if "title" in common:
-        scene["title"] = common["title"]
-        scene["groups"] = [{"name": common["title"], "urls": [common["url"]]}]
     for key in ("date", "details", "image", "studio", "director"):
         if key in common:
             scene[key] = common[key]
     if common["tags"]:
         scene["tags"] = [{"name": tag} for tag in common["tags"]]
 
-    performers = xpath_texts(tree, '//a[@data-testid="title-cast-item__actor"]') or ld_names(common["ld"].get("actor"))
+    performers = xpath_texts(
+        tree, '//a[@data-testid="title-cast-item__actor"]'
+    ) or ld_names(common["ld"].get("actor"))
     if performers:
         scene["performers"] = [{"name": performer} for performer in performers]
 
     return scene
 
 
-def group_from_url(url: str) -> ScrapedGroup:
-    tree = get_tree(url)
-    common = title_common(tree, url)
+def group_from_url(url: str) -> ScrapedGroup | None:
+    if not (page := title_page(url)):
+        return None
+    tree, common = page
     ld = common["ld"]
 
-    group: ScrapedGroup = {"urls": [common["url"]]}
-    if "title" in common:
-        group["name"] = common["title"]
+    group: ScrapedGroup = {"name": common["title"], "urls": [common["url"]]}
     if "date" in common:
         group["date"] = common["date"]
     if "details" in common:
