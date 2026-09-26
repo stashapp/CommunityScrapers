@@ -1,4 +1,5 @@
 name: "MMP Network"
+# scrapes: Dirty Chubby, DirtyCasting, Fake Shooting, Lustyxxxfamily, MMP Network, Melone Challenge, POV Bitch, Sex Games Private, TakeVan, WWMAMM, XXX Reality Fuck
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -12,51 +13,92 @@ sceneByURL:
       - sexgamesprivate.com/video
       - takevan.com/video
       - xxxrealityfuck.com/video
-
     scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      - melonechallenge.com/video
+    scraper: meloneScraper
+  - action: scrapeXPath
+    url:
+      - wwmamm.com/video
+    scraper: wwmammScraper
 
 xPathScrapers:
   sceneScraper:
+    common:
+      $cover: //div[@class="player"]/img/@src | //div[@class="player"]/video/@poster
+      $featuring: //div[@class="videoDescription"][starts-with(normalize-space(), "Featuring:")]
     scene:
-      Title: //*[@class="videoTitle"]
-      Details:
-        selector: //div[@class="videoDescription"]
+      Title: //*[@class="videoTitle"][//div[@class="player"]]
+      Details: //div[@class="videoDescription"][not(starts-with(normalize-space(), "Featuring:"))]
       Date:
-        selector: //div[@class="videoDate" or @id="videoDate"]/text() | //div[@class="videoInfo"]/text()
+        selector: //div[@class="videoDate"]/text()[1] | //div[@id="videoDate"] | //div[@class="videoInfo"]/text()[1]
         postProcess:
-          - replace:
-              - regex: "^Added "
-                with: ""
-          - replace:
-              - regex: " • .*"
-                with: ""
-          - replace:
-              - regex: '.+?(\d{4}/\d{2}/\d{2}).+'
-                with: $1
+          - javascript: |
+              const m = value.match(/\d{4}\/\d{2}\/\d{2}|[A-Z][a-z]+ \d{1,2}, \d{4}/);
+              return m ? m[0] : "";
           - parseDate: January 2, 2006
           - parseDate: 2006/01/02
-
       Performers:
         Name:
-          selector: //div[@class="videoDate"]/a | //div[@class="videoFeaturedModels"]/text()
-          concat: ", "
-          split: ", "
-      Studio:
-        Name:
-          selector: //a[@id="headerNavJoinNow"]/@href
+          selector: //div[@class="videoDate"]/a | //div[@class="videoFeaturedModels"]/text() | $featuring
+          concat: ","
           postProcess:
             - replace:
-                - regex: .*signup\.(.+)\.com.*
+                - regex: '^\s*Featuring:'
+                  with: ""
+          split: ","
+      Studio: &studio
+        Name:
+          selector: $cover
+          postProcess:
+            - replace:
+                - regex: ^https?://free\.([^/]+)\.com/.*$
                   with: $1
             - map:
+                dirty-chubby: Dirty Chubby
+                dirtycasting: DirtyCasting
                 fakeshooting: Fake Shooting
-                melonechallenge: Molone Challenge
+                lustyxxxfamily: Lustyxxxfamily
+                melonechallenge: Melone Challenge
                 mmpnetwork: MMP Network
+                pornmuschimovie: Pornmuschimovie
                 povbitch: POV Bitch
-                takevan: Take Van
-
+                sexgamesprivate: Sex Games Private
+                takevan: TakeVan
+                wwmamm: WWMAMM
+                xxxrealityfuck: XXX Reality Fuck
       Tags:
-        Name: //a[contains(@href,"tag")]/text()
-      Image:
-        selector: //div[@class="player"]/img/@src | //div[@class="player"]/video/@poster | //div[@class="player"]/img/@src | //video/@poster
-# Last Updated April 11, 2024
+        Name: //div[@class="videoTags"]/a
+      Image: $cover
+
+  meloneScraper:
+    common:
+      $cover: //div[@class="video-embed"]/img/@src
+    scene:
+      Title: //div[@class="wrapper"]/h1
+      Date:
+        selector: //div[@class="wrapper"][h1[normalize-space()]]/h2
+        postProcess:
+          - parseDate: January 2, 2006
+      Details:
+        selector: //div[@class="wrapper"][h1[normalize-space()]]//a[contains(@class, "btnPrev")]/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://melonechallenge.com
+          - subScraper:
+              selector: //div[@class="images"]/p
+      Studio: *studio
+      Image: $cover
+
+  wwmammScraper:
+    common:
+      $cover: //a[@class="cover_join"]/img[1]/@src
+    scene:
+      Title: //h2[@class="videoTitle"]
+      Details: //p[@class="text"]
+      Performers:
+        Name: //div[@class="videoLength"]/strong/a
+      Studio: *studio
+      Image: $cover
