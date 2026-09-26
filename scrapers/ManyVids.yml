@@ -64,6 +64,7 @@ jsonScrapers:
         selector: '{"id":legacyUserId,"handle":urlHandle,"insta":socLnkInstagram,"tw":socLnkTwitter}'
         postProcess:
           - javascript: |
+              const { id, handle, insta, tw } = JSON.parse(value);
               const norm = (raw, host) => {
                 if (!raw) return "";
                 const s = String(raw)
