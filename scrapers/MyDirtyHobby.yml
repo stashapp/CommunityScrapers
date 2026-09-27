@@ -10,77 +10,12 @@ xPathScrapers:
     common:
       $script: //script[contains(text(),"profile_page")]/text()
     scene:
-      Title:
-        selector: $script
+      Image:
+        selector: //meta[@name="og:image"]/@content
         postProcess:
           - replace:
-              - regex: '.*"title":{"text":"([^"]+)"},"subtitle".*'
-                with: $1
-          - &decodeUnicodeEscapes
-            javascript: |
-              return value.replace(/\\u([0-9a-fA-F]{4})/g, function (m, hex) {
-                return String.fromCharCode(parseInt(hex, 16));
-              });
-          - &uncensorGerman
-            javascript: |
-              var patterns = [
-                ["fi\\*\\*", "fick"],
-                ["pi\\*\\*", "piss"],
-                ["pu\\*\\*y", "pussy"],
-                ["lec\\*", "leck"],
-                ["wi\\*\\*", "wich"],
-                ["ti\\*ten", "titten"],
-                ["schwä\\*\\*e", "schwänze"],
-                ["schw\\*\\*z", "schwanz"],
-                ["fo\\*\\*e", "fotze"],
-                ["ars\\*\\*", "arsch"],
-                ["musc\\*\\*", "muschi"],
-                ["w\\*x", "wix"],
-                ["dil\\*o", "dildo"],
-                ["fin\\*\\*r", "finger"],
-                ["ana\\*", "anal"],
-                ["bl\\*wjob", "blowjob"],
-                ["hard\\*\\*re", "hardcore"],
-                ["naturs\\*\\*\\*", "natursekt"],
-                ["spri\\*\\*", "spritz"],
-                ["bla\\*", "blas"],
-                ["hur\\*", "hure"],
-                ["schl\\*\\*k", "schluck"],
-                ["gangba\\*g", "gangbang"],
-                ["str\\*ps", "straps"],
-                ["präsenti\\*rt", "präsentiert"],
-                ["sper\\*a", "sperma"],
-                ["s\\*x", "sex"],
-                ["befrie\\*\\*\\*ng", "befriedigung"],
-              ];
-              return patterns.reduce(function (acc, pair) {
-                var re = new RegExp(pair[0], "gi");
-                return acc.replace(re, function (match) {
-                  var real = pair[1];
-                  if (
-                    match === match.toUpperCase() &&
-                    match !== match.toLowerCase()
-                  ) {
-                    return real.toUpperCase();
-                  }
-                  return match[0] === match[0].toUpperCase()
-                    ? real[0].toUpperCase() + real.slice(1)
-                    : real;
-                });
-              }, value);
-
-      Details:
-        selector: $script
-        postProcess:
-          - replace:
-              - regex: '.*"description":{"text":"(.+)","moreText.*'
-                with: $1
-              - regex: "&#39;"
-                with: "'"
-              - regex: '<a[^>]+>([^<]+)<\\/a>' #anchors
-                with: "$1"
-          - *decodeUnicodeEscapes
-          - *uncensorGerman
+              - regex: _big\.
+                with: _orig.
       Date:
         selector: $script
         postProcess:
@@ -110,15 +45,6 @@ xPathScrapers:
               );
           - parseDate: 02 Jan 2006
           - parseDate: 02 Jan. 2006
-      Performers:
-        Name:
-          selector: $script
-          postProcess:
-            - replace:
-                - regex: '.*"thumbImg":{"title":"([^"]+)".*'
-                  with: $1
-            - *decodeUnicodeEscapes
-            - *uncensorGerman
       Tags:
         Name:
           selector: $script
@@ -128,17 +54,86 @@ xPathScrapers:
                   with: $1
                 - regex: '{"text":"([^"]+)","href":"[^"]+"}'
                   with: $1
+            - &decodeUnicodeEscapes
+              javascript: |
+                return value.replace(/\\u([0-9a-fA-F]{4})/g, function (m, hex) {
+                  return String.fromCharCode(parseInt(hex, 16));
+                });
+            - &decodeEntities
+              javascript: |
+                var named = { amp: "&", quot: '"', apos: "'", lt: "<", gt: ">" };
+                return value.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, function (m, e) {
+                  if (e[0] === "#") {
+                    var code = e[1] === "x" || e[1] === "X" ? parseInt(e.slice(2), 16) : parseInt(e.slice(1), 10);
+                    return String.fromCodePoint(code);
+                  }
+                  var n = named[e.toLowerCase()];
+                  return n === undefined ? m : n;
+                });
+            - &uncensorGerman
+              javascript: |
+                var patterns = [
+                  ["fi\\*\\*", "fick"],
+                  ["pi\\*\\*", "piss"],
+                  ["pu\\*\\*y", "pussy"],
+                  ["lec\\*", "leck"],
+                  ["wi\\*\\*", "wich"],
+                  ["ti\\*ten", "titten"],
+                  ["schwä\\*\\*e", "schwänze"],
+                  ["schw\\*\\*z", "schwanz"],
+                  ["fo\\*\\*e", "fotze"],
+                  ["ars\\*\\*", "arsch"],
+                  ["musc\\*\\*", "muschi"],
+                  ["w\\*x", "wix"],
+                  ["dil\\*o", "dildo"],
+                  ["fin\\*\\*r", "finger"],
+                  ["ana\\*", "anal"],
+                  ["bl\\*wjob", "blowjob"],
+                  ["hard\\*\\*re", "hardcore"],
+                  ["naturs\\*\\*\\*", "natursekt"],
+                  ["spri\\*\\*", "spritz"],
+                  ["bla\\*", "blas"],
+                  ["hur\\*", "hure"],
+                  ["schl\\*\\*k", "schluck"],
+                  ["gangba\\*g", "gangbang"],
+                  ["str\\*ps", "straps"],
+                  ["präsenti\\*rt", "präsentiert"],
+                  ["sper\\*a", "sperma"],
+                  ["s\\*x", "sex"],
+                  ["befrie\\*\\*\\*ng", "befriedigung"],
+                  ["gesichtsbesa\\*\\*ng", "gesichtsbesamung"],
+                  ["cream\\*\\*e", "creampie"],
+                  ["rose\\*te", "rosette"],
+                  ["p\\*rn", "porn"],
+                  ["fu\\*k", "fuck"],
+                  ["ora\\*", "oral"],
+                  ["per\\*\\*\\*se", "perverse"],
+                ];
+                return patterns.reduce(function (acc, pair) {
+                  var re = new RegExp(pair[0], "gi");
+                  return acc.replace(re, function (match) {
+                    var real = pair[1];
+                    if (
+                      match === match.toUpperCase() &&
+                      match !== match.toLowerCase()
+                    ) {
+                      return real.toUpperCase();
+                    }
+                    return match[0] === match[0].toUpperCase()
+                      ? real[0].toUpperCase() + real.slice(1)
+                      : real;
+                  });
+                }, value);
+          split: ","
+      Performers:
+        Name:
+          selector: $script
+          postProcess:
+            - replace:
+                - regex: '.*"thumbImg":{"title":"([^"]+)".*'
+                  with: $1
             - *decodeUnicodeEscapes
             - *uncensorGerman
-          split: ","
-      Image:
-        selector: $script
-        postProcess:
-          - replace:
-              - regex: '.*?"thumbnail":\s*{[^}]+"src":\s*"([^"]+)".*'
-                with: $1
-              - regex: '\\/'
-                with: "/"
       Studio:
         Name:
           selector: $script
@@ -148,6 +143,14 @@ xPathScrapers:
                   with: $1
             - *decodeUnicodeEscapes
             - *uncensorGerman
+      Title:
+        selector: //meta[@name="og:title"]/@content
+        postProcess:
+          - *decodeEntities
+      Details:
+        selector: //meta[@name="og:description"]/@content
+        postProcess:
+          - *decodeEntities
 
 driver:
   cookies:
