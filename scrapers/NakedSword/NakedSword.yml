@@ -1,0 +1,23 @@
+# requires: py_common
+name: NakedSword
+# scrapes: NakedSword Originals, NakedSword X Beau Butler, NakedSword X Rhyheim, Trailer Trash Boys, TrentonDucati
+sceneByURL:
+  - action: script
+    url:
+      - nakedsword.com/movies/
+      - trailertrashboys.com/movies/
+      - trentonducati.com/movies/
+    script:
+      - python
+      - NakedSword.py
+      - scene-by-url
+groupByURL:
+  - action: script
+    url:
+      - nakedsword.com/movies/
+      - trailertrashboys.com/movies/
+      - trentonducati.com/movies/
+    script:
+      - python
+      - NakedSword.py
+      - group-by-url
