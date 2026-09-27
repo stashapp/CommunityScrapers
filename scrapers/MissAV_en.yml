@@ -8,7 +8,7 @@ sceneByURL:
     scraper: sceneScraper
 sceneByName:
   action: scrapeXPath
-  queryURL: https://missav.ai/en/search/{}
+  queryURL: https://missav.live/en/search/{}
   scraper: sceneSearch
 sceneByQueryFragment:
   action: scrapeXPath
@@ -18,35 +18,32 @@ sceneByQueryFragment:
 xPathScrapers:
   sceneSearch:
     common:
-      $videoItem: //div[starts-with(@class, 'grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5')]/div/div[@class="thumbnail group"]
+      $tile: //div[contains(@class, "thumbnail")]
     scene:
-      Title: $videoItem/div[@class="my-2 text-sm text-nord4 truncate"]/a/text()
-      URL:
-        selector: $videoItem/div[@class="my-2 text-sm text-nord4 truncate"]/a/@href
-      Image:
-        selector: $videoItem/div[@class="relative aspect-w-16 aspect-h-9 rounded overflow-hidden shadow-lg"]/a/img/@data-src
+      Title: $tile//a[not(*)]
+      URLs: $tile//a[not(*)]/@href
+      Image: $tile//img/@data-src
   sceneScraper:
     scene:
-      Code: //span[text()='Code:']/../span[@class="font-medium"]
-      Date: //span[text()='Release date:']/../time[@class="font-medium"]
       Title:
-        selector: //h1[@class="text-base lg:text-lg text-nord6"]
+        selector: //meta[@property="og:title"]/@content
         postProcess:
           - replace:
               - regex: ^.*?\s
                 with: ""
-      Tags:
-        Name: //span[text()='Genre:']/../a
+      Code: //span[text()="Code:"]/following-sibling::span
+      Date: //span[text()="Release date:"]/following-sibling::time
+      Details: //meta[@property="og:description"]/@content
+      Image: //meta[@property="og:image"]/@content
+      Director: //meta[@property="og:video:director"]/@content
       Performers:
-        Name: //span[text()='Actress:']/../a
+        Name: //meta[@property="og:video:actor"]/@content
       Studio:
-        Name: //span[text()='Maker:']/../a
-      Director: //span[text()='Director:']/../a
-      Details: //div[@class="mb-1 text-secondary break-all line-clamp-2"]
-      Image: //link[@as="image"]/@href
+        Name: //span[text()="Maker:"]/following-sibling::a
+      Tags:
+        Name: //span[text()="Genre:"]/following-sibling::a
 
 driver:
   headers:
     - Key: User-Agent
       Value: stash-scraper/1.0
-# Last Updated March 17, 2024
