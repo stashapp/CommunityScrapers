@@ -16,34 +16,30 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //head/title
-      URL: //meta[@property="og:url"]/@content
+      URLs: //meta[@property="og:url"]/@content
       Date:
-        selector: //meta[@itemprop="uploadDate"]/@content
+        selector: //meta[@itemprop="datePublished"]/@content
         postProcess:
           - replace:
-              - regex: (?i)(T\d+.+)
+              - regex: T.+
                 with: ""
           - parseDate: 2006-01-02
       Image: //meta[@property="og:image"]/@content
-      Details:
-        selector: //meta[@itemprop="description"]/@content
+      Details: //meta[@itemprop="description"]/@content
       Tags:
-        Name: //dd[@class="tags"]//a
-      Performers:
-        Name: //dd[@class="tags"]//a
+        Name: //dd[@class="tags"]//a[contains(@href, "match=tags")]
       Studio:
         Name: //div[@class="item-details-main"]//a
 driver:
+  useCDP: true
   cookies:
-    - CookieURL: "https://www.newgrounds.com"
-      Cookies:
-# You will need to provide the values for the following cookies. View storage under the inspect menu in your browser while logged in.
-      - Name: "NG_GG_username"
-        Domain: ".newgrounds.com"
-        Value: "[insert value here]"
-        Path: "/"
-      - Name: "vmk1du5I8m"
-        Domain: ".newgrounds.com"
-        Value: "[insert value here]"
-        Path: "/"
-# Last Updated October 08, 2023
+    - Cookies:
+        # You will need to provide the values for the following cookies. View storage under the inspect menu in your browser while logged in.
+        - Name: "NG_GG_username"
+          Domain: ".newgrounds.com"
+          Value: "[insert value here]"
+          Path: "/"
+        - Name: "vmk1du5I8m"
+          Domain: ".newgrounds.com"
+          Value: "[insert value here]"
+          Path: "/"
