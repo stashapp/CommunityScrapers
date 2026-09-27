@@ -6,16 +6,28 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $copy: //div[@class="movie_detail"]/p[count(preceding-sibling::h3) = 1][not(font)]
     scene:
       Title:
-        selector: //div[@class="detail_title"]/h2/text()
+        selector: //div[@class="detail_title"]/h2 | $copy[1]
+        concat: "__SEP__"
+        postProcess:
+          - javascript: |
+              const [title, catchline = ""] = value.split("__SEP__");
+              if (title.endsWith("⋯") && catchline.startsWith(title.slice(0, -1))) return catchline;
+              return title;
+      Code:
+        selector: //input[@name="fid"]/@value
+        postProcess:
+          - replace:
+              - regex: _DL$
+                with: ""
       Details:
-        selector: //div[@class="movie_detail"]/h3[1]/following-sibling::p[1]/text()
-        concat: "\n\n"
-      Image:
-        selector: //div[@id="movie_area"]/div[@class="player"]/div/img/@src
+        selector: //div[@class="movie_detail"]/p[count(preceding-sibling::h3) = 1 and not(font) and normalize-space() and not(following-sibling::p[count(preceding-sibling::h3) = 1 and not(font) and normalize-space()])]/text()
+        concat: "\n"
+      Image: //div[@id="movie_area"]/div[@class="player"]/div/img/@src
       Studio:
-        Name: //div[@class="movie_detail"]/p/a[contains(@href,"maid")]/text()
+        Name: //div[@class="movie_detail"]/p/a[contains(@href, "maid=")][1]
       Tags:
-        Name: //div[@class="movie_detail"]/p/a[contains(@href,"geid")]/text()
-# Last Updated November 22, 2025
+        Name: //div[@class="movie_detail"]/p/a[contains(@href, "geid=")][not(@href = "list.php?geid=10" or @href = "list.php?geid=25")]
