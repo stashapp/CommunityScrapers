@@ -4,44 +4,32 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - mundomais.com.br/en/scene/
-    scraper: englishScraper
-  - action: scrapeXPath
-    url:
       - mundomais.com.br/video/
-    scraper: portugueseScraper
+    scraper: sceneScraper
 
 xPathScrapers:
-  englishScraper:
+  sceneScraper:
     scene:
-      Title: &title //div[contains(@class, "barra-titulo")]/h3
-      Date: &date
+      Title: //div[contains(@class, "barra-titulo")]/h3
+      Date:
         selector: //script[contains(., "datePublished")]
         postProcess:
           - replace:
               - regex: .*datePublished":\s+"([^"]+)".*
                 with: $1
-      Details: &details
+      Details:
         selector: //div[@class="descricao-video"]/h5/following-sibling::*
         concat: "\n\n"
-      Tags: &tags
+      Tags:
         Name: //div[contains(@class, "lista-tags")]/a
-      Performers: &performers
+      Performers:
         Name: //div[contains(@class, "container-atores")]//a[text()]
-      Image: &image
+      Image:
         selector: //video/@poster
         postProcess:
           - replace:
-              - regex: ^
+              - regex: ^/
                 with: https://www.mundomais.com.br/
-      Studio: &studio
+      Studio:
         Name:
           fixed: MundoMais
-  portugueseScraper:
-    scene:
-      Title: *title
-      Date: *date
-      Details: *details
-      Tags: *tags
-      Performers: *performers
-      Image: *image
-      Studio: *studio
