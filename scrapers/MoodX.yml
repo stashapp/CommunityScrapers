@@ -3,28 +3,29 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - moodx.tv
+      - moodxott.app/watch/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $value: following-sibling::div[contains(@class, "value")]
     scene:
-      Title:
-        selector: //h1[@class="heading-movie"]/text()
-      Details:
-        selector: //div[@class="label" and text()="Description:"]/following-sibling::div[contains(@class, 'value')]/text()
+      Title: //h1[@class="heading-movie"]
+      Details: //div[@class="label" and text()="Description:"]/$value[normalize-space() != "Streaming Now"]
       Image:
         selector: //video[@id="v_player"]/@poster
         postProcess:
           - replace:
-              - regex: ^(\/)(.*)$
-                with: https://moodx.tv/$2
+              - regex: ^/(web/.*)$
+                with: https://web.archive.org/$1
       Studio:
         Name:
-          fixed: 'Mood X'
+          selector: //h1[@class="heading-movie"]
+          postProcess:
+            - replace:
+                - regex: ^.+$
+                  with: Mood X
       Date:
-        selector: //div[@class="label" and text()="Release Date:"]/following-sibling::div[contains(@class, 'value')]/text()
+        selector: //div[@class="label" and text()="Release Date:"]/$value
         postProcess:
-          - replace:
-              - regex: .*(\d{4})-(\d{2})-(\d{2}).*
-                with: $1-$2-$3
           - parseDate: 2006-01-02
-# Last Updated January 09, 2026
