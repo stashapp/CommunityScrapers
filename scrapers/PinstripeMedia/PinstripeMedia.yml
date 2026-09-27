@@ -1,0 +1,159 @@
+name: Pinstripe Media
+# scrapes: Amateur Gay POV, Bro Seeking Bro, Casual Dudes, HotAfMen, MASQULIN, MENatPLAY, Men of Montréal, The Bro Network
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - menatplay.com
+      - thebronetwork.com
+    scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      # these brands were folded into thebronetwork.com; their own redirects land
+      # on a generic category page rather than the matching scene, but the
+      # scene exists at the identical /updates/ path on thebronetwork.com
+      - amateurgaypov.com
+      - masqulin.com
+      - menofmontreal.com
+    scraper: sceneScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: (www\.)?(amateurgaypov|masqulin|menofmontreal)\.com(/tour)?
+          with: thebronetwork.com
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - https://thebronetwork.com/models
+    scraper: performerScraper
+  - action: scrapeXPath
+    url:
+      - menatplay.com/models
+    scraper: menatplayPerformerScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $gallery: //div[@class="gallery_info spacer"]
+    scene:
+      Title: $gallery/h1
+      Performers:
+        Name: $gallery//span[@class="tour_update_models"]/a
+      Tags:
+        Name: $gallery//a[@class="tagsVideoPage"]
+      Details:
+        selector: $gallery//p[@id="textDesc"]/text()
+        concat: "\n\n"
+      Image: //video-js[@id="trailervid"]/@poster
+      Date:
+        selector: $gallery//span[@class='availdate'][1]
+        postProcess:
+          - parseDate: Jan 02, 2006
+      Studio:
+        Name:
+          selector: //img[@id="logoSize"][not(contains(@alt, "logo"))][$gallery]/@alt | //meta[@name="keywords"][$gallery]/@content | //source[contains(@src, "/trailers/")][$gallery]/@src
+          concat: "|"
+          postProcess:
+            - javascript: |
+                const parts = value.split("|");
+                if (parts.includes("Men At Play")) return "MENatPLAY";
+                if (!parts.includes("The Bro Network")) return "";
+                const trailer = (parts.find((p) => p.includes("/trailers/")) || "").split("/").pop();
+                if (/^BSB[_ -]/i.test(trailer)) return "Bro Seeking Bro";
+                if (/^(masqulin_)?Hot_?AF[_ -]/i.test(trailer)) return "HotAfMen";
+                if (/^(MoM|HAF)[_ -]/i.test(trailer)) return "Men of Montréal";
+                if (/^AGP(OV)?[_ -]/i.test(trailer)) return "Amateur Gay POV";
+                const keywords = parts
+                  .filter((p) => !p.includes("/"))
+                  .join(",")
+                  .split(",")
+                  .map((k) => k.replace(/\s+/g, "").toLowerCase().replace("é", "e"));
+                if (keywords.includes("amateurgaypov")) return "Amateur Gay POV";
+                if (keywords.includes("broseekingbro")) return "Bro Seeking Bro";
+                if (keywords.includes("hotafmen")) return "HotAfMen";
+                if (keywords.includes("casualdudes")) return "Casual Dudes";
+                if (keywords.includes("menofmontreal")) return "Men of Montréal";
+                if (keywords.includes("masqulin")) return "MASQULIN";
+                if (/^masqulin[_ -]/i.test(trailer)) return "MASQULIN";
+                return "The Bro Network";
+  performerScraper:
+    performer:
+      Name: //div[@class="heroTitle"]//h1
+      Gender:
+        fixed: Male
+      HairColor: //span[contains(text(),"Hair Color")]/following-sibling::text()
+      EyeColor: //span[contains(text(),"Eye Color")]/following-sibling::text()
+      Height:
+        selector: //span[contains(text(),"Height:")]/following-sibling::text()
+        postProcess:
+          - javascript: &heightCm |
+              const v = value.replace(",", ".").trim();
+              let m;
+              if ((m = v.match(/^(\d)\s*'\s*(\d+(?:\.\d+)?)?/)))
+                return String(Math.round((m[1] * 12 + +(m[2] || 0)) * 2.54));
+              if ((m = v.match(/^(\d)\s*m\s*(\d{2})/))) return String(+m[1] * 100 + +m[2]);
+              if ((m = v.match(/^\d+(?:\.\d+)?/))) {
+                const n = +m[0];
+                if (n >= 1 && n < 2.5) return String(Math.round(n * 100));
+                if (n >= 100 && n < 250) return String(Math.round(n));
+              }
+              return "";
+      Circumcised: //span[contains(text(),"Cock:")]/following-sibling::text()
+      PenisLength:
+        selector: //span[contains(text(),"Cock Size:")]/following-sibling::text()
+        postProcess:
+          - javascript: &penisCm |
+              const v = value.replace(",", ".").trim();
+              if (/'\s*\d/.test(v)) return "";
+              const m = v.match(/^(\d+(?:\.\d+)?)\s*(cm)?/i);
+              if (!m) return "";
+              return String(Math.round(m[2] ? +m[1] : +m[1] * 2.54));
+      Details: //p[@class="bio_description"]
+      Images: &modelImage
+        selector: //div[@class="model_picture"]/img/@src
+        postProcess:
+          - replace:
+              - regex: -1x\.jpg
+                with: -full.jpg
+  menatplayPerformerScraper:
+    common:
+      $stat: //div[@class="biowrapper"]/text()
+    performer:
+      Name:
+        selector: //div[@class="title_bar"]/h1/text()[last()]
+        postProcess:
+          - replace:
+              - regex: ^\s*/
+                with: ""
+      Gender:
+        fixed: Male
+      Country:
+        selector: $stat[starts-with(normalize-space(), "Nationality:")]
+        postProcess:
+          - replace: &dropLabel
+              - regex: "^[^:]*:"
+                with: ""
+      Height:
+        selector: $stat[starts-with(normalize-space(), "Height:")]
+        postProcess:
+          - replace: *dropLabel
+          - javascript: *heightCm
+      HairColor:
+        selector: $stat[starts-with(translate(normalize-space(), "C", "c"), "Hair color:")]
+        postProcess:
+          - replace: *dropLabel
+      EyeColor:
+        selector: $stat[starts-with(translate(normalize-space(), "C", "c"), "Eye color:")]
+        postProcess:
+          - replace: *dropLabel
+      Circumcised:
+        selector: $stat[starts-with(normalize-space(), "Cock:")]
+        postProcess:
+          - replace: *dropLabel
+      PenisLength:
+        selector: $stat[starts-with(normalize-space(), "Cock Size:")]
+        postProcess:
+          - replace: *dropLabel
+          - javascript: *penisCm
+      Details: //div[@class="biowrapper"]/p
+      Images: *modelImage
