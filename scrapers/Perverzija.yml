@@ -8,33 +8,32 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     common:
+      $h1: //div[@class="title-info"]/h1
       $meta: //div[@class="item-tax-list"]
     scene:
       Title:
-        selector: //div[@class="title-info"]/h1/text()
+        selector: $h1
         postProcess:
           - replace:
-              - regex: ((.+–){2} )
+              - regex: "^.+? – .+? – "
                 with: ""
-      Date:
-        selector: //meta[@property="article:published_time"]/@content
-        postProcess:
-          - replace:
-            - regex: T[\d:+]+
-              with: ""
-          - parseDate: 2006-01-02
+      URLs: //link[@rel="canonical"]/@href
       Details:
         selector: //div[@class="bialty-container"]/p
         concat: " "
+        postProcess:
+          - replace:
+              - regex: "^Description: "
+                with: ""
       Performers:
-        Name:
-          selector: $meta/div[2]/a/text()
+        Name: $meta/div[2]/a
       Tags:
-        Name:
-          selector: $meta/div[3]/a/text()
+        Name: $meta/div[3]/a
       Studio:
-        # sometimes features multiple studios
-        # usepov-summer-stevens-what-we-do-in-the-bus-stop/
-        Name: $meta/div[1]/a[last()]/text()
-      Image:
-        selector: //div[@id="featured-img-id"]/img/@src
+        Name:
+          selector: $h1
+          postProcess:
+            - replace:
+                - regex: " – .+"
+                  with: ""
+      Image: //div[@id="featured-img-id"]/img/@src
