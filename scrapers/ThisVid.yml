@@ -12,19 +12,14 @@ performerByURL:
 xPathScrapers:
   sceneScraper:
     common:
-        $container: //div[@class='container']
-        $videowrap: //div[@class='column-centre column-video']//div[@class='wrap']
-        $desc: //ul[@class="description"]
+      $container: //div[@class='container']
+      $desc: //ul[@class="description"]
     scene:
-      Title: $container//div[@class='headline']//h1/text()
-      Image: 
-        selector: $videowrap//div[@class='video-holder']//div//img/@src
-        postProcess:
-          - replace:
-              - regex: "//"
-                with: https://
+      Title: $container//div[@class='headline']//h1
+      Image: //meta[@property="og:image"]/@content
+      URLs: //link[@rel="canonical"]/@href
       Tags:
-        Name: $desc//li//a[contains(@href,"/tags/")]/text()
+        Name: $desc//li//a[contains(@href,"/tags/") or contains(@href,"/categories/")]
       Details: $desc//li//p/text()
       Code:
         selector: //meta[@property="og:video:url"]/@content
@@ -37,18 +32,19 @@ xPathScrapers:
       $profileCaseL: //div[@class="profile"]//div[@class="case"]//div[@class="case-left"]
       $profileCaseR: //div[@class="profile"]//div[@class="case"]//div[@class="case-right"]
     performer:
-      Name: $profileCaseL//span[contains(text(),"Name")]/strong|//div[@class="profile-menu"]//div[@class="headline"]//h2/text()
+      Name: $profileCaseL//span[contains(text(),"Name")]/strong|//div[@class="profile-menu"]//div[@class="headline"]//h2
       Birthdate:
         selector: $profileCaseL//span[contains(text(),"Birth")]/strong
         postProcess:
           - parseDate: 02 January, 2006
           - parseDate: 2006-01-02
       Country:
-        selector: $profileCaseL//span[contains(text(),"Country")]/strong
+        selector: $profileCaseL//span[contains(text(),"Country") or contains(text(),"Location")]/strong
         postProcess:
+          - replace:
+              - regex: ^.*,\s*
+                with: ""
           - map:
               United States: "USA"
       Gender: $profileCaseR//span[contains(text(),"Gender")]/strong
       Image: //div[@class="avatar"]/img[not(contains(@src,"no-avatar"))]/@src
-
-# Last Updated February 26, 2023
