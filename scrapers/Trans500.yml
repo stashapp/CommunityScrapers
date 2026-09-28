@@ -18,7 +18,6 @@ sceneByURL:
     scraper: sceneScraper
   - action: scrapeXPath
     url:
-      - behindtrans500.com/tour/
       - ikillitts.com/tour/
       - trans500.com/tourespanol
       - tsgirlfriendexperience.com/tour/
