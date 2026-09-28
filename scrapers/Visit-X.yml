@@ -37,12 +37,7 @@ jsonScrapers:
       Tags:
         Name: $video.videoTags
       Performers:
-        Name:
-          selector: $video.actorName
-          postProcess:
-            - replace:
-                - regex: \-
-                  with: " "
+        Name: $video.actorName
       Details:
         selector: $video.description
         postProcess: *decodeHTML
