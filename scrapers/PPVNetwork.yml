@@ -15,17 +15,18 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //h3
+      URLs: //link[@rel="canonical"]/@href
       Details: //p[@id='watch_description']
       Date: //p[@class='addedDate']
       Tags:
         Name:
-          selector:  //base/@href | //div[@id='watch_categories_items']//a
-          concat: ','
+          selector: //base/@href | //div[@id='watch_categories_items']//a
+          concat: ","
           postProcess:
             - replace:
                 - regex: ^[^,]+
-                  with: 'Gay'
-          split: ','
+                  with: "Gay"
+          split: ","
       Performers:
         Name: //div[@id='watch_actors_items']//a
       Image:
@@ -38,51 +39,46 @@ xPathScrapers:
         Name: //p[@class='studio']//a
 
 driver:
-  # Requires CDP to get by the "consent" screen, along with a "CONSENT" cookie with a value of "Y" for each top level URL
-  useCDP: true
-  headers:
-    - Key: User-Agent
-      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
   cookies:
-    - Cookies:
+    - CookieURL: https://www.barebackbox.com
+      Cookies:
         - Name: CONSENT
           Domain: www.barebackbox.com
           Value: Y
           Path: /
-    - Cookies:
+    - CookieURL: https://www.bearboxxx.com
+      Cookies:
         - Name: CONSENT
           Domain: www.bearboxxx.com
           Value: Y
           Path: /
-    - Cookies:
+    - CookieURL: https://www.butchbear.tv
+      Cookies:
         - Name: CONSENT
           Domain: www.butchbear.tv
           Value: Y
           Path: /
-    - Cookies:
-        - Name: CONSENT
-          Domain: www.darkalleyxt.com
-          Value: Y
-          Path: /
-    - Cookies:
+    - CookieURL: https://www.rawandrough.com
+      Cookies:
         - Name: CONSENT
           Domain: www.rawandrough.com
           Value: Y
           Path: /
-    - Cookies:
+    - CookieURL: https://www.rawnastyfuckers.com
+      Cookies:
         - Name: CONSENT
           Domain: www.rawnastyfuckers.com
           Value: Y
           Path: /
-    - Cookies:
+    - CookieURL: https://www.rawtop.tv
+      Cookies:
         - Name: CONSENT
           Domain: www.rawtop.tv
           Value: Y
           Path: /
-    - Cookies:
+    - CookieURL: https://www.treasureislandmedia.tv
+      Cookies:
         - Name: CONSENT
           Domain: www.treasureislandmedia.tv
           Value: Y
           Path: /
-
-# Last Updated May 13, 2024
