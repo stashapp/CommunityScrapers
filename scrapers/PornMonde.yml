@@ -39,7 +39,12 @@ xPathScrapers:
         selector: $infoPiece[contains(text(), 'Birthday')]/following-sibling::span[@class="Value"]
         postProcess:
           - parseDate: 02/01/2006
-      URLs: //span[text() = 'Instagram' or text() = 'Twitter']/../@href
+      URLs:
+        selector: //span[text() = 'Instagram' or text() = 'Twitter']/../@href
+        postProcess:
+          - javascript: |
+              var m = value.match(/[?&]url=([^&]+)/);
+              return m ? decodeURIComponent(m[1]) : value;
       Measurements: $infoPiece[contains(text(), 'Measurements')]/following-sibling::span[@class="Value"]
       Height:
         selector: $infoPiece[contains(text(), 'Height')]/following-sibling::span[@class="Value"]
@@ -56,25 +61,26 @@ xPathScrapers:
     common:
       $performer: //*[@class='VideoPornstars']/*[@class='CircleImageList']
     scene:
-      Title: //*[@class='VideoTitle']/text()
+      Title: //*[@class='VideoTitle']
+      URLs: //meta[@property="og:url"]/@content
       Performers:
-        Name: $performer/li/a/*[@class='Popover']/text()
+        Name: $performer/li/a/*[@class='Popover']
         URLs: $performer//li/a/@href
       Image: //meta[@property="og:image"]/@content
       Date:
-        selector: //*[@class='Date']/*[@class='Value']/text()
+        selector: //*[@class='Date']/*[@class='Value']
         postProcess:
           - replace:
               - regex: (\d{2})\.(\d{2})\.(\d{4})
                 with: $3-$2-$1
       Tags:
-        Name: //*[@class='VideoCategories']/ul/li/a/*[@class='Popover']/text()
+        Name: //*[@class='VideoCategories']/ul/li/a/*[@class='Popover']
 
   sceneSearch:
     common:
       $searchItem: //*[@class="VideosList singleRow"]/*[@class="SingleVideoItemLink"]
     scene:
-      Title: $searchItem/*/*[@class="Title"]/text()
+      Title: $searchItem/*/*[@class="Title"]
       URLs:
         selector: $searchItem/@href
         postProcess:
