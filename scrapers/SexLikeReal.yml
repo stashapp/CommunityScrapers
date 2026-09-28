@@ -1,5 +1,3 @@
-# yaml-language-server: $schema=../validator/scraper.schema.json
-
 name: SexLikeReal
 sceneByName:
   action: scrapeXPath
@@ -40,34 +38,30 @@ xPathScrapers:
     common:
       $ldjson: //script[@type="application/ld+json"][contains(text(), '"@type":"VideoObject"')]/text()
     scene:
-      Title:
-        selector: //h1
+      Title: //h1
       Date:
         selector: //p/time[@datetime][not(@data-hk)]/@datetime
         postProcess: &datePostProcess
           - replace:
-            - regex: "T.+"
-              with: ""
+              - regex: "T.+"
+                with: ""
           - parseDate: 2006-01-02
       Details:
         selector: $ldjson
         postProcess:
-          - replace:
-              - regex: .*"description":\s?"([^"]+).+
-                with: $1
-              - regex: "^'|'\\r\\n"
-                with: ""
-              - regex: '\\r\\n\\r\\n'
-                with: "\n\n"
-              # remove full ldjson if no description
-              # https://discord.com/channels/559159668438728723/651418567475986432/1454463628181770240
-              - regex: ^{.+
-                with: ""
+          - javascript: |
+              var d = JSON.parse(value).description || "";
+              return d.replace(/^'|'\r\n/g, "").replace(/\r\n/g, "\n");
       # fragile but it works
       Tags:
         Name: //div/ul/li/a/span | //div[@style]/p/a[starts-with(@href,"/tags")]/text()
       Performers:
-        Name: //a[starts-with(@href,"/pornstars/")]/span/text()
+        Name:
+          selector: //a[starts-with(@href,"/pornstars/")]/span
+          postProcess:
+            - replace:
+                - regex: \x{FEFF}
+                  with: ""
       Studio:
         Name:
           selector: //h2/a[starts-with(@href,"/studios/")]/text()
@@ -82,7 +76,7 @@ xPathScrapers:
                 VirtualXPorn: Virtual X Porn
                 WankitnowVR: Wank It Now VR
       Image: /html/head/meta[@property="og:image"]/@content
-      URL: //meta[@property="og:url"]/@content
+      URLs: //meta[@property="og:url"]/@content
   searchResultsScraper:
     common:
       $results: //div[div[div[h1[text()="Search Results"]]]]/following-sibling::div/ul[@data-qa="scenes-grid"]//li
@@ -94,7 +88,7 @@ xPathScrapers:
       Date:
         selector: $results//p/time/@datetime
         postProcess: *datePostProcess
-      URL:
+      URLs:
         selector: $results//h3/a/@href
         postProcess:
           - replace:
@@ -113,4 +107,3 @@ xPathScrapers:
 #           Domain: .www.sexlikereal.com
 #           Path: /
 #           Value: "true"
-# Last Updated July 14, 2026
