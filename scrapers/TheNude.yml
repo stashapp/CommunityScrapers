@@ -45,35 +45,32 @@ xPathScrapers:
       Birthdate:
         selector: //li/span[@class="list-quest"][contains(text(),'Born')]/following-sibling::text()
         postProcess:
-          - replace:
-              # Blank year-only dates (e.g. "1985")
-              - regex: '^\s*\d{4}\s*$'
-                with: ""
-              # Blank month+year-only dates (e.g. "November 1985") to prevent
-              # parseDate from defaulting the day to 01
-              - regex: '^\s*[A-Za-z]+\s+\d{4}\s*$'
-                with: ""
-              # Blank any date containing "??" (e.g. "??-??-1996", "15-??-1996")
-              # TheNude uses ?? as placeholder for unknown day/month components
-              - regex: '.*\?\?.*'
-                with: ""
-          - parseDate: 2 January 2006
-          - parseDate: January 2, 2006
+          - javascript: |
+              var months = ["january", "february", "march", "april", "may", "june", "july",
+                "august", "september", "october", "november", "december"];
+              var pad = function (n) { return ("0" + n).slice(-2); };
+              var month = function (name) { return months.indexOf(name.toLowerCase()) + 1; };
+              var v = value.trim(), m;
+              if ((m = v.match(/^(\d{1,2}) ([A-Za-z]+) (\d{4})$/)) && month(m[2]))
+                return m[3] + "-" + pad(month(m[2])) + "-" + pad(m[1]);
+              if ((m = v.match(/^([A-Za-z]+) (\d{1,2}), (\d{4})$/)) && month(m[1]))
+                return m[3] + "-" + pad(month(m[1])) + "-" + pad(m[2]);
+              if ((m = v.match(/^([A-Za-z]+) (\d{4})$/)) && month(m[1]))
+                return m[2] + "-" + pad(month(m[1]));
+              if ((m = v.match(/^(\?\?|\d{1,2})-(\?\?|\d{1,2})-(\d{4})$/)))
+                return m[2] == "??" ? m[3] : m[1] == "??" ? m[3] + "-" + pad(m[2]) : m[3] + "-" + pad(m[2]) + "-" + pad(m[1]);
+              if ((m = v.match(/^(\d{4})$/)))
+                return m[1];
+              return "";
       Ethnicity:
         selector: //li/span[@class="list-quest"][contains(text(),'Ethnicity')]/following-sibling::text()
         postProcess:
           - replace:
-              - regex: "Ebony"
+              - regex: "(?i)ebony"
                 with: "Black"
-              - regex: "ebony"
-                with: "Black"
-              - regex: "white"
+              - regex: "(?i)white"
                 with: "Caucasian"
-              - regex: "White"
-                with: "Caucasian"
-              - regex: "hispanic"
-                with: "Latin"
-              - regex: "Hispanic"
+              - regex: "(?i)hispanic"
                 with: "Latin"
           - map:
               asian: Asian
@@ -156,16 +153,10 @@ xPathScrapers:
               - regex: " "
                 with: "%20"
       Gender: //meta[@itemprop="gender"]/@content
-      Details:
-        selector: //li/span[@class="list-quest"][contains(text(),'Born')]/following-sibling::text()
-        postProcess:
-          - replace:
-              - regex: ^
-                with: "Actual scraped birthdate: "
   coverScraper:
     scene:
       Title: &title
-        selector: //h1/span[2]/text()
+        selector: //h1/span[2]
         postProcess:
           - replace:
               - regex: ^\"(.*)\"$
@@ -177,16 +168,17 @@ xPathScrapers:
               - regex: .*Published on\s(\d{4}-\d{2}-\d{2})
                 with: $1
       Performers: &performers
-        Name: //h1/span[1]/a/text()
+        Name: //h1/span[1]/a
         URLs: //h1/span[1]/a/@href
       Tags: &tags
         Name:
           selector: //meta[@itemprop="keywords"]/@content
           split: ","
       Studio: &studio
-        Name: //h1/span[3]/a/text()
+        Name: //h1/span[3]/a
       Director: &director //h2/a
-      Image: //a[@class="gallery-image-link"]/img/@src
+      Image: (//a[contains(@class, "gallery-image-link")]/img[not(contains(@src, "hc_warning"))]/@src)[1]
+      URLs: &urls //link[@rel="canonical"]/@href
     gallery:
       Title: *title
       Date: *date
@@ -194,6 +186,7 @@ xPathScrapers:
       Tags: *tags
       Studio: *studio
       Photographer: *director
+      URLs: *urls
     image:
       Title: *title
       Date: *date
@@ -201,3 +194,4 @@ xPathScrapers:
       Tags: *tags
       Studio: *studio
       Photographer: *director
+      URLs: *urls
