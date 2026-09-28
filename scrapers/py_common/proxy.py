@@ -40,8 +40,11 @@ class RequestBackend:
 class RequestsBackend(RequestBackend):
   name = "requests"
 
-  def __init__(self, proxies=None, useragent=None):
-    self.session = requests.Session()
+  def __init__(self, session=None, proxies=None, useragent=None):
+    if session is None:
+      self.session = requests.Session()
+    else:
+      self.session = session
     if proxies:
       self.session.proxies = proxies
     if useragent == "inherit":
@@ -53,7 +56,7 @@ class RequestsBackend(RequestBackend):
   def _apply_cache(self, url):
     cache_entry = cookie_cache.get(url)
     if cache_entry:
-      log.debug(f"[proxy] Using cache for {url}")
+      log.debug(f"[proxy] [{self.name}] using cached cookies for {url}")
       for cookie in cache_entry['cookies']:
         self.session.cookies.set(cookie['name'], cookie['value'], domain=cookie['domain'], path=cookie['path'])
       if cache_entry['useragent']:
@@ -66,10 +69,10 @@ class RequestsBackend(RequestBackend):
       res = self.session.request(method, url, **kwargs)
       if not self.is_blocked(res):
         return res
-      log.warning(f"[proxy] requests blocked ({res.status_code}).")
+      log.debug(f"[proxy] [{self.name}] blocked ({res.status_code}).")
     except requests.exceptions.RequestException as e:
-      log.warning(f"[proxy] Request failed: {e}.")
-    raise Exception("Requests backend failed")
+      log.warning(f"[proxy] [{self.name}] failed: {e}.")
+    raise Exception("RequestsBackend failed")
 
 class CloudscraperBackend(RequestBackend):
   name = "cloudscraper"
@@ -84,28 +87,29 @@ class CloudscraperBackend(RequestBackend):
       res = self.scraper.request(method, url, **kwargs)
       if not self.is_blocked(res):
         return res
-      log.warning(f"[proxy] Cloudscraper blocked ({res.status_code}).")
+      log.debug(f"[proxy] [{self.name}] blocked ({res.status_code}).")
     except requests.exceptions.RequestException as e:
-      log.warning(f"[proxy] Cloudscraper request failed: {e}")
-    raise Exception("Cloudscraper backend failed")
+      log.warning(f"[proxy] [{self.name}] request failed: {e}")
+    raise Exception("CloudscraperBackend failed")
 
 class FlareSolverrBackend(RequestBackend):
   name = "flaresolverr"
 
   def request(self, method, url, **kwargs):
     if check_flaresolverr(FLARESOLVERR_URL):
-      log.info(f"[proxy] trying FlareSolverr for {url}")
+      log.info(f"[proxy] [{self.name}] trying FlareSolverr for {url}")
       # HEAD is not supported
       if method == "head":
         method = "get"
-        log.warning("[proxy] HEAD not supported by FlareSolverr, using GET instead")
+        log.warning(f"[proxy] [{self.name}] HEAD not supported by FlareSolverr, using GET instead")
       try:
         post_data = (kwargs.get("json") or kwargs.get("data")) if method == "post" else None
-        return flaresolverr_req(url, method=method, postData=post_data, proxy=PROXY_URL)
+        return flaresolverr_req(url, method=method, flaresolverrParameters=kwargs.get("flaresolverrParameters", None),
+                                postData=post_data, proxy=PROXY_URL)
       except Exception as e:
-        log.warning(f"[proxy] FlareSolverr request failed: {e}")
+        log.warning(f"[proxy] [{self.name}] request failed: {e}")
     else:
-      raise Exception("FlareSolverr not detected")
+      raise Exception(f"FlareSolverr at {FLARESOLVERR_URL} not detected")
     raise Exception("FlareSolverr backend failed")
 
 ## END REWRITE
@@ -123,7 +127,7 @@ def check_flaresolverr(url):
       log.debug(f"[proxy] FlareSolverr detected at {url}")
       return True
   except requests.exceptions.RequestException:
-    log.info(f"[proxy] FlareSolverr not detected at {url}. Requests will be used without bypassing.")
+    log.warning(f"[proxy] FlareSolverr not detected at {url}. Requests will be used without bypassing.")
     return False
 
 PROXY_URL = os.environ.get("HTTP_PROXY") or os.environ.get("HTTPS_PROXY")
@@ -135,17 +139,21 @@ def get_useragent() -> str:
   chrome_ua = requests.get("https://feederbox826.github.io/user-agents/user-agents.json").json()[3]
   return chrome_ua
 
-def flaresolverr_req(url, method="get", postData=None, proxy=None) -> requests.Response:
+def flaresolverr_req(url, method="get", flaresolverrParameters:dict=None, postData=None, proxy=None) -> requests.Response:
   if proxy and "@" in proxy:
     log.warning("[proxy] Ignoring unsupported proxy for FlareSolverr")
     proxy = None
   payload = {
     "cmd": f"request.{method}",
-    "url": url,
-    "proxy": { "url": proxy } if proxy else None
+    "url": url
   }
+  payload = payload | flaresolverrParameters if flaresolverrParameters else payload
+  
+  if proxy is not None:
+    payload["proxy"] = { "url": proxy } 
   if postData is not None:
     payload["postData"] = postData
+    
   response = requests.post(FLARESOLVERR_URL, json=payload, timeout=60)
   if response.status_code != 200:
     raise Exception(f"FlareSolverr request failed with status code {response.status_code}: {response.text}")
@@ -170,20 +178,13 @@ class CookieCache:
     entry = self.cache.get(host)
     if not entry:
       return None
-    expiry = entry.get("expiry")
-    if expiry and expiry < time.time():
-      log.debug(f"[proxy] cache for {host} expired")
-      del self.cache[host]
-      self.update()
-      return None
     return entry
   def set(self, url, cookies, useragent):
     host = urllib.parse.urlparse(url).netloc
-    clearance = next((c for c in cookies if c['name'] == "cf_clearance"), None)
     self.cache[host] = {
+      "set_time": time.time(),
       "cookies": cookies,
       "useragent": useragent,
-      "expiry": clearance['expiry'] if clearance else None
     }
     self.update()
   def update(self):
@@ -192,11 +193,11 @@ class CookieCache:
 cookie_cache = CookieCache()
 
 class BackendManager:
-  def __init__(self, backends=None):
+  def __init__(self, session=None, backends=None, useragent="inherit"):
     proxies = { "http": PROXY_URL, "https": PROXY_URL } if PROXY_URL else {}
     if not backends:
       self.backends = [
-        RequestsBackend(proxies=proxies, useragent="inherit"),
+        RequestsBackend(session=session, proxies=proxies, useragent=useragent),
         CloudscraperBackend(proxies=proxies),
       ]
       if check_flaresolverr(FLARESOLVERR_URL):
@@ -208,28 +209,37 @@ class BackendManager:
         "cloudscraper": CloudscraperBackend,
         "flaresolverr": FlareSolverrBackend,
       }
+      backend_kwargs = {
+        "requests": {"session": session, "proxies": proxies, "useragent": useragent},
+        "cloudscraper": {"proxies": proxies},
+        "flaresolverr": {},
+      }
       self.backends = []
       for name in backends:
         cls = backend_classes.get(name)
         if cls:
-          self.backends.append(cls(proxies=proxies))
+          self.backends.append(cls(**backend_kwargs.get(name, {})))
         else:
           log.warning(f"[proxy] Unknown backend specified: {name}")
 
   def request(self, method, url, **kwargs):
+    flaresolverr_parameters = kwargs.pop('flaresolverrParameters', None)
     for backend in self.backends:
+      common_kwargs = kwargs.copy()
+      if backend.name == "flaresolverr" and flaresolverr_parameters is not None:
+            common_kwargs['flaresolverrParameters'] = flaresolverr_parameters
       try:
-        return backend.request(method, url, **kwargs)
+        return backend.request(method, url, **common_kwargs)
       except Exception as e:
-        log.debug(f"[proxy] {backend.name} failed: {e}")
+        log.warning(f"[proxy] [{backend.name}] failed: {e}")
     raise Exception("All backends failed")
 
 class StashRequests:
-  def __init__ (self, cloudflare=False, useragent="inherit"):
+  def __init__ (self, session=None, backends=None, cloudflare=False, useragent="inherit"):
     self.proxies = { "http": PROXY_URL, "https": PROXY_URL } if PROXY_URL else {}
     self.cloudflare = cloudflare
     self.useragent = useragent
-    self.manager = BackendManager()
+    self.manager = BackendManager(session, backends)
 
   def get(self, url, **kwargs):
     return self.manager.request("get", url, **kwargs)
