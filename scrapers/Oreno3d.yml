@@ -19,8 +19,8 @@ xPathScrapers:
     common:
       $searchItem: //div[@class="g-main-grid"]/article/a
     scene:
-      Title: $searchItem/h2/text()
-      URL: $searchItem/@href
+      Title: $searchItem/h2
+      URLs: $searchItem/@href
       Image:
         selector: $searchItem/figure/img/@src
         postProcess:
@@ -28,17 +28,22 @@ xPathScrapers:
               - regex: "^"
                 with: "https://oreno3d.com"
       Studio:
-        Name: $searchItem/div[@class="box-text1"]/div/text()
+        Name: $searchItem/div[@class="box-text1"]/div
   sceneScraper:
     common:
       $article: //article[@class="g-main-video-article"]
       $aTag: //article[@class="g-main-video-article"]/section[@class="video-section-tag"]//a[contains(@class,"tag-btn")]
     scene:
-      URL: //link[rel='canonical']/@href|//meta[@property='og:url']/@content
-      Title: $article//h1[@class="video-h1"]/text()
+      URLs: //link[@rel="canonical"]/@href | $article//figure[@class="video-figure"]/a/@href
+      Title: $article//h1[@class="video-h1"]
+      Date: $article//li[i[text()="calendar_month"]]/div[@class="video-text"][1]
       Details:
         selector: $article//blockquote[@class="video-information-comment"]/text()
         concat: "\n"
+        postProcess:
+          - replace:
+              - regex: \\n
+                with: "\n"
       Image:
         selector: $article//img[@class="video-img"]/@src
         postProcess:
@@ -46,11 +51,10 @@ xPathScrapers:
               - regex: "^"
                 with: "https://oreno3d.com"
       Tags:
-        Name: $aTag/div/text()
+        Name: $aTag[contains(@href,"/tags/") or contains(@href,"/origins/")]/div
       Studio:
-        Name: $aTag[contains(@href,"/authors/")]/div/text()
+        Name: $aTag[contains(@href,"/authors/")]/div
         URL: $aTag[contains(@href,"/authors/")]/@href
       Performers:
-        Name: $aTag[contains(@href,"/characters/")]/div/text()
-        URLs: $aTag[contains(@href,"/characters/")]/@href
-# Last Updated September 17, 2025
+        Name: $aTag[contains(@href,"/characters/") and not(substring-after(@href,"/characters/")="48")]/div
+        URLs: $aTag[contains(@href,"/characters/") and not(substring-after(@href,"/characters/")="48")]/@href
