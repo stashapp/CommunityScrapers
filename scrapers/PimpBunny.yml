@@ -7,6 +7,7 @@ sceneByURL:
 performerByURL:
   - action: scrapeXPath
     url:
+      - pimpbunny.com/onlyfans-creators/
       - pimpbunny.com/onlyfans-models/
     scraper: performerScraper
 
@@ -16,7 +17,8 @@ xPathScrapers:
       $models: //ul[contains(@class, "pages-view-video-models")]
       $jsonld: //script[@type="application/ld+json"]
     scene:
-      Title: //h1[contains(@class, "pages-view-video-video-title")]
+      Title: //div[contains(@class, "pages-view-video-video-text")]
+      Details: //div[contains(@class, "pages-view-video-description")]
       Date:
         selector: $jsonld
         postProcess:
@@ -25,7 +27,7 @@ xPathScrapers:
                 with: $1
           - parseDate: 2006-01-02
       Image: //meta[@property="og:image"]/@content
-      URL: //link[@rel="canonical"]/@href
+      URLs: //link[@rel="canonical"]/@href
       Studio:
         Name:
           fixed: PimpBunny
@@ -33,11 +35,11 @@ xPathScrapers:
         Name: $models//div[contains(@class, "pages-view-video-model-title")]//a
         URLs: $models//div[contains(@class, "pages-view-video-model-title")]//a/@href
       Tags:
-        Name: //ul[contains(@class, "pages-view-video-tags")][1]//a
+        Name: //ul[contains(@class, "pages-view-video-categories")]//a
   performerScraper:
     performer:
-      Name: //h1[contains(@class, "ui-heading-h1")]
-      Image: //div[contains(@class, "blocks-model-view-thumbnail")]//img/@data-original
+      Name: //div[contains(@class, "blocks-model-view-title")]//h1
+      Images: //div[contains(@class, "blocks-model-view-thumbnail")]//img/@data-original
       Tags:
-        Name: //div[contains(@class,"model-view-top-lists")]/a/text()
+        Name: //div[contains(@class,"model-view-top-lists")]/a
       URLs: //div[contains(@class,"model-view-social-bar")]//a/@href
