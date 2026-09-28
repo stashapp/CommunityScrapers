@@ -12,8 +12,7 @@ galleryByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: &title
-        selector: //div[@class="title_bar"]/span
+      Title: &title //div[@class="title_bar"]/span
       Date: &date
         selector: //div[@class="cell update_date"]
         postProcess:
@@ -22,10 +21,14 @@ xPathScrapers:
         Name: //span[@class="update_models"]/a
       Tags: &tags
         Name: //span[@class="update_tags"]/a
-      Details: &details
-        selector: //span[contains(@class, "update_description")]
-      Image:
-        selector: //meta[@property="og:image"]/@content
+      Details: &details //span[contains(@class, "update_description")]
+      Image: //meta[@property="og:image"]/@content
+      URLs:
+        selector: //div[@class="player_options"]/div[contains(@class, "options_block")]/a[not(contains(@href, "type="))]/@href
+        postProcess: &absoluteUrl
+          - replace:
+              - regex: ^
+                with: https://shylaj.com/shop/
       Studio: &studio
         Name:
           fixed: ShylaJ
@@ -37,4 +40,6 @@ xPathScrapers:
       Tags: *tags
       Details: *details
       Studio: *studio
-# Last Updated June 20, 2021
+      URLs:
+        selector: //li[@class="active"]/a[contains(@href, "gallery.php")]/@href
+        postProcess: *absoluteUrl
