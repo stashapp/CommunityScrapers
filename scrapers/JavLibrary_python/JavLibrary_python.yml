@@ -6,18 +6,19 @@ sceneByFragment:
   script:
     - python
     - JavLibrary_python.py
+    - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
     - JavLibrary_python.py
-    - searchName
+    - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
     - JavLibrary_python.py
-    - validSearch
+    - scene-by-query-fragment
 sceneByURL:
   - action: script
     url:
@@ -28,5 +29,5 @@ sceneByURL:
     script:
       - python
       - JavLibrary_python.py
-      - validSearch
+      - scene-by-url
 # Last Updated January 24, 2026
