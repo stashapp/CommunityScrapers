@@ -43,11 +43,9 @@ xPathScrapers:
         URLs: //span[@class="badge badge-primary"]/../@href
       Tags:
         Name: //span[@class="badge badge-secondary"]
-      Details:
-        selector: //p[@class="watch-description"]
-      # There is HTML variation on the site -- this code looks for screenshots, grabs the next section and pulls the first img
-      # This seemed the most reliable mechanism
-      Image: //div[@class='container-fluid']/div/div/h2[contains(text(),'SCREENSHOTS')]/../../following-sibling::div//div[@class='slick-track']/div[1]//img/@src
+      Details: //p[@class="watch-description"]
+      Image: //meta[@property="og:image"]/@content
+      URLs: //link[@rel="canonical"]/@href
       Date:
         selector: //p[@class='watch-published-date']/text()
         postProcess:
@@ -61,9 +59,9 @@ xPathScrapers:
       # Per community consensus what this does is add the freelancers as a studio, which will then be linkable to the
       # parent studio ("Raw Fuck Club (Network)")
       Studio:
-        Name: //p[@class="watch-channel-name"]/a[1]/text()
+        Name: //div[@class="watch-channel-name"]/a[1]
         URLs:
-          selector: //p[@class="watch-channel-name"]/a[1]/@href
+          selector: //div[@class="watch-channel-name"]/a[1]/@href
           postProcess:
             - replace:
                 - regex: ^\/ #if the url is relative (starts with slash), we append the domain
@@ -78,7 +76,7 @@ xPathScrapers:
     performer:
       Name: //h1[@class="model-header model-header-name"]/text()
       URLs: >
-        //h1[@class="model-header model-header-name"]/a/@href
+        //link[@rel="canonical"]/@href
         | //a[contains(@href,'instagram.com/')]/@href
         | //a[contains(@href,'twitter.com/') or contains(@href,'x.com/')]/@href
       Details: //div[@class="model-description"]/text()
@@ -97,15 +95,11 @@ xPathScrapers:
     # It also returns the scenes.
     # Note: Some channels may have multiple performers, so this is imperfect, but it's the best we can get our of the site.
     performer:
-      Name: //div[@class='channel-info-block']/h2/a/text()
+      Name: //div[@class='channel-info-block']/h2/a[1]
       URLs:
-        selector: //div[@class='channel-info-block']/h2/a/@onclick
-        postProcess: # We have to split apart the location.href='<relative url>' and fix that too
+        selector: //div[@class='channel-info-block']/h2/a[1]/@href
+        postProcess:
           - replace:
-              - regex: ^location\.href=' # remove the leading location.href='
-                with: ""
-              - regex: \'$ # remove trailing quote
-                with: ""
               - regex: ^\/ #if the url is relative (starts with slash), we append the domain
                 with: "https://www.rawfuckclub.com/"
     scene:
