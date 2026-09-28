@@ -7,8 +7,7 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title:
-        selector: //h1[@class="card-title"]
+      Title: //h1[@class="card-title"]
       Date:
         selector: //p[@class="card-text text-muted"]
         postProcess:
@@ -20,11 +19,8 @@ xPathScrapers:
         Name: //p[@class="card-text d-inline-block"]/a
       Tags:
         Name: //li[@class="list-inline-item tag"]/a
-      Details:
-        selector: //p[@class="card-text mb-2"]
-      Image:
-        selector: //img[@class="stdimage img-fluid lazy"]/@data-src
+      Details: //p[@class="card-text mb-2"]
+      Image: //img[@class="stdimage img-fluid lazy"]/@data-src
       Studio:
         Name:
-          fixed: StrapOnCum
-# Last Updated May 20, 2021
+          fixed: Strapon Cum
