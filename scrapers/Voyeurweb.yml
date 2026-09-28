@@ -1,4 +1,4 @@
-name: HomeClips 
+name: HomeClips
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -17,6 +17,8 @@ sceneByFragment:
 
 xPathScrapers:
   sceneScraper:
+    common:
+      $self: //textarea[@name="request"]
     scene:
       Title: //p[@class="contribution-title"]
       Date:
@@ -24,14 +26,20 @@ xPathScrapers:
         postProcess:
           - parseDate: Jan 2, 2006
       Details: //p[@class="contribution-text"]
+      URLs: $self
       Tags:
-        Name: //div[@class="contribution-tags"]/a/text()
-      Image:
-        selector: //div[@class="contri-photos"]//img/@src
+        Name: //div[@class="contribution-tags"]/a
+      Image: //div[@class="contri-photos"]//img/@src
       Studio:
-        Name: 
-          fixed: HomeClips
+        Name:
+          selector: //title
+          postProcess:
+            - replace:
+                - regex: ^.* at (\S+)$
+                  with: $1
         URL:
-          fixed: https://www.homeclips.com/
-        
-# Last Updated February 21, 2025
+          selector: $self
+          postProcess:
+            - replace:
+                - regex: ^(https?://[^/]+/).*$
+                  with: $1
