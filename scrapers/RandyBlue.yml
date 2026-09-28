@@ -1,4 +1,4 @@
-name: "RandyBlue"
+name: RandyBlue
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -17,17 +17,16 @@ xPathScrapers:
         selector: //meta[@itemprop="description"]/@content
         postProcess:
           - replace:
-            - regex: \x{0020}|\x{00A0} # unicode SP, NBSP
-              with: " "
-            - regex: \s*(<br>|</p>)\s*
-              with: "\n"
+              - regex: \x{0020}|\x{00A0} # unicode SP, NBSP
+                with: " "
+              - regex: \s*(<br>|</p>)\s*
+                with: "\n"
       Tags:
         Name: //ul[@class="scene-tags"]/li/a
       Performers:
         Name: //ul[@class="rb-trailerModels"]/li/a
       Image: //meta[@itemprop="thumbnailUrl"]/@content
-      URL: //link[@hreflang="x-default"]/@href
+      URLs: //link[@hreflang="x-default"]/@href
       Studio:
         Name:
           fixed: Randy Blue
-# Last Updated July 13, 2026
