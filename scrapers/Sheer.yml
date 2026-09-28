@@ -9,15 +9,15 @@ xPathScrapers:
   sheer:
     scene:
       Title: //h3[@class="post__title"]
+      URLs: //meta[@name="og:url"]/@content
       Details: //div[@class="post__text"]
       Date:
         selector: //span[@class="post__date-text"]
         postProcess:
-          - replace:
-              # Append the current year for partial dates: this will need to be updated every year
-              - regex: ^(\w{3}\s*\d{2})$
-                with: $1, 2025
-          - parseDate: Jan 02, 2006
+          - javascript: |
+              value = value.trim();
+              return /^\w{3}\s+\d{1,2}$/.test(value) ? value + ", " + new Date().getFullYear() : value;
+          - parseDate: Jan 2, 2006
       Image: //div[@class="post__sfw-preview"]/img/@src
       Performers:
         Name: //div[@class="post__featuring-models__list"]/a
@@ -25,5 +25,4 @@ xPathScrapers:
         Name: //a[@class="post-tags__link"]
       Studio:
         Name: //div[contains(@class, "post__profile-name")]/a/span
-        URL: //div[contains(@class, "post__profile-name")]/a/@href
-# Last Updated April 18, 2025
+        URLs: //div[contains(@class, "post__profile-name")]/a/@href
