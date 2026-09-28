@@ -16,7 +16,7 @@ xPathScrapers:
     group:
       Name: &title (//h2/a)[1]
       Director: &director
-        selector: //div[@class='header_info']/ol[@class='people no_image']/li[@class='profile']/p[1]/a
+        selector: //div[@class='header_info']/ol[@class='people no_image']/li[@class='profile'][p[@class='character'][contains(., 'Director')]]/p[1]/a
         concat: ", "
       Duration:
         selector: //span[@class='runtime']
@@ -27,16 +27,16 @@ xPathScrapers:
               - regex: "m"
                 with: ":00"
       Studio: &studio
-        Name: //a[@label="Studio"]/text()
+        Name: //a[@label="Studio"]
       Date: &date
         selector: //span[@class='release']
         postProcess:
           - replace:
-              - regex: \(.*$
+              - regex: \s*\(.*$
                 with:
-          - parseDate: 02/01/2006
+          - parseDate: 01/02/2006
       Synopsis: &details //div[@class='header_info']/div[@class='overview']/p
-      URL: //meta[@name='og:url']/@content
+      URLs: &urls //meta[@property='og:url']/@content
       FrontImage: &image
         selector: (//img[contains(@class, 'poster')]/@src)[1]
         postProcess:
@@ -54,24 +54,9 @@ xPathScrapers:
       Date: *date
       Image: *image
       Studio: *studio
-      Groups:
-        Name: *title
-        URL: //link[@rel="canonical"]/@href
-        Director: *director
-        Duration:
-          selector: //small[contains(text(), "Length")]/following-sibling::text()
-          postProcess:
-            - replace:
-                - regex: " hrs. "
-                  with: ":"
-                - regex: " mins."
-                  with: ":00"
-        Date: *date
-        Synopsis: *details
-        FrontImage: *image
       Performers:
         Name: //ol[@class='people scroller']/li[@class='card']/p[1]
-      URL: //meta[@name='og:url']/@content
+      URLs: *urls
 
 driver:
   headers:
@@ -86,4 +71,3 @@ driver:
           # {"adult":true,"i18n_fallback_language":"en-US","locale":"en-US","country_code":"US","timezone":"America/Pacific"}
           Value: "%7B%22adult%22%3Atrue%2C%22i18n_fallback_language%22%3A%22en-US%22%2C%22locale%22%3A%22en-US%22%2C%22country_code%22%3A%22US%22%2C%22timezone%22%3A%22America%2FPacific%22%7D"
           Path: "/"
-# Last Updated April 14, 2024
