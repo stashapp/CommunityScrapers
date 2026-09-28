@@ -53,6 +53,7 @@ studio_map = {
     "hardwerk.com": "HardWerk",
     "hobybuchanon.com": "Hoby Buchanon",
     "inkedpov.com": "Inked POV",
+    "inmelanin.com": "InMelanin",
     "inserted.com": "Inserted",
     "jav888.com": "JAV888",
     "tour.javhub.com": "JavHub",
