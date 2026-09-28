@@ -19,7 +19,7 @@ sceneByURL:
     queryURL: "https://r18.dev/videos/vod/movies/detail/-/combined={url}/json"
     queryURLReplace:
       url:
-        - regex: ".+/id=(.+)/?$"
+        - regex: ".+/id=([^/]+)/?$"
           with: "$1"
 
 sceneByName:
@@ -29,7 +29,11 @@ sceneByName:
 
 sceneByQueryFragment:
   action: scrapeJson
-  queryURL: "{url}"
+  queryURL: "https://r18.dev/videos/vod/movies/detail/-/combined={url}/json"
+  queryURLReplace:
+    url:
+      - regex: ".+/id=([^/]+)/?$"
+        with: "$1"
   scraper: sceneScraper
 
 groupByURL:
@@ -39,26 +43,20 @@ groupByURL:
     queryURL: "https://r18.dev/videos/vod/movies/detail/-/combined={url}/json"
     queryURLReplace:
       url:
-        - regex: ".+/id=(.+)/?$"
+        - regex: ".+/id=([^/]+)/?$"
           with: "$1"
     scraper: movieScraper
 
 jsonScrapers:
   sceneScraper:
     scene:
-      Title:
-        selector: dvd_id
-      Date:
-        selector: release_date
+      Title: dvd_id
+      Date: release_date
       Performers:
-        Name:
-          selector: actresses.#.name_romaji
-        Aliases:
-          selector: actresses.#.name_kanji
-      Image:
-        selector: jacket_full_url
-      Director:
-        selector: directors.#.name_romaji
+        Name: actresses.#.name_romaji
+        Aliases: actresses.#.name_kanji
+      Image: jacket_full_url
+      Director: directors.#.name_romaji
       Details:
         selector: title_en
         # All this uncensoring stuff happens automatically on the HTML version of the page due to some JS on the frontend there.
@@ -325,13 +323,12 @@ jsonScrapers:
                 with: "Young Girls" # Not Sure
       Studio:
         Name: maker_name_en
-      Code:
-        selector: dvd_id
+      Code: dvd_id
       Tags:
         Name:
           selector: categories.#.name_en
           postProcess: *ppUncensor
-      URL:
+      URLs:
         selector: content_id
         postProcess:
           - replace:
@@ -340,8 +337,7 @@ jsonScrapers:
 
   movieScraper:
     group:
-      Name:
-        selector: dvd_id
+      Name: dvd_id
       Aliases: title_ja
       Duration:
         selector: runtime_mins
@@ -349,18 +345,15 @@ jsonScrapers:
           - replace:
               - regex: $
                 with: ":00"
-      Date:
-        selector: release_date
-      FrontImage:
-        selector: jacket_full_url
-      Director:
-        selector: directors.#.name_romaji
+      Date: release_date
+      FrontImage: jacket_full_url
+      Director: directors.#.name_romaji
       Synopsis:
         selector: title_en
         postProcess: *ppUncensor
       Studio:
         Name: maker_name_en
-      URL:
+      URLs:
         selector: content_id
         postProcess:
           - replace:
@@ -411,7 +404,7 @@ jsonScrapers:
                   with: ""
       Performers:
         Name: actresses.#.name
-      URL:
+      URLs:
         selector: content_id
         postProcess:
           - replace:
@@ -420,16 +413,17 @@ jsonScrapers:
 
   sceneSearch:
     scene:
-      Title:
-        selector: title
-      Image:
-        selector: images.jacket_image.large2
-      Date:
-        selector: release_date
-      URL:
+      Title: title
+      Image: images.jacket_image.large2
+      Date: release_date
+      URLs:
         selector: content_id
         postProcess:
           - replace:
               - regex: (.+)
-                with: https://r18.dev/videos/vod/movies/detail/-/combined=$1/json
-# Last Updated August 22, 2023
+                with: https://r18.dev/videos/vod/movies/detail/-/id=$1/
+
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0
