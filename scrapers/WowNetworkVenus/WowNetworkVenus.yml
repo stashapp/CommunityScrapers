@@ -12,22 +12,61 @@ sceneByURL:
       - venus.wowgirls.com
       - venus.wowporn.com
       - venus.allfinegirls.com
+  - action: scrapeXPath
+    url:
+      - ultrafilms.xxx
+      - wowgirlsblog.com
+    scraper: blogScraper
 sceneByName:
-    action: script
-    script:
-      - python
-      - WowNetworkVenus.py
-      - search
+  action: script
+  script:
+    - python
+    - WowNetworkVenus.py
+    - search
 sceneByQueryFragment:
-    action: script
-    script:
-      - python
-      - WowNetworkVenus.py
-      - fragment
+  action: script
+  script:
+    - python
+    - WowNetworkVenus.py
+    - fragment
 sceneByFragment:
-    action: script
-    script:
-      - python
-      - WowNetworkVenus.py
-      - query
-# Last Updated July 9, 2023
+  action: script
+  script:
+    - python
+    - WowNetworkVenus.py
+    - query
+
+xPathScrapers:
+  blogScraper:
+    common:
+      $about: //*[@id="video-about"]
+    scene:
+      Title: //h1
+      Date:
+        selector: //script[@type="application/ld+json"]
+        postProcess:
+          - replace:
+              - regex: '.*"datePublished":"(\d{4}-\d{2}-\d{2}).*'
+                with: $1
+          - parseDate: 2006-01-02
+      Image: //meta[@property="og:image"]/@content
+      URLs: //meta[@property="og:url"]/@content
+      Performers:
+        Name: //*[@id="video-actors"]/a
+      Tags:
+        Name:
+          selector: $about/div[@class="tags"]/div/a
+          postProcess:
+            - replace:
+                - regex: " (Movies|Pictures)$"
+                  with: ""
+      Studio:
+        Name:
+          selector: //meta[@property="og:url"]/@content
+          postProcess:
+            - replace:
+                - regex: ^https?://(?:www\.)?([^/]+).*$
+                  with: $1
+            - map:
+                ultrafilms.xxx: Ultra Films
+                wowgirlsblog.com: WowGirls
