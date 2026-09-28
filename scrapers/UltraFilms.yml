@@ -8,7 +8,7 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //div[@class="title-block box-shadow"]//text()
+      Title: //div[@class="title-block box-shadow"]
       Image: //meta[@property="og:image"]/@content
       Date:
         selector: //script[@type="application/ld+json"]/text()
@@ -18,16 +18,15 @@ xPathScrapers:
                 with: $2
           - parseDate: 2006-01-02
       Performers:
-        Name: //*[@id="video-actors"]/a/text()
+        Name: //*[@id="video-actors"]/a
       Tags:
         Name:
-          selector: //*[@id="video-about"]/div[@class="tags"]/div/a/text()
+          selector: //*[@id="video-about"]/div[@class="tags"]/div/a
           postProcess:
             - replace:
-                - regex: " Movies"
+                - regex: " (Movies|Pictures)$"
                   with: ""
-      URL: //meta[@property="og:url"]/@content
+      URLs: //meta[@property="og:url"]/@content
       Studio:
         Name:
           fixed: Ultra Films
-# Last Updated November 27, 2024
