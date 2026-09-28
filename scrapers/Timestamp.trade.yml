@@ -10,13 +10,13 @@ sceneByURL:
       url:
         - regex: scene
           with: json-scene
-          
+
 sceneByFragment:
   action: scrapeJson
   scraper: sceneSearch
   queryURL: https://timestamp.trade/hash_lookup?md5={checksum}&ohash={oshash}
 
-galleryByURL: 
+galleryByURL:
   - action: scrapeJson
     url:
       - timestamp.trade/scene/
@@ -41,13 +41,12 @@ galleryByFragment:
   scraper: galleryFragScraper
   queryURL: https://timestamp.trade/gallery-md5/{checksum}
 
-
 jsonScrapers:
   sceneSearch:
     scene:
       Title: 0.title
       Details: 0.description
-      URL:
+      URLs:
         selector: 0.id
         postProcess:
           - replace:
@@ -60,51 +59,45 @@ jsonScrapers:
       Date: release_date
       Image: cover_url
       Details: description
-#      URL: scene_url
       URLs: urls
-#      URLs: &urls [scene_url]
-      Studio: 
+      Studio:
         Name: studio_name
       Performers:
         Name: performers.#.name
-      Tags: 
+      Tags:
         Name: tags.#.name
     gallery:
       Title: title
       Date: release_date
       Details: description
-      URL: scene_url
-#      URLs: *urls 
-      Studio: 
+      URLs: urls
+      Studio:
         Name: studio_name
       Performers:
         Name: performers.#.name
-      Tags: 
+      Tags:
         Name: tags.#.name
   galleryScraper:
     gallery:
       Title: title
       Date: release_date
-      Details:  description
-#      URL: urls.#."url"
-      URLs: urls.#.url                                    
-      Studio: 
+      Details: description
+      URLs: urls.#.url
+      Studio:
         Name: studio.name
-      Performers: 
+      Performers:
         Name: performers.#.name
-      Tags: 
+      Tags:
         Name: tags.#.name
   galleryFragScraper:
     gallery:
       Title: 0.title
       Date: 0.release_date
-      Details:  0.description
-#      URL: 0.urls.#."url"
-      URLs: urls.#.url     
-      Studio: 
+      Details: 0.description
+      URLs: 0.urls.#.url
+      Studio:
         Name: 0.studio.name
-      Performers: 
+      Performers:
         Name: 0.performers.#.name
-      Tags: 
+      Tags:
         Name: 0.tags.#.name
-# Last Updated November 18, 2025
