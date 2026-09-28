@@ -45,13 +45,13 @@ jsonScrapers:
       Performers:
         Name: "[models.#.model_name,male_models.#.model_name].@flatten"
         # https://github.com/stashapp/stash/pull/5100
-        # Gender:
-        #   selector: "[models.#.sex,male_models.#.sex].@flatten"
-        #   postProcess:
-        #     - map:
-        #         female: FEMALE
-        #         gay: MALE
-        #         male: MALE
+        Gender:
+          selector: "[models.#.sex,male_models.#.sex].@flatten"
+          postProcess:
+            - map:
+                female: FEMALE
+                gay: MALE
+                male: MALE
       Image: player_poster
       Details:
         selector: small_description
