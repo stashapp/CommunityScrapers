@@ -31,7 +31,7 @@ xPathScrapers:
         selector: $title
         postProcess:
           - replace:
-              - regex: \s*([A-Z]{2,3}\d+\s*)?-\s*((Piss|Anal)Vids|BustyPornWorld)$
+              - regex: \s*([A-Z]{2,4}\d+\s*)?-\s*((Piss|Anal)Vids|BustyPornWorld)$
                 with: ""
       Date: &date
         selector: //i[contains(@class, "bi-calendar3")]
@@ -44,7 +44,7 @@ xPathScrapers:
         selector: $title
         postProcess:
           - replace:
-              - regex: .+?([A-Z]{2,3}\d+)\s*-\s*((Piss|Anal)Vids|BustyPornWorld)$$|(.*)
+              - regex: .+?([A-Z]{2,4}\d+)\s*-\s*((Piss|Anal)Vids|BustyPornWorld)$$|(.*)
                 with: $1
       Performers: &performers
         Name: //h1[contains(@class, "watch__title")]//a
