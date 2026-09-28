@@ -1,5 +1,3 @@
-# yaml-language-server: $schema=../validator/scraper.schema.json
-
 name: Pornbox
 
 sceneByURL:
@@ -33,18 +31,27 @@ jsonScrapers:
       Title: scene_name
       Date:
         selector: publish_date
+        postProcess: &cetDate
+          - javascript: |
+              return new Date(Date.parse(value) + 2 * 3600 * 1000).toISOString().slice(0, 10);
+      Code:
+        selector: scene_name
         postProcess:
-          - parseDate: 2006-01-02T15:04:05.999999Z
+          - replace:
+              - regex: ^.*?\b([A-Z]{2,4}\d{2,4})\s*$|.*
+                with: $1
       Tags:
         Name: niches.#.niche
       Performers:
         Name: "[models.#.model_name,male_models.#.model_name].@flatten"
-        Gender:
-          selector: "[models.#.sex,male_models.#.sex].@flatten"
-          postProcess:
-            - map:
-                female: FEMALE
-                male: MALE
+        # https://github.com/stashapp/stash/pull/5100
+        # Gender:
+        #   selector: "[models.#.sex,male_models.#.sex].@flatten"
+        #   postProcess:
+        #     - map:
+        #         female: FEMALE
+        #         gay: MALE
+        #         male: MALE
       Image: player_poster
       Details:
         selector: small_description
@@ -58,7 +65,7 @@ jsonScrapers:
                 with: "\n"
       Studio:
         Name: studio
-      URL:
+      URLs:
         selector: id
         postProcess:
           - replace:
@@ -73,12 +80,10 @@ jsonScrapers:
       Image: $contents.thumbnail.large
       Date:
         selector: $contents.publish_date
-        postProcess:
-          - parseDate: 2006-01-02T15:04:05.999999Z
-      URL:
+        postProcess: *cetDate
+      URLs:
         selector: $contents.id
         postProcess:
           - replace:
               - regex: ^
-                with: https://pornbox.com/contents/
-# Last Updated June 06, 2024
+                with: https://pornbox.com/application/watch-page/
