@@ -6,9 +6,16 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $cover: //div[@class="video__player"]/img/@src
     scene:
-      Title:
-        selector: //h2[@class="video__headline"]
+      Title: //h2[@class="video__headline"]
+      URLs:
+        selector: $cover
+        postProcess:
+          - replace:
+              - regex: ^.+/content/movies/([^/]+)/.+$
+                with: https://pissynetwork.com/movies/$1
       Performers:
         Name: //strong[contains(.,"Models:")]/following-sibling::a[contains(@href,"/models/")]
       Date:
@@ -17,11 +24,13 @@ xPathScrapers:
           - parseDate: 02 Jan 2006
       Tags:
         Name: //strong[contains(.,"Tags:")]/following-sibling::a[contains(@href,"/movies/")]
-      Details:
-        selector: //p[@class="video__text"]/text()[1]
-      Image:
-        selector: //div[@class="video__player"]/img/@src
+      Details: //p[@class="video__text"]/text()[1]
+      Image: $cover
       Studio:
         Name:
           selector: //div[@class="video__top__item"]/a/img/@alt
-# Last Updated May 21, 2021
+          postProcess:
+            - map:
+                Got2pee: Got2Pee
+                Vipissy: VIPissy
+                Wetandpissy: Wet and Pissy
