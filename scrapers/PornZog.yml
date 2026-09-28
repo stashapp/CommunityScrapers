@@ -8,14 +8,18 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //meta[@property="og:title"]/@content
-      Image: //meta[@property="og:image"]/@content
+      URLs: //link[@rel="canonical"]/@href
+      Image:
+        selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+              - regex: ^https://pornzog\.com/
+                with: https://tn.pornzog.com/
       Tags:
         Name: //meta[@property="video:tag"]/@content
       Performers:
-        Name: //ul[@class="models-list"]/li/a/text()
-      Details: //p[@class="description"]/span//text()
+        Name: //ul[@class="models-list"]/li/a
 driver:
   headers:
     - Key: User-Agent
       Value: stash-scraper
-# Last Updated Feburuary 28, 2025
