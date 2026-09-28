@@ -7,8 +7,8 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title:
-        selector: //h1[contains(@class,"elementor-heading-title")]
+      Title: //h1[contains(@class,"elementor-heading-title")]
+      URLs: //link[@rel="canonical"]/@href
       Date:
         selector: //span[contains(text(),"Released:")]/following-sibling::text()
         postProcess:
@@ -18,9 +18,6 @@ xPathScrapers:
       Tags:
         Name: //div[@class="jet-listing jet-listing-dynamic-terms"]/a[contains(@href,"/video-categories/")]
       Details: //div[@class="elementor-element elementor-element-520671f1 elementor-widget elementor-widget-jet-listing-dynamic-field"]
-      Image:
-        selector: //meta[@property="og:image"]/@content
+      Image: //meta[@property="og:image"]/@content
       Studio:
-        Name:
-          selector: //span[contains(text(),"Studio:")]/following-sibling::a
-# Last Updated April 08, 2022
+        Name: //span[contains(text(),"Studio:")]/following-sibling::a
