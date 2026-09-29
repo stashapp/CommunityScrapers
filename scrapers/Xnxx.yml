@@ -49,13 +49,7 @@ xPathScrapers:
 
   sceneScraper:
     scene:
-      Title:
-        selector: //div[@class="video-title"]/strong
-        postProcess:
-          - javascript: |
-              if(value?.length){
-                return value.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
-              }
+      Title: //div[@class="video-title"]/strong
       Date:
         selector: //script[@type="application/ld+json"]
         postProcess:
@@ -67,11 +61,7 @@ xPathScrapers:
       Tags:
         Name: //div[@class="metadata-row video-tags"]/a[contains(@class, "is-keyword")]
       Performers:
-        Name:
-          selector: //div[@class="metadata-row video-tags"]/a[contains(@class, "is-pornstar")]
-          postProcess:
-            - javascript: |
-                return value.replace(/\b\w/g, function (c) { return c.toUpperCase() })
+        Name: //div[@class="metadata-row video-tags"]/a[contains(@class, "is-pornstar")]
       Studio:
         Name: //span[@class="metadata"]/a[@class="gold-plate" or @class="free-plate"]
       # premium pages have no description and no JSON-LD upload date
