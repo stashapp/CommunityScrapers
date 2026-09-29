@@ -20,9 +20,6 @@ xPathScrapers:
       Date:
         selector: //div/i[@class="far fa-calendar"]/../span
         postProcess:
-          - replace:
-              - regex: ^(\d{4}-\d{2}-\d{2}).+
-                with: $1
           - parseDate: Jan 2, 2006
       Details: //div[@class="expand-inner"]
       Tags:
@@ -43,40 +40,44 @@ xPathScrapers:
       Name: //div[@class="item-col col -model"]/a/@title
       URLs: //div[@class="item-col col -model"]/a/@href
   performerScraper:
+    common:
+      $stats: //ul[@class="model-list"]/li
     performer:
-      Name: //div[@class="title-col -normal col"]/h2
-      URLs: >
-        //link[@rel='canonical']/@href
-        | //a[contains(@href,"https://www.instagram.com/")]/@href
-        | //a[contains(@href,"https://twitter.com")]/@href
-      Gender:
-        fixed: Male
-      Measurements:
-        selector: //span[contains(text(),"Cock size:")]/following-sibling::text()
+      Name: //h1
+      URLs:
+        selector: >
+          //link[@rel="canonical"]/@href
+          | //ul[contains(@class, "-social")]//a/@href
         postProcess:
           - replace:
-              - regex: ^
-                with: "0''"
+              - regex: \?.*$
+                with: ""
+      Gender:
+        fixed: Male
+      Height:
+        selector: $stats[contains(., "Height:")]/span[@class="desc"]
+        postProcess:
           - feetToCm: true
       Weight:
-        selector: //span[contains(text(),"Weight:")]/following-sibling::text()
+        selector: $stats[contains(., "Weight:")]/span[@class="desc"]
         postProcess:
           - lbToKg: true
-      Height:
-        selector: //span[contains(text(),"Height:")]/following-sibling::text()
+      PenisLength:
+        selector: $stats[contains(., "Penis Size:")]/span[@class="desc"]
         postProcess:
-          - feetToCm: true
-      Aliases: //span[contains(text(),"a.k.a.:")]/following-sibling::text()
-      Ethnicity: //span[contains(text(),"Ethnicity:")]/following-sibling::text()
-      HairColor:
-        selector: //span[contains(text(),"Hair:")]/following-sibling::text()
-      EyeColor:
-        selector: //span[contains(text(),"Eyes:")]/following-sibling::text()
-      Country:
-        selector: //span[contains(text(),"State")]/following-sibling::text()
-      Birthdate:
-        selector: //span[contains(text(),"Dob:")]/following-sibling::text()
+          - javascript: |
+              const inches = parseFloat(value);
+              if (isNaN(inches)) return "";
+              return (inches * 2.54).toFixed(1);
+      Circumcised: $stats[contains(., "Circumcision:")]/span[@class="desc"]
+      Ethnicity: $stats[contains(., "Ethnicity:")]/span[@class="desc"]
+      HairColor: $stats[contains(., "Hair:")]/span[@class="desc"]
+      EyeColor: $stats[contains(., "Eyes:")]/span[@class="desc"]
+      Country: $stats[contains(., "State:")]/span[@class="desc"]
+      Images: //div[@class="model-avatar"]//img/@src
+      Details:
+        selector: //div[@class="model-desc"]/div[@class="expand-inner"]
         postProcess:
-          - parseDate: 2006-01-02
-      Images: //div[@class="image"]//@src
-      Details: //div[@class="expand-inner"]
+          - replace:
+              - regex: ^Stats and bio for porn star .*$
+                with: ""
