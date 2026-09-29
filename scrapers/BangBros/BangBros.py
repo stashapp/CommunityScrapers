@@ -1,24 +1,27 @@
 import json
 import sys
-from requests import head
 from typing import Any
-from py_common import log
-from py_common.util import dig, replace_all, replace_at
+
+from requests import head
+
 from AyloAPI.scrape import (
-    gallery_from_url,
     gallery_from_fragment,
-    scraper_args,
+    gallery_from_url,
+    movie_from_url,
+    performer_from_fragment,
+    performer_from_url,
+    performer_search,
+    scene_from_fragment,
     scene_from_url,
     scene_search,
-    scene_from_fragment,
-    performer_from_url,
-    performer_from_fragment,
-    performer_search,
-    movie_from_url,
+    scraper_args,
 )
+from py_common import log
+from py_common.util import dig, replace_all, replace_at
 
 studio_map = {
     "AvaSpice": "Ava Spice",
+    "Can He Score": "Can He Score?",
     "MomIsHorny": "Mom Is Horny",
     "Dad's Love Porn": "Dads Love Porn",
 }
@@ -79,7 +82,7 @@ if __name__ == "__main__":
         case "gallery-by-url", {"url": url} if url:
             url = redirect(url)
             result = gallery_from_url(url, postprocess=bangbros)
-        case "gallery-by-fragment":
+        case "gallery-by-fragment", args:
             fixed = replace_all(args, "url", redirect)
             result = gallery_from_fragment(
                 fixed, search_domains=domains, postprocess=bangbros
