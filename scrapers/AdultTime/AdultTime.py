@@ -20,23 +20,54 @@ from py_common.util import dig, replace_all, scraper_args
 # This map just contains overrides when using a channel name as the studio
 channel_name_map = {
     "Adam And Eve Pictures": "Adam & Eve Pictures",
+    "Addicted2Girls": "Addicted 2 Girls",
     "Age & Beauty": "Age and Beauty",
     "Black Money Erotica": "Adult Time x Black Money Erotica",
     "Bratty Sis": "Adult Time x Bratty Sis",
+    "Chaos Men": "ChaosMen",
     "Cuck Hunter": "Adult Time x Cuck Hunter",
+    "Deepthroat Frenzy": "Deep Throat Frenzy",
+    "F.U.T.A. Sentai Squad": "F.U.T.A Sentai Squad",
     "Frameleaks": "Adult Time x Frameleaks",
+    "Gay Hoopla": "GAYHOOPLA",
+    "GenderX Films": "GenderXFilms",
+    "GotFilled": "Got Filled",
     "Heteroflexible": "HeteroFlexible",
+    "Holy Matri-Moly": "Holy Matri-moly!",
     "Horny Household": "Adult Time x Horny Household",
     "Hussie Pass": "Adult Time x Hussie Pass",
+    "It'sPOV": "It's POV",
     "JOI Mom": "J.O.I Mom",
     "Lady Lazarus": "Adult Time x Lady Lazarus",
     "LesbianX": "Adult Time x LesbianX",
     "LucidFlix": "Adult Time x LucidFlix",
+    "Luke's POV": "LukesPOV",
+    "Lust Reality": "LustReality",
     # API returns a curly apostrophe, StashDB's studio uses a straight one
     "Mommy’s Boy": "Mommy's Boy",
+    "Mother Fucker XXX": "Motherfucker XXX",
+    "Mr. Lucky POV": "Mr. LuckyPOV",
+    "Naked Sword": "NakedSword",
+    "Nubiles Porn Network": "Nubiles Porn (Network)",
+    "Only3X": "Only 3x",
+    "Only3X VR": "Only 3x VR",
+    "PEGHIM": "Peg Him",
+    "Pure TS": "PureTS",
+    "Raw Attack": "RawAttack",
+    "Real Hot VR": "RealHotVR",
+    "SinfulXXX": "Sinful XXX",
     "Slayed": "Adult Time x Slayed",
+    "SugarBabes TV": "Sugar Babes.TV",
     "Taboo Heat": "Adult Time x Taboo Heat",
+    "Tough Love X": "ToughLoveX",
+    "TS POV": "TSPOV",
+    "TSVirtualLovers": "TS Virtual Lovers",
+    "Virtual Real Gay": "VirtualRealGay",
+    "Virtual Real Porn": "VirtualRealPorn",
+    "Virtual Real Trans": "VirtualRealTrans",
+    "VirtualXPorn": "Virtual X Porn",
     "Vixen": "Adult Time x Vixen",
+    "VR Sexperts": "VRSexperts",
 }
 
 # Each network_name requiring a map/override should have a key-value here
@@ -137,20 +168,66 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
 MEMBERS_HOST = "members.adulttime.com"
 
 PUBLIC_DOMAINS = {
-    "21naturals", "21sextreme", "21sextury", "accidentalgangbang",
-    "ageandbeauty", "agentredgirl", "allgirlmassage", "analteenangels",
-    "asmrfantasy", "assholefever", "devilsfilm", "devilsfilmparodies",
-    "devilsgangbangs", "devilstgirls", "dpfanatics", "fantasymassage",
-    "femalesubmission", "femboyish", "footsiebabes", "futaworld",
-    "getupclose", "girlstryanal", "girlsunderarrest", "girlsway",
-    "givemeteens", "hairyundies", "hentaisexschool", "heteroflexible",
-    "isthisreal", "jerk-buddies", "joymii", "ladygonzo", "lezbebad",
-    "lezcuties", "massage-parlor", "milkingtable", "mixedx", "modeltime",
-    "moderndaysins", "mommysboy", "mommysgirl", "nudefightclub",
-    "nurumassage", "oopsie", "oopsieanimated", "outofthefamily",
-    "peternorth", "prettydirty", "puretaboo", "sistertrick",
-    "soapymassage", "thebrats", "transfixed", "trickyspa", "truelesbian",
-    "upclosevr", "vivid", "webyoung", "welikegirls", "wheretheboysarent",
+    "21naturals",
+    "21sextreme",
+    "21sextury",
+    "accidentalgangbang",
+    "ageandbeauty",
+    "agentredgirl",
+    "allgirlmassage",
+    "analteenangels",
+    "asmrfantasy",
+    "assholefever",
+    "devilsfilm",
+    "devilsfilmparodies",
+    "devilsgangbangs",
+    "devilstgirls",
+    "dpfanatics",
+    "fantasymassage",
+    "femalesubmission",
+    "femboyish",
+    "footsiebabes",
+    "futaworld",
+    "getupclose",
+    "girlstryanal",
+    "girlsunderarrest",
+    "girlsway",
+    "givemeteens",
+    "hairyundies",
+    "hentaisexschool",
+    "heteroflexible",
+    "isthisreal",
+    "jerk-buddies",
+    "joymii",
+    "ladygonzo",
+    "lezbebad",
+    "lezcuties",
+    "massage-parlor",
+    "milkingtable",
+    "mixedx",
+    "modeltime",
+    "moderndaysins",
+    "mommysboy",
+    "mommysgirl",
+    "nudefightclub",
+    "nurumassage",
+    "oopsie",
+    "oopsieanimated",
+    "outofthefamily",
+    "peternorth",
+    "prettydirty",
+    "puretaboo",
+    "sistertrick",
+    "soapymassage",
+    "thebrats",
+    "transfixed",
+    "trickyspa",
+    "truelesbian",
+    "upclosevr",
+    "vivid",
+    "webyoung",
+    "welikegirls",
+    "wheretheboysarent",
     "whiteghetto",
 }
 
@@ -253,19 +330,21 @@ def adulttime(obj: Any, api_object: dict[str, Any]) -> Any:
 
     obj = replace_all(obj, "urls", to_members_url)
 
-    if (
-        not obj.get("urls")
-        and sitename
-        and (clip_id := api_object.get("clip_id"))
-    ):
+    if not obj.get("urls") and sitename and (clip_id := api_object.get("clip_id")):
         url_title = api_object.get("url_title", "")
         obj = {
             **obj,
-            "urls": [f"https://{MEMBERS_HOST}/en/video/{sitename}/{url_title}/{clip_id}"],
+            "urls": [
+                f"https://{MEMBERS_HOST}/en/video/{sitename}/{url_title}/{clip_id}"
+            ],
         }
 
     if (link := public_url(api_object)) and (urls := obj.get("urls")):
         obj = {**obj, "urls": [link, *urls]}
+
+    # Every availableOnSite domain collapses onto the same members URL
+    if urls := obj.get("urls"):
+        obj = {**obj, "urls": list(dict.fromkeys(urls))}
 
     return obj
 

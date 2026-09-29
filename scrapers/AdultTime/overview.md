@@ -1,4 +1,4 @@
-Scraper has been tested on 2026-09-11
+Scraper has been tested on 2026-09-30
 
 |                   Network | Studio                 | URL                                                                                                                                        |
 | ------------------------: | :--------------------- | :----------------------------------------------------------------------------------------------------------------------------------------- |
@@ -46,7 +46,7 @@ Scraper has been tested on 2026-09-11
 |                     Vivid | Mom is a Milf          | https://momisamilf.com/en/video/momisamilf/Pizza-Delivery/141497                                                                           |
 |      Adult Time Originals | Mommy's Boy            | https://mommysboy.com/en/video/mommysboy/Dance-Dance-Jiggle-ution/290772                                                                   |
 |        Girlsway (Network) | Mommy's Girl           | https://mommysgirl.com/en/video/mommysgirl/Attire-Backfire/290773                                                                          |
-|              Fame Digital | Mother Fucker XXX      | https://motherfuckerxxx.com/en/video/motherfuckerxxx/40-More-Fucking-MILFs/58018                                                           |
+|              Fame Digital | Motherfucker XXX       | https://motherfuckerxxx.com/en/video/motherfuckerxxx/40-More-Fucking-MILFs/58018                                                           |
 |              Fame Digital | My Teen Oasis          | https://myteenoasis.com/en/video/myteenoasis/After-School-Glazing/23316                                                                    |
 |                     Vivid | Nasty Step Family      | https://nastystepfamily.com/en/video/nastystepfamily/Family-Secrets---Part-3/141733                                                        |
 |      21 Sextury (Network) | Nude Fight Club        | https://nudefightclub.com/en/video/nudefightclub/Favourite-Matches/93035                                                                   |
