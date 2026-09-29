@@ -47,7 +47,7 @@ def default_postprocess(obj: Any, _) -> Any:
 
 
 def slugify(text: str) -> str:
-    return re.sub(r"[^a-zA-Z0-9-]+", "-", text)
+    return re.sub(r"[^a-zA-Z0-9 +-]", "", text).replace(" ", "-")
 
 
 def headers_for_homepage(homepage: str) -> dict[str, str]:
