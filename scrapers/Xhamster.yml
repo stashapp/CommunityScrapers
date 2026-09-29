@@ -37,20 +37,19 @@ xPathScrapers:
       $videoThumbInfo: //div[contains(@class, "thumb-list__item video-thumb")]//a[contains(@class, "video-thumb-info__name")]
     scene:
       Title: $videoThumbInfo/@title
-      URL:
-        selector: $videoThumbInfo/@href
-      Image:
-        selector: $videoThumbImage/@src
+      URLs: $videoThumbInfo/@href
+      Image: $videoThumbImage/@src
 
   sceneScraper:
     common:
       $player: //div[@class="width-wrap with-player-container"]
+      $channel: //div[@class="width-wrap with-player-container"]/nav//a[contains(@href,"/channels/") and not(contains(@href,"/channels/faphouse")) and not(contains(@href,"/channels/many-vids"))]//div[contains(@class,"content")]/span
       $creator: //div[@class="width-wrap with-player-container"]/nav//a[contains(@href,"/creators/")]//div[contains(@class,"content")]/span
       $user: //div[@class="width-wrap with-player-container"]/nav//a[contains(@href,"/users/")]//div[contains(@class,"content")]/span
     scene:
       Title: $player//h1
       Details: //div[@class="ab-info controls-info__item xh-helper-hidden"]/p
-      URL: //meta[@property='og:url']/@content|//meta[@name='twitter:url']/@content
+      URLs: //meta[@property='og:url']/@content|//meta[@name='twitter:url']/@content
       Date:
         selector: //div[@class="entity-info-container__date tooltip-nocache"]/@data-tooltip
         postProcess:
@@ -60,12 +59,8 @@ xPathScrapers:
           - parseDate: 2006-01-02
       Image: //link[@as="image"]/@href
       Studio:
-        Name:
-          selector: $player/nav//a[contains(@href,"/channels/")]//div[contains(@class,"content")]/span | $creator | $user
+        Name: $channel | $creator | $user
       Tags:
-        Name:
-          selector: $player/nav//a[contains(@href,"/categories/") or contains(@href,"/tags/")]
+        Name: $player/nav//a[contains(@href,"/categories/") or contains(@href,"/tags/")]
       Performers:
-        Name:
-          selector: $player/nav//a[contains(@href,"/pornstars/")] | $creator | $user
-# Last Updated December 12, 2025
+        Name: $player/nav//a[contains(@href,"/pornstars/")] | $creator | $user
