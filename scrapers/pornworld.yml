@@ -1,12 +1,6 @@
-# yaml-language-server: $schema=../validator/scraper.schema.json
-
 name: Pornworld
 
 sceneByURL:
-  - action: scrapeXPath
-    url:
-      - tour10.pornworld.com/watch/
-    scraper: tour10SceneScraper
   - action: scrapeXPath
     url:
       - pornworld.com/watch/
@@ -25,7 +19,7 @@ jsonScrapers:
   sceneQueryScraper:
     scene:
       Title: terms.Scene.0.name
-      URL: terms.Scene.0.url
+      URLs: terms.Scene.0.url
 
 xPathScrapers:
   sceneScraper:
@@ -57,32 +51,9 @@ xPathScrapers:
         Name:
           fixed: Porn World
       Image: $details//video/@poster
-      URL:
+      URLs:
         selector: //link[@rel = 'canonical']/@href
         postProcess:
           - replace:
               - regex: (.+)
                 with: https:$1
-  tour10SceneScraper:
-    scene:
-      Title: *title
-      Date:
-        selector: //strong/following-sibling::span
-        postProcess:
-          - parseDate: 2006, January 02
-      Details: //span[text()="Description:"]/..
-      Tags:
-        Name: //span[text()="Tags:"]/../a/text()
-      Performers:
-        Name: //a[contains(@href, '/model/')]
-      Studio:
-        Name:
-          fixed: Porn World
-      Image: //video/@poster
-      URL:
-        selector: //head/link[@rel="canonical"]/@href
-        postProcess:
-          - replace:
-              - regex: (.*)
-                with: https://tour10.pornworld.com$1
-# Last Updated September 17, 2025
