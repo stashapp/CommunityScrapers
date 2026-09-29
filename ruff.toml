@@ -1,0 +1,8 @@
+# Stash runs scrapers with scrapers/ on sys.path, so py_common is first-party
+src = ["scrapers"]
+
+[lint]
+# Imports must follow ensure_requirements() calls that install them
+ignore = ["E402"]
+# Keep existing `noqa: E402` comments from being flagged as unused
+external = ["E402"]
