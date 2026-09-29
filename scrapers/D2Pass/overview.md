@@ -18,8 +18,8 @@ All sites below are part of the D2PASS pass operated by DTI. One install of this
 | H4610 (EN)                | https://en.h4610.com/moviepages/gol234/index.html                     |
 | Heydouga                  | https://www.heydouga.com/moviepages/4321/076/index.html               |
 | Heydouga (av9898)         | https://av9898.heydouga.com/monthly/av9898/moviepages/2937/index.html |
-| Unkotare (JP)             | https://www.unkotare.com/moviepages/ki260919/index.html               |
-| Unkotare (EN)             | https://en.unkotare.com/moviepages/ki260919/index.html                |
+| Unkotare (JP)             | https://www.unkotare.com/moviepages/ori10539/index.html               |
+| Unkotare (EN)             | https://en.unkotare.com/moviepages/ori10539/index.html                |
 | Kin8tengoku               | https://en.kin8tengoku.com/movie/0453                                 |
 | Kin8tengoku (JP)          | https://www.kin8tengoku.com/movie/0453                                |
 | Exotic Babes              | https://enexbabes.kin8tengoku.com/movie/5488                          |

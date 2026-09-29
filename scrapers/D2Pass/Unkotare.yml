@@ -16,9 +16,10 @@ sceneByFragment:
 xPathScrapers:
   sceneScraper:
     common:
+      $movie: //div[@class="prof_pict_area"]
       $pict: //div[@class="prof_pict_area"]/img/@src
     scene:
-      Title: //div[@class="head_banner1"]/@title
+      Title: //div[@class="head_banner1"][$movie]/@title
       URLs:
         selector: $pict
         postProcess:
@@ -26,13 +27,6 @@ xPathScrapers:
               - regex: .*moviepages\/(.*?)\/.*
                 with: https://www.unkotare.com/moviepages/$1/index.html|https://en.unkotare.com/moviepages/$1/index.html
         split: "|"
-      Details:
-        selector: //div[@id="unko_rank_area"]/script or //div[@class="namearea"]/div or //div[@class="profvalue"]/div or //div[@class="unko_comment"]
-        concat: "📢📢📢"
-        postProcess:
-          - replace:
-              - regex: (\s|\S)*背景色.*?data(\s|\S)*?\s{5}(\d),(\s|\S)*?(\d)(\s|\S)*?(\d)(\s|\S)*?(\d)(\s|\S)*?(\d)(\s|\S)*?📢📢📢(.*?)📢📢📢(.*?)📢📢📢(.*?)📢📢📢(.*?)📢📢📢(.*)
-                with: 👩$14 $13  📏身高：$15  👙三围：$16  💩状态：色 $3/5, 味 $5/5, 大小 $7/5, 硬度 $9/5, 形态 $11/5  🍽️:昨日晚餐：$17
       Date:
         # the page shows no date; "ki" ids are YYMMDD and match the 公開日 the sibling h0930 sites print
         selector: $pict
@@ -42,7 +36,7 @@ xPathScrapers:
               return m ? `20${m[1]}-${m[2]}-${m[3]}` : "";
       Performers:
         Name:
-          selector: //div[@class="namearea"]/div[@class="d1"]
+          selector: //div[@class="namearea"][$movie]/div[@class="d1"]
           postProcess:
             - replace:
                 - regex: (.*).\d{2}.
@@ -55,7 +49,7 @@ xPathScrapers:
                 with: $1
       Tags:
         Name:
-          selector: //meta[@name="keywords"]/@content
+          selector: //meta[@name="keywords"][$movie]/@content
           split: ","
       Image:
         selector: $pict
@@ -65,7 +59,11 @@ xPathScrapers:
                 with: "https:"
       Studio:
         Name:
-          fixed: Unkotare
+          selector: $pict
+          postProcess:
+            - replace:
+                - regex: .+
+                  with: Unkotare
 driver:
   cookies:
     - CookieURL: "https://www.unkotare.com/"
