@@ -12,11 +12,21 @@ from Altwolia.scrape import (
     scene_from_url,
     scene_search,
 )
-
 from py_common import log
+from py_common.types import ScrapedStudio
 from py_common.util import dig, replace_all, scraper_args
 
+# The Algolia index is shared by every Alpha Studio Group site, and Active Duty's
+# DVD releases carry their own studio_name without a mainChannel on photosets
+OWN_STUDIO: ScrapedStudio = {
+    "name": "Active Duty",
+    "parent": {"name": "Alpha Studio Group"},
+}
+
+
 def activeduty(obj: Any, api_object: dict[str, Any]) -> Any:
+    if api_object.get("sitename") == "activeduty":
+        return replace_all(obj, "studio", lambda s: {**s, **OWN_STUDIO})
     if studio_name := dig(api_object, "mainChannel", "name"):
         return replace_all(obj, "studio", lambda s: {**s, "name": studio_name})
     return obj
