@@ -1,0 +1,158 @@
+name: TheClassicPorn
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://theclassicporn.com/search/?q={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - theclassicporn.com
+    scraper: sceneScraper
+groupByURL:
+  - action: scrapeXPath
+    url:
+      - theclassicporn.com
+    scraper: movieScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - theclassicporn.com/actors/
+    scraper: performerScraper
+performerByName:
+  action: scrapeXPath
+  queryURL: https://theclassicporn.com/actors/search/?q={}
+  scraper: performerSearch
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: &title //div[@class='video-info-top']/p[@class='title']/a[@class='link-blue link-no-border']
+      Tags:
+        Name: //p[@class='data-row data-categories']/a[@class='tag-button']
+      Performers:
+        Name: //div[@class='video-data']/p[@class='data-row data-actress']/a[starts-with(@class,"link")]
+      URLs: &url
+        selector: //input[@name="redirect_to"]/@value
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://theclassicporn.com
+      Date: &date //div[@class='video-info-top']/ul[@class='info-bar']/li[contains(., "Year:")]/a
+      Image: &cover //div[@class='video-list-item inner']/div[@class='thumb-container']/a[@class='thumb-video-link']/img/@src
+      Director: &director //div[@class='video-data']/p[@class='data-row data-director']/a[@class='link-light-blue']
+  movieScraper:
+    group:
+      Name: *title
+      URLs: *url
+      Date: *date
+      Director: *director
+      Duration:
+        selector: //div[@class='video-info-top']/ul[@class='info-bar']/li[contains(., "Duration:")]
+        postProcess:
+          - replace:
+              - regex: ^\D*(\d+)\s*min.*$
+                with: 00:$1:00
+      FrontImage: *cover
+  performerSearch:
+    performer:
+      Name: //p[@class='title']/a[@class='link-blue link-no-border']
+      URLs:
+        selector: //p[@class='title']/a[@class='link-blue link-no-border']/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://theclassicporn.com
+  performerScraper:
+    common:
+      $info: //div[@class='model-info-container']/ul[@class='model-info-list']/li
+    performer:
+      URLs: *url
+      Name: //div[@class='model-info-container']/p[@class='title']/span[@class='link-blue link-no-border']
+      Gender:
+        selector: //div[@class='model-info-container']/p[@class='title']/i/@title
+        postProcess:
+          - map:
+              Actress: female
+              Actor: male
+      Aliases: $info/span[contains(text(),"AKA:")]/following-sibling::text()
+      Birthdate:
+        selector: $info[span[contains(text(),"Birthday:")]]
+        postProcess:
+          - replace:
+              - regex: ^Birthday:\s*
+                with: ""
+              - regex: (\d)(st|nd|rd|th)
+                with: $1
+              - &na
+                regex: ^n/a$
+                with: ""
+          - parseDate: January 2, 2006
+      CareerStart: $info[span[contains(text(),"Years Active:")]]/a
+      CareerEnd:
+        selector: $info[span[contains(text(),"Years Active:")]]/a/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: ^\s*-\s*
+                with: ""
+      Ethnicity:
+        selector: $info/span[contains(text(),"Ethnicity:")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: Ethnicity:\s\/+.+
+                with: ""
+              - *na
+      Country:
+        selector: $info/span[contains(text(),"Nationality")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: .+\s+(United\sStates|Italy|France)$
+                with: $1
+              - *na
+      HairColor:
+        selector: $info/span[contains(text(),"Hair Color:")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - *na
+      Measurements:
+        selector: $info/span[contains(text(),"Measurements")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - *na
+      Height:
+        selector: $info/span[contains(text(),"Height")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - *na
+              - regex: Height:\s\/+.+
+                with: ""
+      Tattoos:
+        selector: $info/span[contains(text(),"Tattoo:")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - *na
+      Piercings:
+        selector: $info/span[contains(text(),"Piercing:")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - *na
+      Images: //div[@class='model-info-left']/div[@class='thumb-container']/a[@class='thumb-model-link']/img[not(contains(@src, "noavatar"))]/@src
+  sceneSearch:
+    scene:
+      Title: //div[@class="thumb-video"]/p[@class='title']/a[@class='link-blue link-no-border']
+      URLs:
+        selector: //div[@class="thumb-video"]/p[@class='title']/a[@class='link-blue link-no-border']/@href
+        postProcess:
+          - replace:
+              - regex: ^/
+                with: https://theclassicporn.com/
+      Date: *date
+      Image:
+        selector: //div[@class='video-list-item']/div[@class='thumb-container']/a[@class='thumb-video-link']/img/@src
+        postProcess:
+          - replace:
+              - regex: ^/
+                with: https://theclassicporn.com/
+      Director: *director
