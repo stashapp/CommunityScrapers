@@ -48,19 +48,14 @@ xPathScrapers:
       Performers:
         Name: //li[@class="model"]//span[@class="name"]
       Studio:
-        Name: //li[@class="main-uploader"]/a[
-          starts-with(@href,'/channels')          or
-          starts-with(@href,'/amateur-channels')  or
-          starts-with(@href,'/model-channels')    or
-          starts-with(@href,'/pornstar-channels')
-          ]/span[@class="name"]/text()
+        Name: //li[@class="main-uploader"]/a[not(starts-with(@href, "/profiles/"))]/span[@class="name"]
       Image:
         selector: //script[contains(text(), "setThumbUrl169")]/text()|//div[@id="html5video"][span[@class="premium-log-overlay"]]/div[@class="embed-responsive-item"]/@style
         postProcess:
           - replace:
-              - regex: ^.+(?:setThumbUrl169|url)\('(.+?\.jpg).+$
+              - regex: ^.+(?:setThumbUrl169|url)\('(.+?\.(?:jpg|avif)).+$
                 with: $1
-      URL: //link[@rel="alternate" and @hreflang="x-default"]/@href
+      URLs: //link[@rel="alternate" and @hreflang="x-default"]/@href
       Date:
         selector: //script[@type="application/ld+json"]/text()
         postProcess:
@@ -68,4 +63,3 @@ xPathScrapers:
               - regex: '[\S\s]+"uploadDate"\s*:\s*"(\d+-\d{2}-\d{2})[^"]+"[\S\s]+'
                 with: $1
           - parseDate: 2006-01-02
-# Last Updated May 6, 2026
