@@ -20,26 +20,26 @@ xPathScrapers:
         selector: //div[contains(@class,"image-metabar")]/div/time/@datetime
         postProcess:
           - replace:
-            - regex: T.+
-              with: ""
+              - regex: T.+
+                with: ""
           - parseDate: 2006-01-02
       Performers: &performers
         Name:
-          selector: //span[@data-tag-category="character"]/span/a[@class="tag__name"]/text()
+          selector: //div[@data-tag-category="character"]/span/a[@class="tag__name"]
       Studio: &artist
         Name:
-          selector: //span[@data-tag-category="origin"]/@data-tag-name
+          selector: //div[@data-tag-category="origin"]/@data-tag-name
           postProcess:
             - replace:
-              - regex: "artist:"
-                with: ""
+                - regex: "artist:"
+                  with: ""
       Tags: &tag_string
         Name:
-          selector: //span[@data-tag-category=""]/@data-tag-name
+          selector: //div[@data-tag-category=""]/@data-tag-name
       URLs: &source
         selector: //div[@class="image_sources"]//a/@href
       Details: &details
-        selector: '//div[@class="paragraph"]/text()'
+        selector: //div[@class="paragraph"]
     scene:
       Date: *date
       Performers: *performers
@@ -53,5 +53,3 @@ driver:
   headers:
     - Key: "User-Agent"
       Value: "stashapp/stash scraper"
-
-# Last Updated April 19, 2025

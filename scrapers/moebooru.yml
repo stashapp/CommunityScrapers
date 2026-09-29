@@ -6,6 +6,7 @@ sceneByURL:
     url: &urls
       - https://konachan.net/post/show
       - https://konachan.com/post/show
+      - https://yande.re/post/show
     scraper: postScraper
 
 imageByURL:
@@ -20,17 +21,17 @@ xPathScrapers:
         selector: //li[contains(text(),"Posted")]/a/@title
         postProcess:
           - replace:
-            - regex: \d{2}:\d{2}:\d{2}
-              with: ""
+              - regex: \d{2}:\d{2}:\d{2}
+                with: ""
           - parseDate: Mon Jan 2 2006
       Performers: &performers
         Name:
-          selector: //li[contains(@class,"tag-type-character")]/a[last()]/text()
+          selector: //li[contains(@class,"tag-type-character")]/a[last()]
       Studio: &artist
-        Name: //li[contains(@class,"tag-type-artist")]/a[last()]/text()
+        Name: //li[contains(@class,"tag-type-artist")]/a[last()]
       Tags: &tag_string
         Name:
-          selector: //li[contains(@class,"tag-type-general")]/a[last()]/text()
+          selector: //li[contains(@class,"tag-type-general")]/a[last()]
       URLs: &source
         selector: '//li[contains(text(),"Source:")]/a/@href'
     scene:
@@ -44,5 +45,3 @@ driver:
   headers:
     - Key: "User-Agent"
       Value: "stashapp/stash scraper"
-
-# Last Updated April 19, 2025

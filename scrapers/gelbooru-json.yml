@@ -2,28 +2,28 @@ name: gelbooru-json
 # https://github.com/stashapp/CommunityScrapers/issues/2273
 # loosely based on danbooru
 # specifically for rule34.xxx, see gelbooru-xpath
-sceneByURL:
-  - action: scrapeJson
-    url: &urls
-      # does not work, see https://github.com/stashapp/CommunityScrapers/issues/2273
-      - https://rule34.xxx
-    scraper: postScraper
-    queryURL: "{url}"
-    queryURLReplace:
-      url: &urlreplace
-        - regex: 'index\.php.+&id=(\d+)(.+)?'
-          with: "index.php?page=dapi&q=index&json=1&s=post&id=$1"
-        - regex: '$'
-          with: "&api_key=NOT_AN_API_KEY&user_id=2"
-        # https://api.rule34.xxx/
-
-imageByURL:
-  - action: scrapeJson
-    url: *urls
-    scraper: postScraper
-    queryURL: "{url}"
-    queryURLReplace:
-      url: *urlreplace
+# the API needs a rule34.xxx key: fill in api_key and user_id, then uncomment sceneByURL and imageByURL
+# sceneByURL:
+#   - action: scrapeJson
+#     url: &urls
+#       - https://rule34.xxx
+#     scraper: postScraper
+#     queryURL: "{url}"
+#     queryURLReplace:
+#       url: &urlreplace
+#         - regex: 'index\.php.+&id=(\d+)(.+)?'
+#           with: "index.php?page=dapi&q=index&json=1&s=post&id=$1"
+#         - regex: "$"
+#           with: "&api_key=NOT_AN_API_KEY&user_id=2"
+#         # https://api.rule34.xxx/
+#
+# imageByURL:
+#   - action: scrapeJson
+#     url: *urls
+#     scraper: postScraper
+#     queryURL: "{url}"
+#     queryURLReplace:
+#       url: *urlreplace
 
 jsonScrapers:
   postScraper:
@@ -42,5 +42,3 @@ jsonScrapers:
       Date: *date
       Tags: *tag_string
       URLs: *source
-
-# Last Updated April 19, 2025

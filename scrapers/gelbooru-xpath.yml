@@ -25,7 +25,7 @@ sceneByFragment: &fragementscraper
         with: "https://hypnohub.net/post/show/$1"
       - regex: "^yandere_(.*)" # map to domain by prefix
         with: "https://yande.re/post/show/$1"
-      - regex: '^(.*&id=)([0-9]+)_.*$' # capture numeric sequence at begining as ID
+      - regex: "^(.*&id=)([0-9]+)_.*$" # capture numeric sequence at begining as ID
         with: "$1$2"
   scraper: postScraper
 imageByFragment: *fragementscraper
@@ -39,7 +39,6 @@ sceneByURL:
       - https://xbooru.com
       - https://safebooru.org
       - https://hypnohub.net
-      - https://yande.re/post/show/
     scraper: postScraper
 imageByURL:
   - action: scrapeXPath
@@ -56,22 +55,22 @@ xPathScrapers:
         selector: //div[@id="post-view" or @id="container"]//li[contains(text(),"Posted")]/text()[1]
         postProcess:
           - replace:
-            - regex: 'Posted:'
-              with: ""
-            - regex: \d{2}:\d{2}:\d{2}$
-              with: ""
+              - regex: "Posted:"
+                with: ""
+              - regex: \d{2}:\d{2}:\d{2}$
+                with: ""
           - parseDate: 2006-01-02
       Performers: &performers
         Name:
-          selector: //div[@id="post-view" or @id="container"]//li[contains(@class,"tag-type-character")]/a[last()]/text()
+          selector: //div[@id="post-view" or @id="container"]//li[contains(@class,"tag-type-character")]/a[last()]
       Studio: &artist
-        Name: //div[@id="post-view" or @id="container"]//li[contains(@class,"tag-type-artist")]/a[last()]/text()
+        Name: //div[@id="post-view" or @id="container"]//li[contains(@class,"tag-type-artist")]/a[last()]
       Tags: &tag_string
         Name:
           # Variant A: only pull tags
-          #selector: //div[@id="post-view" or @id="container"]//li[contains(@class,"tag-type-general")]/a[last()]/text()
+          #selector: //div[@id="post-view" or @id="container"]//li[contains(@class,"tag-type-general")]/a[last()]
           # Variant B: also pull metadata tags (like 2D, 3D, AI generated)
-          selector: //div[@id="post-view" or @id="container"]//li[contains(@class,"tag-type-general") or contains(@class,"tag-type-metadata")]/a[last()]/text()
+          selector: //div[@id="post-view" or @id="container"]//li[contains(@class,"tag-type-general") or contains(@class,"tag-type-metadata")]/a[last()]
       URLs: &source
         selector: '//div[@id="post-view" or @id="container"]//li[contains(text(),"Source:")]/a/@href'
       # pulls note overlay texts (translations) into Details box
@@ -91,5 +90,3 @@ driver:
   headers:
     - Key: User-Agent
       Value: stashapp/stash scraper
-
-# Last Updated October 17, 2025
