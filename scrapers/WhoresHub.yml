@@ -19,17 +19,10 @@ sceneByQueryFragment:
 xPathScrapers:
   sceneSearch:
     common:
-      $searchItem: //div[@id="list_videos_videos_list_search_result_items"]
-      $searchThumb: //div[@id="list_videos_videos_list_search_result_items"]//a[contains(@class, "item")]//span[contains(@class, "description")]
-
+      $searchItem: //div[@id="list_videos_videos_list_search_result_items"]//a[contains(@class, "item")]
     scene:
-      Title: $searchThumb/text()
-      URL:
-        selector:  $searchItem//a[contains(@class, "item")]/@href
-        # postProcess:
-        #   - replace:
-        #       - regex: ^
-        #         with: "https://www.whoreshub.com"
+      Title: $searchItem/@title
+      URLs: $searchItem/@href
       Image:
         selector: $searchItem//span[@class="thumb-img"]/img/@data-src
         postProcess:
@@ -38,29 +31,24 @@ xPathScrapers:
                 with: "https:"
 
   sceneScraper:
-    common:
-      $studio: //div[@class="user-info"]//a/text()
     scene:
-      Title: //title
-      Details: //title
-      URL: //link[@rel="canonical"]/@href
-      # Date:
-      #   selector: //script[contains(., 'uploadDate')]/text()
-      #   postProcess:
-      #     - replace:
-      #         - regex: .+(?:"uploadDate":\s")([^"]+).+
-      #           with: $1
-      #         - regex: (.+)T.+
-      #           with: $1
-      #     - parseDate: 2006-01-02
+      Title: //h1
+      Details: //div[@class="text text-description"][. != "-" and . != //h1]
+      URLs: //div[@id="tab3"]//input/@value
       Tags:
-        Name: //div[@class="tags-outer"]//li//a/text()
-      Studio:
-        Name: $studio
-        URL: $studio/@href
+        Name: //div[@class="info-wrap"]//ul[@class="tags-list"]//a
+      Performers:
+        Name:
+          selector: >-
+            //script[contains(., "video_models: '")][not(contains(., "video_models: ''"))]
+          postProcess:
+            - replace:
+                - regex: (?s).*video_models:\s*'([^']*)'.*
+                  with: $1
+          split: ", "
       Image:
-        selector: //meta[@property="og:image"][1]/@content
+        selector: //meta[@property="og:image"]/@content
         postProcess:
           - replace:
-            - regex: ^
-              with: "https:"
+              - regex: ^
+                with: "https:"
