@@ -1,0 +1,30 @@
+name: auntykathy
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - auntykathy.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: //span[@class="video-info"]//ul[@class="info"]
+    scene:
+      Title: //div[@class="title"]//h2
+      Date:
+        selector: $info[contains(., "Date Added:")]/li[2]
+        postProcess:
+          - parseDate: 01/02/2006
+      Details: //span[@class="video-info"]//p
+      Performers:
+        Name: $info[contains(., "Featuring:")]//a
+      Tags:
+        Name: $info[contains(., "Tags:")]//a
+      Studio:
+        Name:
+          fixed: auntykathy.com
+      Image:
+        selector: //script[contains(text(), "poster")]/text()
+        postProcess:
+          - replace:
+              - regex: .+poster="([^"]*?)(?:-[1-4]x)?\.jpg".+
+                with: https://www.auntykathy.com${1}-full.jpg
