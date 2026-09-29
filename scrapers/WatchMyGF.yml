@@ -9,14 +9,12 @@ xPathScrapers:
     common:
       $middle: //div[@class='middle-item-container more']
     scene:
-      Title: //div[@class='title-video']/span/text()
+      Title: //div[@class='title-video']/span
       Image: //meta[@property='og:image']/@content
       Studio:
-        Name: $middle//a[@href[contains(.,'channel/')]]/text()
+        Name: $middle//a[@href[contains(.,'channel/')]]
       Tags:
-        Name: $middle//a[@href[contains(.,'.porn') or contains(.,'tag/')]]/span/text()
+        Name: $middle//a[@href[contains(.,'.porn') or contains(.,'tag/')]]/span
       Performers:
-        Name: $middle//a[@href[contains(.,'girls/')]]//text()
-      URL: //link[@rel='canonical']/@href
-
-# Last Updated October 08, 2020
+        Name: $middle//a[@href[contains(.,'girls/')]]
+      URLs: //link[@rel='canonical']/@href
