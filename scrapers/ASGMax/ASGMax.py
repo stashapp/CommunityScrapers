@@ -15,7 +15,11 @@ from py_common import log
 from py_common.types import ScrapedStudio
 from py_common.util import dig, replace_all, scraper_args
 
-OWN_BRAND = "ASGmax"
+OWN_BRANDS = {"ASGmax", "ASGmax Films"}
+OWN_PARENT = "Alpha Studio Group"
+
+# A distribution label for licensed partner channels, not a real network
+PARTNERS = "ASGmax Partners"
 
 NOT_A_STUDIO = {"On The Set", "Bonus Content"}
 
@@ -26,18 +30,15 @@ def determine_studio(api_object: dict[str, Any]) -> ScrapedStudio | None:
     scene was licensed from while mainChannel is the sub-brand it belongs to
     """
     network = (api_object.get("studio_name") or "").strip()
-    channel = (dig(api_object, "mainChannel", "name") or "").strip() or (
-        "ASGmax Originals" if network == OWN_BRAND else None
-    )
-    if (
-        not channel
-        or channel in NOT_A_STUDIO
-        or (
-            dig(api_object, "mainChannel", "type") == "network" and network != OWN_BRAND
-        )
-    ):
+    channel = (dig(api_object, "mainChannel", "name") or "").strip()
+    if channel in NOT_A_STUDIO:
+        channel = ""
+    if network in OWN_BRANDS:
+        name = channel or ("ASGmax Originals" if network == "ASGmax" else network)
+        return {"name": name, "parent": {"name": OWN_PARENT}}
+    if not channel or dig(api_object, "mainChannel", "type") == "network":
         return {"name": network} if network else None
-    if not network or network == channel:
+    if not network or network in (channel, PARTNERS):
         return {"name": channel}
     return {"name": channel, "parent": {"name": network}}
 
