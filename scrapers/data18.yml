@@ -52,7 +52,7 @@ xPathScrapers:
         URLs: $performer/@href
       Studio:
         Name: $studio
-        URL: $studio/@href
+        URLs: $studio/@href
       Groups:
         Name:
           selector: //select/option[contains(@value, 'referermovie=')] | //p[b[normalize-space(.)='Movie:']][not(//select/option[contains(@value, 'referermovie=')])]/a[contains(@href, '/movies/')]
@@ -118,7 +118,7 @@ xPathScrapers:
         selector: //title
         postProcess:
           - replace:
-              - regex: (.+?)(?:\s\(\d{4}\)\sPorn\sMovie\s\|\sDATA18)
+              - regex: (.+?)(?:\s\(\d{4}\)(?:\sPorn)?\sMovie\s\|\sDATA18)
                 with: $1
       Date:
         selector: $movieInfo//span[contains(text(), "Release date")]
@@ -128,8 +128,8 @@ xPathScrapers:
                 with:
           - parseDate: January, 2006
       Studio:
-        Name: $studio/text()
-        URL: $studio/@href
+        Name: $studio
+        URLs: $studio/@href
       Director: //p[b[contains(text(),'Director')]]//a[@class='bold']
       Performers:
         Name: $performer
@@ -141,14 +141,7 @@ xPathScrapers:
           - replace:
               - regex: '^Description\s*-\s*'
                 with:
-      Groups:
-        Name:
-          selector: //title
-          postProcess:
-            - replace:
-                - regex: (.+?)(?:\s\(\d{4}\)(?:\sPorn)?\sMovie\s\|\sDATA18)
-                  with: $1
-        URL: //h1/a/@href
+      URLs: //h1/a/@href
       Image: //a[@id='enlargecover']/@data-featherlight
 driver:
   cookies:
@@ -160,4 +153,4 @@ driver:
           Path: "/"
   headers:
     - Key: User-Agent
-      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
+      Value: stash-scraper/1.0
