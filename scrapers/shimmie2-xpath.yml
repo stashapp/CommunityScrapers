@@ -15,20 +15,18 @@ xPathScrapers:
   postScraper:
     image:
       Date: &date
-        selector: //tr[@data-row="Uploader"]//time
+        selector: //tr[@data-row="Uploader"]//time/@datetime
         postProcess:
           - replace:
-            - regex: "T.+"
-              with: ""
+              - regex: "T.+"
+                with: ""
           - parseDate: 2006-01-02
       Tags: &tag_string
         Name:
-          selector: //tr[@data-row="Tags"]//td/a/text()
+          selector: //tr[@data-row="Tags"]//td/a
       URLs: &source
         selector: //tr[@data-row="Source Link"]/td/div/a/@href
     scene:
       Date: *date
       Tags: *tag_string
       URLs: *source
-
-# Last Updated April 19, 2025
