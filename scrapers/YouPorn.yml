@@ -21,16 +21,14 @@ xPathScrapers:
     scene:
       Title: //meta[@property='og:title']/@content
       Date:
-        selector: //span[@class='publishedDate']/text()
+        selector: //span[@class='publishedDate']
         postProcess:
           - parseDate: Published on January 2, 2006
       Image: //meta[@property='og:image']/@content
       Studio:
-        Name: //div[@class='watchTopInfoPanelTable']//div[@class="submitByLink"]/a/text()
+        Name: //div[@class='watchTopInfoPanelTable']//div[@class="submitByLink"]/a
       Tags:
-        Name: $tags//a[@href[contains(.,'category/') or contains(.,'porntags/')]]/text()
+        Name: $tags//a[@href[contains(.,'category/') or contains(.,'porntags/')]]
       Performers:
-        Name: $tags//a[@href[contains(.,'pornstar/')]]/text()
-      URL: //meta[@property='og:url']/@content
-
-# Last Updated August 28, 2025
+        Name: $tags//a[@href[contains(.,'pornstar/')]]
+      URLs: //meta[@property='og:url']/@content
