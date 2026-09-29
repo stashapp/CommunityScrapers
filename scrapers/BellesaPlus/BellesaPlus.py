@@ -1,23 +1,27 @@
-import requests
 import json
 import re
 import sys
-from py_common import log
-from datetime import datetime
+from datetime import UTC, datetime
+from typing import Any
 
-# bellesa original series/studio filtering
-# ignore all redistribution scenes
-bellesa_studio_handles = [
+import requests
+
+from py_common import log
+from py_common.types import ScrapedScene, ScrapedTag
+from py_common.util import scraper_args
+
+# Only Bellesa's own series: the API also carries redistributed studios
+BELLESA_STUDIO_HANDLES = {
     "bellesa-house",
     "bellesa-films",
     "bellesa-blind-date",
     "belle-says",
     "bellesa-house-party",
-    "zero-to-hero"
-]
+    "zero-to-hero",
+}
 
 # Replace bellesa tags with stash tags (make sure hyphen is preserved)
-tag_replacements = {
+TAG_REPLACEMENTS = {
     "penetration": "Vaginal Penetration",
     "dick-riding": "Riding",
     "porn for women": "Erotica",
@@ -52,96 +56,92 @@ tag_replacements = {
     "nipple suck": "Nipple Play",
     "tall guy": "Tall Man",
 }
-# tags that do not have a stash equivalent or are invalid either way
-# make sure hyphens are preserved
-bad_tags = [
+
+# Tags with no stash equivalent (make sure hyphens are preserved)
+BAD_TAGS = {
     "original",
     "hot guy",
     "hot girls",
     "bellesa",
     "bellesa houses",
-    "bs", # belle says
+    "bs",  # belle says
     "bellesa original",
-    "bh", # bellesa house
+    "bh",  # bellesa house
     "special",
-    "zth", # zero to hero
-    "z2h", # zero 2 hero
-    "euro house", # bellesa euro house
-]
+    "zth",  # zero to hero
+    "z2h",  # zero 2 hero
+    "euro house",  # bellesa euro house
+}
 
-# parse response for stash
-def parse_response(data):
-    res = {}
-    res["title"] = data["title"]
-    res["details"] = data["description"]
-    res["image"] = data["image"]
-    res["code"] = str(data["id"])
-    res["studio"] = {}
-    res["studio"]["name"] = data["content_provider"][0]["name"]
-    res["performers"] = []
-    for performer in data["performers"]:
-        res["performers"].append({"name": performer["name"]})
-    res["tags"] = []
-    # clean tags
-    temptags = data["tags"].split(",")
-    # remove studio from tags
-    bad_tags.append(res["studio"]["name"].lower())
-    # remove performers from tags
-    for performer in res["performers"]:
-        bad_tags.append(performer["name"].lower())
-    for tag in temptags:
-        # filter out bad tags
-        lower = tag.lower()
-        if lower not in bad_tags:
-            # replace tags
-            if lower in tag_replacements:
-                tag = tag_replacements[lower]
-            # replace hyphens with spaces
-            tag = tag.replace("-", " ")
-            res["tags"].append({"name": tag})
-    # parse unix date to YYYY-MM-DD
-    res["date"] = datetime.fromtimestamp(data["posted_on"]).strftime('%Y-%m-%d')
-    print(json.dumps(res))
 
-def scrape_scene(url):
-    # replace URL with api url
-    videoIDmatch = re.search(r'(\/videos?\/)(\d+)(\/.+)?', url)
-    if videoIDmatch is None:
-        log.error("Invalid URL")
-        sys.exit(1)
-    videoID = videoIDmatch.group(2)
-    api_url = f"https://www.bellesa.co/api/rest/v1/videos/{videoID}"
-    response = requests.get(api_url)
-    data = response.json()
-    # check if response is nested
-    if data.get("value") is not None:
-        # if nested, proceed to nested data
-        data = data["value"]
-    # if not nested, proceed normally
+def to_tags(raw: str, not_tags: set[str]) -> list[ScrapedTag]:
+    "The API mixes the scene's studio and performers into its tags"
+    return [
+        {"name": TAG_REPLACEMENTS.get(lower, tag).replace("-", " ")}
+        for tag in raw.split(",")
+        if (lower := tag.lower()) not in not_tags
+    ]
 
-    # check if response is from bellesaplus
-    # bellesa scenes also include free redistributions and delayed scenes
-    if data["access"]["plus"] != 1 or data["access"]["bellesa"] == 1:
-        log.error("This video URL is from bellesa.co (free) and not bellesaplus.co (premium)")
-        print("{}")
-        sys.exit(1)
-    # check if scene is from bellesa original series/studio
-    if data["content_provider"][0]["handle"] not in bellesa_studio_handles:
-        log.error("This video is not from a bellesa original series/studio")
-        print("{}")
-        sys.exit(1)
-    parse_response(data)
 
-def main():
-    fragment = json.loads(sys.stdin.read())
-    url = fragment.get("url")
-    # If nothing is passed to the script:
-    if url is None:
-        log.error("No URL provided")
-        sys.exit(1)
-    # If we've been given a URL:
-    if url is not None:
-        scrape_scene(url)
+def to_scraped_scene(video: dict[str, Any], url: str) -> ScrapedScene:
+    studio_name = video["content_provider"][0]["name"]
+    performers = [p["name"] for p in video["performers"]]
+    scene: ScrapedScene = {
+        "title": video["title"],
+        "code": str(video["id"]),
+        "urls": [url],
+        "studio": {"name": studio_name, "parent": {"name": "Bellesa"}},
+        "performers": [{"name": name} for name in performers],
+        # Released at 08:00 Pacific, so UTC gives the site's own date anywhere
+        "date": datetime.fromtimestamp(video["posted_on"], UTC).date().isoformat(),
+    }
+    if details := video.get("description"):
+        scene["details"] = details
+    if image := video.get("image"):
+        scene["image"] = image
+    if duration := video.get("duration"):
+        scene["duration"] = duration
+    not_tags = BAD_TAGS | {studio_name.lower()} | {p.lower() for p in performers}
+    if tags := to_tags(video.get("tags") or "", not_tags):
+        scene["tags"] = tags
+    return scene
+
+
+def scene_from_url(url: str) -> ScrapedScene | None:
+    if not (match := re.search(r"/videos?/(\d+)", url)):
+        log.error(f"No video ID found in {url}")
+        return None
+    api_url = f"https://www.bellesa.co/api/rest/v1/videos/{match.group(1)}"
+    try:
+        res = requests.get(api_url, timeout=30)
+    except requests.RequestException as e:
+        log.error(f"Failed to fetch {api_url}: {e}")
+        return None
+    # Premium videos answer 402 Payment Required, but the body still has the metadata
+    if res.status_code not in (200, 402):
+        log.error(f"HTTP {res.status_code} for {api_url}")
+        return None
+    data = res.json()
+    video = data.get("value") or data
+
+    # bellesa.co also carries free redistributions and delayed scenes
+    if video["access"]["plus"] != 1 or video["access"]["bellesa"] == 1:
+        log.error("This video is from bellesa.co (free), not bellesaplus.co (premium)")
+        return None
+    if video["content_provider"][0]["handle"] not in BELLESA_STUDIO_HANDLES:
+        log.error("This video is not from a Bellesa original series/studio")
+        return None
+    return to_scraped_scene(video, url)
+
 
 if __name__ == "__main__":
-    main()
+    op, args = scraper_args()
+    result = None
+    match op, args:
+        case "scene-by-url", {"url": url} if url:
+            result = scene_from_url(url)
+        case _:
+            log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
+            sys.exit(1)
+
+    print(json.dumps(result))
