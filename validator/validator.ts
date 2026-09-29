@@ -38,16 +38,41 @@ interface ActionDefinition {
 
 type Definitions = Record<string, Record<string, unknown>>;
 
+interface Deprecation {
+  path: string;
+  message: string;
+}
+
+/**
+ * Ajv treats `deprecated` as a silent annotation, so deprecated subschemas get
+ * this extra keyword, which records where it matched and never fails.
+ */
+const deprecationProbe = "x-deprecation-probe";
+
+const withDeprecationProbes = (node: unknown): unknown => {
+  if (Array.isArray(node)) return node.map(withDeprecationProbes);
+  if (node === null || typeof node !== "object") return node;
+  const copy: Record<string, unknown> = Object.fromEntries(
+    Object.entries(node).map(([k, v]) => [k, withDeprecationProbes(v)]),
+  );
+  if (copy.deprecated === true) {
+    copy[deprecationProbe] = copy.deprecationMessage ?? "Deprecated";
+  }
+  return copy;
+};
+
 class Validator {
   stopOnError: boolean;
   sortedURLs: boolean;
   verbose: boolean;
+  listDeprecations: boolean;
   schema: object;
 
   constructor(flags: string[]) {
     this.stopOnError = !flags.includes("-a");
     this.sortedURLs = flags.includes("-s");
     this.verbose = flags.includes("-v");
+    this.listDeprecations = flags.includes("-d");
 
     const schemaPath = resolve(import.meta.dirname!, "./scraper.schema.json");
     this.schema = JSON.parse(Deno.readTextFileSync(schemaPath));
@@ -62,7 +87,28 @@ class Validator {
     const ajv = new Ajv({ strict: true });
     addFormats.default(ajv);
     ajv.addVocabulary(["deprecationMessage"]);
-    const validate = ajv.compile(this.schema);
+
+    let deprecations: Deprecation[] = [];
+    ajv.addKeyword({
+      keyword: deprecationProbe,
+      schemaType: "string",
+      errors: false,
+      validate: (
+        message: string,
+        _data: unknown,
+        _parent: unknown,
+        cxt?: { instancePath: string },
+      ) => {
+        deprecations.push({ path: cxt?.instancePath || "/", message });
+        return true;
+      },
+    });
+    const validate = ajv.compile(withDeprecationProbes(this.schema) as object);
+
+    // Named files are the ones being worked on, so list their deprecations in full
+    const showDeprecations = this.listDeprecations || files.length > 0;
+    let deprecatedFields = 0;
+    let deprecatedFiles = 0;
 
     let result = true;
 
@@ -80,7 +126,25 @@ class Validator {
         else continue;
       }
 
+      deprecations = [];
       let valid = validate(data);
+
+      const unique = [
+        ...new Map(
+          deprecations.map((d) => [`${d.path}\0${d.message}`, d]),
+        ).values(),
+      ];
+      if (unique.length > 0) {
+        deprecatedFields += unique.length;
+        deprecatedFiles++;
+        if (showDeprecations) {
+          for (const { path, message } of unique) {
+            console.log(
+              `${chalk.yellow(chalk.bold("DEPRECATED"))} in ${relPath}: ${path} - ${message}`,
+            );
+          }
+        }
+      }
 
       // If schema validation did not pass, don't try to validate mappings.
       if (valid) {
@@ -117,6 +181,15 @@ class Validator {
 
     if (!this.verbose && result) {
       console.log(chalk.green("Validation passed!"));
+    }
+
+    // Deprecations are advisory: reported, but never part of the result
+    if (deprecatedFields > 0 && !showDeprecations) {
+      console.log(
+        chalk.yellow(
+          `${deprecatedFields} deprecated field(s) in ${deprecatedFiles} file(s); run with -d to list them`,
+        ),
+      );
     }
 
     return result;
