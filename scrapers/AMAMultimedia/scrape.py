@@ -1,13 +1,14 @@
 import json
 import sys
-from typing import Literal
-import requests
 from datetime import datetime
+from typing import Literal
 from urllib.parse import urlparse
 
-import py_common.log as log
+import requests
+
+from py_common import log
+from py_common.types import ScrapedPerformer, ScrapedScene, ScrapedStudio, ScrapedTag
 from py_common.util import dig, scraper_args
-from py_common.types import ScrapedScene, ScrapedPerformer, ScrapedStudio, ScrapedTag
 
 studio_hierarchy = {
     "Fuck You Cash": {
@@ -15,16 +16,16 @@ studio_hierarchy = {
         "bbc-pie": "BBC Pie",
         "casting-couch-x": "Casting Couch X",
         "cum4k": "Cum4K",
-        "exotic-4k": "Exotic4K",
-        "facials-4k": "Facials4K",
+        "exotic4k": "Exotic4K",
+        "facials4k": "Facials4K",
         "fantasy-hd": "Fantasy HD",
         "girlcum": "GirlCum",
         "holed": "Holed",
         "lubed": "Lubed",
-        "mom-4k": "Mom4K",
+        "mom-4k": "Mom 4K",
         "my-very-first-time": "My Very First Time",
         "nannyspy": "NannySpy",
-        "passion-hd": "Passion HD",
+        "passion-hd": "Passion-HD",
         "povd": "POVD",
         "pure-mature": "Pure Mature",
         "spyfam": "SpyFam",
@@ -57,12 +58,16 @@ studio_hierarchy = {
         "double-trouble": "Double Trouble",
         "facials-galore": "Facials Galore",
         "game-on": "Game On",
+        "girl-stream": "gIRL Stream",
         "glory-hole-4k": "Glory Hole 4K",
+        "him-vs-her": "Him VS Her",
         "kinky-sluts-4k": "Kinky Sluts 4K",
         "momcum": "Mom Cum",
+        "p2p-marketplace": "Penis To Pussy Marketplace",
         "passion-fuck": "Passion Fuck",
         "pornstars-in-cars": "Pornstars in Cars",
         "property-exploits": "Property Exploits",
+        "public-pickup": "Public Pickup",
         "rv-adventures": "RV Adventures",
         "school-of-cock": "School of Cock",
         "sexercise": "Sexercise",
@@ -102,22 +107,16 @@ gender_map: dict[str, Literal["MALE", "FEMALE"]] = {
     "guy": "MALE",
 }
 
-tag_map = {
-    "Milf": "MILF",
-    "Bdsm": "BDSM",
-    "Hd": "HD",
-}
-
 # Some scenes are available on multiple sites and some have different domains
 # than their API metadata indicate so we map some of them manually
 site_map = {
     **{
         studio: [studio.replace("-", "")]
-        for studio in studio_hierarchy["Fuck You Cash"].keys()
+        for studio in studio_hierarchy["Fuck You Cash"]
     },
-    **{studio: ["pornpros"] for studio in studio_hierarchy["Porn Pros"].keys()},
-    **{studio: ["pornplus"] for studio in studio_hierarchy["PORN+"].keys()},
-    **{studio: ["gayroom", studio] for studio in studio_hierarchy["Gay Room"].keys()},
+    **{studio: ["pornpros"] for studio in studio_hierarchy["Porn Pros"]},
+    **{studio: ["pornplus"] for studio in studio_hierarchy["PORN+"]},
+    **{studio: ["gayroom", studio] for studio in studio_hierarchy["Gay Room"]},
     "casting-couch-x": ["castingcouch-x"],
     "passion-hd": ["passion-hd"],
     "creepy-pa": ["pornplus", "creepypa"],
@@ -125,30 +124,40 @@ site_map = {
 }
 
 
-def to_scraped_studio(raw_scene: dict) -> ScrapedStudio:
-    site = dig(raw_scene, "sponsor", "cachedSlug")
+def find_studio(slug: str | None) -> ScrapedStudio | None:
     for parent, children in studio_hierarchy.items():
-        if site in children:
-            return {"name": children[site], "parent": {"name": parent}}
+        if slug in children:
+            return {"name": children[slug], "parent": {"name": parent}}
+    return None
 
-    return {"name": dig(raw_scene, "sponsor", "name")}
+
+# Gay Room cross-posts scenes between its sites under the original sponsor,
+# but StashDB files them under the site hosting them, which `site` reflects
+def studio_slug(raw_scene: dict) -> str:
+    site = dig(raw_scene, "site", "slug")
+    return site if find_studio(site) else dig(raw_scene, "sponsor", "cachedSlug")
+
+
+def to_scraped_studio(raw_scene: dict) -> ScrapedStudio:
+    return find_studio(studio_slug(raw_scene)) or {
+        "name": dig(raw_scene, "sponsor", "name")
+    }
 
 
 def to_scraped_performer(dict: dict) -> ScrapedPerformer:
     performer: ScrapedPerformer = {"name": dict["name"]}
     if gender := dig(dict, "gender"):
-        performer["gender"] = gender_map.get(gender, gender)  # type: ignore
+        performer["gender"] = gender_map.get(gender, gender)
     return performer
 
 
 def to_scraped_tag(tag: str) -> ScrapedTag:
-    name = " ".join(tag.split("_")).title()
-    return {"name": tag_map.get(name, name)}
+    return {"name": tag.replace("_", " ")}
 
 
 def get_urls(raw_scene: dict) -> list[str]:
     slug = dig(raw_scene, "cachedSlug")
-    site_slug = dig(raw_scene, "sponsor", "cachedSlug")
+    site_slug = studio_slug(raw_scene)
     return [
         f"https://{site}.com/video/{slug}"
         for site in site_map.get(site_slug, [site_slug])
@@ -164,11 +173,14 @@ def to_scraped_scene(raw_scene: dict) -> ScrapedScene | None:
         "studio": to_scraped_studio(raw_scene),
     }
 
-    if (image := dig(raw_scene, ("posterUrl", "thumbUrl"))) or (
-        image := dig(raw_scene, "thumbUrls", 0)
-    ):
-        full_size_image = image.split("?")[0]
-        scene["image"] = full_size_image
+    # Some posterUrls are just the bare CDN host with no image path
+    images = (
+        raw_scene.get("posterUrl"),
+        raw_scene.get("thumbUrl"),
+        *(raw_scene.get("thumbUrls") or []),
+    )
+    if image := next((i for i in images if i and urlparse(i).path.strip("/")), None):
+        scene["image"] = image.split("?")[0]
     if tags := dig(raw_scene, "tags"):
         scene["tags"] = [to_scraped_tag(t) for t in tags]
     if performers := dig(raw_scene, "actors"):
@@ -194,27 +206,12 @@ def scene_from_url(url) -> ScrapedScene | None:
     return to_scraped_scene(raw_scene)
 
 
-def find_scene(query: str) -> ScrapedScene | None:
-    log.error(f"No scenes found for '{query}'")
-    return None
-
-
-def scene_search(query: str) -> list[ScrapedScene]:
-    if not query:
-        log.error("No query provided")
-        return []
-
-    return []
-
-
 if __name__ == "__main__":
     op, args = scraper_args()
     result = None
     match op, args:
         case "scene-by-url", {"url": url} if url:
             result = scene_from_url(url)
-        case "scene-by-name", {"name": query} if query:
-            result = scene_search(query)
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
             sys.exit(1)
