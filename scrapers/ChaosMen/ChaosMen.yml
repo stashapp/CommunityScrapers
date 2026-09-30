@@ -13,6 +13,7 @@ sceneByFragment:
   script:
     - python
     - ../Altwolia/scrape.py
+    - chaosmen
     - scene-by-fragment
 sceneByName:
   action: script
@@ -33,6 +34,7 @@ performerByFragment:
   script:
     - python
     - ../Altwolia/scrape.py
+    - chaosmen
     - performer-by-fragment
 performerByName:
   action: script
