@@ -7,7 +7,7 @@ galleryByURL:
       - bromo.com/scene/
     script:
       - python
-      - MileHighMedia_BiandTrans.py
+      - Bromo.py
       - gallery-by-url
 galleryByFragment:
   action: script
