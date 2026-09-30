@@ -3,7 +3,7 @@ name: Ersties
 sceneByURL:
   - action: script
     url:
-      - ersties.com/
+      - ersties.com/shoot/
     script:
       - python
       - Ersties.py
@@ -24,4 +24,3 @@ performerByURL:
       - python
       - Ersties.py
       - performer-by-url
-# Last Updated: December 7, 2025
