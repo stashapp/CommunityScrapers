@@ -1,19 +1,24 @@
 import json
 import sys
 from typing import Any
-from py_common import log
-from py_common.util import replace_at
+
 from AyloAPI.scrape import (
-    scraper_args,
+    scene_from_fragment,
     scene_from_url,
     scene_search,
-    scene_from_fragment,
+    scraper_args,
 )
+from py_common import log
+from py_common.util import replace_all, replace_at
 
 
 def blackmaleme(obj: Any, _) -> Any:
     # Flatten all studios to just "Black Male Me"
-    return replace_at(obj, "studio", replacement=lambda _: {"name": "Black Male Me"})
+    fixed = replace_at(obj, "studio", replacement=lambda _: {"name": "Black Male Me"})
+    # The API brands these scenes as Bromo, but they live on the studio's own domain too
+    return replace_all(
+        fixed, "url", lambda url: url.replace("www.bromo.com", "www.blackmaleme.com")
+    )
 
 
 if __name__ == "__main__":
