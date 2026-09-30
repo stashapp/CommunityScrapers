@@ -12,7 +12,6 @@ from Altwolia.scrape import (
     scene_from_url,
     scene_search,
 )
-
 from py_common import log
 from py_common.util import replace_all, scraper_args
 
@@ -25,16 +24,32 @@ studio_rename = {
 }
 
 
+# The index also holds placeholder studios like "TBD", which get no parent
+NETWORK_STUDIOS = {
+    *studio_rename.values(),
+    "Blowbanged",
+    "Blowpass",
+    "Squirting Orgies",
+    "Throated",
+}
+
+
 def determine_studio(api_object: dict[str, Any]) -> str | None:
     if api_object.get("serie_name") == "Squirting Orgies":
         return "Squirting Orgies"
     return studio_rename.get(api_object.get("studio_name"))
 
 
+def with_network(studio: dict[str, Any], name: str | None) -> dict[str, Any]:
+    studio = {**studio, "name": name} if name else studio
+    if studio.get("name") in NETWORK_STUDIOS:
+        studio = {**studio, "parent": {"name": "Blowpass (Network)"}}
+    return studio
+
+
 def blowpass(obj: Any, api_object: dict[str, Any]) -> Any:
-    if studio_override := determine_studio(api_object):
-        obj = replace_all(obj, "studio", lambda s: {**s, "name": studio_override})
-    return obj
+    studio_override = determine_studio(api_object)
+    return replace_all(obj, "studio", lambda s: with_network(s, studio_override))
 
 
 if __name__ == "__main__":
