@@ -58,6 +58,7 @@ performerByFragment:
   script:
     - python
     - ../AyloAPI/scrape.py
+    - babes
     - performer-by-fragment
 groupByURL:
   - action: script
@@ -69,4 +70,3 @@ groupByURL:
       - python
       - ../AyloAPI/scrape.py
       - movie-by-url
-# Last Updated January 13, 2024
