@@ -1,0 +1,36 @@
+name: PornerMates
+# requires: py_common, FAKNetwork
+# scrapes: Destroyers Made in Spain, DIVAS... Tenían que estar aquí, El Diario de Apolonia Lapiedra, Ellas se lo montan... tu solo miras, Estamos In Love, Mas de 2 NO son multitud, Nacho Vidal: Empotrador, Tengo una amiga que quiere ser PornStar
+sceneByURL:
+  - action: script
+    url:
+      # Implicitly english language
+      - pornermates.com/video/
+      # Explicitly english language
+      - pornermates.com/en/video/
+      # Explicitly spanish language
+      - pornermates.com/es/video/
+      # Explicitly portugese language
+      - pornermates.com/pt/video/
+    script:
+      - python
+      - PornerMates.py
+      - scene-by-url
+sceneByName:
+  action: script
+  script:
+    - python
+    - PornerMates.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - PornerMates.py
+    - scene-by-query-fragment
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - PornerMates.py
+    - scene-by-fragment

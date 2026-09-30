@@ -648,7 +648,7 @@ studio_map = {
     },
     119: {
         "en": {
-            "name": "I sell my girlfriend.",
+            "name": "I sell my girlfriend",
             "aliases": "Vendo a mi Novia, Vendo minha namorada",
             "url": "https://www.fakings.com/en/serie/i-sell-my-girlfriend",
             "parent": {
@@ -658,7 +658,7 @@ studio_map = {
         },
         "es": {
             "name": "Vendo a mi Novia",
-            "aliases": "I sell my girlfriend., Vendo minha namorada",
+            "aliases": "I sell my girlfriend, Vendo minha namorada",
             "url": "https://www.fakings.com/es/serie/vendo-a-mi-novia",
             "parent": {
                 "name": "FAKings",
@@ -667,7 +667,7 @@ studio_map = {
         },
         "pt": {
             "name": "Vendo minha namorada",
-            "aliases": "I sell my girlfriend., Vendo a mi Novia",
+            "aliases": "I sell my girlfriend, Vendo a mi Novia",
             "url": "https://www.fakings.com/pt/serie/vendo-minha-namorada",
             "parent": {
                 "name": "FAKings",
@@ -735,8 +735,8 @@ studio_map = {
     },
     132: {
         "en": {
-            "name": "I TORNEO: 2016",
-            "aliases": "",
+            "name": "1ST TOURNAMENT: 2016",
+            "aliases": "I TORNEO: 2016",
             "url": "https://www.madlifes.com/en/serie/i-edicion-20152016",
             "parent": {
                 "name": "MadLifes",
@@ -764,8 +764,8 @@ studio_map = {
     },
     135: {
         "en": {
-            "name": "II TORNEO: 2017",
-            "aliases": "",
+            "name": "2ND TOURNAMENT: 2017",
+            "aliases": "II TORNEO: 2017",
             "url": "https://www.madlifes.com/en/serie/ii-torneo-2017",
             "parent": {
                 "name": "MadLifes",
@@ -793,8 +793,8 @@ studio_map = {
     },
     136: {
         "en": {
-            "name": "Nuestra Primera Porno",
-            "aliases": "",
+            "name": "Our First Porn",
+            "aliases": "Nuestra Primera Porno",
             "url": "https://www.pepeporn.com/en/serie/nuestra-primera-porno",
             "parent": {
                 "name": "PepePorn",
@@ -822,8 +822,8 @@ studio_map = {
     },
     137: {
         "en": {
-            "name": "¿Valgo para el Porno?",
-            "aliases": "",
+            "name": "Am I good for porn?",
+            "aliases": "¿Valgo para el Porno?",
             "url": "https://www.pepeporn.com/en/serie/valgo-para-el-porno",
             "parent": {
                 "name": "PepePorn",
@@ -851,8 +851,8 @@ studio_map = {
     },
     138: {
         "en": {
-            "name": "Fantasias Cumplidas",
-            "aliases": "",
+            "name": "Fulfilled Fantasies",
+            "aliases": "Fantasias Cumplidas",
             "url": "https://www.pepeporn.com/en/serie/fantasias-cumplidas",
             "parent": {
                 "name": "PepePorn",
@@ -938,8 +938,8 @@ studio_map = {
     },
     151: {
         "en": {
-            "name": "18 añitos",
-            "aliases": "",
+            "name": "18 years old",
+            "aliases": "18 añitos",
             "url": "https://www.pepeporn.com/en/serie/18-anitos",
             "parent": {
                 "name": "PepePorn",
@@ -967,8 +967,8 @@ studio_map = {
     },
     152: {
         "en": {
-            "name": "Pareja de celosos",
-            "aliases": "",
+            "name": "Jealous couple",
+            "aliases": "Pareja de celosos",
             "url": "https://www.pepeporn.com/en/serie/pareja-de-celosos",
             "parent": {
                 "name": "PepePorn",
@@ -996,8 +996,8 @@ studio_map = {
     },
     153: {
         "en": {
-            "name": "Maduritos y Maduritas",
-            "aliases": "",
+            "name": "Maduritos and Maduritas",
+            "aliases": "Maduritos y Maduritas",
             "url": "https://www.pepeporn.com/en/serie/maduritos-y-maduritas",
             "parent": {
                 "name": "PepePorn",
@@ -1228,8 +1228,8 @@ studio_map = {
     },
     171: {
         "en": {
-            "name": "II Fiesta Madlifes",
-            "aliases": "",
+            "name": "II Madlifes Party",
+            "aliases": "II Fiesta Madlifes",
             "url": "https://www.madlifes.com/en/serie/ii-fiesta-madlifes",
             "parent": {
                 "name": "MadLifes",
@@ -1257,8 +1257,8 @@ studio_map = {
     },
     172: {
         "en": {
-            "name": "III Fiesta MadLifes",
-            "aliases": "",
+            "name": "III MadLifes Party",
+            "aliases": "III Fiesta MadLifes",
             "url": "https://www.madlifes.com/en/serie/iii-fiesta-madlifes",
             "parent": {
                 "name": "MadLifes",
@@ -1286,8 +1286,8 @@ studio_map = {
     },
     173: {
         "en": {
-            "name": "IV Fiesta MadLifes",
-            "aliases": "",
+            "name": "IV MadLifes Party",
+            "aliases": "IV Fiesta MadLifes",
             "url": "https://www.madlifes.com/en/serie/iv-fiesta-madlifes",
             "parent": {
                 "name": "MadLifes",
@@ -1315,8 +1315,8 @@ studio_map = {
     },
     174: {
         "en": {
-            "name": "V Fiesta MadLifes",
-            "aliases": "",
+            "name": "V MadLifes Party",
+            "aliases": "V Fiesta MadLifes",
             "url": "https://www.madlifes.com/en/serie/v-fiesta-madlifes",
             "parent": {
                 "name": "MadLifes",
@@ -1344,8 +1344,8 @@ studio_map = {
     },
     175: {
         "en": {
-            "name": "VI Fiesta MadLifes",
-            "aliases": "",
+            "name": "VI MadLifes Party",
+            "aliases": "VI Fiesta MadLifes",
             "url": "https://www.madlifes.com/en/serie/vi-fiesta-madlifes",
             "parent": {
                 "name": "MadLifes",
@@ -1373,8 +1373,8 @@ studio_map = {
     },
     176: {
         "en": {
-            "name": "VII Fiesta MadLifes",
-            "aliases": "",
+            "name": "VII MadLifes Party",
+            "aliases": "VII Fiesta MadLifes",
             "url": "https://www.madlifes.com/en/serie/vii-fiesta-madlifes",
             "parent": {
                 "name": "MadLifes",
@@ -1460,8 +1460,8 @@ studio_map = {
     },
     179: {
         "en": {
-            "name": "VIII Fiesta MadLifes",
-            "aliases": "",
+            "name": "VIII MadLifes Party",
+            "aliases": "VIII Fiesta MadLifes",
             "url": "https://www.madlifes.com/en/serie/viii-fiesta-madlifes",
             "parent": {
                 "name": "MadLifes",
@@ -1518,8 +1518,8 @@ studio_map = {
     },
     182: {
         "en": {
-            "name": "Fiestas MadLifes - 2018",
-            "aliases": "",
+            "name": "MadLifes Festivities - 2018",
+            "aliases": "Fiestas MadLifes - 2018",
             "url": "https://www.madlifes.com/en/serie/fiestas-madlifes-2018",
             "parent": {
                 "name": "MadLifes",
@@ -1721,8 +1721,8 @@ studio_map = {
     },
     189: {
         "en": {
-            "name": "Fiestas MadLifes - 2019",
-            "aliases": "",
+            "name": "MadLifes Festivities - 2019",
+            "aliases": "Fiestas MadLifes - 2019",
             "url": "https://www.madlifes.com/en/serie/fiestas-madlifes-2019",
             "parent": {
                 "name": "MadLifes",
@@ -2098,8 +2098,8 @@ studio_map = {
     },
     203: {
         "en": {
-            "name": "Grabado en casa",
-            "aliases": "",
+            "name": "Recorded at home",
+            "aliases": "Grabado en casa",
             "url": "https://www.pepeporn.com/en/serie/porno-en-casa",
             "parent": {
                 "name": "PepePorn",
@@ -2127,8 +2127,8 @@ studio_map = {
     },
     205: {
         "en": {
-            "name": "Follate a mi pareja",
-            "aliases": "",
+            "name": "Fuck my partner",
+            "aliases": "Follate a mi pareja",
             "url": "https://www.pepeporn.com/en/serie/follate-a-mi-pareja",
             "parent": {
                 "name": "PepePorn",
@@ -2156,8 +2156,8 @@ studio_map = {
     },
     206: {
         "en": {
-            "name": "Quiero ser Cornudo",
-            "aliases": "",
+            "name": "I Want to Be a Cuckold",
+            "aliases": "Quiero ser Cornudo",
             "url": "https://www.pepeporn.com/en/serie/quiero-ser-cornudo",
             "parent": {
                 "name": "PepePorn",
@@ -2533,8 +2533,8 @@ studio_map = {
     },
     220: {
         "en": {
-            "name": "El Diario de Apolonia Lapiedra",
-            "aliases": "",
+            "name": "The Diary of Apolonia Lapiedra",
+            "aliases": "El Diario de Apolonia Lapiedra",
             "url": "https://www.pornermates.com/en/serie/el-diario-de-apolonia-lapiedra",
             "parent": {
                 "name": "PornerMates",
@@ -2562,8 +2562,8 @@ studio_map = {
     },
     221: {
         "en": {
-            "name": "Nacho Vidal: Empotrador",
-            "aliases": "",
+            "name": "Nacho Vidal: Embedder",
+            "aliases": "Nacho Vidal: Empotrador",
             "url": "https://www.pornermates.com/en/serie/nacho-vidal-empotrador",
             "parent": {
                 "name": "PornerMates",
@@ -2591,8 +2591,8 @@ studio_map = {
     },
     222: {
         "en": {
-            "name": "Mas de 2 NO son multitud",
-            "aliases": "",
+            "name": "More than 2 are NOT crowds",
+            "aliases": "Mas de 2 NO son multitud",
             "url": "https://www.pornermates.com/en/serie/mas-de-2-no-son-multitud",
             "parent": {
                 "name": "PornerMates",
@@ -2620,8 +2620,8 @@ studio_map = {
     },
     223: {
         "en": {
-            "name": "Ellas se lo montan... tu solo miras",
-            "aliases": "",
+            "name": "They set it up... you just watch",
+            "aliases": "Ellas se lo montan... tu solo miras",
             "url": "https://www.pornermates.com/en/serie/ellas-se-lo-montan-tu-solo-miras",
             "parent": {
                 "name": "PornerMates",
@@ -2649,8 +2649,8 @@ studio_map = {
     },
     224: {
         "en": {
-            "name": "Tengo una amiga que quiere ser PornStar",
-            "aliases": "",
+            "name": "I have a friend who wants to be a Pornstar",
+            "aliases": "Tengo una amiga que quiere ser PornStar",
             "url": "https://www.pornermates.com/en/serie/tengo-una-amiga-que-quiere-ser-pornstar",
             "parent": {
                 "name": "PornerMates",
@@ -2707,8 +2707,8 @@ studio_map = {
     },
     226: {
         "en": {
-            "name": "DIVAS... Tenían que estar aquí",
-            "aliases": "",
+            "name": "DIVAS... They had to be here",
+            "aliases": "DIVAS... Tenían que estar aquí",
             "url": "https://www.pornermates.com/en/serie/divas-tenian-que-estar-aqui",
             "parent": {
                 "name": "PornerMates",
@@ -2736,8 +2736,8 @@ studio_map = {
     },
     227: {
         "en": {
-            "name": "Estamos In Love",
-            "aliases": "",
+            "name": "We Are In Love",
+            "aliases": "Estamos In Love",
             "url": "https://www.pornermates.com/en/serie/estamos-in-love",
             "parent": {
                 "name": "PornerMates",
@@ -2765,8 +2765,8 @@ studio_map = {
     },
     228: {
         "en": {
-            "name": "Porno solidario",
-            "aliases": "",
+            "name": "Solidarity porn",
+            "aliases": "Porno solidario",
             "url": "https://www.nigged.com/en/serie/porno-solidario",
             "parent": {
                 "name": "Nigged",

@@ -1,15 +1,18 @@
-from html import unescape
-import pathlib
-from urllib.parse import quote
 import json
+import pathlib
 import re
+import sys
+from html import unescape
+from urllib.parse import quote
+
 import requests
+
+from FAKNetwork.sites import to_scraped_studio
 from py_common import log
 from py_common.cache import cache_to_disk
 from py_common.config import get_config
 from py_common.types import ScrapedPerformer, ScrapedScene, ScrapedTag
 from py_common.util import dig, scraper_args
-from FAKNetwork.sites import to_scraped_studio
 
 config = get_config(
     default="""
@@ -25,6 +28,8 @@ flatten_hierarchy = False
 scraper = requests.Session()
 
 tag_map = {}
+
+IMAGE_URL = "https://almacen-faknetworks.b-cdn.net/videos"
 
 
 def clean_text(text):
@@ -55,7 +60,9 @@ def to_scraped_performer(api_obj: dict) -> ScrapedPerformer:
         "urls": [],
     }
     if site_name := dig(api_obj, "product"):
-        performer["urls"].append(f"https://{site_name}.com/actrices-porno/{api_obj['slug']}")
+        performer["urls"].append(
+            f"https://{site_name}.com/actrices-porno/{api_obj['slug']}"
+        )
 
     if loverfans := dig(api_obj, "loverfansUrl"):
         performer["urls"].append(loverfans)
@@ -63,26 +70,53 @@ def to_scraped_performer(api_obj: dict) -> ScrapedPerformer:
     return performer
 
 
+def cover_image(data: dict) -> str | None:
+    """
+    The screenshot is the full-size version of the cover the site shows
+    (portada_<profile>), but older scenes only have the small cover left
+    """
+    candidates = [
+        f"{IMAGE_URL}/{quote(screenshot)}"
+        if (screenshot := dig(data, "screenshot"))
+        else None,
+        f"{IMAGE_URL}/portada_{quote(profile)}"
+        if (profile := dig(data, "profile"))
+        else None,
+        f"https://player.faknetworks.com/almacen/videos/listado_horizontal_{image}"
+        if (image := dig(data, "horizontalProfile"))
+        else None,
+    ]
+    urls = [url for url in candidates if url]
+    for url in urls[:-1]:
+        try:
+            if scraper.head(url, timeout=15).status_code == 200:
+                return url
+        except requests.RequestException:
+            continue
+    return urls[-1] if urls else None
+
+
 def to_scraped_scene(data: dict, lang="en") -> ScrapedScene:
     global tag_map
     site_name = data["product"]
     tag_map = tag_mappings(site=site_name, lang=lang)
+    # Search results are partial: they lack the filename, description, tags and performers
     scene: ScrapedScene = {
         "title": data["title"],
         "date": data["date"],
-        "code": data["filename"],
-        "details": clean_text(data["description"]),
-        "tags": [to_scraped_tag(c) for c in data["categories"]],
-        "performers": [to_scraped_performer(p) for p in data["performers"]],
+        "tags": [to_scraped_tag(c) for c in data.get("categories", [])],
+        "performers": [to_scraped_performer(p) for p in data.get("performers", [])],
         "urls": [
             f"https://{site_name}.com/{lang}/video/{data['slug']}",
         ],
     }
+    if code := data.get("filename"):
+        scene["code"] = code
+    if description := data.get("description"):
+        scene["details"] = clean_text(description)
 
-    if image := dig(data, "horizontalProfile"):
-        scene["image"] = (
-            f"https://player.faknetworks.com/almacen/videos/listado_horizontal_{image}"
-        )
+    if image := cover_image(data):
+        scene["image"] = image
 
     studio = to_scraped_studio(data["serie"], site_name, lang)
     if config.flatten_hierarchy:
@@ -106,12 +140,32 @@ def scene_by_url(url: str) -> ScrapedScene | None:
 
     log.debug(f"Asking API... {api_url}")
     response = scraper.get(api_url)
+    if response.status_code == 404 and (new_slug := renamed_slug(url, slug)):
+        log.debug(f"Scene slug was renamed to {new_slug}")
+        api_url = f"https://api.faknetworks.com/v1/public/videos/{new_slug}?lang={lang}"
+        response = scraper.get(api_url)
     if response.status_code != 200:
         log.error(f"Failed to fetch data for {slug}: {response.status_code}")
         return None
     data = response.json()
 
     return to_scraped_scene(data, lang=lang)
+
+
+def renamed_slug(url: str, slug: str) -> str | None:
+    "The sites redirect old scene slugs to renamed ones, but the API only knows the new one"
+    if not url.startswith("http"):
+        return None
+    try:
+        response = scraper.get(url, allow_redirects=False, timeout=30)
+    except requests.RequestException:
+        return None
+    # Either a plain Location header, or a Next.js digest in the body of a 308 without one
+    target = response.headers.get("Location") or next(
+        iter(re.findall(r"NEXT_REDIRECT;\w+;([^;\\\"]+);30\d", response.text)), ""
+    )
+    new_slug = target.rstrip("/").rsplit("/", 1)[-1]
+    return new_slug if re.fullmatch(r"[-\w]+", new_slug) and new_slug != slug else None
 
 
 # Placeholder until we can figure out how to map filenames back to scenes
@@ -164,6 +218,6 @@ if __name__ == "__main__":
             result = scene_by_fragment(fragment)
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
-            exit(1)
+            sys.exit(1)
 
     print(json.dumps(result))
