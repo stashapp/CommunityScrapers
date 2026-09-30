@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - spritzz.com/video/
+      - spritzz.com/showgal.php
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -20,9 +21,12 @@ xPathScrapers:
                   with: $1
           split: ","
       Image:
-        selector: //img[@id="scene_faceimage"]/@src
+        # The player poster is 960x540, the face image only 500x351
+        selector: //script[contains(., "_player.jpg")] | //img[@id="scene_faceimage"][not(//script[contains(., "_player.jpg")])]/@src
         postProcess:
           - replace:
+              - regex: (?s)^.*image:\s*'/([^']+_player\.jpg)'.*$
+                with: ${1}
               - regex: ^
                 with: https://spritzz.com/
       Date:
