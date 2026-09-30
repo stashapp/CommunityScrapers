@@ -13,6 +13,7 @@ sceneByFragment:
   script:
     - python
     - ../Altwolia/scrape.py
+    - biphoria
     - scene-by-fragment
 sceneByName:
   action: script
