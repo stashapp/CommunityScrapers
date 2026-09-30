@@ -12,7 +12,6 @@ from Altwolia.scrape import (
     scene_from_url,
     scene_search,
 )
-
 from py_common import log
 from py_common.util import replace_all, scraper_args
 
@@ -21,12 +20,18 @@ SITENAME_PRETTY_MAP = {
     "DownlowBoys": "Downlow Boys",
 }
 
+# Licensed third-party content, not one of the network's own sites
+PARTNERS = {"Dfxtrapartners"}
+
 
 def dogfartnetwork(obj: Any, api_object: dict[str, Any]) -> Any:
     if not (pretty := api_object.get("sitename_pretty")):
         return obj
     studio_name = SITENAME_PRETTY_MAP.get(pretty, pretty)
-    return replace_all(obj, "studio", lambda s: {**s, "name": studio_name})
+    studio = {"name": studio_name}
+    if studio_name not in PARTNERS:
+        studio["parent"] = {"name": "Dogfart Network"}
+    return replace_all(obj, "studio", lambda s: {**s, **studio})
 
 
 if __name__ == "__main__":
