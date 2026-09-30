@@ -13,6 +13,7 @@ sceneByFragment:
   script:
     - python
     - ../Altwolia/scrape.py
+    - burningangel
     - scene-by-fragment
 sceneByName:
   action: script
@@ -41,6 +42,7 @@ galleryByFragment:
   script:
     - python
     - ../Altwolia/scrape.py
+    - burningangel
     - gallery-by-fragment
 performerByURL:
   - action: script
@@ -55,6 +57,7 @@ performerByFragment:
   script:
     - python
     - ../Altwolia/scrape.py
+    - burningangel
     - performer-by-fragment
 performerByName:
   action: script
