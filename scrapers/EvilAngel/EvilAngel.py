@@ -15,7 +15,6 @@ from Altwolia.scrape import (
     scene_from_url,
     scene_search,
 )
-
 from py_common import log
 from py_common.util import dig, replace_all, replace_at, scraper_args
 
@@ -124,10 +123,11 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
     ):
         log.debug(f"matched director_match '{director_match}'")
         return director_match
-    if movie_desc := (api_object.get("movie_desc") or api_object.get("description")):
-        if "BAM Visions" in movie_desc:
-            log.debug("matched 'BAM Visions' in movie_desc")
-            return "BAM Visions"
+    if (
+        movie_desc := (api_object.get("movie_desc") or api_object.get("description"))
+    ) and "BAM Visions" in movie_desc:
+        log.debug("matched 'BAM Visions' in movie_desc")
+        return "BAM Visions"
     log.debug("Did not match any studio override logic")
     return None
 
@@ -153,9 +153,20 @@ def has_working_url_pattern(_url: str) -> bool:
     return site_name(_url) not in ["lewood", "lexingtonsteele"]
 
 
+# LeWood is its own top-level studio, not an Evil Angel sub-studio
+NOT_EVIL_ANGEL_CHILDREN = {"Evil Angel", "LeWood"}
+
+
+def with_network(studio: dict[str, Any], name: str | None) -> dict[str, Any]:
+    studio = {**studio, "name": name} if name else studio
+    if studio.get("name") not in NOT_EVIL_ANGEL_CHILDREN:
+        studio = {**studio, "parent": {"name": "Evil Angel"}}
+    return studio
+
+
 def evilangel(obj: Any, api_object: dict[str, Any]) -> Any:
-    if studio_override := determine_studio(api_object):
-        obj = replace_all(obj, "studio", lambda s: {**s, "name": studio_override})
+    studio_override = determine_studio(api_object)
+    obj = replace_all(obj, "studio", lambda s: with_network(s, studio_override))
 
     obj = replace_at(obj, "details", replacement=fix_ts_trans_find_replace)
     obj = replace_at(obj, "synopsis", replacement=fix_ts_trans_find_replace)

@@ -1,8 +1,8 @@
-Scraper has been tested on 2026-08-28 and returns correct studio/network values for all of the following URLs
+Scraper has been tested on 2026-09-30 and returns correct studio/network values for all of the following URLs
 
 |    Network | Studio                       | URL                                                                                               |
 | ---------: | :--------------------------- | ------------------------------------------------------------------------------------------------- |
-| Evil Angel | Evil Angel                   | https://www.evilangel.com/en/video/evilangel/Alexis-James/292020                                  |
+|            | Evil Angel                   | https://www.evilangel.com/en/video/evilangel/Alexis-James/292020                                  |
 | Evil Angel | Aiden Riley                  | https://www.evilangel.com/en/video/evilangel/Girl-Train-04-Scene-03/77347                         |
 | Evil Angel | Anal Acrobats                | https://www.evilangel.com/en/video/evilangel/Natasha-RiosPolly-Petrova-Set-2/199401               |
 | Evil Angel | AnalTriXXX                   | https://www.analtrixxx.com/en/video/evilangel/Big-Toys-Dick-Lube-Farting/133914                   |
@@ -22,7 +22,7 @@ Scraper has been tested on 2026-08-28 and returns correct studio/network values 
 | Evil Angel | Kevin Moore                  | https://www.evilangel.com/en/video/evilangel/Anal-Corruption-Scene-01/53090                       |
 | Evil Angel | Latex Playtime               | https://www.evilangel.com/en/video/evilangel/NICO-LUVA-Latex-Encased-Anal--A2M-Fun/285985         |
 | Evil Angel | Lexington Steele             | https://www.evilangel.com/en/video/evilangel/Young-Quinns-11-Inch-BBC-Passion/126248              |
-| Evil Angel | LeWood                       | https://www.evilangel.com/en/video/evilangel/LOLLY-DAMES-Anal-Rimming--Gaping-MILF/234838         |
+|            | LeWood                       | https://www.evilangel.com/en/video/evilangel/LOLLY-DAMES-Anal-Rimming--Gaping-MILF/234838         |
 | Evil Angel | Mike Adriano                 | https://www.evilangel.com/en/video/evilangel/Gaping-Compilation-04---Mike-Adriano-Scene-01/174424 |
 | Evil Angel | Nacho Vidal Hardcore         | https://www.evilangel.com/en/video/evilangel/Tattooed-Candys-Big-Cock-BlowjobFuck/146916          |
 | Evil Angel | PansexualX                   | https://www.evilangel.com/en/video/pansexualx/Zariah-Aura--Lilly-Bell/291012                      |
@@ -43,4 +43,4 @@ A few substudios are known to be irreducibly ambiguous from the Algolia API's ow
 - `Jake Malone` vs `Cock Choking Sluts` - some Jake Malone-branded series (like "We Suck") have `mainChannel: "Cock Choking Sluts"` and both site tags; the scraper defaults to Cock Choking Sluts since it's more specific/current
 - `Christoph Clark Online` vs `Euro Angels` - some Christoph Clark Online series (like "Angel Perverse") have `mainChannel: "Euro Angels"` alongside the christophclarkonline site tag; defaults to Euro Angels
 - `Jonni Darkko XXX` vs `AnalTriXXX` - some Jonni Darkko-hosted scenes have `mainChannel: "Anal Trixxx"`; defaults to AnalTriXXX
-- `Shemale Idol` vs `Transsexual Angel`/`TS Factor` - some StashDB-curated Shemale Idol scenes carry none of the signals that identify the studio elsewhere: `availableOnSite` is just `["evilangel", "tsfactor"]` (no `shemaleidol` tag), `mainChannel` is `"Transsexual Angel"`, and `serie_name` is an unrelated series like `"Trans-Visions"`. No field on these scenes distinguishes them from genuine Transsexual Angel/TS Factor content, so they scrape as TS Factor. (Scenes whose `serie_name` is literally `"She-Male Idol"` - a hyphenated spelling variant - *are* correctly detected via an early check in `determine_studio`, ahead of the `tsfactor` site_map match that would otherwise shadow them.)
+- `Shemale Idol` vs `Transsexual Angel`/`TS Factor` - some StashDB-curated Shemale Idol scenes carry none of the signals that identify the studio elsewhere: `availableOnSite` is just `["evilangel", "tsfactor"]` (no `shemaleidol` tag), `mainChannel` is `"Transsexual Angel"`, and `serie_name` is an unrelated series like `"Trans-Visions"`. No field on these scenes distinguishes them from genuine Transsexual Angel/TS Factor content, so they scrape as TS Factor. (Scenes whose `serie_name` is literally `"She-Male Idol"` - a hyphenated spelling variant - _are_ correctly detected via an early check in `determine_studio`, ahead of the `tsfactor` site_map match that would otherwise shadow them.)
