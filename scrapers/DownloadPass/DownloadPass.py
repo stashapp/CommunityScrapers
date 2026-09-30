@@ -1,218 +1,179 @@
 import json
 import re
 import sys
-from datetime import datetime as dt
+import time
 
 from py_common import log
 from py_common.deps import ensure_requirements
 from py_common.types import (
-    ScrapedMovie,
+    ScrapedGroup,
     ScrapedPerformer,
     ScrapedScene,
     ScrapedStudio,
-    ScrapedTag,
 )
 from py_common.util import scraper_args
 
 ensure_requirements("requests", "lxml")
-import requests  # noqa: E402
-from lxml import html  # noqa: E402
+import requests
+from lxml import html
 
 BASE_URL = "https://www.downloadpass.com"
 
+# Used as the meta description of scenes that have no description of their own
+BOILERPLATE_DETAILS = "Download full-length Porn DVDs at Download Pass"
 
-def get_html_from_url(url: str, session: requests.Session) -> html.HtmlElement | None:
+session = requests.Session()
+
+
+def fetch(url: str) -> html.HtmlElement | None:
     try:
-        res = session.get(url)
+        res = session.get(url, timeout=30)
         res.raise_for_status()
-    except Exception as ex:
-        log.error(f"Error getting URL: {ex}")
-    else:
-        return html.fromstring(res.text)
-
-
-def get_first_elem_text(root: html.HtmlElement, expression: str) -> str | None:
-    try:
-        el = root.xpath(expression)[0]
-    except IndexError:
-        log.warning(f"Element not found: {expression}")
+    except requests.RequestException as e:
+        log.error(f"Error getting URL: {e}")
         return None
-    if isinstance(el, html.HtmlElement):
-        return el.text
-    return el
+    return html.fromstring(res.text)
 
 
-def urls_from_style(style_text: str) -> list[str]:
-    return re.findall(r"(https?://\S+)\)", style_text)
+def first(root: html.HtmlElement, xpath: str) -> str | None:
+    "Text of the first match, whether the XPath selects elements or strings"
+    for match in root.xpath(xpath):
+        text = match.text if isinstance(match, html.HtmlElement) else str(match)
+        if text and (text := text.strip()):
+            return text
+    return None
 
 
-def movie_from_url(url: str) -> ScrapedMovie:
-    def get_table_text(tree: html.HtmlElement, header: str):
-        return get_first_elem_text(tree, ".//li/span[text()='" + header + "']/parent::li/text()")
+def url_from_style(style: str | None) -> str | None:
+    return (
+        m.group(1) if style and (m := re.search(r"(https?://\S+)\)", style)) else None
+    )
 
-    sess = requests.Session()
 
-    url = url.replace("heatwavepass.com", "downloadpass.com")
-    tree = get_html_from_url(url, sess)
-    if tree is None:
-        sys.exit(1)
-
+def parse_date(text: str, fmt: str) -> str | None:
     try:
-        info_el = tree.xpath("//div[contains(@class, 'dvd-info')]")[0]
-    except IndexError:
-        log.warning("Info element not found")
-        sys.exit(1)
+        return time.strftime("%Y-%m-%d", time.strptime(text, fmt))
+    except ValueError:
+        return None
 
-    group = ScrapedMovie()
 
-    # Name
-    name_text = get_first_elem_text(info_el, "./h1")
-    if name_text:
-        group["name"] = name_text
-    # Date
-    date_text = get_table_text(info_el, "Added")
-    if date_text:
-        group["date"] = dt.strptime(date_text, "%b %d, %Y").strftime("%Y-%m-%d")
-    # Duration
-    duration_text = get_table_text(info_el, "Duration")
-    if duration_text:
-        duration = 0
-        duration_parts = re.findall(r"(\d+[h|m|s])", duration_text)
-        for part in duration_parts:
-            t_abbr = part[-1]
-            t_val = int(part[:-1])
-            match t_abbr:
-                case "s":
-                    t_mult = 1
-                case "m":
-                    t_mult = 60
-                case "h":
-                    t_mult = 60 * 60
-            duration = duration + t_val * t_mult
-        if duration:
-            group["duration"] = str(duration)
-    # Covers
-    cover_map = {"front_image": "cover-front", "back_image": "cover-back"}
-    for k, v in cover_map.items():
-        cover_style_text = get_first_elem_text(info_el, f".//div[@id='{v}']/@style")
-        try:
-            cover_url = urls_from_style(cover_style_text)[0]
-        except (TypeError, IndexError):
-            pass
-        else:
-            group[k] = cover_url
-    # URL
-    group_url_text = get_first_elem_text(tree, "//link[@rel='canonical']/@href")
-    if group_url_text:
-        group["url"] = group_url_text
+def parse_duration(text: str) -> int:
+    "Durations are written like '1h, 26m, 29s'"
+    units = {"h": 3600, "m": 60, "s": 1}
+    return sum(int(n) * units[u] for n, u in re.findall(r"(\d+)([hms])", text))
 
+
+def dvd_studio(dvd: html.HtmlElement) -> ScrapedStudio | None:
+    xpath = "//div[contains(@class, 'dvd-info')]//li/span[text()='Studio']/parent::li/a"
+    return {"name": name} if (name := first(dvd, xpath)) else None
+
+
+def movie_from_url(url: str) -> ScrapedGroup | None:
+    url = url.replace("heatwavepass.com", "downloadpass.com")
+    if (tree := fetch(url)) is None:
+        return None
+    if not (info := tree.xpath("//div[contains(@class, 'dvd-info')]")):
+        log.error("Info element not found")
+        return None
+    info = info[0]
+
+    def field(label: str) -> str | None:
+        return first(info, f".//li/span[text()='{label}']/parent::li/text()")
+
+    group: ScrapedGroup = {}
+    if name := first(info, "./h1"):
+        group["name"] = name
+    if (added := field("Added")) and (date := parse_date(added, "%b %d, %Y")):
+        group["date"] = date
+    if (length := field("Duration")) and (duration := parse_duration(length)):
+        group["duration"] = str(duration)
+    if front := url_from_style(first(info, ".//div[@id='cover-front']/@style")):
+        group["front_image"] = front
+    if back := url_from_style(first(info, ".//div[@id='cover-back']/@style")):
+        group["back_image"] = back
+    if studio := dvd_studio(tree):
+        group["studio"] = studio
+    if canonical := first(tree, "//link[@rel='canonical']/@href"):
+        group["urls"] = [canonical]
     return group
 
 
-def scene_from_url(url: str) -> ScrapedScene:
-    sess = requests.Session()
+def scene_from_url(url: str) -> ScrapedScene | None:
+    if (tree := fetch(url)) is None:
+        return None
 
-    tree = get_html_from_url(url, sess)
-    if tree is None:
-        sys.exit(1)
+    scene: ScrapedScene = {}
+    if (details := first(tree, "//meta[@name='description']/@content")) and (
+        details != BOILERPLATE_DETAILS
+    ):
+        scene["details"] = details
+    if canonical := first(tree, "//link[@rel='canonical']/@href"):
+        scene["urls"] = [canonical]
 
-    scene = ScrapedScene()
-
-    # Details
-    try:
-        scene["details"] = tree.xpath("//meta[@name='description']/@content")[0]
-    except IndexError:
-        log.error("Details element not found.")
-
-    # URL
-    try:
-        scene["url"] = tree.xpath("//link[@rel='canonical']/@href")[0]
-    except IndexError:
-        log.error("Canonical link element not found.")
-
-    try:
-        player_el = tree.xpath("//div[@id='player_page']")[0]
-    except IndexError:
-        log.error("Player element not found.")
-    else:
-        # Title
-        title_el = get_first_elem_text(player_el, ".//h1[@class='title']")
-        if title_el:
-            scene["title"] = title_el
-        # Image
-        image_text = get_first_elem_text(player_el, ".//div[@id='promo-shots']/div[1]/@style")
-        if image_text:
-            image_url = urls_from_style(image_text)[0]
-            # Use the first thumbnail image name as scene image name. Naming convention happens to align.
-            scene["image"] = re.sub(r"(.+)/images/(.+)/crop/\d+x\d+/(.+)", r"\1/sc/\2/\3", image_url)
-        # Performers
-        performer_els = player_el.xpath(".//div[contains(@class, 'starItem')]")
-        performers = []
-        for p_el in performer_els:
-            p_name = get_first_elem_text(p_el, "./div[@class='name']/a")
-            if p_name:
-                performer = ScrapedPerformer(name=p_name)
-                p_url = get_first_elem_text(p_el, "./div[@class='name']/a/@href")
-                if p_url:
-                    performer["urls"] = [BASE_URL + p_url]
-                performers.append(performer)
-        scene["performers"] = performers
-
-    try:
-        info_el = tree.xpath("//div[@id='info_container']")[0]
-    except IndexError:
-        log.error("Info element not found.")
-    else:
-        # Date
-        date_text = get_first_elem_text(info_el, ".//span[text()='Added']/parent::p/text()")
-        if date_text:
-            scene["date"] = dt.strptime(date_text.replace("Added", "").strip(), "%B %d, %Y").strftime("%Y-%m-%d")
-        # Groups
-        group_title = get_first_elem_text(info_el, ".//span[text()='DVD Title']/parent::p/a")
-        if group_title:
-            group = ScrapedMovie(name=group_title)
-            group_url = get_first_elem_text(tree, "//div[@id='right']/div[@class='dvd']/h4/a/@href")
-            if group_url:
-                group["url"] = BASE_URL + group_url
-            scene["movies"] = [group]
-        # Tags
-        tag_els = info_el.xpath(".//span[text()='Tags']/parent::p/a")
-        if tag_els:
-            scene["tags"] = [ScrapedTag(name=t.text) for t in tag_els]
-
-    # Studio
-    studio_url = get_first_elem_text(tree, "//div[@id='right']/div[@class='dvd']/h4/a/@href")
-    if studio_url:
-        studio_tree = get_html_from_url(BASE_URL + studio_url, sess)
-        if studio_tree is not None:
-            studio_name = get_first_elem_text(
-                studio_tree,
-                "//div[@id='content']//div[contains(@class, 'dvd-info')]//li/span[text()='Studio']/parent::li/a",
+    if player := tree.xpath("//div[@id='player_page']"):
+        player = player[0]
+        if title := first(player, ".//h1[@class='title']"):
+            scene["title"] = title
+        style = first(player, ".//div[@id='promo-shots']/div[1]/@style")
+        if thumb := url_from_style(style):
+            # The first thumbnail's name matches the scene image's naming convention
+            scene["image"] = re.sub(
+                r"(.+)/images/(.+)/crop/\d+x\d+/(.+)", r"\1/sc/\2/\3", thumb
             )
-            if studio_name:
-                scene["studio"] = ScrapedStudio(name=studio_name)
+        scene["performers"] = [
+            {
+                "name": name,
+                **({"urls": [BASE_URL + href]} if href else {}),
+            }
+            for star in player.xpath(".//div[contains(@class, 'starItem')]")
+            if (name := first(star, "./div[@class='name']/a"))
+            for href in [first(star, "./div[@class='name']/a/@href")]
+        ]
+
+    if info := tree.xpath("//div[@id='info_container']"):
+        info = info[0]
+        if (added := first(info, ".//span[text()='Added']/parent::p/text()")) and (
+            date := parse_date(added.replace("Added", "").strip(), "%B %d, %Y")
+        ):
+            scene["date"] = date
+        if (length := first(info, ".//span[text()='Duration']/parent::p/text()")) and (
+            duration := parse_duration(length)
+        ):
+            scene["duration"] = duration
+        if tags := [t.text for t in info.xpath(".//span[text()='Tags']/parent::p/a")]:
+            scene["tags"] = [{"name": tag} for tag in tags if tag]
+
+    dvd_path = first(tree, "//div[@id='right']/div[@class='dvd']/h4/a/@href")
+    if dvd_title := first(
+        tree, "//div[@id='info_container']//span[text()='DVD Title']/parent::p/a"
+    ):
+        group: ScrapedGroup = {"name": dvd_title}
+        if dvd_path:
+            group["urls"] = [BASE_URL + dvd_path]
+        scene["groups"] = [group]
+    # The studio is only listed on the scene's DVD page
+    if (
+        dvd_path
+        and (dvd := fetch(BASE_URL + dvd_path)) is not None
+        and (studio := dvd_studio(dvd))
+    ):
+        scene["studio"] = studio
 
     return scene
 
 
-def performer_from_url(url: str) -> ScrapedPerformer:
-    sess = requests.Session()
-    tree = get_html_from_url(url, sess)
-    if tree is None:
-        sys.exit(1)
-
-    try:
-        bio_elem = tree.xpath("//div[contains(@class, 'pornstar-bio')]")[0]
-    except IndexError:
-        log.error("Bio element not found.")
-        sys.exit(1)
-
-    p_id = re.findall(r".+?(\d+)", url)[0]
-    performer = ScrapedPerformer(
-        name=get_first_elem_text(bio_elem, "./h1"),
-        image=f"https://images.downloadpass.com/images/headshots/{p_id[:1]}/{p_id}/crop/300.jpg",
-    )
-
+def performer_from_url(url: str) -> ScrapedPerformer | None:
+    if (tree := fetch(url)) is None:
+        return None
+    if not (name := first(tree, "//div[contains(@class, 'pornstar-bio')]/h1")):
+        log.error("Performer name not found")
+        return None
+    performer: ScrapedPerformer = {"name": name, "urls": [url]}
+    if p_id := re.search(r"(\d+)", url.rsplit("/", 1)[-1]):
+        pid = p_id.group(1)
+        performer["images"] = [
+            f"https://images.downloadpass.com/images/headshots/{pid[:1]}/{pid}/crop/300.jpg"
+        ]
     return performer
 
 
@@ -227,7 +188,7 @@ if __name__ == "__main__":
         case "performer-by-url", {"url": url} if url:
             result = performer_from_url(url)
         case _:
-            log.error(f"Not Implemented: Operation: {op}, arguments: {json.dumps(args)}")
+            log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
             sys.exit(1)
 
     print(json.dumps(result))
