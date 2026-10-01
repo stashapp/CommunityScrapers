@@ -1,5 +1,6 @@
 import json
 import sys
+from typing import Any
 
 from Altwolia.scrape import (
     movie_from_url,
@@ -12,10 +13,26 @@ from Altwolia.scrape import (
 )
 from Altwolia.utils import append_scene_number
 from py_common import log
-from py_common.util import scraper_args
+from py_common.util import replace_all, scraper_args
+
+studio_map = {
+    "Hot House": "Hot House Entertainment",
+    "Naked Sword Originals": "NakedSword",
+}
 
 
-falconstudios = append_scene_number
+def rename_studios(obj: Any) -> Any:
+    return replace_all(
+        obj, "studio", lambda s: {**s, "name": studio_map.get(s["name"], s["name"])}
+    )
+
+
+def falconstudios(scene: Any, api_scene: dict[str, Any]) -> Any:
+    return rename_studios(append_scene_number(scene, api_scene))
+
+
+def falconstudios_group(group: Any, _) -> Any:
+    return rename_studios(group)
 
 
 if __name__ == "__main__":
@@ -37,7 +54,7 @@ if __name__ == "__main__":
         case "performer-by-name", {"name": name} if name:
             result = performer_search(name, site)
         case "movie-by-url", {"url": url} if url:
-            result = movie_from_url(url, site)
+            result = movie_from_url(url, site, postprocess=falconstudios_group)
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
             sys.exit(1)
