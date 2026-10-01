@@ -3,6 +3,7 @@ import sys
 from typing import Any
 
 from Altwolia.scrape import (
+    api_scene_from_id,
     gallery_from_fragment,
     gallery_from_url,
     movie_from_url,
@@ -13,27 +14,52 @@ from Altwolia.scrape import (
     scene_from_url,
     scene_search,
 )
-
-from Altwolia.utils import append_scene_number, append_studio_name
-from py_common.types import ScrapedScene
+from Altwolia.utils import append_scene_number
 from py_common import log
-from py_common.util import scraper_args
+from py_common.types import ScrapedGallery, ScrapedScene
+from py_common.util import dig, replace_all, scraper_args
 
 FALLBACK_STUDIO = "Fisting Inferno"
+SITE = "fistinginferno"
 
 
 def fistinginferno(obj: Any, api_object: dict[str, Any]) -> Any:
-    return append_studio_name(obj, api_object, fallback=FALLBACK_STUDIO)
+    "Sets the studio to the API's main channel, parented under Fisting Inferno"
+    # photosets carry `channels` but no `mainChannel`
+    if studio_name := dig(api_object, "mainChannel", "name") or dig(
+        api_object, "channels", 0, "name"
+    ):
+        return replace_all(
+            obj,
+            "studio",
+            lambda s: {**s, "name": studio_name, "parent": {"name": FALLBACK_STUDIO}},
+        )
+    return replace_all(obj, "studio", lambda s: {**s, "name": FALLBACK_STUDIO})
 
 
-def fistinginferno_scene(scene: ScrapedScene, api_scene: dict[str, Any]) -> ScrapedScene:
+def fistinginferno_scene(
+    scene: ScrapedScene, api_scene: dict[str, Any]
+) -> ScrapedScene:
     return append_scene_number(fistinginferno(scene, api_scene), api_scene)
+
+
+def fistinginferno_gallery(
+    gallery: ScrapedGallery, api_object: dict[str, Any]
+) -> ScrapedGallery:
+    # most photosets carry no channel, but their scene does
+    if (
+        not api_object.get("channels")
+        and (clip_id := api_object.get("clip_id"))
+        and (api_scene := api_scene_from_id(str(clip_id), SITE))
+    ):
+        api_object = api_scene
+    return fistinginferno(gallery, api_object)
 
 
 if __name__ == "__main__":
     op, args = scraper_args()
 
-    site = "fistinginferno"
+    site = SITE
     log.debug(f"args: {args}")
     match op, args:
         case "scene-by-url", {"url": url} if url:
@@ -43,9 +69,11 @@ if __name__ == "__main__":
         case "scene-by-fragment" | "scene-by-query-fragment", args:
             result = scene_from_fragment(args, site, postprocess=fistinginferno_scene)
         case "gallery-by-url", {"url": url} if url:
-            result = gallery_from_url(url, site, postprocess=fistinginferno)
+            result = gallery_from_url(url, site, postprocess=fistinginferno_gallery)
         case "gallery-by-fragment", args:
-            result = gallery_from_fragment(args, site, postprocess=fistinginferno)
+            result = gallery_from_fragment(
+                args, site, postprocess=fistinginferno_gallery
+            )
         case "movie-by-url", {"url": url} if url:
             result = movie_from_url(url, site, postprocess=fistinginferno)
         case "performer-by-url", {"url": url}:

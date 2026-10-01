@@ -1,4 +1,4 @@
-Scraper has been tested on 2026-08-29
+Scraper has been tested on 2026-10-01
 
 `fistingcentral.com` and `clubinfernodungeon.com` both 301-redirect to `fistinginferno.com`
 

@@ -35,6 +35,9 @@ galleryByURL:
       - fistinginferno.com/en/photo/
       - fistingcentral.com/en/photo/
       - clubinfernodungeon.com/en/photo/
+      - fistinginferno.com/en/video/
+      - fistingcentral.com/en/video/
+      - clubinfernodungeon.com/en/video/
     script:
       - python
       - FistingInferno.py

@@ -1,10 +1,7 @@
 import re
-from typing import Any, TypeVar
+from typing import Any
 
-from py_common.types import ScrapedGallery, ScrapedMovie, ScrapedScene
-from py_common.util import dig, replace_all
-
-Scraped = TypeVar("Scraped", ScrapedScene, ScrapedGallery, ScrapedMovie)
+from py_common.types import ScrapedScene
 
 # clip_path is always "{movie_id}_{position}", but the position is only a
 # meaningful scene number when the clip is part of its original multi-scene release
@@ -40,20 +37,3 @@ def append_scene_number(
     ):
         scene["title"] = f"{title}{separator}Scene {int(position.group(1))}"
     return scene
-
-
-def append_studio_name(
-    obj: Scraped, api_object: dict[str, Any], fallback: str
-) -> Scraped:
-    "Sets the studio to the API's main channel, parented under the fallback"
-    if studio_name := dig(api_object, "mainChannel", "name"):
-        return replace_all(
-            obj,
-            "studio",
-            lambda s: {
-                **s,
-                "name": studio_name,
-                "parent": {"name": fallback},
-            },
-        )
-    return replace_all(obj, "studio", lambda s: {**s, "name": fallback})
