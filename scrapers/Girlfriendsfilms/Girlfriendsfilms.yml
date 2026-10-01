@@ -30,6 +30,7 @@ galleryByURL:
   - action: script
     url:
       - girlfriendsfilms.com/en/photo/
+      - girlfriendsfilms.com/en/video/
     script:
       - python
       - Girlfriendsfilms.py
