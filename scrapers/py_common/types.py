@@ -145,6 +145,7 @@ class ScrapedScene(TypedDict, total=False):
     director: str
     urls: list[str]
     date: str
+    production_date: str
     image: str
     "Image can be a URL or base64-encoded data URL"
     studio: ScrapedStudio
