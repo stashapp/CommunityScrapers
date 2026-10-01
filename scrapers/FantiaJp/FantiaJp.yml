@@ -5,14 +5,13 @@ sceneByURL:
       - fantia.jp/posts/
     script:
       - python
-      - ./fantiajp.py
-      - post
+      - fantiajp.py
+      - scene-by-url
 galleryByURL:
   - action: script
     url:
       - fantia.jp/posts/
     script:
       - python
-      - ./fantiajp.py
-      - post
-# Last Updated May 19, 2024
+      - fantiajp.py
+      - gallery-by-url
