@@ -749,9 +749,26 @@ def performer_from_fragment(
         [ScrapedPerformer, dict], ScrapedPerformer
     ] = default_postprocess,
 ) -> ScrapedPerformer | None:
-    if not (url := fragment.get("url")):
-        return None
-    return performer_from_url(url, site, postprocess)
+    if url := fragment.get("url") or next(iter(fragment.get("urls") or []), None):
+        return performer_from_url(url, site, postprocess)
+    # Without a URL only an exact name match is safe to follow
+    if (
+        (name := fragment.get("name"))
+        and (
+            match := next(
+                (
+                    p
+                    for p in performer_search(name, site)
+                    if p["name"].casefold() == name.casefold()
+                ),
+                None,
+            )
+        )
+        and (urls := match.get("urls"))
+    ):
+        return performer_from_url(urls[0], site, postprocess)
+    log.warning("Cannot scrape performer: no URL and no exact name match")
+    return None
 
 
 if __name__ == "__main__":
