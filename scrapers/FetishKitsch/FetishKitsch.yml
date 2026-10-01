@@ -1,14 +1,10 @@
 name: FetishKitsch
 # requires: py_common
-
 sceneByURL:
   - action: script
     script:
-      - python3
+      - python
       - FetishKitsch.py
-      - scrape
-      - scene
+      - scene-by-url
     url:
       - fetishkitsch.com/post/
-
-# Last Updated May 11, 2024

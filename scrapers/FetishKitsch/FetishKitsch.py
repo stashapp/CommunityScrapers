@@ -1,217 +1,71 @@
-import base64
 import json
+import re
 import sys
-from datetime import datetime
-from typing import Union, Any, Dict, List
-from urllib.parse import urljoin, urlparse
-
-from py_common import log
-from py_common.types import ScrapedPerformer, ScrapedScene, ScrapedTag
+import time
+from typing import Any
 
 import requests
-from bs4 import BeautifulSoup
+
+from py_common import log
+from py_common.types import ScrapedScene
+from py_common.util import scraper_args
 
 
-USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
+def fetch_post(url: str) -> dict[str, Any] | None:
+    try:
+        response = requests.get(
+            url, headers={"User-Agent": "stash-scraper/1.0"}, timeout=(3, 10)
+        )
+        response.raise_for_status()
+    except requests.RequestException as e:
+        log.error(f"Failed to fetch {url}: {e}")
+        return None
+
+    if not (
+        match := re.search(
+            r'<script id="__NEXT_DATA__" type="application/json">(.+?)</script>',
+            response.text,
+        )
+    ):
+        log.error(f"No __NEXT_DATA__ found on {url}")
+        return None
+
+    return json.loads(match.group(1))["props"]["pageProps"].get("post")
 
 
-class FetishKitsch:
-    """
-    Class to scrape FetishKitsch.com.
-
-    Attributes
-    ----------
-    _base_url : str
-        The base URL of the FetishKitsch website.
-    """
-
-    _base_url: str = 'https://fetishkitsch.com/'
-
-    @classmethod
-    def fetch_post(cls, post_id: str) -> Union[Dict[str, Any], None]:
-        """
-        Fetches a post from the FetishKitsch website.
-
-        Parameters
-        ----------
-        post_id : str
-            The ID of the post to fetch.
-
-        Returns
-        -------
-        Union[Dict[str, Any], None]
-            The post data if it was found, None otherwise.
-        """
-        next_build_id: Union[str, None] = cls.scrape_build_id()
-        if next_build_id is None:
-            return None
-
-        url: str = urljoin(cls._base_url, f'/_next/data/{next_build_id}/post/{post_id}.json?postId={post_id}')
-        log.debug(f'Fetching URL {url}')
-        try:
-            response = requests.get(url, headers={'User-Agent': USER_AGENT}, timeout=(3, 6))
-        except requests.exceptions.RequestException as req_ex:
-            log.error(f'Error fetching URL {url}: {req_ex}')
-            return None
-
-        if response.status_code >= 400:
-            log.info(f'Fetching URL {url} resulted in error status: {response.status_code}')
-            return None
-
-        data = response.json()
-        log.debug(f'Received data: {data}')
-        return data
-
-    @classmethod
-    def fetch_thumbnail(cls, thumbnail_url: str) -> Union[str, None]:
-        """
-        Fetches the thumbnail for a post from the FetishKitsch website.
-
-        Parameters
-        ----------
-        thumbnail_url : str
-            The URL of the thumbnail to fetch.
-
-        Returns
-        -------
-        Union[str, None]
-            The URL of the thumbnail if it was found, None otherwise.
-        """
-        try:
-            response = requests.get(thumbnail_url, headers={'User-Agent': USER_AGENT}, timeout=(3, 6))
-            if response and response.status_code < 400:
-                content_type = response.headers.get('content-type')
-                mime = content_type.split(';')[0] if content_type else 'image/jpeg'
-                encoded = base64.b64encode(response.content).decode('utf-8')
-                return f'data:{mime};base64,{encoded}'
-        except requests.exceptions.RequestException as req_ex:
-            log.info(f'Error fetching URL {thumbnail_url}: {req_ex}')
-            return None
-
-    @classmethod
-    def map_performer(cls, performer: str) -> ScrapedPerformer:
-        """
-        Maps a raw performer info to a ScrapedPerformer.
-
-        Parameters
-        ----------
-        performer : str
-            The raw performer info to map.
-
-        Returns
-        -------
-        ScrapedPerformer
-            The mapped performer.
-        """
-        return {
-            'name': performer.replace('_', ' '),
-        }
-
-    @classmethod
-    def map_tag(cls, tag: str) -> ScrapedTag:
-        """
-        Maps a raw tag to a ScrapedTag.
-
-        Parameters
-        ----------
-        tag : str
-            The raw tag to map.
-
-        Returns
-        -------
-        ScrapedTag
-            The mapped tag.
-        """
-        return {
-            'name': tag.replace('_', ' '),
-        }
-
-    @classmethod
-    def scrape_build_id(cls) -> Union[str, None]:
-        """
-        Fetches the buildId from the next.js website.
-
-        Returns
-        -------
-        Union[str, None]
-            The buildId if it was found, None otherwise.
-        """
-        log.debug('Fetching next.js buildId')
-        try:
-            response = requests.get(cls._base_url, headers={'User-Agent': USER_AGENT}, timeout=(3, 6))
-        except requests.exceptions.RequestException as req_ex:
-            log.error(f'Error fetching next.js buildId: {req_ex}')
-            return None
-
-        if response.status_code >= 400:
-            log.info(f'Fetching next.js buildId resulted in error status: {response.status_code}')
-            return None
-
-        html_response = BeautifulSoup(response.text, 'html.parser')
-        next_meta = json.loads(html_response.find('script', {'id': '__NEXT_DATA__'}).string)
-        return next_meta['buildId']
-
-    @classmethod
-    def scrape_scene(cls, url: str) -> Union[ScrapedScene, None]:
-        """
-        Scrapes a scene from FetishKitsch.com.
-
-        Parameters
-        ----------
-        url : str
-            The URL of the scene to scrape.
-
-        Returns
-        -------
-        Union[ScrapedScene, None]
-            The scraped scene if it was found, None otherwise.
-        """
-        log.info(f'Scraping FetishKitsch.com scene from {url}')
-        parsed = urlparse(url)
-        path: List[str] = parsed.path.split('/')
-        build_id: Union[str, None] = cls.scrape_build_id()
-
-        if build_id is None:
-            return None
-
-        post_id: str = path[path.index('post') + 1]
-        post: Union[Dict[str, Any], None] = cls.fetch_post(post_id)
-
-        if post is None:
-            return None
-
-        post = post['pageProps']['post']
-        assert post is not None
-        scene: ScrapedScene = {
-            'title': post['title'].replace('_', ' '),
-            'url': urljoin(cls._base_url, f'/post/{post_id}'),
-            'date': datetime.strptime(post['publishDate'], '%b %d, %Y').strftime('%Y-%m-%d'),
-            'tags': list(map(lambda t: cls.map_tag(t), post['tags'])),
-            'performers': list(map(lambda p: cls.map_performer(p), post['people'])),
-            'studio': {
-                'name': 'FetishKitsch',
-                'url': 'https://fetishkitsch.com/',
-            },
-            'code': str(post['shootCode']),
-        }
-
-        thumbnail: Union[str, None] = cls.fetch_thumbnail(post['videoThumbnail'])
-        if thumbnail is not None:
-            scene['image'] = thumbnail
-
-        return scene
+def to_iso_date(date: str) -> str:
+    return time.strftime("%Y-%m-%d", time.strptime(date, "%b %d, %Y"))
 
 
-scraper_input = sys.stdin.read()
-i = json.loads(scraper_input)
-log.debug(f'Started with input: {scraper_input}')
+def to_scraped_scene(post: dict[str, Any]) -> ScrapedScene:
+    scene: ScrapedScene = {
+        "title": post["title"].replace("_", " "),
+        "urls": [f"https://fetishkitsch.com/post/{post['_id']}"],
+        "date": to_iso_date(post["publishDate"]),
+        "studio": {"name": "FetishKitsch", "urls": ["https://fetishkitsch.com/"]},
+    }
+    if shoot_date := post.get("shootDate"):
+        scene["production_date"] = to_iso_date(shoot_date)
+    if code := post.get("shootCode"):
+        scene["code"] = str(code)
+    if duration := post.get("videoLength"):
+        scene["duration"] = int(duration)
+    if image := post.get("videoThumbnail"):
+        scene["image"] = image
+    if tags := post.get("tags"):
+        scene["tags"] = [{"name": t.replace("_", " ")} for t in tags]
+    if people := post.get("people"):
+        scene["performers"] = [{"name": p.replace("_", " ")} for p in people]
+    return scene
 
-ret = {}
-scraper = FetishKitsch()
-if sys.argv[1] == 'scrape' and sys.argv[2] == 'scene':
-    ret = scraper.scrape_scene(i['url'])
 
-output = json.dumps(ret) if ret is not None else '{}'
-print(output)
+if __name__ == "__main__":
+    op, args = scraper_args()
+    match op, args:
+        case "scene-by-url", {"url": url} if url:
+            result = (post := fetch_post(url)) and to_scraped_scene(post)
+        case _:
+            log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
+            sys.exit(1)
 
-# Last Updated July 08, 2024
+    print(json.dumps(result))
