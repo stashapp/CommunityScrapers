@@ -1,19 +1,27 @@
 name: Fit18
 # requires: py_common
-
+# scrapes: Fit18, Thicc18
 sceneByURL:
-  - url:
-      - fit18.com/videos/
+  - action: script
+    url:
+      - fit18.com/video/
       - thicc18.com/videos/
-    action: script
     script:
       - python
       - Fit18.py
+      - scene-by-url
 performerByURL:
+  - action: script
+    url:
+      - fit18.com/model/
+      - fit18.com/models/
+    script:
+      - python
+      - Fit18.py
+      - performer-by-url
   - action: scrapeXPath
     url:
-      - https://fit18.com/models/
-      - https://thicc18.com/models/
+      - thicc18.com/models/
     scraper: performerScraper
 
 xPathScrapers:
@@ -23,18 +31,17 @@ xPathScrapers:
     performer:
       Name: $info/h1
       Gender:
-        fixed: "Female"
-      Image: //picture/img/@src
+        fixed: Female
       Height:
-        selector: $info/div[2]/h1
+        selector: $info/div[h3="Height"]/h4
         postProcess:
           - replace:
-            - regex: cm
-              with:
+              - regex: cm
+                with:
       Weight:
-        selector: $info/div[2]/h4
+        selector: $info/div[h3="Weight"]/h4
         postProcess:
           - replace:
-            - regex: kg
-              with:
-# Last Updated January 07, 2022
+              - regex: kg
+                with:
+      Measurements: $info/div[h3="Measurements"]/h4
