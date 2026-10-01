@@ -9,7 +9,7 @@ import requests
 
 from py_common import log
 from py_common.types import ScrapedScene, ScrapedStudio
-from py_common.util import scraper_args, dig
+from py_common.util import dig, scraper_args
 
 # studio_id and studio.name in the API are production houses or suppliers
 # and not necessarily what we understand as studios in Stash
@@ -124,8 +124,11 @@ def release_date(timestamp: str | None) -> str | None:
 
 
 def cover_image(video: dict) -> str | None:
-    if url := dig(video, ("artwork", "artwork_f16", "cover"), "large"):
-        return url if url.startswith("http") else f"https://s01.uni73d.net/{url}"
+    # every kind is always present, with null sizes when the video lacks it;
+    # "original" is the same resolution as "large" but less compressed
+    for kind in ("artwork", "artwork_f16", "cover"):
+        if url := dig(video, kind, "original") or dig(video, kind, "large"):
+            return url if url.startswith("http") else f"https://s01.uni73d.net{url}"
     return None
 
 
@@ -163,7 +166,9 @@ def scene_from_url(url: str) -> ScrapedScene | None:
     hostname, video_id = match.group(1).lower(), match.group(2)
 
     try:
-        response = requests.get(f"https://api.fundorado.com/api/videodetail/{video_id}")
+        response = requests.get(
+            f"https://api.fundorado.com/api/videodetail/{video_id}", timeout=10
+        )
         response.raise_for_status()
     except requests.HTTPError as e:
         log.info(f"No scene found with id {video_id}: {e}")
