@@ -5,7 +5,7 @@ sceneByURL:
       - fantia.jp/posts/
     script:
       - python
-      - fantiajp.py
+      - FantiaJp.py
       - scene-by-url
 galleryByURL:
   - action: script
@@ -13,5 +13,5 @@ galleryByURL:
       - fantia.jp/posts/
     script:
       - python
-      - fantiajp.py
+      - FantiaJp.py
       - gallery-by-url
