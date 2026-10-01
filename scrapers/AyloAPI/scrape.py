@@ -1,15 +1,18 @@
+import difflib
 import json
 import re
 import sys
-import difflib
-import requests
+from collections.abc import Callable
 from datetime import datetime
 from html import unescape
-from typing import Any, Callable
+from typing import Any
 from urllib.parse import urlparse
 
-import py_common.log as log
-from py_common.util import dig, guess_nationality, scraper_args
+import requests
+
+from AyloAPI import domains
+from AyloAPI.slugger import slugify
+from py_common import log
 from py_common.config import get_config
 from py_common.types import (
     ScrapedGallery,
@@ -19,8 +22,7 @@ from py_common.types import (
     ScrapedStudio,
     ScrapedTag,
 )
-import AyloAPI.domains as domains
-from AyloAPI.slugger import slugify
+from py_common.util import dig, guess_nationality, scraper_args
 
 config = get_config(
     default="""
@@ -45,7 +47,7 @@ def default_postprocess(obj: Any, _) -> Any:
 
 ## Temporary function to add markers to scenes, remove when/if Stash gets native support
 def add_markers(scene_id: str, markers: list[dict]):
-    from itertools import tee, filterfalse
+    from itertools import filterfalse, tee
 
     def partition(pred, iterable):
         t1, t2 = tee(iterable)
@@ -178,7 +180,7 @@ def _construct_url(api_result: dict) -> str | None:
 
     brand = api_result["brand"]
     # exclude brands without their own sites
-    if brand in ["leviproductions"]: 
+    if brand in ["leviproductions"]:
         return None
 
     type_ = api_result["type"]
@@ -288,11 +290,11 @@ def to_scraped_performer(
         performer["details"] = details
 
     # All remaining fields are only available when scraped directly
-    if height := performer_from_api.get("height"):
-        # Aylo sometimes returns unreasonably small heights for performers
-        if height > 5:
-            # Convert to cm
-            performer["height"] = str(round(height * 2.54))
+
+    # Aylo sometimes returns unreasonably small heights for performers
+    if (height := performer_from_api.get("height")) and (height > 5):
+        # Covert to cm
+        performer["height"] = str(round(height * 2.54))
 
     if weight := performer_from_api.get("weight"):
         # Convert to kg
@@ -553,9 +555,6 @@ def movie_from_url(
     if not api_movie_json:
         return None
 
-    with open("api_response.json", "w", encoding="utf-8") as f:
-        json.dump(api_movie_json, f, indent=2)
-
     if dig(api_movie_json, "type") in ("movie", "serie"):
         return postprocess(to_scraped_movie(api_movie_json), api_movie_json)
 
@@ -566,9 +565,10 @@ def movie_from_url(
             url.replace(f"/{movie_id}/", f"/{api_movie_json['parent']['id']}/"),
             postprocess=postprocess,
         )
-    return postprocess(
-        to_scraped_movie(api_movie_json["parent"]), api_movie_json["parent"]
-    )
+    if not (parent := api_movie_json.get("parent")):
+        log.error(f"Release {movie_id} is not part of a movie or series")
+        return None
+    return postprocess(to_scraped_movie(parent), parent)
 
 
 # Since the "Scrape with..." function in Stash expects a single result, we provide
