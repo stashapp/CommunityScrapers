@@ -1,8 +1,11 @@
 import json
+import re
 import sys
-from datetime import datetime
+import time
+
+from py_common import log
 from py_common.deps import ensure_requirements
-import py_common.log as log
+from py_common.util import scraper_args
 
 ensure_requirements("requests", "lxml")
 
@@ -27,7 +30,7 @@ def get_page_content(url):
 def format_date(date_str):
     """Convert date from 'Oct 9, 2017' to 'YYYY-MM-DD' format."""
     try:
-        return datetime.strptime(date_str, "%b %d, %Y").strftime("%Y-%m-%d")
+        return time.strftime("%Y-%m-%d", time.strptime(date_str, "%b %d, %Y"))
     except ValueError:
         return None  # Return None if the date can't be parsed
 
@@ -36,10 +39,10 @@ def scrape_video_data(main_url):
     """Extract title, image, details, tags, studio, and date for the given video URL."""
     tree = get_page_content(main_url)
     if tree is None:
-        return {}
+        return None
 
     scene: dict = {
-        "studio": {"name": "Got2Pee", "url": "https://got2pee.com"},
+        "studio": {"name": "Got2Pee", "urls": ["https://got2pee.com"]},
     }
 
     if title := tree.xpath("//h1"):
@@ -48,10 +51,19 @@ def scrape_video_data(main_url):
     if image := tree.xpath("//div[@class='video-trailer']//img/@src"):
         scene["image"] = image[0]
 
-    if details := tree.xpath("//div[@class='movie-description']"):
+    # Only the description's own text: skips the "About video:" label and the "See more" link
+    if details := tree.xpath("//div[@class='movie-description']/text()"):
         scene["details"] = "\n".join(
-            part for d in details if (part := d.text_content().strip())
+            part for d in details if (part := " ".join(d.split()))
         )
+
+    # Duration: 01' 27''
+    if (
+        duration := tree.xpath(
+            "//div[@class='movie-data']/strong[.='Duration:']/following-sibling::text()[1]"
+        )
+    ) and (match := re.search(r"(\d+)'\s*(\d+)''", duration[0])):
+        scene["duration"] = int(match.group(1)) * 60 + int(match.group(2))
 
     if tags := tree.xpath("//span[@class='tags-list']//a/text()"):
         # Remove hashtag from tags
@@ -103,7 +115,12 @@ def scrape_video_date(main_url):
 
 
 if __name__ == "__main__":
-    input_data = json.load(sys.stdin)
+    op, args = scraper_args()
+    match op, args:
+        case "scene-by-url", {"url": url} if url:
+            result = scrape_video_data(url)
+        case _:
+            log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
+            sys.exit(1)
 
-    if video_url := input_data.get("url"):
-        print(json.dumps(scrape_video_data(video_url)))
+    print(json.dumps(result))

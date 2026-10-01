@@ -1,4 +1,5 @@
 name: Got2Pee
+# requires: py_common
 
 sceneByURL:
   - action: script
@@ -6,4 +7,5 @@ sceneByURL:
       - got2pee.com/videos/
     script:
       - python
-      - got2pee_scraper.py
+      - Got2Pee.py
+      - scene-by-url
