@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
-import sys
 import json
-import requests
-import re
 import os
+import re
+import sys
+import time
+from urllib.parse import quote, urljoin, urlparse
+
+import requests
 from bs4 import BeautifulSoup, NavigableString
-from datetime import datetime
-from urllib.parse import quote, urlparse
-from py_common.util import dig, scraper_args
+
+from Clips4Sale.Clips4Sale import scene_from_url as c4s_scene_from_url
+from py_common import log
+from py_common.util import scraper_args
+
 
 def resolve_url(url):
     try:
@@ -19,7 +24,17 @@ def resolve_url(url):
         print(f"Failed to resolve URL: {e}", file=sys.stderr)
         return ""
 
-def get_oldest_wayback_date(url: str) -> str:
+def clips4sale_date(url: str) -> str | None:
+    if not (match := re.search(r"clips4sale\.com/studio/\d+/(\d+)/", url)):
+        return None
+    # scene_from_url falls back to a title search that can return another clip
+    if (clip := c4s_scene_from_url(url)) and clip.get("code") == match.group(1):
+        return clip.get("date")
+    log.debug(f"No Clips4Sale date for {url}")
+    return None
+
+
+def get_oldest_wayback_date(url: str) -> str | None:
     # Simple estimation of when a page was first published, as studio doesn't list
     if urlparse(url).scheme == "":
         url = "https://" + url
@@ -29,16 +44,19 @@ def get_oldest_wayback_date(url: str) -> str:
     )
 
     try:
-        response = requests.get(cdx_api_url, timeout=10)
+        # the CDX API routinely takes 10-20s to answer
+        response = requests.get(cdx_api_url, timeout=30)
         response.raise_for_status()
         data = response.json()
         if len(data) > 1:
-            timestamp_index = data[0].index("timestamp") 
+            timestamp_index = data[0].index("timestamp")
             raw_timestamp = data[1][timestamp_index]
-            date_object = datetime.strptime(raw_timestamp, "%Y%m%d%H%M%S")
-            return date_object.strftime("%Y-%m-%d")
+            date = time.strftime("%Y-%m-%d", time.strptime(raw_timestamp, "%Y%m%d%H%M%S"))
+            original = data[1][data[0].index("original")]
+            log.info(f"Date {date} from the Wayback Machine: https://web.archive.org/web/{raw_timestamp}/{original}")
+            return date
         else:
-            return "" # do not return non-date type
+            return None
             
     except requests.exceptions.RequestException as e:
         print(f"Error connecting to API: {e}", file=sys.stderr)
@@ -116,7 +134,7 @@ def extract_description(soup):
     text = re.sub(r'(Full\s+(?:Video|Download)\s+Details).*?Key highlights of video include','Key highlights of video include',text,flags=re.DOTALL)
     text = re.sub(r'(Key highlights of video include[^\n]*\n)(?:^[ \t]*\n)+',r'\1',text,flags=re.MULTILINE)
 
-    text = re.split(r"available\s+in\s*:", text, flags=re.I)[0].strip()
+    text = re.split(r"available\s+in\s*:", text, flags=re.IGNORECASE)[0].strip()
 
     return text if text else None
 
@@ -149,28 +167,46 @@ def scrape_scene(url):
     urls = []
     for a in soup.find_all("a"):
         img = a.find("img")
-        if img and "buynow" in img.get("src", ""):
+        if img and "buynow" in str(img.get("src", "")):
             urls.append(a.get("href"))
 
-    date = get_oldest_wayback_date(url)
-    
     checked_urls = [url]
     for test_url in urls:
         test_url=resolve_url(test_url)
         if test_url!="" and test_url!="https://www.clips4sale.com/studio/48957/gg-fetish-media":
             checked_urls.append(test_url)
-    
+
     studioName = studio_name(url)
-    
-    return {
+
+    scene = {
         "title": title,
         "details": desc,
-        "date": date,
         "urls": checked_urls,
         "code": code,
         "studio": {"name": studioName},
-        "tags": [{"name": "Missing Date", "stashid": "ffbbb41f-3bd7-4b3d-b26d-74236d5ac2aa"}] # using wayback date at best
     }
+
+    # The site never shows release dates: the Clips4Sale listing date is the
+    # closest we can get, the first Wayback capture is only an upper bound
+    if c4s_dates := [(d, u) for u in checked_urls if (d := clips4sale_date(u))]:
+        date, source = min(c4s_dates)
+        log.info(f"Date {date} from Clips4Sale: {source}")
+        scene["date"] = date
+    else:
+        if date := get_oldest_wayback_date(url):
+            scene["date"] = date
+        scene["tags"] = [{"name": "Missing Date"}]
+
+    # The pages only carry a row of small stills, so the first one is the best cover
+    stills = (
+        src
+        for img in soup.find_all("img")
+        if (src := str(img.get("src", ""))).startswith("images/") and "buynow" not in src
+    )
+    if still := next(stills, None):
+        scene["image"] = urljoin(url, still)
+
+    return scene
 
 if __name__ == "__main__":
     op, args = scraper_args()

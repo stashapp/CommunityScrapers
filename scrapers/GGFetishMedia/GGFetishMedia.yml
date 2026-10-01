@@ -1,4 +1,5 @@
 name: GGFetishMedia
+# requires: py_common, Clips4Sale
 sceneByURL:
   - action: script
     url:
