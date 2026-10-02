@@ -1,12 +1,13 @@
-import re
 import json
+import re
 import sys
-from datetime import datetime
-import py_common.log as log
+
+from py_common import log
 from py_common.cache import cache_to_disk
-from py_common.util import dig, scraper_args
 from py_common.config import get_config
 from py_common.deps import ensure_requirements
+from py_common.types import ScrapedScene
+from py_common.util import dig, scraper_args
 
 ensure_requirements("cloudscraper")
 
@@ -47,8 +48,8 @@ if has_login:
     scraper.headers["Authorization"] = f"Bearer {token}"
 
 
-def api_request(query):
-    response = scraper.get(query)
+def api_request(query: str, params: dict | None = None) -> dict:
+    response = scraper.get(query, params=params)
     if response.status_code == 404 and not has_login:
         log.error(
             "Login required for this video: please fill in your username and password in Iwara/config.ini"
@@ -61,63 +62,93 @@ def api_request(query):
     return response.json()
 
 
-def to_scraped_scene(json_from_api: dict):
+def youtube_thumbnail(embed_url: str) -> str | None:
+    if not (
+        match := re.search(r"(?:v=|youtu\.be/|embed/|shorts/)([\w-]{11})", embed_url)
+    ):
+        return None
+    # maxresdefault only exists for HD uploads, hqdefault always does
+    maxres = f"https://i.ytimg.com/vi/{match[1]}/maxresdefault.jpg"
+    if scraper.head(maxres).ok:
+        return maxres
+    return f"https://i.ytimg.com/vi/{match[1]}/hqdefault.jpg"
+
+
+def thumbnail(json_from_api: dict) -> str | None:
     # Some videos have custom thumbnails
     # Example: https://www.iwara.tv/video/J7W7n4VdKtohQ7/
     if custom := dig(json_from_api, "customThumbnail", "id"):
-        image = f"https://i.iwara.tv/image/original/{custom}/{custom}.jpg"
+        return f"https://i.iwara.tv/image/original/{custom}/{custom}.jpg"
     # Normal thumbnails must have their index padded to two digits: 1 -> thumbnail-01.jpg
     # Example: https://www.iwara.tv/video/2DORyCe5fVqXz6/
-    elif (file_id := dig(json_from_api, "file", "id")) and (
-        idx := dig(json_from_api, "thumbnail")
+    if (file_id := dig(json_from_api, "file", "id")) and (
+        idx := json_from_api.get("thumbnail")
     ) is not None:
-        image = f"https://i.iwara.tv/image/original/{file_id}/thumbnail-{idx:02}.jpg"
-    else:
-        image = "https://placehold.co/600x400?text=Scraper+broken"
+        return f"https://i.iwara.tv/image/original/{file_id}/thumbnail-{idx:02}.jpg"
+    # Embedded YouTube videos have no file of their own
+    # Example: https://www.iwara.tv/video/LcJWjXgoz8aY6D
+    if embed_url := json_from_api.get("embedUrl"):
+        return youtube_thumbnail(embed_url)
+    return None
 
-    return {
+
+def to_scraped_scene(json_from_api: dict) -> ScrapedScene:
+    scene: ScrapedScene = {
         "title": json_from_api["title"],
-        "url": f"https://www.iwara.tv/video/{json_from_api['id']}",
-        "image": image,
-        "date": datetime.strptime(json_from_api["createdAt"], "%Y-%m-%dT%H:%M:%S.%fZ")
-        .date()
-        .isoformat(),
-        "details": json_from_api["body"],
+        "urls": [f"https://www.iwara.tv/video/{json_from_api['id']}"],
+        "date": json_from_api["createdAt"][:10],
         "studio": {
-            "Name": dig(json_from_api, "user", "name"),
-            "URL": f"https://www.iwara.tv/profile/{dig(json_from_api, 'user', 'username')}",
+            "name": dig(json_from_api, "user", "name"),
+            "urls": [
+                f"https://www.iwara.tv/profile/{dig(json_from_api, 'user', 'username')}"
+            ],
         },
-        "tags": [{"name": tag["id"]} for tag in json_from_api.get("tags", [])],
     }
+    if image := thumbnail(json_from_api):
+        scene["image"] = image
+    if details := json_from_api.get("body"):
+        scene["details"] = details
+    if duration := dig(json_from_api, "file", "duration"):
+        scene["duration"] = duration
+    if tags := json_from_api.get("tags"):
+        scene["tags"] = [{"name": tag["id"]} for tag in tags]
+    return scene
 
 
-def get_video_details(video_id):
+def get_video_details(video_id: str) -> ScrapedScene:
     scene = api_request(f"https://api.iwara.tv/video/{video_id}")
     return to_scraped_scene(scene)
 
 
-def scene_by_url(url):
-    if not (match := re.search(r"/video/([^/]+)/?", url)):
+def scene_by_url(url: str) -> ScrapedScene | None:
+    if not (match := re.search(r"/video/([^/?#]+)", url)):
         log.error(f"Invalid video URL: {url}")
-        exit(1)
-    video_id = match.group(1)
-    return get_video_details(video_id)
+        return None
+    return get_video_details(match.group(1))
 
 
-def scene_by_filename(file):
+def scene_by_fragment(args: dict) -> ScrapedScene | None:
+    urls = [args.get("url"), *(args.get("urls") or [])]
+    if url := next((u for u in urls if u and "iwara.tv/video/" in u), None):
+        return scene_by_url(url)
+
     # Filename must contain video ID in brackets
     # Example: Robin - Queencard [2DORyCe5fVqXz6].mp4
-    if match := re.search(r"\[([0-9a-zA-Z]{13,})\]", file):
+    names = [f["path"] for f in args.get("files") or []] + [args.get("title") or ""]
+    if match := next(
+        (m for name in names if (m := re.search(r"\[([0-9a-zA-Z]{13,})\]", name))),
+        None,
+    ):
         return get_video_details(match.group(1))
-    log.error(f"Unable to extract video ID from filename '{file}'")
+    log.error(f"Unable to extract video ID from {names}")
     return None
 
 
-def scene_search(query):
+def scene_search(query: str) -> list[ScrapedScene]:
     search_results = api_request(
-        f"https://api.iwara.tv/search?type=video&page=0&query={query}"
+        "https://api.iwara.tv/search",
+        params={"type": "videos", "page": 0, "query": query},
     )["results"]
-
     return [to_scraped_scene(r) for r in search_results]
 
 
@@ -126,12 +157,11 @@ if __name__ == "__main__":
 
     result = None
     match op, args:
-        case "scene-by-url", {"url": url}:
+        case "scene-by-url", {"url": url} if url:
             result = scene_by_url(url)
-        case "scene-by-fragment", args:
-            file = dig(args, "files", 0, "path")
-            result = scene_by_filename(file)
-        case "scene-by-name", {"name": query}:
+        case "scene-by-fragment" | "scene-by-query-fragment", args:
+            result = scene_by_fragment(args)
+        case "scene-by-name", {"name": query} if query:
             result = scene_search(query)
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")

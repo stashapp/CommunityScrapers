@@ -20,11 +20,10 @@ sceneByQueryFragment:
   script:
     - python
     - Iwara.py
-    - scene-by-url
+    - scene-by-query-fragment
 sceneByFragment:
   action: script
   script:
     - python
     - Iwara.py
     - scene-by-fragment
-# Last Updated December 15, 2024
