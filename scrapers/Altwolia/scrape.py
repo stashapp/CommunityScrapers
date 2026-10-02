@@ -130,7 +130,7 @@ def scene_url(site: str, sitename: str, url_title: str, clip_id: str) -> str:
 
 
 def name_values_as_csv(objects: list[dict[str, Any]]) -> str:
-    return ", ".join(obj.get("name", "") for obj in objects)
+    return ", ".join(name for obj in objects if (name := obj.get("name")))
 
 
 def name_values_as_list(objects: list[dict[str, Any]]) -> list[ScrapedTag]:
@@ -287,8 +287,8 @@ def to_scraped_scene(api_scene: dict[str, Any], site: str) -> ScrapedScene:
 
     if actors := api_scene.get("actors"):
         scene["performers"] = actors_to_performers(actors, site)
-    if directors := api_scene.get("directors"):
-        scene["director"] = name_values_as_csv(directors)
+    if director := name_values_as_csv(api_scene.get("directors", [])):
+        scene["director"] = director
 
     return scene
 
@@ -336,8 +336,8 @@ def to_scraped_gallery(api_hit: dict[str, Any], site: str) -> ScrapedGallery:
         gallery["tags"] = name_values_as_list(categories)
     if actors := api_hit.get("actors"):
         gallery["performers"] = actors_to_performers(actors, site)
-    if directors := api_hit.get("directors"):
-        gallery["photographer"] = name_values_as_csv(directors)
+    if photographer := name_values_as_csv(api_hit.get("directors", [])):
+        gallery["photographer"] = photographer
     if picture := api_hit.get("picture"):
         log.info(f"Cover image: {TRANSFORM_IMAGE_CDN}/photo_set{picture}")
 
@@ -409,8 +409,8 @@ def to_scraped_movie(api_movie: dict[str, Any], site: str) -> ScrapedMovie:
         movie["date"] = date_created
     if length := api_movie.get("length"):
         movie["duration"] = str(length)
-    if directors := api_movie.get("directors"):
-        movie["director"] = name_values_as_csv(directors)
+    if director := name_values_as_csv(api_movie.get("directors", [])):
+        movie["director"] = director
     if description := api_movie.get("description"):
         movie["synopsis"] = clean_text(description)
     if studio_name := api_movie.get("studio_name"):
@@ -557,6 +557,13 @@ def gallery_from_scene_id(
 ) -> ScrapedGallery | None:
     if not (api_scene := api_scene_from_id(clip_id, site)):
         return None
+    # the photoset carries its own description, which the scene usually lacks
+    if (photoset_id := api_scene.get("photoset_id")) and (
+        gallery := gallery_from_set_id(photoset_id, site, postprocess)
+    ):
+        if "details" not in gallery and (description := api_scene.get("description")):
+            gallery["details"] = clean_text(description)
+        return gallery
     return postprocess(to_scraped_gallery(api_scene, site), api_scene)
 
 

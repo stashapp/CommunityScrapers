@@ -13,6 +13,7 @@ sceneByFragment:
   script:
     - python
     - ../Altwolia/scrape.py
+    - interracialvision
     - scene-by-fragment
 sceneByName:
   action: script
@@ -32,6 +33,7 @@ galleryByURL:
   - action: script
     url:
       - interracialvision.com/en/photo/
+      - interracialvision.com/en/video/
     script:
       - python
       - ../Altwolia/scrape.py
@@ -49,6 +51,7 @@ performerByFragment:
   script:
     - python
     - ../Altwolia/scrape.py
+    - interracialvision
     - performer-by-fragment
 performerByName:
   action: script
