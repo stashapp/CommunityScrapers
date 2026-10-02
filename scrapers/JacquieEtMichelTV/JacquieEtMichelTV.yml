@@ -1,13 +1,70 @@
-name: JacquieEtMicaelTV
+name: JacquieEtMichelTV
 
 sceneByURL:
-  - action: script
+  - action: scrapeXPath
     url:
+      - jacquieetmicheltv.net/de/content
       - jacquieetmicheltv.net/en/content
+      - jacquieetmicheltv.net/es/content
       - jacquieetmicheltv.net/fr/content
-    script:
-      - python3
-      - JacquieEtMichelTV.py
-      - scene-by-url
+      - jacquieetmicheltv.net/it/content
+      - jacquieetmicheltv.net/pt/content
+    scraper: sceneScraper
 
-# Last Updated March 9, 2025
+xPathScrapers:
+  sceneScraper:
+    common:
+      $video: //script[@type="application/ld+json"][contains(., "VideoObject")]
+      $actor: //div[@class="actress-card__details"]
+    scene:
+      Title: //h1[@class="content-detail__title"]
+      Details:
+        selector: $video
+        postProcess:
+          - javascript: |
+              const data = JSON.parse(value);
+              const video = (data["@graph"] || [data]).find((o) => o["@type"] === "VideoObject");
+              const entities = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " " };
+              return video.description
+                .replace(/<[^>]*>/g, "")
+                .replace(/&(#x?[0-9a-f]+|[a-z]+);/gi, (match, code) =>
+                  code[0] !== "#"
+                    ? entities[code.toLowerCase()] ?? match
+                    : String.fromCodePoint(code[1].toLowerCase() === "x" ? parseInt(code.slice(2), 16) : +code.slice(1)),
+                );
+      Date:
+        selector: $video
+        postProcess:
+          - javascript: |
+              const data = JSON.parse(value);
+              const video = (data["@graph"] || [data]).find((o) => o["@type"] === "VideoObject");
+              return video.datePublished.slice(0, 10);
+      # TODO: enable when scrape dialog can show durations
+      # Duration:
+      #   selector: $video
+      #   postProcess:
+      #     - javascript: |
+      #         const data = JSON.parse(value);
+      #         const video = (data["@graph"] || [data]).find((o) => o["@type"] === "VideoObject");
+      #         const [, h, m, s] = video.duration.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+      #         return String((+h || 0) * 3600 + (+m || 0) * 60 + (+s || 0));
+      URLs: //link[@rel="canonical"]/@href
+      Image: //meta[@property="og:image"]/@content
+      Tags:
+        Name: //li[contains(@class, "content-detail__tag--categorytag")]/a
+      Performers:
+        Name: $actor/h3
+        URLs:
+          selector: $actor//a[@class="actress-card__cta"]/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://www.jacquieetmicheltv.net
+      Studio:
+        Name: //a[@class="content-detail__creator__name"]
+        URLs:
+          selector: //a[@class="content-detail__creator__name"]/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://www.jacquieetmicheltv.net
