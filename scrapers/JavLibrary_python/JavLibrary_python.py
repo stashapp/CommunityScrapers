@@ -1,983 +1,273 @@
-"""JAVLibrary python scraper"""
-import base64
 import json
 import re
 import sys
-import threading
-import time
-from urllib.parse import urlparse
+from pathlib import Path
+from typing import Any
+from urllib.parse import quote, urljoin
 
-try:
-    from py_common import log
-except ModuleNotFoundError:
-    print("You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
-    sys.exit()
+from py_common import log
+from py_common.config import get_config
+from py_common.deps import ensure_requirements
+from py_common.types import ScrapedPerformer, ScrapedScene
+from py_common.util import scraper_args
 
-try:
-    import lxml.html
-except ModuleNotFoundError:
-    print("You need to install the lxml module. (https://lxml.de/installation.html#installation)",
-     file=sys.stderr)
-    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install lxml",
-     file=sys.stderr)
-    sys.exit()
+ensure_requirements("requests", "lxml")
 
-try:
-    import requests
-except ModuleNotFoundError:
-    print("You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)",
-     file=sys.stderr)
-    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests",
-     file=sys.stderr)
-    sys.exit()
+import requests  # noqa: E402
+from lxml import html  # noqa: E402
 
+config = get_config(
+    default="""
+# javlibrary sits behind a Cloudflare challenge that only a real browser can solve:
+# run FlareSolverr (https://github.com/FlareSolverr/FlareSolverr) and point this at it
+flaresolverr_url = http://localhost:8191/v1
+# Site language: en, ja, tw or cn
+language = ja
+"""
+)
 
-# GLOBAL VAR ######
-JAV_DOMAIN = "Check"
-###################
+BASE = "https://www.javlibrary.com"
+LANGUAGE = config.language
+# Cloudflare's clearance cookie only works together with the user agent that earned it
+CLEARANCE_FILE = Path(__file__).with_name("clearance.json")
 
-JAV_SEARCH_HTML = None
-JAV_MAIN_HTML = None
-PROTECTION_CLOUDFLARE = False
-
-# Flaresolverr
-FLARESOLVERR_ENABLED = True
-FLARESOLVERR_URL = "http://localhost:8191/v1"
-FLARESOLVERR_TIMEOUT_MAX = 60000
-
-JAV_HEADERS = {
-    "User-Agent":
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0',
-    "Referer": "http://www.javlibrary.com/"
+IGNORE_TAGS = {
+    "Features Actress",
+    "Hi-Def",
+    "Beautiful Girl",
+    "Blu-ray",
+    "Featured Actress",
+    "VR Exclusive",
+    "MOODYZ SALE 4",
 }
-# We can't add movie image atm in the same time as Scene
-STASH_SUPPORTED = False
-# Stash doesn't support Labels yet
-STASH_SUPPORT_LABELS = False
-# ...and name order too...
-STASH_SUPPORT_NAME_ORDER = False
-# Tags you don't want to scrape
-IGNORE_TAGS = [
-    "Features Actress", "Hi-Def", "Beautiful Girl", "Blu-ray",
-    "Featured Actress", "VR Exclusive", "MOODYZ SALE 4"
-]
-# Select preferable name order
-# Site language: en, ja, tw, cn
-LANGUAGE = "ja"
-NAME_ORDER_JAPANESE = False
-# Some performers don't need to be reversed
-IGNORE_PERF_REVERSE = ["Lily Heart"]
+# The English site lists 微乳 as "Tits"
+OBFUSCATED_TAGS = {"Tits": "Small Tits"}
+# Latin names are listed family name first: Aoi Tsukasa -> Tsukasa Aoi
+IGNORE_NAME_REVERSE = {"Lily Heart"}
 
-# Keep the legacy field scheme:
-# Actual Code -> Title, actual Title -> Details, actual Details -> /dev/null
-LEGACY_FIELDS = False
-# Studio Code now in a separate field, so it may (or may not) be stripped from title
-# Makes sense only if not LEGACY_FIELDS
-KEEP_CODE_IN_TITLE = True
+# Blu-ray editions duplicate the DVD release under the same code
+BLU_RAY = re.compile(r"\(Blu-ray|（ブルーレイ")
+CODE = re.compile(r"(?<![a-z])([a-z]{2,8})-?(\d{2,5})(?!\d)", re.IGNORECASE)
 
-# Tags you want to be added in every scrape
-FIXED_TAGS = ""
-# Split tags if they contain [,·] ('Best, Omnibus' -> 'Best','Omnibus')
-SPLIT_TAGS = False
-
-# Don't fetch the Aliases (Japanese Name)
-IGNORE_ALIASES = False
-# Always wait for the aliases to load. (Depends on network response)
-WAIT_FOR_ALIASES = False
-# All javlib sites
-SITE_JAVLIB = ["javlibrary"]
-
-BANNED_WORDS = {
-    "A******ation": "Asphyxiation",
-    "A*****t": "Assault",
-    "A*****ts": "Assaults",
-    "A*****ted": "Assaulted",
-    "A*****ting": "Assaulting",
-    "A****p": "Asleep",
-    "A***e": "Abuse",
-    "A***ed": "Abused",
-    "A***es": "Abuses",
-    "B*****k": "Berserk",
-    "B*****p": "Bang Up",
-    "B***d": "Blood",
-    "B***dcurdling": "Bloodcurdling",
-    "B***dline": "Bloodline",
-    "B***dy": "Bloody",
-    "B*******y": "Brutality",
-    "B******y": "Brutally",
-    "C*****y": "Cruelty",
-    "C***d": "Child",
-    "C***dcare": "Childcare",
-    "C***dhood": "Childhood",
-    "C***dish": "Childish",
-    "C***dren": "Children",
-    "C*ck": "Cock",
-    "C*cks": "Cocks",
-    "C*llegiate": "Collegiate",
-    "Chai*saw": "Chainsaw",
-    "CrumB**d": "Crumbled",
-    "D*ck": "Dick",
-    "D******e": "Disgrace",
-    "D******ed": "Disgraced",
-    "D******eful": "Disgraceful",
-    "D***k": "Drunk",
-    "D***ken": "Drunken",
-    "D***kest": "Drunkest",
-    "D***king": "Drinking",
-    "D***ks": "Drinks",
-    "D**g": "Drug",
-    "D**gged": "Drugged",
-    "D**gs": "Drugs",
-    "EnS***ed": "Enslaved",
-    "F*****g": "Fucking",
-    "F***e": "Force",
-    "F***ed": "Fucked",
-    "F***eful": "Forceful",
-    "F***efully": "Forcefully",
-    "F***es": "Forces",
-    "G*********d": "Gang-Banged",
-    "G*******g": "Gangbang",
-    "G*******ged": "Gangbanged",
-    "G*******ging": "Gangbanging",
-    "G******ging": "Gangbanging",
-    "G*******gs": "Gangbangs",
-    "G******g": "Gangbang",
-    "G******ged": "Gangbanged",
-    "G****gers": "Gangbangers",
-    "H*********n": "Humiliation",
-    "H*******ed": "Hypnotized",
-    "H*******m": "Hypnotism",
-    "H**t": "Hurt",
-    "H**ts": "Hurts",
-    "Half-A****p": "Half-Asleep",
-    "Hot-B***ded": "Hot-Blooded",
-    "HumB**d": "Humbled",
-    "H*******es": "Humiliates",
-    "H******s": "Hypnosis",
-    "I********ed": "Impregnated",
-    "I****t": "Incest",
-    "I****tual": "Incestual",
-    "I****ted": "Insulted",
-    "I****ting": "Insulting",
-    "I****ts": "Insults",
-    "I****tuous": "Incestuous",
-    "J*": "Jo",
-    "J*s": "Jos",
-    "K****p": "Kidnap",
-    "K****pped": "Kidnapped",
-    "K****pper": "Kidnapper",
-    "K****pping": "Kidnapping",
-    "K**l": "Kill",
-    "K**led": "Killed",
-    "K**ler": "Killer",
-    "K**ling": "Killing",
-    "K*d": "Kid",
-    "K*dding": "Kidding",
-    "K*ds": "Kids",
-    "Lo**ta": "Lolita",
-    "Lol*pop": "Lolipop",
-    "M****t": "Molest",
-    "M****ts": "Molests",
-    "M****tation": "Molestation",
-    "M****ted": "Molested",
-    "M****ter": "Molester",
-    "M****ters": "Molesters",
-    "M****ting": "Molesting",
-    "M****tor": "Molestor",
-    "Ma*ko": "Maiko",
-    "P****h": "Punish",
-    "P****hed": "Punished",
-    "P****hing": "Punishing",
-    "P****hment": "Punishment",
-    "P********t": "Punishment",
-    "P**hed": "Punished",
-    "P*ssy": "Pussy",
-    "R****g": "Raping",
-    "R**e": "Rape",
-    "R**ey": "Rapey",
-    "R**ed": "Raped",
-    "R**es": "Rapes",
-    "S*********l": "School Girl",
-    "S*********ls": "School Girls",
-    "S*********s": "Schoolgirls",
-    "S********l": "Schoolgirl",
-    "S********ls": "Schoolgirls",
-    "S********n": "Submission",
-    "S**t": "Shit",
-    "S******g": "Sleeping",
-    "S*****t": "Student",
-    "S*****ts": "Students",
-    "S***e": "Slave",
-    "S***ery": "Slavery",
-    "S***es": "Slaves",
-    "Sch**lgirl": "Schoolgirl",
-    "Sch**lgirls": "Schoolgirls",
-    "SK**led": "Skilled",
-    "SK**lful": "Skillful",
-    "SK**lfully": "Skillfully",
-    "SK**ls": "Skills",
-    "StepB****************r": "StepBrother And Sister",
-    "StepK*ds ": "StepKids",
-    "StepM************n": "Stepmother And Son",
-    "T******e": "Tentacle",
-    "T******es": "Tentacles",
-    "T*****e": "Torture",
-    "T*****ed": "Tortured",
-    "T*****es": "Tortures",
-    "U*********s": "Unconscious",
-    "U*********sly": "Unconsciously",
-    "U*******g": "Unwilling",
-    "U*******gly": "Unwillingly",
-    "V******e": "Violence",
-    "V*****e": "Violate",
-    "V*olated": "Violated",
-    "V*****ed": "Violated",
-    "V*****es": "Violates",
-    "V*****t": "Violent",
-    "V*****tly": "Violently",
-    "Y********l": "Young Girl",
-    "Y********ls": "Young Girls"
-}
-
-REPLACE_TITLE = {
-    "FHD_6M-": "",
-    "[FHD6m]": "",
-    "-uncensored": "",
-    "-Uncensored": "",
-    "uncensored": "",
-    "Uncensored": "",
-    "-uncensore": "",
-    "-Uncensore": "",
-    "_uncen": "",
-    "_Uncen": "",
-    "hd.": ".",
-    "HD.": ".",
-    "a.hd": "",
-    "b.hd": "",
-    "c.hd": "",
-    "d.hd": "",
-    "A.HD": "",
-    "B.HD": "",
-    "C.HD": "",
-    "D.HD": "",
-    "a.H": "",
-    "b.H": "",
-    "c.H": "",
-    "d.H": "",
-    "A.H": "",
-    "B.H": "",
-    "C.H": "",
-    "D.H": "",
-    ".hd": "",
-    ".HD": "",
-    "-hd": "",
-    "-HD": "",
-    "_hd": "",
-    "_HD": "",
-    "1080p": "",
-    "1080P": "",
-    "-4k": "",
-    "-4K": "",
-    ".4k": "",
-    ".4K": "",
-    "a.avi": ".avi",
-    "b.avi": ".avi",
-    "c.avi": ".avi",
-    "d.avi": ".avi",
-    "a.mp4": ".mp4",
-    "b.mp4": ".mp4",
-    "c.mp4": ".mp4",
-    "d.mp4": ".mp4",
-    "a.wmv": ".wmv",
-    "b.wmv": ".wmv",
-    "c.wmv": ".wmv",
-    "d.wmv": ".wmv",  
-    "A.avi": ".avi",
-    "B.mp4": ".avi",
-    "C.mp4": ".avi",
-    "D.avi": ".avi",
-    "A.mp4": ".mp4",
-    "B.mp4": ".mp4",
-    "C.mp4": ".mp4",
-    "D.mp4": ".mp4",
-    "A.wmv": ".wmv",
-    "B.wmv": ".wmv",
-    "C.wmv": ".wmv",
-    "D.wmv": ".wmv",
-    "A.AVI": ".AVI",
-    "B.AVI": ".AVI",
-    "C.AVI": ".AVI",
-    "D.AVI": ".AVI",
-    "A.MP4": ".MP4",
-    "B.MP4": ".MP4",
-    "C.MP4": ".MP4",
-    "D.MP4": ".MP4",
-    "A.WMV": ".WMV",
-    "B.WMV": ".WMV",
-    "C.WMV": ".WMV",
-    "D.WMV": ".WMV",  
-    "A.AVI": ".AVI",
-    "B.MP4": ".AVI",
-    "C.MP4": ".AVI",
-    "D.AVI": ".AVI",
-    "A.MP4": ".MP4",
-    "B.MP4": ".MP4",
-    "C.MP4": ".MP4",
-    "D.MP4": ".MP4",
-    "A.WMV": ".WMV",
-    "B.WMV": ".WMV",
-    "C.WMV": ".WMV",
-    "D.WMV": ".WMV",
-    ".3g2": "",
-    ".3gp": "",
-    ".amv": "",
-    ".asf": "",
-    ".avi": "",
-    ".f4a": "",
-    ".f4b": "",
-    ".f4p": "",
-    ".f4v": "",
-    ".flv": "",
-    ".flv": "",
-    ".gifv": "",
-    ".m4p": "",
-    ".m4v": "",
-    ".m4v": "",
-    ".mkv": "",
-    ".mng": "",
-    ".mod": "",
-    ".mov": "",
-    ".mp2": "",
-    ".mp4": "",
-    ".mpe": "",
-    ".mpeg": "",
-    ".mpg": "",
-    ".mpv": "",
-    ".mxf": "",
-    ".nsv": "",
-    ".ogg": "",
-    ".ogv": "",
-    ".qt": "",
-    ".rm": "",
-    ".roq": "",
-    ".rrc": "",
-    ".svi": "",
-    ".ts": "",
-    ".vob": "",
-    ".webm": "",
-    ".wmv": "",
-    ".yuv": "", 
-    ".3G2": "",
-    ".3GP": "",
-    ".AMV": "",
-    ".ASF": "",
-    ".AVI": "",
-    ".F4A": "",
-    ".F4B": "",
-    ".F4P": "",
-    ".F4V": "",
-    ".FLV": "",
-    ".FLV": "",
-    ".GIFV": "",
-    ".M4P": "",
-    ".M4V": "",
-    ".M4V": "",
-    ".MKV": "",
-    ".MNG": "",
-    ".MOD": "",
-    ".MOV": "",
-    ".MP2": "",
-    ".MP4": "",
-    ".MPE": "",
-    ".MPEG": "",
-    ".MPG": "",
-    ".MPV": "",
-    ".MXF": "",
-    ".NSV": "",
-    ".OGG": "",
-    ".OGV": "",
-    ".QT": "",
-    ".RM": "",
-    ".ROQ": "",
-    ".RRC": "",
-    ".SVI": "",
-    ".TS": "",
-    ".VOB": "",
-    ".WEBM": "",
-    ".WMV": "",
-    ".YUV": ""
-}
-
-OBFUSCATED_TAGS = {
-    "Girl": "Young Girl", # ロリ系 in Japanese
-    "Tits": "Small Tits" # 微乳 in Japanese
-}
+session = requests.Session()
 
 
-class ResponseHTML:
-    content = ""
-    html = ""
-    status_code = 0
-    url = ""
+def use_clearance(clearance: dict[str, Any]) -> None:
+    session.headers["User-Agent"] = clearance["userAgent"]
+    session.cookies.update(clearance["cookies"])
 
-def bypass_protection(url, retries=4):
-    url_domain = re.sub(r"www\.|\.com", "", urlparse(url).netloc)
-    log.debug("=== Checking Status of Javlib site ===")
-    response_html = ResponseHTML()
-    site = "javlibrary"
-    url_n = url.replace(url_domain, site)
+
+def solve_challenge(url: str) -> None:
+    log.info(
+        f"Solving Cloudflare's challenge with FlareSolverr ({config.flaresolverr_url})"
+    )
     try:
-        if FLARESOLVERR_ENABLED:             
-            url = FLARESOLVERR_URL
-            headers = {"Content-Type": "application/json"}
-            data = {
-                "cmd": "request.get",
-                "url": url_n,
-                "session": "2",
-                "session_ttl_minutes": 120,
-                "maxTimeout": FLARESOLVERR_TIMEOUT_MAX,
-                "set-cookie": "over18=18",
-            }
+        res = requests.post(
+            config.flaresolverr_url,
+            json={"cmd": "request.get", "url": url, "maxTimeout": 60000},
+            timeout=90,
+        ).json()
+    except requests.RequestException as e:
+        log.error(
+            f"FlareSolverr is unreachable at {config.flaresolverr_url}: javlibrary"
+            " can't be scraped without it, see JavLibrary_python/config.ini"
+        )
+        log.debug(str(e))
+        sys.exit(1)
+    if res.get("status") != "ok":
+        log.error(f"FlareSolverr failed to solve the challenge: {res.get('message')}")
+        sys.exit(1)
 
-            log.info(f"Using FlareSolverr: {FLARESOLVERR_URL}")
-            log.info(f"Javlibrary input url: {url_n}")
-            cookies = {'over18': '18'}
-            responseJson = requests.post(FLARESOLVERR_URL, cookies=cookies, headers=headers, json=data)
-            json_input = responseJson.json()
-
-            if json_input.get('status') == 'ok' and 'solution' in json_input:
-                response_html.content = json_input['solution']['response']
-                response_html.html = json_input['solution']['response']
-                response_html.status_code = json_input['solution']['status']
-                response_html.url = json_input['solution']['url']
-            else:
-                raise Exception(f"FlareSolverr returned error: {json_input.get('message', 'Unknown error')}")
-
-            #log.info(f"Flaresolverr response html: {response_html}")
-        else:
-            response = requests.get(url_n, headers=JAV_HEADERS, timeout=10)
-            response_html.content = response.content
-            response_html.html = response.text
-            response_html.status_code = response.status_code
-            response_html.url = response.url
-    except Exception as exc_req:
-        log.warning(f"Exception error {exc_req} while checking protection for {site}")
-        if retries == 4:
-            retries = retries - 1
-            log.warning(f"Retrying once normally after 7s delay [retries left: {retries}] for site: {site}")
-            time.sleep(7.2)
-            return bypass_protection(url, retries)
-        else:
-            return None, None
-    if response_html.url == "https://www.javlib.com/maintenance.html":
-        log.error(f"[{site}] Maintenance")
-    elif response_html.url == "https://www.javlibrary.com/maintenance.html":
-        log.error(f"[{site}] Maintenance")
-    elif response_html.status_code != 200:   
-        log.error(f"[{site}] Other issue ({response_html.status_code})")
-    else:
-        log.info(
-                f"[{site}] Using this site for scraping | status code: ({response_html.status_code})"
-            )
-        log.debug("======================================")
-        return site, response_html
-    log.debug("======================================")
-    return None, None
+    solution = res["solution"]
+    clearance = {
+        "userAgent": solution["userAgent"],
+        "cookies": {c["name"]: c["value"] for c in solution["cookies"]},
+    }
+    CLEARANCE_FILE.write_text(json.dumps(clearance), encoding="utf-8")
+    use_clearance(clearance)
 
 
-def send_request(url, head, retries=0, delay=2.5):
-    if retries > 3:
-        log.warning(f"Scrape for {url} failed after retrying {retries} times")
-        return None
-
-    global JAV_DOMAIN
-
-    if delay != 0:
-        log.info(f"Delaying request by {delay} seconds to prevent Cloudflare rate limiting")
-        time.sleep(delay)
-    url_domain = re.sub(r"www\.|\.com", "", urlparse(url).netloc)
-    response = None
-    if url_domain in SITE_JAVLIB:
-        # Javlib
-        if FLARESOLVERR_ENABLED:
-            _, response = bypass_protection(url)
-            return response
-            
-        if JAV_DOMAIN == "Check":
-            JAV_DOMAIN, response = bypass_protection(url)
-            if response:
-                return response
-        if JAV_DOMAIN is None:
+def fetch(url: str) -> tuple[html.HtmlElement, str] | None:
+    url = re.sub(r"^https?://(www\.)?javlib(rary)?\.com", BASE, url)
+    for attempt in range(2):
+        res = session.get(url, timeout=20)
+        if res.status_code == 403 and "Just a moment" in res.text and not attempt:
+            solve_challenge(url)
+            continue
+        if "maintenance" in res.url:
+            log.error("javlibrary is down for maintenance")
             return None
-        url = url.replace(url_domain, JAV_DOMAIN)
-    log.debug(f"[{threading.get_ident()}] Request URL: {url}")
-    try:
-        response = requests.get(url, headers=head, timeout=10)
-    except requests.exceptions.Timeout as exc_timeout:
-        log.warning(f"Timed out {exc_timeout}")
-        return send_request(url, head, retries+1)
-    except Exception as exc_req:
-        log.error(f"scrape error exception {exc_req}")
-        if delay != 0:
-            error_delay = delay+2.75
-            log.info(f"Delaying request by {error_delay} seconds and retrying")
-            time.sleep(error_delay)
-        return send_request(url, head, retries+1)
-    if response.status_code != 200:
-        log.debug(f"[Request] Error, Status Code: {response.status_code}")
-        response = None
-    return response
-
-
-def replace_banned_words(matchobj):
-    word = matchobj.group(0)
-    if word in BANNED_WORDS:
-        return BANNED_WORDS[word]
-    return word
-
-def cleanup_title(title):
-    if title == None:
-        return title
-
-    log.info(f"Starting title cleanup for: {title}")
-    cleaned_title = False
-    for key, value in REPLACE_TITLE.items():
-        if key in title:
-            title = title.replace(key, value)
-            cleaned_title = True
-    
-    if cleaned_title:
-        title = title.strip()
-        log.info(f"Found match and using new clean title: {title}")
-    return title
-
-def regexreplace(input_replace):
-    if not LEGACY_FIELDS:
-        return ""
-    word_pattern = re.compile(r'(\w|\*)+')
-    output = word_pattern.sub(replace_banned_words, input_replace)
-    return re.sub(r"[\[\]\"]", "", output)
-
-
-def getxpath(xpath, tree):
-    if not xpath:
-        return None
-    xpath_result = []
-    # It handles the union strangely so it is better to split and get one by one
-    if "|" in xpath:
-        for xpath_tmp in xpath.split("|"):
-            xpath_result.append(tree.xpath(xpath_tmp))
-        xpath_result = [val for sublist in xpath_result for val in sublist]
-    else:
-        xpath_result = tree.xpath(xpath)
-    #log.debug(f"xPATH: {xpath}")
-    #log.debug(f"raw xPATH result: {xpath_result}")
-    list_tmp = []
-    for x_res in xpath_result:
-        # for xpaths that don't end with /text()
-        if isinstance(x_res,lxml.html.HtmlElement):
-            list_tmp.append(x_res.text_content().strip())
-        else:
-            list_tmp.append(x_res.strip())
-    if list_tmp:
-        xpath_result = list_tmp
-    xpath_result = list(filter(None, xpath_result))
-    return xpath_result
-
-
-# SEARCH PAGE
-
-
-def jav_search(html, xpath):
-    if f"/{LANGUAGE}/jav" in html.url or "?v=jav" in html.url:
-        log.debug(f"Using the provided movie page ({html.url})")
-        return html
-    jav_search_tree = lxml.html.fromstring(html.content)
-        
-    jav_url = getxpath(xpath['url'], jav_search_tree)  # ./javme5it6a
-    if jav_url:
-        url_domain = urlparse(html.url).netloc
-        jav_url = re.sub(r"^\.", f"https://{url_domain}/{LANGUAGE}", jav_url[0])
-        log.debug(f"Using API URL: {jav_url}")
-        main_html = send_request(jav_url, JAV_HEADERS)
-        return main_html
-    log.debug("[JAV] There is no result in search")
+        if not res.ok:
+            log.error(f"Failed to fetch {url}: {res.status_code} {res.reason}")
+            return None
+        return html.fromstring(res.content), res.url
+    log.error(f"Still challenged by Cloudflare after solving it for {url}")
     return None
 
 
-def jav_search_by_name(html, xpath):
-    jav_search_tree = lxml.html.fromstring(html.content)
-    jav_url = getxpath(xpath['url'], jav_search_tree)  # ./javme5it6a
-    jav_title = getxpath(xpath['title'], jav_search_tree)
-    jav_image = getxpath(
-        xpath['image'], jav_search_tree
-    )  # //pics.dmm.co.jp/mono/movie/adult/13gvh029/13gvh029ps.jpg
-    lst = []
-    # Added fallback for 1 item results which redirect to video page automatically
-    if(len(jav_url) == 0):
-        jav_url = getxpath('//meta[@property="og:url"]/@content', jav_search_tree)
-        jav_title = getxpath('//div[@id="video_title"]/h3/a/text()', jav_search_tree)
-        jav_image = getxpath('//div[@id="video_jacket"]/img/@src', jav_search_tree)
-
-        if(len(jav_url) > 0):
-            for count, _ in enumerate(jav_url):
-                log.debug(jav_url[count])
-                lst.append({
-                    "title": jav_title[count],
-                    "url":
-                    f"https:{jav_url[count]}",
-                    "image": re.sub("^//","https://",jav_image[count])
-                })
-    else:
-        for count, _ in enumerate(jav_url):
-            lst.append({
-                "title": jav_title[count],
-                "url":
-                    f"https://www.javlibrary.com/{LANGUAGE}/{jav_url[count].replace('./', '')}",
-                "image": re.sub("^//","https://",jav_image[count])
-            })
-    log.debug(f"There is/are {len(lst)} scene(s)")
-    return lst
+def localized(url: str, language: str = LANGUAGE) -> str:
+    return re.sub(r"/(en|ja|tw|cn)/", f"/{language}/", url)
 
 
-def buildlist_tagperf(data, type_scrape=""):
-    list_tmp = []
-    dict_jav = None
-    if type_scrape == "perf_jav":
-        dict_jav = data
-        data = data["performers"]
-    for idx, data_value in enumerate(data):
-        p_name = data_value
-        if p_name == "":
+def texts(tree: html.HtmlElement, xpath: str) -> list[str]:
+    return [
+        value.strip()
+        for node in tree.xpath(xpath)
+        if (value := node if isinstance(node, str) else node.text_content())
+        and value.strip()
+    ]
+
+
+def text(tree: html.HtmlElement, xpath: str) -> str | None:
+    return next(iter(texts(tree, xpath)), None)
+
+
+def performer_name(name: str) -> str:
+    if name in IGNORE_NAME_REVERSE:
+        return name
+    return re.sub(r"^([a-zA-Z]+) ([a-zA-Z]+)$", r"\2 \1", name)
+
+
+def japanese_names(page_url: str) -> dict[str, str]:
+    "Maps each cast member's link to their name on the Japanese version of the page"
+    if not (page := fetch(localized(page_url, "ja"))):
+        return {}
+    tree, _ = page
+    cast = tree.xpath('//div[@id="video_cast"]//span[@class="cast"]/span/a')
+    return {a.get("href"): a.text_content().strip() for a in cast}
+
+
+def performers(tree: html.HtmlElement, page_url: str) -> list[ScrapedPerformer]:
+    cast = tree.xpath('//div[@id="video_cast"]//span[@class="cast"]/span/a')
+    aliases = japanese_names(page_url) if cast and LANGUAGE != "ja" else {}
+    result: list[ScrapedPerformer] = []
+    for a in cast:
+        href, name = a.get("href"), performer_name(a.text_content().strip())
+        performer: ScrapedPerformer = {"name": name, "urls": [urljoin(page_url, href)]}
+        if (alias := aliases.get(href)) and alias != name:
+            performer["aliases"] = alias
+        result.append(performer)
+    return result
+
+
+def to_scene(tree: html.HtmlElement, page_url: str) -> ScrapedScene:
+    scene: ScrapedScene = {}
+    if title := text(tree, '//div[@id="video_title"]/h3/a'):
+        scene["title"] = title
+    if code := text(tree, '//div[@id="video_id"]//td[@class="text"]'):
+        scene["code"] = code
+    if date := text(tree, '//div[@id="video_date"]//td[@class="text"]'):
+        scene["date"] = date
+    if minutes := text(tree, '//div[@id="video_length"]//span[@class="text"]'):
+        scene["duration"] = int(minutes) * 60
+    if director := text(tree, '//div[@id="video_director"]//span[@class="director"]/a'):
+        scene["director"] = director
+    if url := text(tree, '//meta[@property="og:url"]/@content'):
+        scene["urls"] = [urljoin(page_url, url)]
+    if studio := text(tree, '//div[@id="video_maker"]//span[@class="maker"]/a'):
+        scene["studio"] = {"name": studio}
+    if tags := [
+        {"name": OBFUSCATED_TAGS.get(tag, tag)}
+        for tag in texts(tree, '//div[@id="video_genres"]//span[@class="genre"]/a')
+        if tag not in IGNORE_TAGS
+    ]:
+        scene["tags"] = tags
+    if cast := performers(tree, page_url):
+        scene["performers"] = cast
+    if (image := text(tree, '//div[@id="video_jacket"]/img/@src')) and not re.search(
+        r"now_printing|noimage", image
+    ):
+        scene["image"] = urljoin(page_url, image)
+    return scene
+
+
+def scene_from_url(url: str) -> ScrapedScene | None:
+    if page := fetch(localized(url)):
+        return to_scene(*page)
+    return None
+
+
+def search(
+    keyword: str,
+) -> tuple[list[ScrapedScene], tuple[html.HtmlElement, str] | None]:
+    """
+    Returns the search results, or the scene page itself when javlibrary
+    redirects a search with a single result straight to it
+    """
+    if not (
+        page := fetch(f"{BASE}/{LANGUAGE}/vl_searchbyid.php?keyword={quote(keyword)}")
+    ):
+        return [], None
+    tree, page_url = page
+    if "vl_searchbyid" not in page_url:
+        return [], page
+
+    results: list[ScrapedScene] = []
+    for video in tree.xpath('//div[@class="videos"]/div[@class="video"]'):
+        link = video.find("a")
+        if link is None or BLU_RAY.search(link.get("title", "")):
             continue
-        if type_scrape == "perf_jav":
-            if p_name not in IGNORE_PERF_REVERSE and not NAME_ORDER_JAPANESE:
-                # Invert name (Aoi Tsukasa -> Tsukasa Aoi)
-                p_name = re.sub(r"([a-zA-Z]+)(\s)([a-zA-Z]+)", r"\3 \1", p_name)
-            if STASH_SUPPORT_NAME_ORDER:
-                # There is such names as "Aoi." and even "@you". Indeed, JAV is fun!
-                parsed_name = re.search(r"([a-zA-Z\.@]+)(\s)?([a-zA-Z]+)?", p_name)
-                if not parsed_name:
-                    log.debug(f"Failed to parse name: {p_name}")
-                    continue
-                p_name = {}
-                if parsed_name[2] == ' ' and parsed_name[3]:
-                    p_name[
-                        "surname"] = parsed_name[1]
-                    p_name[
-                        "first_name"] = parsed_name[3]
-                else:
-                    p_name[
-                        "nickname"] = parsed_name[0]
-        if type_scrape == "tags" and p_name in IGNORE_TAGS:
-            continue
-        if type_scrape == "tags" and p_name in OBFUSCATED_TAGS:
-            p_name = OBFUSCATED_TAGS[p_name]
-        if type_scrape == "perf_jav" and dict_jav.get("performer_aliases"):
-            try:
-                list_tmp.append({
-                    "name": p_name,
-                    "aliases": dict_jav["performer_aliases"][idx],
-                    "gender": "FEMALE"
-                })
-            except:
-                list_tmp.append({"name": p_name, "gender": "FEMALE"})
-        else:
-            list_tmp.append({"name": p_name})
-    # Adding personal fixed tags
-    if FIXED_TAGS and type_scrape == "tags":
-        list_tmp.append({"name": FIXED_TAGS})
-    return list_tmp
+        result: ScrapedScene = {
+            "title": link.get("title"),
+            "urls": [urljoin(page_url, link.get("href"))],
+        }
+        if code := text(video, './/div[@class="id"]'):
+            result["code"] = code
+        if image := text(video, ".//img/@src"):
+            result["image"] = urljoin(page_url, image)
+        results.append(result)
+    return results, None
 
 
-def th_request_perfpage(page_url, perf_url):
-    # vl_star.php?s=afhvw
-    #log.debug("[DEBUG] Aliases Thread: {}".format(threading.get_ident()))
-    javlibrary_ja_html = send_request(re.sub(r"/(en|ja|tw|cn)/", "/ja/", page_url),
-                                      JAV_HEADERS)
-    if javlibrary_ja_html:
-        javlibrary_perf_ja = lxml.html.fromstring(javlibrary_ja_html.content)
-        list_tmp = []
-        try:
-            for p_v in perf_url:
-                list_tmp.append(
-                    javlibrary_perf_ja.xpath('//a[@href="' + p_v +
-                                             '"]/text()')[0])
-            if list_tmp:
-                jav_result['performer_aliases'] = list_tmp
-                log.debug(f"Got the aliases: {list_tmp}")
-        except:
-            log.debug("Error with the aliases")
-    else:
-        log.debug("Can't get the Jap HTML")
+def scene_search(name: str) -> list[ScrapedScene]:
+    results, scene_page = search(name)
+    if scene_page:
+        return [to_scene(*scene_page)]
+    return results
 
 
-def th_imageto_base64(imageurl, typevar):
-    #log.debug("[DEBUG] {} thread: {}".format(typevar,threading.get_ident()))
-    head = JAV_HEADERS
-    if isinstance(imageurl,list):
-        for image_index, image_url in enumerate(imageurl):
-            try:
-                img = requests.get(image_url.replace(
-                    "ps.jpg", "pl.jpg"),
-                                   timeout=10,
-                                   headers=head)
-                if img.status_code != 200:
-                    log.debug(
-                        "[Image] Got a bad request (status: "\
-                        f"{img.status_code}) for <{image_url}>"
-                    )
-                    imageurl[image_index] = None
-                    continue
-                base64image = base64.b64encode(img.content)
-                imageurl[
-                    image_index] = "data:image/jpeg;base64," + base64image.decode(
-                        'utf-8')
-            except:
-                log.debug(
-                    f"[{typevar}] Failed to get the base64 of the image"
-                )
-    else:
-        try:
-            img = requests.get(imageurl.replace("ps.jpg", "pl.jpg"),
-                               timeout=10,
-                               headers=head)
-            if img.status_code != 200:
-                log.debug(
-                    f"[Image] Got a bad request (status: {img.status_code}) for <{imageurl}>"
-                )
-                return
-            base64image = base64.b64encode(img.content)
-            if typevar == "JAV":
-                jav_result[
-                    "image"] = "data:image/jpeg;base64," + base64image.decode(
-                        'utf-8')
-            log.debug(f"[{typevar}] Converted the image to base64!")
-        except:
-            log.debug(f"[{typevar}] Failed to get the base64 of the image")
-    return
+def scene_from_code(name: str) -> ScrapedScene | None:
+    if not (match := CODE.search(name)):
+        log.error(f"No JAV code found in '{name}'")
+        return None
+    code = f"{match[1]}-{match[2]}".upper()
+    results, scene_page = search(code)
+    if scene_page:
+        return to_scene(*scene_page)
+    if not (best := next((r for r in results if r.get("code") == code), None)):
+        log.error(f"No javlibrary result for {code}")
+        return None
+    return scene_from_url(best["urls"][0])
 
 
-#log.debug(f"[DEBUG] Main Thread: {threading.get_ident()}")
-FRAGMENT = json.loads(sys.stdin.read())
+def scene_from_fragment(args: dict[str, Any]) -> ScrapedScene | None:
+    urls = [args.get("url"), *(args.get("urls") or [])]
+    if url := next(
+        (u for u in urls if u and re.search(r"javlib(rary)?\.com", u)), None
+    ):
+        return scene_from_url(url)
+    names = [Path(f["path"]).stem for f in args.get("files") or []]
+    names += [args.get("code") or "", args.get("title") or ""]
+    if name := next((n for n in names if CODE.search(n)), None):
+        return scene_from_code(name)
+    log.error(f"No javlibrary URL or JAV code in {names}")
+    return None
 
-SEARCH_TITLE = FRAGMENT.get("name")
-SEARCH_TITLE = cleanup_title(SEARCH_TITLE)
-SCENE_URL = FRAGMENT.get("url")
-if SCENE_URL:
-    SCENE_URL = re.sub(r"/(en|ja|tw|cn)/", f"/{LANGUAGE}/", SCENE_URL)
 
-if FRAGMENT.get("title"):
-    SCENE_TITLE = FRAGMENT["title"]
-    SCENE_TITLE = cleanup_title(SCENE_TITLE)
-else:
-    SCENE_TITLE = None
+if __name__ == "__main__":
+    op, args = scraper_args()
+    if CLEARANCE_FILE.exists():
+        use_clearance(json.loads(CLEARANCE_FILE.read_text(encoding="utf-8")))
 
-if "validSearch" in sys.argv and SCENE_URL is None:
-    sys.exit()
+    match op, args:
+        case "scene-by-url", {"url": url} if url:
+            result = scene_from_url(url)
+        case "scene-by-name", {"name": name} if name:
+            result = scene_search(name)
+        case "scene-by-fragment" | "scene-by-query-fragment", args:
+            result = scene_from_fragment(args)
+        case _:
+            log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
+            sys.exit(1)
 
-if "searchName" in sys.argv:
-    log.debug(f"Using search with Title: {SEARCH_TITLE}")
-    JAV_SEARCH_HTML = send_request(
-        f"https://www.javlibrary.com/{LANGUAGE}/vl_searchbyid.php?keyword={SEARCH_TITLE}",
-        JAV_HEADERS)
-else:
-    if SCENE_URL:
-        scene_domain = re.sub(r"www\.|\.com", "", urlparse(SCENE_URL).netloc)
-        # Url from Javlib
-        if scene_domain in SITE_JAVLIB:
-            log.debug(f"Using URL: {SCENE_URL}")
-            JAV_MAIN_HTML = send_request(SCENE_URL, JAV_HEADERS)
-        else:
-            log.warning(f"The URL is not from JavLibrary ({SCENE_URL})")
-    if JAV_MAIN_HTML is None and SCENE_TITLE:
-        log.debug(f"Using search with Title: {SCENE_TITLE}")
-        JAV_SEARCH_HTML = send_request(
-            f"https://www.javlibrary.com/{LANGUAGE}/vl_searchbyid.php?keyword={SCENE_TITLE}",
-            JAV_HEADERS)
-
-# XPATH
-jav_xPath_search = {}
-jav_xPath_search[
-    'url'] = '//div[@class="videos"]/div/a[not(contains(@title,"(Blu-ray"))]/@href'
-jav_xPath_search[
-    'title'] = '//div[@class="videos"]/div/a[not(contains(@title,"(Blu-ray"))]/@title'
-jav_xPath_search[
-    'image'] = '//div[@class="videos"]/div/a[not(contains(@title,"(Blu-ray"))]//img/@src'
-
-jav_xPath = {}
-jav_xPath[
-    "code"] = '//div[@id="video_id"]//td[@class="text"]/text()'
-# or '//div[@id="video_id"]//td[2][@class="text"]/text()'
-jav_xPath[
-    "title"] = jav_xPath["code"] if LEGACY_FIELDS else '//div[@id="video_title"]/h3/a/text()'
-#There are no actual Details in JavLibrary
-#For legacy reasons we add the Title in Details by default
-jav_xPath[
-    "details"] = None if not LEGACY_FIELDS else '//div[@id="video_title"]/h3/a/text()'
-jav_xPath["url"] = '//meta[@property="og:url"]/@content'
-jav_xPath[
-    "date"] = '//div[@id="video_date"]//td[@class="text"]/text()'
-jav_xPath[
-    "director"] = '//div[@id="video_director"]//td[@class="text"]/span[@class="director"]/a/text()'
-jav_xPath[
-    "tags"] = '//div[@id="video_genres"]//span[@class="genre"]/a/text()'
-jav_xPath[
-    "performers"] = '//div[@id="video_cast"]//span[@class="cast"]/span/a/text()'
-jav_xPath[
-    "performers_url"] = '//div[@id="video_cast"]//span[@class="cast"]/span/a/@href'
-jav_xPath[
-    "studio"] = '//div[@id="video_maker"]//span[@class="maker"]/a/text()'
-#jav_xPath[
-#    "label"] = '//td[@class="header" and text()="Label:"]'\
-#                '/following-sibling::td/span[@class="label"]/a/text()'
-jav_xPath["image"] = '//div[@id="video_jacket"]/img/@src'
-
-jav_result = {}
-
-if "searchName" in sys.argv:
-    if JAV_SEARCH_HTML:
-        if "/en/jav" in JAV_SEARCH_HTML.url:
-            log.debug(f"Scraping the movie page directly ({JAV_SEARCH_HTML.url})")
-            jav_tree = lxml.html.fromstring(JAV_SEARCH_HTML.content)
-            jav_result["title"] = getxpath(jav_xPath["title"], jav_tree)
-            jav_result["details"] = getxpath(jav_xPath["details"], jav_tree)
-            jav_result["url"] = getxpath(jav_xPath["url"], jav_tree)
-            jav_result["image"] = getxpath(jav_xPath["image"], jav_tree)
-            for key, value in jav_result.items():
-                if isinstance(value,list):
-                    jav_result[key] = value[0]
-                if key in ["image", "url"]:
-                    jav_result[key] = f"https:{jav_result[key]}".replace("https:https:", "https:")
-            jav_result = [jav_result]
-        else:
-            jav_result = jav_search_by_name(JAV_SEARCH_HTML, jav_xPath_search)
-        if jav_result:
-            print(json.dumps(jav_result))
-        else:
-            print(json.dumps([{"title": "The search doesn't return any result."}]))
-    else:
-        if PROTECTION_CLOUDFLARE:
-            print(
-                json.dumps([{
-                    "title": "Protected by Cloudflare, try later."
-                }]))
-        else:
-            print(
-                json.dumps([{
-                    "title":
-                    "The request has failed to get the page. Check log."
-                }]))
-    sys.exit()
-
-if JAV_SEARCH_HTML:
-    JAV_MAIN_HTML = jav_search(JAV_SEARCH_HTML, jav_xPath_search)
-
-if JAV_MAIN_HTML:
-    #log.debug("[DEBUG] Javlibrary Page ({})".format(JAV_MAIN_HTML.url))
-    jav_tree = lxml.html.fromstring(JAV_MAIN_HTML.content)
-    # is not None for removing the FutureWarning...
-    if jav_tree is not None:
-        # Get data from javlibrary
-        for key, value in jav_xPath.items():
-            jav_result[key] = getxpath(value, jav_tree)
-        # PostProcess
-        if jav_result.get("image"):
-            tmp = re.sub(r"(http:|https:)", "", jav_result["image"][0])
-            jav_result["image"] = "https:" + tmp
-            if "now_printing.jpg" in jav_result[
-                    "image"] or "noimage" in jav_result["image"]:
-                # https://pics.dmm.com/mono/movie/n/now_printing/now_printing.jpg
-                # https://pics.dmm.co.jp/mono/noimage/movie/adult_ps.jpg
-                log.debug(
-                    "[Warning][Javlibrary] Image was deleted or failed to load "\
-                    f"({jav_result['image']})"
-                )
-                jav_result["image"] = None
-            else:
-                imageBase64_jav_thread = threading.Thread(
-                    target=th_imageto_base64,
-                    args=(
-                        jav_result["image"],
-                        "JAV",
-                    ))
-                imageBase64_jav_thread.start()
-        if jav_result.get("url"):
-            jav_result["url"] = "https:" + jav_result["url"][0]
-        if jav_result.get("details") and LEGACY_FIELDS:
-            jav_result["details"] = re.sub(r"^(.*? ){1}", "",
-                                           jav_result["details"][0])
-        if jav_result.get("title"):
-            if LEGACY_FIELDS or KEEP_CODE_IN_TITLE:
-                jav_result["title"] = jav_result["title"][0]
-            elif not KEEP_CODE_IN_TITLE:
-                jav_result["title"] = (re.sub(jav_result['code'][0], "",
-                                            jav_result["title"][0])).lstrip()
-        if jav_result.get("director"):
-            jav_result["director"] = jav_result["director"][0]
-        #if jav_result.get("label"):
-        #    jav_result["label"] = jav_result["label"][0]
-        if jav_result.get("performers_url") and IGNORE_ALIASES is False:
-            javlibrary_aliases_thread = threading.Thread(
-                target=th_request_perfpage,
-                args=(
-                    JAV_MAIN_HTML.url,
-                    jav_result["performers_url"],
-                ))
-            javlibrary_aliases_thread.daemon = True
-            javlibrary_aliases_thread.start()
-
-if JAV_MAIN_HTML is None:
-    log.info("No results found")
-    print(json.dumps({}))
-    sys.exit()
-
-log.debug('[JAV] {}'.format(jav_result))
-
-# Time to scrape all data
-scrape = {}
-
-# DVD code
-try:
-    scrape['code'] = next(iter(jav_result.get('code', [])), None)
-    scrape['title'] = jav_result.get('title')
-    scrape['date'] = next(iter(jav_result.get('date', [])), None)
-    scrape['director'] = jav_result.get('director') or None
-    scrape['url'] = jav_result.get('url')
-    scrape['details'] = regexreplace(jav_result.get('details', ""))
-    scrape['studio'] = {
-        'name': next(iter(jav_result.get('studio', [])), None),
-    }
-except Exception as e:
-    log.error(f"Error mapping scraped data to fields: {e}")
-    log.error(f"Raw jav_result dump: {jav_result}")
-    raise e
-#scrape['label'] = {
-#    'name': jav_result.get('label'),
-#}
-
-if WAIT_FOR_ALIASES and not IGNORE_ALIASES:
-    try:
-        if javlibrary_aliases_thread.is_alive():
-            javlibrary_aliases_thread.join()
-    except NameError:
-        log.debug("No Jav Aliases Thread")
-scrape['performers'] = buildlist_tagperf(jav_result, "perf_jav")
-
-scrape['tags'] = buildlist_tagperf(jav_result.get('tags', []), "tags")
-scrape['tags'] = [
-    {
-        "name": tag_name.strip()
-    } for tag_dict in scrape['tags']
-    for tag_name in tag_dict["name"].replace('·', ',').split(",")
-]
-
-try:
-    if imageBase64_jav_thread.is_alive() is True:
-        imageBase64_jav_thread.join()
-    if jav_result.get('image'):
-        scrape['image'] = jav_result['image']
-except NameError:
-    log.debug("No image JAV Thread")
-
-print(json.dumps(scrape))
+    print(json.dumps(result))
