@@ -1,30 +1,148 @@
 name: IFeelMyself
-performerByName:
-  action: script
-  script:
-    - python3
-    - IFeelMyself.py
-    - query
-    - performer
-performerByFragment:
-  action: script
-  script:
-    - python3
-    - IFeelMyself.py
-    - scrape
+# requires: py_common
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - ifeelmyself.com
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: ^.*/(\d+)/([fFmM]\d+)-\d+[a-z]*\.jpg.*$
+          with: https://ifeelmyself.com/public/main.php?page=flash_player&out=bkg&media_id=${1}&artist_id=${2}
+    scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://ifeelmyself.com/public/main.php?page=quick_search&view_by=news&keyword={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
 sceneByFragment:
   action: script
   script:
-    - python3
+    - python
     - IFeelMyself.py
-    - query
-    - scene
-sceneByURL:
-  - url:
-      - ifeelmyself.com
-    action: script
-    script:
-      - python3
-      - IFeelMyself.py
-      - url
-# Last Updated February 04, 2023
+    - scene-by-fragment
+performerByName:
+  action: scrapeXPath
+  queryURL: https://ifeelmyself.com/public/main.php?page=quick_search&view_by=news&keyword={}
+  scraper: performerSearch
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $scene: //table[contains(@class, "ppss-scene")]
+      $heading: //table[contains(@class, "ppss-scene")]//*[contains(@class, "entryHeading")]
+    scene:
+      Title:
+        selector: $heading/a[1]
+        postProcess:
+          - &utf8AsCp1252
+            javascript: |
+              const cp1252High = [
+                0x20ac, 0, 0x201a, 0x0192, 0x201e, 0x2026, 0x2020, 0x2021,
+                0x02c6, 0x2030, 0x0160, 0x2039, 0x0152, 0, 0x017d, 0,
+                0, 0x2018, 0x2019, 0x201c, 0x201d, 0x2022, 0x2013, 0x2014,
+                0x02dc, 0x2122, 0x0161, 0x203a, 0x0153, 0, 0x017e, 0x0178,
+              ];
+              let bytes = "";
+              for (const ch of value) {
+                const code = ch.charCodeAt(0);
+                const byte = code < 0x100 ? code : 0x80 + cp1252High.indexOf(code);
+                if (byte < 0x80 && code >= 0x100) return value;
+                bytes += "%" + byte.toString(16).padStart(2, "0");
+              }
+              try {
+                return decodeURIComponent(bytes);
+              } catch (e) {
+                return value;
+              }
+      Date:
+        selector: $scene//*[@class="blog-title-right" or @class="entryDatestamp"]
+        postProcess:
+          - parseDate: 02 Jan 2006
+      Details:
+        selector: $scene//td[@class="blog_wide_new_text" or @class="entryBlurb"]
+        postProcess:
+          - *utf8AsCp1252
+      Image: $scene//img[contains(@src, "bcdn.ifeelmyself.com")]/@src | $scene//video/@poster
+      URLs:
+        selector: $scene//img[contains(@src, "bcdn.ifeelmyself.com")]/@src | $scene//video/@poster | $scene//div[starts-with(@id, "player__")]/@id
+        postProcess:
+          - replace:
+              - &sceneURL
+                regex: ^(?:.*/(\d+)/([fFmM]\d+)-.*|player__(\d+)-([fFmM]\d+))$
+                with: https://ifeelmyself.com/public/main.php?page=flash_player&out=bkg&media_id=${1}${3}&artist_id=${2}${4}
+      Performers:
+        Name:
+          selector: $heading/a[2]
+          postProcess:
+            - replace:
+                - &underscoreToSpace
+                  regex: _
+                  with: " "
+        URLs:
+          selector: $scene//img[contains(@src, "bcdn.ifeelmyself.com")]/@src | $scene//video/@poster | $scene//div[starts-with(@id, "player__")]/@id
+          postProcess:
+            - replace:
+                - regex: ^(?:.*/\d+/|player__\d+-)([fFmM]\d+).*$
+                  with: https://ifeelmyself.com/public/main.php?page=artist_bio&artist_id=${1}
+      Tags:
+        Name: $scene//span[@class="tags-list-item-tag"]
+      Studio:
+        Name:
+          fixed: I Feel Myself
+
+  sceneSearch:
+    common:
+      $result: //table[contains(@class, "ppss-scene")][not(@data-scene-id = preceding::table/@data-scene-id or .//img[@class="blog-photo-preview"])]
+    scene:
+      Title:
+        selector: $result//*[contains(@class, "entryHeading")]/a[1]
+        postProcess:
+          - *utf8AsCp1252
+      Date:
+        selector: $result//*[@class="blog-title-right" or @class="entryDatestamp"]
+        postProcess:
+          - parseDate: 02 Jan 2006
+      Image: $result//img[contains(@src, "bcdn.ifeelmyself.com")]/@src | $result//video/@poster
+      URLs:
+        selector: $result//img[contains(@src, "bcdn.ifeelmyself.com")]/@src | $result//video/@poster
+        postProcess:
+          - replace:
+              - *sceneURL
+
+  performerSearch:
+    common:
+      $artist: //*[contains(@class, "entryHeading")]/a[2][not(@href = preceding::*[contains(@class, "entryHeading")]/a[2]/@href)]
+    performer:
+      Name:
+        selector: $artist
+        postProcess:
+          - replace:
+              - *underscoreToSpace
+      URLs:
+        selector: $artist/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://ifeelmyself.com
+      Images:
+        selector: $artist/@href
+        postProcess:
+          - replace:
+              - regex: ^.*artist_id=([fFmM]\d+).*$
+                with: https://bcdn.ifeelmyself.com/artists/${1}.jpg
+      Gender:
+        selector: $artist/@href
+        postProcess:
+          - replace:
+              - regex: ^.*artist_id=([fFmM])\d+.*$
+                with: ${1}
+          - map:
+              f: Female
+              F: Female
+              m: Male
+              M: Male
