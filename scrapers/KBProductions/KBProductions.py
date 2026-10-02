@@ -6,8 +6,9 @@ from html.parser import HTMLParser
 from unicodedata import normalize
 
 import requests
+
 from py_common import log
-from py_common.types import ScrapedMovie, ScrapedPerformer, ScrapedScene, ScrapedStudio
+from py_common.types import ScrapedGroup, ScrapedPerformer, ScrapedScene, ScrapedStudio
 from py_common.util import dig, guess_nationality, replace_all, scraper_args
 
 # Maps the `site_domain` key from the API
@@ -102,6 +103,7 @@ studio_map = {
     "theartemixxx.com": "The ArtemiXXX",
     "topwebmodels.com": "Top Web Models",
     "topwebmodels-interviews.com": "TWM Interviews",
+    "twm-porn-vault.com": "TWM Porn Vault",
     "trashyneverclassy.com": "Trashy Never Classy",
     "3rdwheel.toughlovex.com": "ToughLoveX",
     "drkarl.toughlovex.com": "ToughLoveX",
@@ -121,6 +123,21 @@ studio_map = {
     "api.nyseedxxx.com": "NYSeed",
 }
 
+# Sub-brands whose `site_domain` doesn't resolve: their scenes and models
+# live on a network host instead, so links point at the page's own host
+NO_SITE_OF_THEIR_OWN = {
+    "3rdwheel.toughlovex.com",
+    "drkarl.toughlovex.com",
+    "karlskasting.toughlovex.com",
+    "karlsworld.toughlovex.com",
+    "premium-nickmarxx.com",
+    "slutwife.labelladx.com",
+    "toughlove.toughlovex.com",
+    "topwebmodels-interviews.com",
+    "twm-porn-vault.com",
+    "twmclassics.com",
+}
+
 
 def feetinches_to_cm(feet, inches):
     return str(round((float(feet) * 12 + float(inches)) * 2.54))
@@ -137,12 +154,8 @@ def clean_url(url: str) -> str:
 
 # Some sites only work with the `tour.` subdomain
 def fix_url(url: str) -> str:
-    url = url.replace("twmclassics.com", "topwebmodels.com")
-    url = url.replace("topwebmodels-interviews.com", "topwebmodels.com")
     url = url.replace("suckthisdick.com", "hobybuchanon.com")
-    url = url.replace("premium-nickmarxx.com", "nickmarxx.com")
     url = url.replace("api.nyseedxxx.com", "nyseedxxx.com")
-    url = url.replace("3rdwheel.toughlovex.com", "tour.toughlovex.com")
     tour_domain = (
         "nympho",
         "allanal",
@@ -158,7 +171,6 @@ def fix_url(url: str) -> str:
         "shesbrandnew",
         "topwebmodels",
         "trueanal",
-        "twmclassics",
     )
     return re.sub(rf"//(?<!tour\.)({'|'.join(tour_domain)})", r"//tour.\1", url)
 
@@ -207,19 +219,24 @@ def fetch_page_props(url: str) -> dict | None:
     return content
 
 
-def make_performer_url(slug: str, site: str) -> str:
-    return f"https://{site}/models/{slug}"
+def site_url(site: str, page_url: str) -> str:
+    if site in NO_SITE_OF_THEIR_OWN:
+        return f"https://{urllib.parse.urlparse(page_url).netloc}"
+    return f"https://{site}"
 
 
-def get_studio(site: str) -> ScrapedStudio:
+def make_performer_url(slug: str, site: str, page_url: str) -> str:
+    return f"{site_url(site, page_url)}/models/{slug}"
+
+
+def get_studio(site: str, page_url: str) -> ScrapedStudio:
     name = studio_map.get(site, site)
     studio: ScrapedStudio = {
         "name": name,
-        "urls": [f"https://{site}"],
-
+        "urls": [site_url(site, page_url)],
     }
     if name == "Suck This Dick":
-        studio["parent"] = get_studio("hobybuchanon.com")
+        studio["parent"] = get_studio("hobybuchanon.com", page_url)
     return studio
 
 
@@ -257,7 +274,7 @@ def torso_variant(url: str) -> str:
         return torso_image_url
     return url
 
-def to_scraped_performer(raw_performer: dict) -> ScrapedPerformer:
+def to_scraped_performer(raw_performer: dict, page_url: str) -> ScrapedPerformer:
     # Convert dict keys to lower case because, of couse, they can come in differently depending on studio.
     raw_performer = {key.lower(): value for key, value in raw_performer.items()}
 
@@ -272,7 +289,9 @@ def to_scraped_performer(raw_performer: dict) -> ScrapedPerformer:
         "name": raw_performer["name"],
         "gender": raw_performer["gender"],
         "urls": [
-            make_performer_url(raw_performer["slug"], raw_performer["site_domain"])
+            make_performer_url(
+                raw_performer["slug"], raw_performer["site_domain"], page_url
+            )
         ],
         "tags": [],
     }
@@ -373,8 +392,8 @@ def to_scraped_performer(raw_performer: dict) -> ScrapedPerformer:
     return performer
 
 
-def to_scraped_movie(raw_movie: dict) -> ScrapedMovie:
-    movie: ScrapedMovie = {
+def to_scraped_group(raw_movie: dict, page_url: str) -> ScrapedGroup:
+    movie: ScrapedGroup = {
         "name": raw_movie["title"],
     }
 
@@ -388,14 +407,14 @@ def to_scraped_movie(raw_movie: dict) -> ScrapedMovie:
         movie["front_image"] = cover
 
     site = raw_movie["site_domain"]
-    movie["studio"] = get_studio(site)
+    movie["studio"] = get_studio(site, page_url)
 
     # There is no reliable way to construct a movie URL from the data
 
     return movie
 
 
-def to_scraped_scene_from_content(raw_scene: dict) -> ScrapedScene:
+def to_scraped_scene_from_content(raw_scene: dict, page_url: str) -> ScrapedScene:
     log.debug(f"Raw scene data: {json.dumps(raw_scene)}")
     site = raw_scene["site_domain"]
     scene: ScrapedScene = {}
@@ -413,7 +432,7 @@ def to_scraped_scene_from_content(raw_scene: dict) -> ScrapedScene:
             {
                 "name": x["name"],
                 "image": x["thumb"],
-                "urls": [make_performer_url(x["slug"], site)],
+                "urls": [make_performer_url(x["slug"], site, page_url)],
             }
             for x in models
         ]
@@ -423,13 +442,13 @@ def to_scraped_scene_from_content(raw_scene: dict) -> ScrapedScene:
             tags.append("Virtual Reality")
         scene["tags"] = [{"name": x} for x in tags]
 
-    scene["studio"] = get_studio(site)
+    scene["studio"] = get_studio(site, page_url)
     # PurgatoryX splits its catalogue into "Heaven" and "Hell" series, tagged
     # as such; StashDB models them as child studios of PurgatoryX
     if site == "purgatoryx.com" and (
         series := next((t for t in raw_scene.get("tags", []) if t in ("Heaven", "Hell")), None)
     ):
-        scene["studio"] = {"name": series, "parent": get_studio(site)}
+        scene["studio"] = {"name": series, "parent": get_studio(site, page_url)}
 
     # trailer seems to give the best quality image (2024/08/28)
     # trailer_screencap is what's shown on most sites
@@ -487,7 +506,7 @@ def to_scraped_scene_from_video(raw_scene: dict, page_url: str) -> ScrapedScene:
     if tags := raw_scene.get("categories"):
         scene["tags"] = [{"name": x["name"]} for x in tags]
 
-    studio = get_studio(site)
+    studio = get_studio(site, page_url)
     # The thumbnail CDN host used to identify the studio isn't a real, browsable
     # site URL - use the domain the scene was actually requested from instead
     studio["urls"] = [f"https://{urllib.parse.urlparse(page_url).netloc}"]
@@ -503,7 +522,7 @@ def scrape_scene(url: str) -> ScrapedScene | None:
 
     scene: ScrapedScene = {}
     if content := props.get("content"):
-        scene = to_scraped_scene_from_content(content)
+        scene = to_scraped_scene_from_content(content, url)
     if video := props.get("video"):
         scene = to_scraped_scene_from_video(video, url)
     scene["urls"] = [url]
@@ -512,7 +531,7 @@ def scrape_scene(url: str) -> ScrapedScene | None:
     if playlist := dig(props, "playlist", "data", 0) or (
         dig(props, "playlist", "title") and props["playlist"]
     ):
-        scene["movies"] = [to_scraped_movie(playlist)]
+        scene["groups"] = [to_scraped_group(playlist, url)]
 
     return scene
 
@@ -521,7 +540,7 @@ def scrape_performer(url: str) -> ScrapedPerformer | None:
     if not (props := fetch_page_props(url)):
         return None
 
-    return to_scraped_performer(props["model"])
+    return to_scraped_performer(props["model"], url)
 
 
 if __name__ == "__main__":

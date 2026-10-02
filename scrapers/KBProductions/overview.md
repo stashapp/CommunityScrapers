@@ -1,4 +1,4 @@
-Scraper has been tested on 2026-09-06
+Scraper has been tested on 2026-10-02
 
 | Studio                | URL                                                                                                                           |
 | :-------------------- | :---------------------------------------------------------------------------------------------------------------------------- |
@@ -23,13 +23,15 @@ Scraper has been tested on 2026-09-06
 | DickHDDaily           | https://dickhddaily.com/videos/cream-in-the-pink                                                                              |
 | Dire Desires          | https://diredesires.com/scenes/rellies-desires                                                                                |
 | Dirty Auditions       | https://dirtyauditions.com/scenes/lost-in-lust-with-luna                                                                      |
-| Divine-DD             | https://divine-dd.com/videos/fucking-your-step-sisters-f-cup-tits                                                             |
+| Divine-DD             | https://divine-dd.com/videos/her-tits-have-a-starring-role                                                                    |
 | DoggVision            | https://doggvision.com/videos/40m-tits-squirting-bbw-power-fucked                                                             |
 | Downblouse Jerk       | https://downblousejerk.com/videos/stepmums-ironing-session                                                                    |
 | DripDrip              | https://dripdropprod.net/scenes/thick-latina-babe-jasmine-flower-bbw-busty-bexx-suck-his-nipples-and-fuck-the-shit-out-of-him |
+| Edward James          | https://edwardjames.com/videos/big-cock-workout-part-1                                                                        |
 | Exposed Emos          | https://www.emonetwork.com/gay-emo-twinks-watch/ee0048_kevinnash                                                              |
 | Facials Forever       | https://tour.facialsforever.com/scenes/bunny-bae-4                                                                            |
 | FantasyPOV            | https://fantasypov.com/videos/spying-on-my-stepsister                                                                         |
+| FreakMob Hardcore     | https://freakmobhardcore.com/videos/big-booty-twerking-hardcore-whore                                                         |
 | FreakMob Media        | https://freakmobmedia.com/videos/two-big-dicks-for-nia-bleu                                                                   |
 | Gogo Bar Auditions    | https://gogobarauditions.com/trailers/Has-no-objections-when-asked-to-provide-a-sample                                        |
 | GoGo World Porn       | https://gogoworldporn.com/videos/milf-timeout-yums-court                                                                      |
@@ -41,6 +43,7 @@ Scraper has been tested on 2026-09-06
 | Inked POV             | https://inkedpov.com/scenes/pool-side-hook-up-with-brenna                                                                     |
 | Inserted              | https://inserted.com/videos/lunas-backdoor-bash                                                                               |
 | JAV888                | https://jav888.com/videos/megumi-iwabuchi                                                                                     |
+| JavHub                | https://tour.javhub.com/videos/shizuku-iori-1                                                                                 |
 | Jizz Addiction        | https://www.jizzaddiction.com/scenes/potters-got-a-magic-cock                                                                 |
 | Joe Schmoe Videos     | https://joeschmoevideos.com/scenes/swapping-some-fresh-cum                                                                    |
 | La BellaDX            | https://labelladx.com/videos/a-day-in-the-life-ft-its-beastxxx                                                                |
@@ -81,13 +84,14 @@ Scraper has been tested on 2026-09-06
 | Suck This Dick        | https://hobybuchanon.com/suck-this-dick/marley-madden-sloppy-deepthroat-blowjob-3                                             |
 | Swallowed             | https://tour.swallowed.com/scenes/iris-wants-her-mouth-filled                                                                 |
 | The ArtemiXXX         | https://theartemixxx.com/videos/sophia-takes-it-all-ft-sophia-isabella                                                        |
-| Top Web Models        | https://tour.topwebmodels.com/scenes/memel-wilde-amazing-deepthroat-and-throatpie                                             |
+| Top Web Models        | https://tour.topwebmodels.com/scenes/twm-porn-vault-abelia                                                                    |
 | ToughLoveX            | https://tour.toughlovex.com/view/149/audrey-noir-toughlove                                                                    |
 | Trashy Never Classy   | https://trashyneverclassy.com/videos/too-hot-for-just-a-bath                                                                  |
 | True Anal             | https://tour.trueanal.com/scenes/anal-makes-hazel-happy                                                                       |
 | Twink Light           | https://www.gaylifenetwork.com/gay-porn-twinks-watch/vamp026_connerbradley_joshbensan                                         |
 | TWM Classics          | https://tour.topwebmodels.com/scenes/twm-classics-kitty                                                                       |
 | TWM Interviews        | https://tour.topwebmodels.com/scenes/mia-kay-interview-tease-preview                                                          |
+| TWM Porn Vault        | https://tour.topwebmodels.com/scenes/twm-porn-vault-jenaveve-jolie-1                                                          |
 | Upskirt Jerk          | https://upskirtjerk.com/videos/ready-and-naughty                                                                              |
 | VRHush                | https://www.vrhush.com/scenes/the-right-tool-70584                                                                            |
 | Wank It Now           | https://wankitnow.com/videos/freaky-fun                                                                                       |
