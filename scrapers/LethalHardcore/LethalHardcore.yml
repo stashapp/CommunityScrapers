@@ -14,6 +14,7 @@ sceneByFragment:
   script:
     - python
     - ../Altwolia/scrape.py
+    - lethalhardcore
     - scene-by-fragment
 sceneByName:
   action: script
@@ -33,7 +34,9 @@ galleryByURL:
   - action: script
     url:
       - lethalhardcore.com/en/photo/
+      - lethalhardcore.com/en/video/
       - lethalhardcorevr.com/en/photo/
+      - lethalhardcorevr.com/en/video/
     script:
       - python
       - ../Altwolia/scrape.py
@@ -60,6 +63,7 @@ performerByFragment:
   script:
     - python
     - ../Altwolia/scrape.py
+    - lethalhardcore
     - performer-by-fragment
 performerByName:
   action: script
