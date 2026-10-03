@@ -1,19 +1,21 @@
 import json
+import re
 import sys
 from typing import Any
-from py_common import log
-from py_common.util import dig, replace_all, replace_at
+
 from AyloAPI.scrape import (
     gallery_from_url,
-    scraper_args,
+    movie_from_url,
+    performer_from_fragment,
+    performer_from_url,
+    performer_search,
+    scene_from_fragment,
     scene_from_url,
     scene_search,
-    scene_from_fragment,
-    performer_from_url,
-    performer_from_fragment,
-    performer_search,
-    movie_from_url,
+    scraper_args,
 )
+from py_common import log
+from py_common.util import replace_all
 
 studio_map = {
     "Family Hook Ups": "Family Hookups",
@@ -21,28 +23,20 @@ studio_map = {
 }
 
 
+def to_metrohd(url: str) -> str:
+    # The API builds metro.com links, which 404, and the sub-site domains redirect to
+    # listings: metrohd.com serves every scene, model and movie page itself
+    return re.sub(
+        r"//(www\.)?(metro|devianthardcore|familyhookups|girlgrind|kinkyspa|shewillcheat)\.com",
+        "//www.metrohd.com",
+        url,
+    )
+
+
 def metrohd(obj: Any, _) -> Any:
-    replacement = None
-    match dig(obj, "studio", "name"):
-        case "Deviant Hardcore":
-            replacement = "devianthardcore.com"
-        case "Family Hook Ups":
-            replacement = "familyhookups.com"
-        case "Girl Grind":
-            replacement = "girlgrind.com"
-        case "Kinky Spa":
-            replacement = "kinkyspa.com"
-        case "She Will Cheat":
-            replacement = "shewillcheat.com"
-        case _:
-            replacement = "metrohd.com"
-
-    # Replace the studio name in all URLs: even if there's no specific studio,
-    # metro.com is wrong and needs to be replaced with metrohd.com
-    fixed = replace_all(obj, "url", lambda x: x.replace("metro.com", replacement))
-
-    fixed = replace_all(fixed, "name", replacement=lambda x: studio_map.get(x, x))
-    return fixed
+    fixed = replace_all(obj, "url", to_metrohd)
+    fixed = replace_all(fixed, "urls", to_metrohd)
+    return replace_all(fixed, "name", replacement=lambda x: studio_map.get(x, x))
 
 
 if __name__ == "__main__":
@@ -71,7 +65,9 @@ if __name__ == "__main__":
         case "performer-by-url", {"url": url}:
             result = performer_from_url(url, postprocess=metrohd)
         case "performer-by-fragment", args:
-            result = performer_from_fragment(args)
+            result = performer_from_fragment(
+                args, search_domains=domains, postprocess=metrohd
+            )
         case "performer-by-name", {"name": name} if name:
             result = performer_search(name, search_domains=domains, postprocess=metrohd)
         case "movie-by-url", {"url": url} if url:
