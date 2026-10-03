@@ -115,17 +115,17 @@ def get_scene_index_subtree(index_url: str, scene_url: str) -> html.HtmlElement 
     
 
 
-def get_release_date(tree: html.HtmlElement, scene_url: str) -> str | None:
+def get_release_date(tree: html.HtmlElement, scene_url: str) -> tuple[str | None, bool]:
     # We need to load the scene index page to get the release date.
     scene_index_url = tree.xpath("string(//a[contains(text(), 'SCENE INDEX')]/@href)")
     if not scene_index_url:
         log.warning("Could not find scene index URL")
-        return None
+        return None, False
     
     scene_index_subtree = get_scene_index_subtree(scene_index_url, scene_url)
     if scene_index_subtree is None:
         log.warning("Could not find scene index subtree")
-        return None
+        return None, False
     
     # Important that path part of this expression begins with `.` in order to only search the
     # subtree. Without `.`, the entire document would be searched.
@@ -135,7 +135,7 @@ def get_release_date(tree: html.HtmlElement, scene_url: str) -> str | None:
         # Convert MM-DD-YYYY to YYYY-MM-DD
         try:
             parsed_date = datetime.strptime(raw_date_string, "%m-%d-%Y")
-            return parsed_date.strftime("%Y-%m-%d")
+            return parsed_date.strftime("%Y-%m-%d"), False
         except ValueError:
             log.warning(f"Could not parse date string: {raw_date_string}")
 
@@ -144,12 +144,14 @@ def get_release_date(tree: html.HtmlElement, scene_url: str) -> str | None:
     if raw_when_string:
         try:
             parsed_date = datetime.strptime(raw_when_string, "%B %Y")
-            return parsed_date.strftime("%Y-%m")
+            # "When" dates are only month-level precision and may be based on production date
+            # rather than release date, so indicate that the date is only an estimate.
+            return parsed_date.strftime("%Y-%m"), True
         except ValueError:
             log.warning(f"Could not parse 'When' date string: {raw_when_string}")
 
     log.warning("Could not find release date string")
-    return None
+    return None, False
 
 
 def extract_text_with_linebreaks(element: html.HtmlElement) -> str:
@@ -214,8 +216,14 @@ PERFORMER_NAME_MAP = {
     "dirk": "Dirk Huge",
     "donny": "Donny Sins",
     "isiah": "Isiah Maxwell",
+    "jason": "Jason Amalfi",
+    "john": "John Janiero",
     "lawson": "Lawson Jones",
+    "marlon": "Marlon Tesoro",
+    "randy": "Randy Rodman",
+    "randyd": "Randy Denmark",
     "ray": "Ray Black",
+    "rico": "Rico Reyes",
     "rion": "Rion King",
     "robby": "Robby Apples",
     # Girls
@@ -224,7 +232,9 @@ PERFORMER_NAME_MAP = {
     "alicia": "Alicia Daniels",
     "amanda": "Amanda Ryder",
     "cathy": "Cathy Craving",
+    "chanell": "Chanell Heart",
     "darian": "Darians Fire",
+    "fallon": "Fallon West",
     "janey": "Janey Web",
     "lily": "Lilly Lixx",
     "lilyf": "Lilly Lit",
@@ -329,7 +339,7 @@ def scrape_scene_data(url: str) -> ScrapedScene:
         log.error("Unable to find title. Exiting")
         return {}
 
-    date_str = get_release_date(tree, url)
+    date_str, date_is_estimate = get_release_date(tree, url)
     if date_str:
         scene["date"] = date_str
 
@@ -344,6 +354,8 @@ def scrape_scene_data(url: str) -> ScrapedScene:
     scene["tags"] = get_tags(tree)
     # All scene pages require member login:
     scene["tags"].append({"name": "Members Only"})
+    if date_is_estimate:
+        scene["tags"].append({"name": "Estimated Date"})
 
     image_url = get_image(tree)
     if image_url:
