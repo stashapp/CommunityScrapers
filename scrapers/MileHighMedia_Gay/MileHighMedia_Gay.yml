@@ -1,11 +1,12 @@
 name: Mile High Media (Gay)
 # requires: py_common, AyloAPI
-# scrapes: Icon Male, Noir Male, Taboo Male
+# scrapes: Icon Male, Noir Male
 galleryByURL:
   - action: script
     url:
       - iconmale.com/scene/
       - noirmale.com/scene/
+      - taboomale.com/scene/
     script:
       - python
       - MileHighMedia_Gay.py
@@ -21,6 +22,7 @@ sceneByURL:
     url:
       - iconmale.com/scene/
       - noirmale.com/scene/
+      - taboomale.com/scene/
     script:
       - python
       - MileHighMedia_Gay.py
@@ -54,6 +56,7 @@ performerByURL:
     url:
       - iconmale.com/model/
       - noirmale.com/model/
+      - taboomale.com/model/
     script:
       - python
       - MileHighMedia_Gay.py
@@ -76,4 +79,3 @@ groupByURL:
       - python
       - MileHighMedia_Gay.py
       - movie-by-url
-# Last Updated January 14, 2024
