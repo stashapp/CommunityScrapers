@@ -1,20 +1,23 @@
 import json
+import re
 import sys
-from requests import head
 from typing import Any
-from py_common import log
-from py_common.util import replace_all
+
+from requests import head
+
 from AyloAPI.scrape import (
     gallery_from_url,
-    scraper_args,
+    movie_from_url,
+    performer_from_fragment,
+    performer_from_url,
+    performer_search,
+    scene_from_fragment,
     scene_from_url,
     scene_search,
-    scene_from_fragment,
-    performer_from_url,
-    performer_from_fragment,
-    performer_search,
-    movie_from_url,
+    scraper_args,
 )
+from py_common import log
+from py_common.util import replace_all
 
 studio_map = {
     "Lets Doe It": "LetsDoeIt",
@@ -24,6 +27,9 @@ studio_map = {
 def redirect(url: str) -> str:
     if not url or "doegirls.com" not in url:
         return url
+    # DoeGirls' Aylo scene IDs are LetsDoeIt's, but doegirls.com no longer serves them
+    if "/scene/" in url:
+        return re.sub(r"^https?://(www\.)?doegirls\.com", "https://www.letsdoeit.com", url)
     res = head(url, allow_redirects=True)
     if redirect := res.url:
         if redirect.rstrip("/").endswith("404"):
@@ -63,7 +69,9 @@ if __name__ == "__main__":
             url = redirect(url)
             result = performer_from_url(url, postprocess=letsdoeit)
         case "performer-by-fragment", args:
-            result = performer_from_fragment(args)
+            result = performer_from_fragment(
+                args, search_domains=domains, postprocess=letsdoeit
+            )
         case "performer-by-name", {"name": name} if name:
             result = performer_search(
                 name, search_domains=domains, postprocess=letsdoeit
