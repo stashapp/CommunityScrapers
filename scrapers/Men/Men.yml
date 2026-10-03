@@ -4,7 +4,7 @@ name: Men.com
 galleryByURL:
   - action: script
     url: &sceneUrls
-      - \/men.com/scene
+      - //men.com/scene
       - www.men.com/scene
       - mennetwork.com/scene
       - bigdicksatschool.com/scene/
@@ -59,7 +59,7 @@ performerByName:
 performerByURL:
   - action: script
     url:
-      - \/men.com/modelprofile/
+      - //men.com/modelprofile/
       - www.men.com/modelprofile/
       - mennetwork.com/modelprofile/
       - bigdicksatschool.com/model/
@@ -83,7 +83,7 @@ performerByFragment:
 groupByURL:
   - action: script
     url:
-      - \/men.com/movie
+      - //men.com/movie
       - www.men.com/movie/
       - mennetwork.com/movie
       - bigdicksatschool.com/movie/
@@ -95,7 +95,7 @@ groupByURL:
       - toptobottom.com/movie/
       - twinkpop.com/movie/
       # Since scenes link to the movie we can scrape movies from scenes
-      - \/men.com/scene
+      - //men.com/scene
       - www.men.com/scene
       - mennetwork.com/scene
       - bigdicksatschool.com/scene/
@@ -110,4 +110,3 @@ groupByURL:
       - python
       - Men.py
       - movie-by-url
-# Last Updated January 14, 2024
