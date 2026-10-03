@@ -4,6 +4,20 @@ sceneByURL:
     url:
       - faphouse.com/videos/
     scraper: sceneScraper
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - faphouse.com/pornstars/
+      - faphouse.com/models/
+    scraper: performerScraper
+performerByName:
+  action: scrapeXPath
+  queryURL: https://faphouse.com/pornstars?q={}
+  scraper: performerSearch
 xPathScrapers:
   sceneScraper:
     scene:
@@ -19,12 +33,38 @@ xPathScrapers:
         selector: //div[contains(@class,"video-info-details__description")]//p
         concat: " "
       Performers:
-        Name: //div[contains(@class, "categories")]/a[contains(@href, "pornstars")]
+        Name: //div[contains(@class, "categories")]/a[contains(@href, "pornstars") or contains(@href, "models")]
+        URLs:
+          selector: //div[contains(@class, "categories")]/a[contains(@href, "pornstars") or contains(@href, "models")]/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://faphouse.com
+        Images: //div[contains(@class, "categories")]/a[contains(@href, "pornstars") or contains(@href, "models")]//img/@src
       Tags:
-        Name: //div[contains(@class, "categories")]/a[not (contains(@href, "pornstars") or contains(@href, "studios"))]
+        Name: //div[contains(@class, "categories")]/a[not (contains(@href, "pornstars") or contains(@href, "studios") or contains(@href, "models"))]
       Studio:
         Name: >-
           //a[contains(@class,"studio-link--without-after-point")] |
           //a[contains(@class,"studio-link")]
       Image: //meta[@property="og:image"]/@content
       URLs: //link[@rel="canonical"]/@href
+  performerScraper:
+    performer:
+      Name:
+        selector: //h1
+        postProcess:
+          - replace:
+              - regex: '\s*Porn Videos\s*$'
+                with: ""
+      Images: //meta[@property="og:image"]/@content
+  performerSearch:
+    performer:
+      Name: //a[contains(@class, "creator__thumb") and (starts-with(@href, "/pornstars/") or starts-with(@href, "/models/"))]/@title
+      URLs:
+        selector: //a[contains(@class, "creator__thumb") and (starts-with(@href, "/pornstars/") or starts-with(@href, "/models/"))]/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://faphouse.com
+# Last Updated 2026-09-28
