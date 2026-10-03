@@ -1,11 +1,11 @@
-import sys
 import json
 import re
+import sys
 
 from py_common import log
-from py_common.types import ScrapedScene
-from py_common.util import scraper_args, dig
 from py_common.deps import ensure_requirements
+from py_common.types import ScrapedScene
+from py_common.util import dig, scraper_args
 
 ensure_requirements("cloudscraper")
 import cloudscraper  # noqa: E402
@@ -33,17 +33,22 @@ def to_scraped_scene(scene_from_api: dict) -> ScrapedScene:
         "urls": [f"https://www.loyalfans.com/{owner_slug}/video/{scene_slug}"],
     }
 
-    if content := dig(scene_from_api, "content"):
-        details = content.replace("<br />", "")
-        # Sometimes hashtags are included at the bottom of the description. This line strips all that junk out, as we're utilising the hashtags for the tags. Also tidies up ellipses.
-        details = re.sub(r"#\w+\b", "", details).replace(". . .", "...").strip()
+    # original_content is the creator's plain text; content is the same as HTML
+    if details := (
+        dig(scene_from_api, "original_content")
+        or re.sub(r"<br\s*/?>", "", dig(scene_from_api, "content") or "")
+    ).strip():
         scraped["details"] = details
 
     if image := dig(scene_from_api, "video_object", "poster"):
         scraped["image"] = image
 
     if studio_name := dig(scene_from_api, "owner", "display_name"):
-        scraped["studio"] = {"name": studio_name}
+        scraped["studio"] = {
+            "name": studio_name,
+            "urls": [f"https://www.loyalfans.com/{owner_slug}"],
+            "parent": {"name": "LoyalFans"},
+        }
         scraped["performers"] = [{"name": studio_name}]
 
     if date := dig(scene_from_api, "created_at", "date"):
@@ -52,18 +57,19 @@ def to_scraped_scene(scene_from_api: dict) -> ScrapedScene:
     if tags := dig(scene_from_api, "hashtags"):
         scraped["tags"] = [{"name": tag.strip("#. ")} for tag in tags]
 
-    # TODO: add duration to Stash scrapers
-    # if duration := dig(scene_from_api, "video_object", "duration"):
-    #     scraped["duration"] = duration
+    if duration := dig(scene_from_api, "video_object", "duration"):
+        scraped["duration"] = duration
 
     return scraped
 
 
-def scene_from_url(scene_url: str) -> dict:
+def scene_from_url(scene_url: str) -> ScrapedScene | None:
     slug = scene_url.split("/")[-1]
     api_url = f"https://www.loyalfans.com/api/v1/social/post/{slug}"
-    raw = scraper.get(api_url).json()
-    return to_scraped_scene(raw["post"])
+    if not (post := dig(scraper.get(api_url).json(), "post")):
+        log.error(f"No post found for {scene_url}")
+        return None
+    return to_scraped_scene(post)
 
 
 def scene_search(query: str) -> list[ScrapedScene]:
