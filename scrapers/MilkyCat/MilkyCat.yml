@@ -1,37 +1,32 @@
 name: MilkyCat
+# requires: py_common
 
 sceneByURL:
   - action: script
     url:
       - www.milky-cat.com
-    script:  
-      - python  
-      - scraper.py  
-      - sceneByURL
+    script:
+      - python
+      - MilkyCat.py
+      - scene-by-url
 
 sceneByName:
   action: script
-  script:  
-    - python  
-    - scraper.py  
-    - sceneByName
+  script:
+    - python
+    - MilkyCat.py
+    - scene-by-name
 
 sceneByQueryFragment:
   action: script
-  script:  
-    - python  
-    - scraper.py  
-    - sceneByQueryFragment
+  script:
+    - python
+    - MilkyCat.py
+    - scene-by-query-fragment
 
 sceneByFragment:
   action: script
   script:
     - python
-    - scraper.py
-    - sceneByFragment
-
-driver:
-  headers:
-    - Key: User-Agent
-      Value: stash-scraper/1.0
-# Last Updated March 17, 2024
+    - MilkyCat.py
+    - scene-by-fragment
