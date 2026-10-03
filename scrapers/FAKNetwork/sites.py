@@ -1,4 +1,4 @@
-# All series fetched from the API on 2026-07-19
+# All series fetched from the API on 2026-10-03
 # https://api.faknetworks.com/v1/series?lang=<en|es|pt>&page=1&take=1000
 
 from py_common.util import dig
@@ -6,13 +6,15 @@ from py_common.util import dig
 
 def to_scraped_studio(api_object: dict, product: str, lang: str = "en") -> dict:
     slug = api_object["slug"]
-    unknown = {"name": api_object.get("title", "Unknown"), "parent": {"name": "Unknown"}}
+    # A series newer than this table: its name is known, its network isn't
+    unknown = {"name": api_object["title"]}
 
     series_id = dig(slug_index, product, slug)
     if series_id is None:
         return unknown
 
-    return dig(studio_map, series_id, lang, default=unknown)
+    studio = dig(studio_map, series_id, lang, default=unknown)
+    return {key: value for key, value in studio.items() if value}
 
 
 slug_index = {
@@ -235,6 +237,20 @@ slug_index = {
         "couples": 245,
         "parejas": 245,
         "casais": 245,
+    },
+    "roccovids": {
+        "orgies-and-gangbangs": 247,
+        "orgias-y-gangbangs": 247,
+        "orgias-e-gangbangs": 247,
+        "rocco-lesbians": 248,
+        "rocco-lesbicos": 248,
+        "rocco-anal": 249,
+        "rocco-vip": 250,
+        "bbc-big-black-cock": 251,
+        "bbc-grande-galo-preto": 251,
+        "bts-behind-the-camera": 252,
+        "bts-detras-de-camara": 252,
+        "bts-atras-da-camera": 252,
     },
 }
 
@@ -3254,6 +3270,103 @@ studio_map = {
                 "name": "MorenoLust",
                 "url": "https://www.morenolust.com",
             },
+        },
+    },
+    # Rocco Vids has no site of its own: its scenes are listed on the other network sites
+    247: {
+        "en": {
+            "name": "Orgies and GangBangs",
+            "aliases": "Orgías y GangBangs, Orgias e GangBangs",
+            "parent": {"name": "Rocco Vids"},
+        },
+        "es": {
+            "name": "Orgías y GangBangs",
+            "aliases": "Orgies and GangBangs, Orgias e GangBangs",
+            "parent": {"name": "Rocco Vids"},
+        },
+        "pt": {
+            "name": "Orgias e GangBangs",
+            "aliases": "Orgies and GangBangs, Orgías y GangBangs",
+            "parent": {"name": "Rocco Vids"},
+        },
+    },
+    248: {
+        "en": {
+            "name": "Rocco Lesbians",
+            "aliases": "Rocco Lésbicos",
+            "parent": {"name": "Rocco Vids"},
+        },
+        "es": {
+            "name": "Rocco Lésbicos",
+            "aliases": "Rocco Lesbians",
+            "parent": {"name": "Rocco Vids"},
+        },
+        "pt": {
+            "name": "Rocco Lésbicos",
+            "aliases": "Rocco Lesbians",
+            "parent": {"name": "Rocco Vids"},
+        },
+    },
+    249: {
+        "en": {
+            "name": "Rocco Anal",
+            "parent": {"name": "Rocco Vids"},
+        },
+        "es": {
+            "name": "Rocco Anal",
+            "parent": {"name": "Rocco Vids"},
+        },
+        "pt": {
+            "name": "Rocco Anal",
+            "parent": {"name": "Rocco Vids"},
+        },
+    },
+    250: {
+        "en": {
+            "name": "Rocco Vip",
+            "parent": {"name": "Rocco Vids"},
+        },
+        "es": {
+            "name": "Rocco Vip",
+            "parent": {"name": "Rocco Vids"},
+        },
+        "pt": {
+            "name": "Rocco Vip",
+            "parent": {"name": "Rocco Vids"},
+        },
+    },
+    251: {
+        "en": {
+            "name": "BBC - Big Black Cock",
+            "aliases": "BBC - Grande Galo Preto",
+            "parent": {"name": "Rocco Vids"},
+        },
+        "es": {
+            "name": "BBC - Big Black Cock",
+            "aliases": "BBC - Grande Galo Preto",
+            "parent": {"name": "Rocco Vids"},
+        },
+        "pt": {
+            "name": "BBC - Grande Galo Preto",
+            "aliases": "BBC - Big Black Cock",
+            "parent": {"name": "Rocco Vids"},
+        },
+    },
+    252: {
+        "en": {
+            "name": "BTS - Behind the camera",
+            "aliases": "BTS - Detrás de cámara, BTS - Atrás da câmera",
+            "parent": {"name": "Rocco Vids"},
+        },
+        "es": {
+            "name": "BTS - Detrás de cámara",
+            "aliases": "BTS - Behind the camera, BTS - Atrás da câmera",
+            "parent": {"name": "Rocco Vids"},
+        },
+        "pt": {
+            "name": "BTS - Atrás da câmera",
+            "aliases": "BTS - Behind the camera, BTS - Detrás de cámara",
+            "parent": {"name": "Rocco Vids"},
         },
     },
 }

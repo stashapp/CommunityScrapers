@@ -3,7 +3,7 @@ import pathlib
 import re
 import sys
 from html import unescape
-from urllib.parse import quote
+from urllib.parse import quote, unquote
 
 import requests
 
@@ -75,11 +75,12 @@ def cover_image(data: dict) -> str | None:
     The screenshot is the full-size version of the cover the site shows
     (portada_<profile>), but older scenes only have the small cover left
     """
+    # Some file names come from the API already percent-encoded, others don't
     candidates = [
-        f"{IMAGE_URL}/{quote(screenshot)}"
+        f"{IMAGE_URL}/{quote(unquote(screenshot))}"
         if (screenshot := dig(data, "screenshot"))
         else None,
-        f"{IMAGE_URL}/portada_{quote(profile)}"
+        f"{IMAGE_URL}/portada_{quote(unquote(profile))}"
         if (profile := dig(data, "profile"))
         else None,
         f"https://player.faknetworks.com/almacen/videos/listado_horizontal_{image}"
@@ -119,8 +120,8 @@ def to_scraped_scene(data: dict, lang="en") -> ScrapedScene:
         scene["image"] = image
 
     studio = to_scraped_studio(data["serie"], site_name, lang)
-    if config.flatten_hierarchy:
-        studio = studio["parent"]
+    if config.flatten_hierarchy and (parent := studio.get("parent")):
+        studio = parent
 
     scene["studio"] = studio
 

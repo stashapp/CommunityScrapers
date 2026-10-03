@@ -1,4 +1,4 @@
-Scraper has been tested on 2026-09-30 and returns correct studio/network values for all of the following URLs
+Scraper has been tested on 2026-10-03 and returns correct studio/network values for all of the following URLs
 
 |     Network | Studio                                     | URL                                                                                                                                                                |
 | ----------: | :----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -74,3 +74,5 @@ Scraper has been tested on 2026-09-30 and returns correct studio/network values 
 | PornerMates | Nacho Vidal: Embedder                      | https://pornermates.com/en/video/threesomes-with-amateur-girl-friends-two-bombshells-fighting-this-is-your-sunday-plan-d                                           |
 | PornerMates | The Diary of Apolonia Lapiedra             | https://pornermates.com/en/video/academia-apolonia-para-pornstars-presenta-pibon-pezonacos-galleta-maria-y-ansiosa-por-aprender-es-esto-el-cielo-o                 |
 | PornerMates | We Are In Love                             | https://pornermates.com/en/video/tengo-21-anos-y-me-he-follado-300-tios-delante-de-mi-chico-cari-hoy-tambien-te-toca-mirar-d                                       |
+|  Rocco Vids | BBC - Big Black Cock                       | https://madlifes.com/en/video/hiba-hakimi-debuts-with-jesus-reyes-bbc-and-rides-that-cock-with-her-ass                                                             |
+|  Rocco Vids | Rocco Vip                                  | https://madlifes.com/en/video/jordi-enp-catches-aaliyah-yasin-touching-her-hairy-pussy-and-ends-up-fucking-her                                                     |
