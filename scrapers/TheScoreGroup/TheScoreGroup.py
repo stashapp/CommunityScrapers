@@ -1,19 +1,24 @@
-from datetime import datetime
 import json
 import re
 import sys
+from datetime import datetime
 from urllib.parse import urlparse, urlunparse
 
+from py_common import log
 from py_common.deps import ensure_requirements
-import py_common.log as log
-from py_common.types import ScrapedPerformer, ScrapedScene
-from py_common.util import dig, is_valid_url, scraper_args
+from py_common.types import (
+    Ethnicity,
+    HairColor,
+    ScrapedGallery,
+    ScrapedPerformer,
+    ScrapedScene,
+)
+from py_common.util import feet_to_cm, is_valid_url, lb_to_kg, scraper_args
 
 ensure_requirements("lxml", "curl_cffi")
 
-from lxml import html  # noqa: E402
 from curl_cffi import requests  # noqa: E402
-
+from lxml import html  # noqa: E402
 
 STUDIO_MAP = {
     "18eighteen": "18 Eighteen",
@@ -107,6 +112,21 @@ STUDIO_MAP = {
     "yourwifemymeat": "Your Wife My Meat",
 }
 
+ETHNICITY_MAP: dict[str, Ethnicity] = {
+    "Asian": "ASIAN",
+    "Black": "BLACK",
+    "Latina": "LATIN",
+    "Other": "OTHER",
+    "White": "CAUCASIAN",
+}
+
+HAIR_COLOR_MAP: dict[str, HairColor] = {
+    "Black": "BLACK",
+    "Blonde": "BLONDE",
+    "Brunette": "BRUNETTE",
+    "Redhead": "RED",
+}
+
 # Shared client because we're making multiple requests.
 # The sites reject non-browser TLS fingerprints: the handshake succeeds and the
 # connection is then reset at the first HTTP byte, so impersonation is required.
@@ -194,7 +214,74 @@ def best_quality_scene_image(code: str) -> str | None:
 
 def scene_from_url(url: str) -> ScrapedScene:
     "Scrape scene URL from HTML"
-    # url
+    scene = page_metadata(url)
+    if not scene:
+        return scene
+
+    scene_id = re.sub(r".*\/(\d+)\/?$", r"\1", urlparse(url).path)
+    scene["code"] = scene_id
+    if image_url := best_quality_scene_image(scene_id):
+        scene["image"] = image_url
+    return scene
+
+
+def gallery_from_url(url: str) -> ScrapedGallery:
+    "Photo sets share the scene page layout and id, so the scene fields carry over"
+    scene = page_metadata(url)
+    gallery: ScrapedGallery = {}
+    for key in ("title", "date", "details", "urls", "studio", "tags", "performers"):
+        if value := scene.get(key):
+            gallery[key] = value
+    return gallery
+
+
+def performer_from_url(url: str) -> ScrapedPerformer | None:
+    "Scrape performer profile page"
+    tree = html.fromstring(client.get(url).content)
+
+    if not (name := re.sub(r"'s Profile$", "", tree.xpath("string(//h1)").strip())):
+        log.error("Could not find performer name, scraper needs updating")
+        return None
+
+    def stat(label: str) -> str:
+        return tree.xpath(
+            f'string(//span[@class="label" and text()="{label}:"]/following-sibling::span)'
+        ).strip()
+
+    performer: ScrapedPerformer = {
+        "name": name,
+        "gender": "FEMALE",
+        "urls": [urlunparse(urlparse(url)._replace(query=""))],
+    }
+    if ethnicity := stat("Ethnicity"):
+        if mapped_ethnicity := ETHNICITY_MAP.get(ethnicity):
+            performer["ethnicity"] = mapped_ethnicity
+        else:
+            log.warning(f"Unmapped ethnicity '{ethnicity}'")
+    if hair_color := stat("Hair Color"):
+        if mapped_hair := HAIR_COLOR_MAP.get(hair_color):
+            performer["hair_color"] = mapped_hair
+        else:
+            log.warning(f"Unmapped hair color '{hair_color}'")
+    if height := feet_to_cm(stat("Height")):
+        performer["height"] = height
+    if weight := lb_to_kg(stat("Weight")):
+        performer["weight"] = weight
+    # The bra size replaces the bust figure: 34H + 44-28-38 -> 34H-28-38
+    bra_size, measurements = stat("Bra Size"), stat("Measurements")
+    if bra_size and (m := re.match(r"\d+(-\d+-\d+)$", measurements)):
+        performer["measurements"] = bra_size + m[1]
+    elif bra_size or measurements:
+        performer["measurements"] = bra_size or measurements
+    if image := tree.xpath(
+        'string(//img[contains(@src, "/modeldir/data/photos/")]/@src)'
+    ):
+        performer["images"] = [image]
+    return performer
+
+
+def page_metadata(url: str) -> ScrapedScene:
+    "Fields shared by the video and photo pages"
     clean_url = urlunparse(urlparse(url)._replace(query=""))
     scene: ScrapedScene = {}
 
@@ -222,16 +309,18 @@ def scene_from_url(url: str) -> ScrapedScene:
     if raw_date := video_page.xpath(
         '//div[contains(concat(" ",normalize-space(@class)," ")," mb-3 ")]//span[contains(.,"Date:")]/following-sibling::span'
     ):
-        scene["date"] = datetime.strptime(
-            re.sub(r"(\d+)[a-z]{2}", r"\1", next(iter(raw_date)).text).replace(
-                "..,", ""
-            ),
-            "%B %d, %Y",
-        ).strftime("%Y-%m-%d")
+        scene["date"] = (
+            datetime.strptime(  # noqa: DTZ007
+                re.sub(r"(\d+)[a-z]{2}", r"\1", next(iter(raw_date)).text).replace(
+                    "..,", ""
+                ),
+                "%B %d, %Y",
+            )
+            .date()
+            .isoformat()
+        )
 
-    scene_id = re.sub(r".*\/(\d+)\/?$", r"\1", clean_url)
-    scene["code"] = scene_id
-    scene["url"] = clean_url
+    scene["urls"] = [clean_url]
 
     # Original studio is determinable by looking at the CDN links (<source src="//cdn77.scoreuniverse.com/naughtymag/scenes...)
     # this helps set studio for PornMegaLoad URLs as nothing is released directly by the network
@@ -256,10 +345,6 @@ def scene_from_url(url: str) -> ScrapedScene:
     ):
         scene["performers"] = [{"name": p.text} for p in iter(performers)]
 
-    # image
-    if image_url := best_quality_scene_image(scene_id):
-        scene["image"] = image_url
-
     return scene
 
 
@@ -270,6 +355,10 @@ def main():
     match op, args:
         case "scene-by-url", {"url": url} if url:
             result = scene_from_url(url)
+        case "gallery-by-url", {"url": url} if url:
+            result = gallery_from_url(url)
+        case "performer-by-url", {"url": url} if url:
+            result = performer_from_url(url)
         case "performer-by-name", {"name": name} if name:
             result = performer_query(name)
         case _:

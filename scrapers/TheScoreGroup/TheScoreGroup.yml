@@ -1,4 +1,3 @@
-# yaml-language-server: $schema=../../validator/scraper.schema.json
 # requires: py_common
 name: TheScoreGroup
 sceneByURL:
@@ -97,173 +96,22 @@ sceneByURL:
       - TheScoreGroup.py
       - scene-by-url
 galleryByURL:
-  - action: scrapeXPath
+  - action: script
     url: *urls
-    scraper: galleryScraper
+    script:
+      - python
+      - TheScoreGroup.py
+      - gallery-by-url
 performerByURL:
-  - action: scrapeXPath
+  - action: script
     url: *urls
-    scraper: performerScraper
+    script:
+      - python
+      - TheScoreGroup.py
+      - performer-by-url
 performerByName:
   action: script
   script:
     - python
     - TheScoreGroup.py
     - performer-by-name
-
-xPathScrapers:
-  sceneScraper:
-    common:
-      $url: //link[@rel="canonical"]/@href
-      $videopage: //article[@id="videos_page-page" or @id="mixed_page-page"]
-      $stat: //div[contains(concat(' ',normalize-space(@class),' '),' mb-3 ')]
-  galleryScraper:
-    common:
-      $photopage: //article[@id='photos_page-page']
-    gallery:
-      Title: //h1
-      Studio:
-        Name:
-          selector: //link[@rel="canonical"]/@href
-          postProcess:
-            - replace:
-                - regex: ^(https://)?.+?([^\.]+)\.com/.*
-                  with: $2
-            - map:
-                18eighteen: 18 Eighteen
-                40somethingmag: 40 Something Mag
-                50plusmilfs: 50 Plus MILFs
-                60plusmilfs: 60 Plus MILFs
-                analqts: Anal QTs
-                autumn-jade: Autumn Jade
-                bigboobalexya: Big Boob Alexya
-                bigboobbundle: Big Boob Bundle
-                bigboobspov: Big Boobs POV
-                bigtitangelawhite: Big Tit Angela White
-                bigtitkatiethornton: Big Tit Katie Thornton
-                bigtithitomi: Big Tit Hitomi
-                bigtithooker: Big Tit Hooker
-                bigtitterrynova: Big Tit Terry Nova
-                bigtitvenera: Big Tit Venera
-                bonedathome: Boned At Home
-                bootyliciousmag: Bootylicious Mag
-                bustyangelique: Busty Angelique
-                bustyarianna: Busty Arianna
-                bustydanniashe: Busty Danni Ashe
-                bustydustystash: busty Dusty Stash
-                bustyinescudna: Busty Ines Cudna
-                bustykellykay: Busty Kelly Kay
-                bustykerrymarie: Busty Kerry Marie
-                bustylornamorga: Busty Lorna Morga
-                bustymerilyn: Busty Merilyn
-                bustyoldsluts: Busty Old Sluts
-                chicksonblackdicks: Chicks on Black Dicks
-                chloesworld: Chloe's World
-                christymarks: Christy Marks
-                cock4stepmom: Cock 4 Stepmom
-                codivorexxx: Codi Vore XXX
-                creampieforgranny: Creampie for Granny
-                crystalgunnsworld: Crystal Gunns World
-                daylenerio: Daylene Rio
-                desiraesworld: Desiraes World
-                ebonythots: Ebony Thots
-                evanottyvideos: Eva Notty Videos
-                feedherfuckher: Feed Her Fuck Her
-                flatandfuckedmilfs: Flat and Fucked MILFs
-                grannygetsafacial: Granny Gets Facial
-                grannylovesbbc: Granny Loves BBC
-                grannylovesyoungcock: Granny Loves Young Cock
-                hairycoochies: Hairy Coochies
-                homealonemilfs: Home Alone MILFs
-                hornyasianmilfs: Horny AsisnlM ILFs
-                ibonedyourmom: I Boned Your Mom
-                ifuckedtheboss: I Fucked The Boss
-                joanabliss: Joana Bliss
-                karinahart: Karina Hart
-                latinmommas: Latin Mommas
-                latinacoochies: Latina Coochies
-                leannecrowvideos: Leanne Crow Videos
-                legsex: Leg Sex
-                megatitsminka: Mega Tits Minka
-                mickybells: Micky Bells
-                milfbundle: MILF Bundle
-                milfthreesomes: MILF Threesomes
-                milftugs: MILF Tugs
-                millymarks: Milly Marks
-                mommystoytime: Mommy's Toy Time
-                nataliefiore: Natalie Fiore
-                naughtymag: Naughty Mag
-                naughtyfootjobs: Naughty Foot Jobs
-                naughtytugs: Naughty Tugs
-                nicolepeters: Nicole Peters
-                oldhornymilfs: Old Horny MILFS
-                pickinguppussy: Picking Up Pussy
-                pornloser: Porn Loser
-                pornmegaload: Porn Mega Load
-                reneerossvideos: Renee Ross Video
-                roxired: Roxi Red
-                sarennasworld: Sarenna's World
-                scoreclassics: Score Classics
-                # Scoreland2 needs to come before scoreland because it's more specific
-                scoreland2: Scoreland2
-                scoreland: Scoreland
-                scorevideos: Score Videos
-                sharizelvideos: Sha Rizel Videos
-                silversluts: Silver Sluts
-                stacyvandenbergboobs: Stacy Vandenberg Boobs
-                tawny-peaks: Tawny Peaks
-                tiffany-towers: Tiffany Towers
-                titsandtugs: Tits And Tugs
-                tnatryouts: TNA Tryouts
-                valoryirene: Valory Irene
-                xlgirls: XL Girls
-                yourmomlovesanal: Your Mom Loves Anal
-                yourmomsgotbigtits: Your Mom's Got Big Tits
-                yourwifemymeat: Your Wife My Meat
-      Date:
-        selector: //div[span[@class="label" and contains(.,"Date")]]/span[@class="value"]/text()
-        postProcess:
-          - replace:
-              - regex: (\d+)(st|nd|rd|th)
-                with: $1
-          - parseDate: January 2, 2006
-      Details:
-        selector: $photopage//div[contains(@class, 'p-desc')]/text()
-        concat: "\n"
-      Tags:
-        Name: //h3/following-sibling::a[not(contains(@class,"btn-1"))]/text()
-      Performers:
-        Name: //div[span[@class="label" and contains(.,"Featuring")]]/span[@class="value"]//a/text()
-
-  performerScraper:
-    performer:
-      Name: //h1[@class="model-title"]
-      Gender:
-        fixed: Female
-      URLs: //meta[@property="og:url"]/@content
-      Ethnicity:
-        selector: //span[text()="Ethnicity:"]/following-sibling::span
-        postProcess:
-          - map:
-              White: Caucasian
-      HairColor: //span[text()="Hair Color:"]/following-sibling::span
-      Height:
-        selector: //span[text()="Height:"]/following-sibling::span
-        postProcess:
-          - feetToCm: true
-      Weight:
-        selector: //span[text()="Weight:"]/following-sibling::span
-        postProcess:
-          - replace:
-              - regex: (\d+).*
-                with: $1
-          - lbToKg: true
-      Measurements:
-        selector: //span[text()="Bra Size:"]/following-sibling::span|//span[text()="Measurements:"]/following-sibling::span
-        concat: "-"
-        postProcess:
-          - replace:
-              - regex: (\d+[a-zA-Z]{1,3})-\d+(-\d+-\d+)
-                with: $1$2
-      Image: //article[@id="model-page"]//img[@class="lazyload"]/@src
-# Last Updated March 17, 2026
