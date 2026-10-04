@@ -57,19 +57,23 @@ def sanitize_hair_color(str) -> HairColor:
 
 def sanitize_fake_tits(value: str) -> str | None:
     # Maps Babepedia's breast type labels to Stash's valid fake_tits values:
-    # "Fake", "Natural", or "Na". We never return "Na" here — if Babepedia
-    # has no data, it's cleaner to leave the field unset than to store "Na".
+    # Valid Stash values: "Augmented", "Natural", "Unknown"
+    if not value:
+        return "Unknown"
     mapping = {
-        "fake/enhanced": "Fake",    # observed on Babepedia
-        "real/natural":  "Natural", # observed on Babepedia
-        "fake":          "Fake",    # defensive
-        "enhanced":      "Fake",    # defensive
-        "augmented":     "Fake",    # defensive
-        "natural":       "Natural", # defensive
-        "real":          "Natural", # defensive
+        "fake/enhanced": "Augmented",   # observed on Babepedia
+        "real/natural":  "Natural",     # observed on Babepedia
+        "fake":          "Augmented",   # defensive
+        "enhanced":      "Augmented",   # defensive
+        "augmented":     "Augmented",   # defensive
+        "natural":       "Natural",     # defensive
+        "real":          "Natural",     # defensive
+        "none":          "Unknown",     # no data
+        "n/a":           "Unknown",     # no data
+        "unknown":       "Unknown",     # no data
     }
-    # Anything unrecognised returns None, which the caller treats as no data.
-    return mapping.get(value.lower().strip())
+    # Return mapped value or "Unknown" for unmapped/missing values
+    return mapping.get(value.lower().strip(), "Unknown")
 
 def performer_from_url(url) -> ScrapedPerformer:
     scraped = scraper.get(url, headers=get_headers())
