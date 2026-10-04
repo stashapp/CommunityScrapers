@@ -1,4 +1,5 @@
 name: PlayboyPlus
+# requires: py_common
 galleryByURL:
   - action: script
     url:

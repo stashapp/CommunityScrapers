@@ -1,22 +1,25 @@
+import html
 import json
 import re
 import sys
-import html
+from typing import Any
 from urllib.parse import quote_plus
 
 from py_common import log
-from py_common.util import dig, scraper_args
 from py_common.deps import ensure_requirements
 from py_common.types import (
-    ScrapedScene,
-    ScrapedPerformer,
     ScrapedGallery,
+    ScrapedPerformer,
+    ScrapedScene,
+    ScrapedStudio,
     ScrapedTag,
 )
+from py_common.util import dig, scraper_args
 
 ensure_requirements("requests", "pycountry")
+import pycountry  # noqa: E402
 import requests  # noqa: E402
-import pycountry # needed for country guessing
+
 """why pycountry?
 "home" seems to be a free-field text box with multiple formats without commas, which means we can't use py_common/util/guess_nationality
 nor does a static lookup table make sense
@@ -37,7 +40,8 @@ and even US is inconsistent, with state sometimes being shortened, USA/ United S
 "Ashland KY USA" https://www.playboyplus.com/en/model/view/-/118164
 """
 
-def __raw_photoset_from_api(set_id: str, headers) -> dict | None:
+
+def __raw_photoset_from_api(set_id: str, headers) -> dict[str, Any] | None:
     app_id = headers["X-Algolia-Application-Id"]
     api_URL = f"https://{app_id.lower()}-dsn.algolia.net/1/indexes/all_photosets/query"
     payload = {"params": f"query=&hitsPerPage=10&facetFilters=set_id:{set_id}"}
@@ -50,7 +54,7 @@ def __raw_photoset_from_api(set_id: str, headers) -> dict | None:
     return _set
 
 
-def __raw_clip_from_api(clip_id: str, headers) -> dict | None:
+def __raw_clip_from_api(clip_id: str, headers) -> dict[str, Any] | None:
     app_id = headers["X-Algolia-Application-Id"]
     api_URL = f"https://{app_id.lower()}-dsn.algolia.net/1/indexes/all_scenes/query"
     payload = {"params": f"query=&hitsPerPage=10&facetFilters=clip_id:{clip_id}"}
@@ -63,7 +67,7 @@ def __raw_clip_from_api(clip_id: str, headers) -> dict | None:
     return clip
 
 
-def __raw_performer_from_api(actor_id: str, headers) -> dict | None:
+def __raw_performer_from_api(actor_id: str, headers) -> dict[str, Any] | None:
     app_id = headers["X-Algolia-Application-Id"]
     api_URL = f"https://{app_id.lower()}-dsn.algolia.net/1/indexes/all_actors/query"
     payload = {
@@ -81,11 +85,11 @@ def __raw_performer_from_api(actor_id: str, headers) -> dict | None:
 def _create_headers() -> dict[str, str]:
     r = requests.get(
         "https://www.playboyplus.com",
-        {
+        headers={
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:140.0) Gecko/20100101 Firefox/140.0",
             "Referer": "https://www.playboyplus.com",
             "Origin": "https://www.playboyplus.com",
-        }
+        },
     )
     if (script_tag := re.search(r"window.env\s+=\s(.+);", r.text, re.MULTILINE)) and (
         page_json := json.loads(script_tag.group(1))
@@ -123,10 +127,24 @@ def clean_description(text: str) -> str:
     return text.strip()
 
 
-def to_scraped_tag(res: dict) -> ScrapedTag:
+def to_scraped_tag(res: dict[str, Any]) -> ScrapedTag:
     return {
         "name": res["name"],
     }
+
+
+def to_scraped_studio(res: dict[str, Any]) -> ScrapedStudio | None:
+    # Sets without a video have an empty studio_name
+    if name := res.get("studio_name", "").strip() or res.get("sitename_pretty"):
+        return {"name": name}
+    return None
+
+
+def director_names(res: dict[str, Any]) -> str:
+    return ", ".join(
+        name for d in dig(res, "directors", default=[]) if (name := d["name"])
+    )
+
 
 def country_lookup(home):
     # if there is a comma, get last part
@@ -146,7 +164,8 @@ def country_lookup(home):
                 continue
     return None
 
-def to_scraped_performer(res: dict) -> ScrapedPerformer:
+
+def to_scraped_performer(res: dict[str, Any]) -> ScrapedPerformer:
     performer: ScrapedPerformer = {
         "name": res["name"],
         "gender": res["gender"],
@@ -173,9 +192,10 @@ def to_scraped_performer(res: dict) -> ScrapedPerformer:
             (e["file"] for e in nsfw if e.get("name") == "modelHeroMobile"), None
         ):
             performer["images"] = [f"https://transform.gammacdn.com/media/{img}"]
-    elif pictures := dig(res, "pictures"):
-        if main_pic := list(pictures.values())[-1]:
-            performer["images"] = [f"https://transform.gammacdn.com/media{main_pic}"]
+    elif (pictures := dig(res, "pictures")) and (
+        main_pic := list(pictures.values())[-1]
+    ):
+        performer["images"] = [f"https://transform.gammacdn.com/media{main_pic}"]
 
     if eye_color := dig(res, "attributes", "eye_color"):
         performer["eye_color"] = eye_color
@@ -200,14 +220,13 @@ def to_scraped_performer(res: dict) -> ScrapedPerformer:
     return performer
 
 
-def to_scraped_gallery(res: dict) -> ScrapedGallery:
+def to_scraped_gallery(res: dict[str, Any]) -> ScrapedGallery:
     gallery: ScrapedGallery = {
         "title": res["title"],
-        "code": str(res["set_id"]),
         "date": res["date_online"],
     }
-    if studio_name := res.get("studio_name", "").strip():
-        gallery["studio"] = {"name": studio_name}
+    if studio := to_scraped_studio(res):
+        gallery["studio"] = studio
     if description := dig(res, "description"):
         gallery["details"] = clean_description(description)
 
@@ -217,19 +236,21 @@ def to_scraped_gallery(res: dict) -> ScrapedGallery:
     if tags := dig(res, "categories"):
         gallery["tags"] = [to_scraped_tag(t) for t in tags]
 
-    if directors := dig(res, "directors"):
-        gallery["photographer"] = ", ".join(d["name"] for d in directors)
+    if photographer := director_names(res):
+        gallery["photographer"] = photographer
 
     return gallery
 
 
-def to_scraped_scene(res: dict) -> ScrapedScene:
+def to_scraped_scene(res: dict[str, Any]) -> ScrapedScene:
     scene: ScrapedScene = {
         "title": res["title"],
         "date": res["release_date"],
     }
-    if studio_name := res.get("studio_name", "").strip():
-        scene["studio"] = {"name": studio_name}
+    if studio := to_scraped_studio(res):
+        scene["studio"] = studio
+    if (length := res.get("length")) and length >= 10:
+        scene["duration"] = length
     if description := dig(res, "description"):
         scene["details"] = clean_description(description)
 
@@ -239,8 +260,8 @@ def to_scraped_scene(res: dict) -> ScrapedScene:
     if tags := dig(res, "categories"):
         scene["tags"] = [to_scraped_tag(t) for t in tags]
 
-    if directors := dig(res, "directors"):
-        scene["director"] = ", ".join(d["name"] for d in directors)
+    if director := director_names(res):
+        scene["director"] = director
 
     return scene
 
@@ -278,8 +299,6 @@ def scene_from_url(url: str) -> ScrapedScene | None:
     if image := dig(photoset, "multicontent_data", "nsfw", 0, "file"):  # type: ignore
         scene["image"] = f"https://transform.gammacdn.com/media/{image}"
 
-    # Using the clip_id is pointless here since those URLs do not resolve
-    scene["code"] = set_id
     if not dig(scene, "details") and (description := dig(photoset, "description")):
         scene["details"] = clean_description(description)
 
