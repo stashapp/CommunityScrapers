@@ -1,16 +1,16 @@
 import json
 import sys
+from typing import Any
 
+from Altwolia.scrape import scene_from_url
 from py_common import log
 from py_common.types import ScrapedScene
 from py_common.util import dig, scraper_args
 
-from Altwolia.scrape import scene_from_url
-
 SITE = "playboytv"
 
 
-def _build_title(api_scene: dict) -> str | None:
+def _build_title(api_scene: dict[str, Any]) -> str | None:
     """
     Construct title as "Serie Name - Season X, Episode Y".
     Uses the site's own language from serie_name, movie_title, and title fields.
@@ -18,7 +18,7 @@ def _build_title(api_scene: dict) -> str | None:
     """
     serie_name = api_scene.get("serie_name", "").strip()
     movie_title = api_scene.get("movie_title", "").strip()  # e.g. "Season 1"
-    episode_title = api_scene.get("title", "").strip()       # e.g. "Episode 1"
+    episode_title = api_scene.get("title", "").strip()  # e.g. "Episode 1"
 
     if serie_name and movie_title and episode_title:
         return f"{serie_name} - {movie_title}, {episode_title}"
@@ -27,11 +27,8 @@ def _build_title(api_scene: dict) -> str | None:
     return episode_title or serie_name or None
 
 
-def _build_urls(api_scene: dict) -> list[str]:
-    """
-    Build all known URL variants for a PlayboyTV episode:
-    both www and members subdomains, both /view/ and /playboytv/ path formats.
-    """
+def _build_urls(api_scene: dict[str, Any]) -> list[str]:
+    "Both the www and members URLs for a PlayboyTV episode"
     url_title = api_scene.get("url_title", "")
     clip_id = api_scene.get("clip_id", "")
     return [
@@ -40,25 +37,25 @@ def _build_urls(api_scene: dict) -> list[str]:
     ]
 
 
-def _postprocess(scene: ScrapedScene, api_scene: dict) -> ScrapedScene:
+def _postprocess(scene: ScrapedScene, api_scene: dict[str, Any]) -> ScrapedScene:
     """
     PlayboyTV-specific overrides applied after Altwolia's generic scraping:
     1. Title: constructed from serie_name + movie_title + title
-    2. URLs: four variants (www/members x view/playboytv paths)
+    2. URLs: www and members variants
     3. Image: PlayboyTV uses multicontent_data.nsfw, not pictures.nsfw.top
+    4. No group: the "movie" is a bare "Season N" shared by every show,
+       and its movie page doesn't exist
     """
     if title := _build_title(api_scene):
         scene["title"] = title
 
     scene["urls"] = _build_urls(api_scene)
+    scene.pop("movies", None)
 
-    # Override image: PlayboyTV uses multicontent_data.nsfw instead of pictures
     if nsfw := dig(api_scene, "multicontent_data", "nsfw"):
         img_file = next(
             (e["file"] for e in nsfw if e.get("name") == "contentHero"), None
-        ) or next(
-            (e["file"] for e in nsfw if e.get("name") == "thumbnail"), None
-        )
+        ) or next((e["file"] for e in nsfw if e.get("name") == "thumbnail"), None)
         if img_file:
             scene["image"] = f"https://transform.gammacdn.com/media/{img_file}"
 
