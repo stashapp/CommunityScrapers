@@ -113,24 +113,26 @@ STUDIO_MAP = {
 }
 
 ETHNICITY_MAP: dict[str, Ethnicity] = {
-    "Asian": "ASIAN",
-    "Black": "BLACK",
-    "Latina": "LATIN",
-    "Other": "OTHER",
-    "White": "CAUCASIAN",
+    "Asian": "Asian",
+    "Black": "Black",
+    "Latina": "Latin",
+    "Other": "Other",
+    "White": "Caucasian",
 }
 
 HAIR_COLOR_MAP: dict[str, HairColor] = {
-    "Black": "BLACK",
-    "Blonde": "BLONDE",
-    "Brunette": "BRUNETTE",
-    "Redhead": "RED",
+    "Black": "Black",
+    "Blonde": "Blonde",
+    "Brunette": "Brunette",
+    "Redhead": "Red",
 }
 
 # Shared client because we're making multiple requests.
 # The sites reject non-browser TLS fingerprints: the handshake succeeds and the
 # connection is then reset at the first HTTP byte, so impersonation is required.
 client = requests.Session(impersonate="chrome")
+# Search serves a "Verifying Browser" interstitial whose JS only sets this cookie
+client.cookies.set("tsg_verified", "true", domain=".scoreland.com")
 
 
 # Example element:
@@ -161,17 +163,16 @@ def map_performer(el) -> ScrapedPerformer | None:
         return None
     name = el.xpath(".//a/@title")[1]
     image = el.xpath(".//img/@src")[0]
-    fixed_url = re.sub(r".*?([^/]*(?=/2/0))/2/0/([^?]*)", r"https://www.\1.com/\2", url)
-    log.debug(f"url: {url}")
-    log.debug(f"fixed_url: {fixed_url}")
-
-    if not is_valid_url(fixed_url):
-        log.debug(f"Performer '{name}' has a broken profile link, skipping")
+    # https://join.{domain}/strack/{nats}/{site}/2/1/{path} -> https://www.{domain}/{path}
+    if not (
+        m := re.match(r"https://join\.([^/]+)/strack/[^/]+/[^/]+/2/\d+/([^?]+)", url)
+    ):
+        log.debug(f"Performer '{name}' has no profile link, skipping")
         return None
 
     return {
         "name": name,
-        "urls": [fixed_url],
+        "urls": [f"https://www.{m[1]}/{m[2]}"],
         "image": image,
     }
 
@@ -193,6 +194,14 @@ def performer_query(query: str):
     result = client.post("https://www.scoreland.com/search-es/", data=payload)
     tree = html.fromstring(result.content)
     performers = [p for x in tree.find_class("model") if (p := map_performer(x))]
+    # The site offers no relevance sort, so float exact and partial name matches to the top
+    needle = query.casefold()
+    performers.sort(
+        key=lambda p: (
+            p["name"].casefold() != needle,
+            needle not in p["name"].casefold(),
+        )
+    )
 
     if not performers:
         log.warning(f"No performers found for '{query}'")
@@ -239,7 +248,7 @@ def performer_from_url(url: str) -> ScrapedPerformer | None:
     "Scrape performer profile page"
     tree = html.fromstring(client.get(url).content)
 
-    if not (name := re.sub(r"'s Profile$", "", tree.xpath("string(//h1)").strip())):
+    if not (name := re.sub(r"'s? Profile$", "", tree.xpath("string(//h1)").strip())):
         log.error("Could not find performer name, scraper needs updating")
         return None
 
