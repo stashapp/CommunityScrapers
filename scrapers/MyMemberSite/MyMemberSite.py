@@ -1,12 +1,19 @@
 import json
-import sys
 import re
-from urllib.parse import urlparse
+import sys
+from typing import Any
 
 from py_common import log
 from py_common.deps import ensure_requirements
-from py_common.util import scraper_args, dig
-from py_common.types import ScrapedGallery, ScrapedPerformer, ScrapedScene, ScrapedStudio, ScrapedTag
+from py_common.rsc import Flight
+from py_common.types import (
+    ScrapedGallery,
+    ScrapedPerformer,
+    ScrapedScene,
+    ScrapedStudio,
+    ScrapedTag,
+)
+from py_common.util import dig, scraper_args
 
 ensure_requirements("requests", "bs4:beautifulsoup4")
 
@@ -22,10 +29,6 @@ session.headers.update(
 
 
 def _fetch_page(scrape_url: str) -> str:
-    """
-    Fetches the page at scrape_url and returns the HTML text.
-    Exits if the request fails or if the response status is not 200.
-    """
     log.debug(f"Fetching '{scrape_url}'")
     try:
         response = session.get(scrape_url, timeout=(3, 6))
@@ -34,175 +37,98 @@ def _fetch_page(scrape_url: str) -> str:
         sys.exit(-1)
 
     if response.status_code != 200:
-        log.error(f"Fetching '{scrape_url}' resulted in error status: {response.status_code}")
+        log.error(
+            f"Fetching '{scrape_url}' resulted in error status: {response.status_code}"
+        )
         sys.exit(-1)
 
     return response.text
 
 
-def _extract_nextjs_video_data(html: str) -> dict | None:
-    """
-    Parse the Next.js __next_f RSC payload embedded in server-rendered HTML to
-    extract scene/gallery data.
-    """
-    pattern = re.compile(
-        r'self\.__next_f\.push\(\[1,\s*"((?:[^"\\]|\\.)*)"\]\)', re.DOTALL
+def _details(html: str) -> str:
+    soup = BeautifulSoup(html, "html.parser")
+    lines = soup.find_all(
+        ["p", "h1", "h2", "h3", "h4", "h5", "h6", "li", "blockquote", "pre"]
     )
-
-    for m in pattern.finditer(html):
-        raw = m.group(1)
-        try:
-            decoded = json.loads('"' + raw + '"')
-        except Exception:
-            continue
-
-        if '"pageType":"video"' not in decoded and '"pageType":"photoset"' not in decoded:
-            continue
-
-        data_match = re.search(r'"data":(\{)', decoded)
-        if not data_match:
-            continue
-
-        start = data_match.start(1)
-        depth = 0
-        for i, ch in enumerate(decoded[start:], start):
-            if ch == "{":
-                depth += 1
-            elif ch == "}":
-                depth -= 1
-                if depth == 0:
-                    try:
-                        return json.loads(decoded[start : i + 1])
-                    except Exception:
-                        break
-
-    return None
-
-
-def _fetch_studio(html: str, scrape_url: str) -> ScrapedStudio:
-    """
-    Extract studio name and URL from __next_f payload.
-    """
-    pattern = re.compile(
-        r'self\.__next_f\.push\(\[1,\s*"((?:[^"\\]|\\.)*)"\]\)', re.DOTALL
+    text = (
+        "\n".join(line.get_text().strip() for line in lines)
+        if lines
+        else soup.get_text()
     )
-    for m in pattern.finditer(html):
-        raw = m.group(1)
-        try:
-            decoded = json.loads('"' + raw + '"')
-        except Exception:
-            continue
-        if '"site_long_name"' not in decoded:
-            continue
-        name_m = re.search(r'"site_long_name":"([^"]+)"', decoded)
-        url_m = re.search(r'"site_url":"(https?://[^"]+)"', decoded)
-        if name_m:
-            parsed = urlparse(scrape_url)
-            return ScrapedStudio(
-                name=name_m.group(1),
-                url=url_m.group(1) if url_m else f"{parsed.scheme}://{parsed.netloc}",
-            )
-
-    parsed = urlparse(scrape_url)
-    return ScrapedStudio(
-        name=parsed.netloc,
-        url=f"{parsed.scheme}://{parsed.netloc}",
-    )
+    return re.sub(r"\n{3,}", "\n\n", text).strip()
 
 
-def gallery_from_url(gallery_url: str) -> ScrapedGallery:
+def _page(scrape_url: str) -> tuple[dict[str, Any], dict[str, Any] | None]:
     """
-    Scrapes a gallery from the given URL.
-
-    Parameters
-    ----------
-    gallery_url : str
-        The URL of the gallery to scrape.
-
-    Returns
-    -------
-    ScrapedGallery
-        The scraped gallery data.
+    The page's video/photoset data and its site settings
     """
-    html = _fetch_page(gallery_url)
-    studio: ScrapedStudio = _fetch_studio(html, gallery_url)
-    raw_gallery = _extract_nextjs_video_data(html)
-    if not raw_gallery:
-        log.error(f"Could not extract gallery data from Next.js payload at '{gallery_url}'")
+    flight = Flight.from_html(_fetch_page(scrape_url))
+    page = flight.first(lambda d: d.get("pageType") in ("video", "photoset")) or {}
+    if not isinstance(data := page.get("data"), dict):
+        log.error(
+            f"Could not extract content data from Next.js payload at '{scrape_url}'"
+        )
         sys.exit(-1)
+    return data, flight.first(lambda d: "site_long_name" in d)
 
-    scraped: ScrapedGallery = {}
 
-    if title := raw_gallery.get("title"):
-        scraped["title"] = title
+def to_scraped_studio(site: dict[str, Any]) -> ScrapedStudio:
+    studio = ScrapedStudio(name=site["site_long_name"])
+    if url := site.get("site_url"):
+        studio["urls"] = [url]
+    return studio
 
-    if _id := raw_gallery.get("id"):
-        scraped["code"] = str(_id)
 
-    if date := raw_gallery.get("publish_date"):
-        scraped["date"] = date.split("T")[0]
+def to_scraped_scene(data: dict[str, Any], site: dict[str, Any] | None) -> ScrapedScene:
+    scene: ScrapedScene = {}
+    if title := data.get("title"):
+        scene["title"] = title
+    if date := data.get("publish_date"):
+        scene["date"] = date.split("T")[0]
+    if (details := data.get("description")) and (text := _details(details)):
+        scene["details"] = text
+    if tags := data.get("tags"):
+        scene["tags"] = [ScrapedTag(name=t["name"]) for t in tags]
+    if performers := data.get("casts"):
+        scene["performers"] = [
+            ScrapedPerformer(name=p["screen_name"]) for p in performers
+        ]
+    if site:
+        scene["studio"] = to_scraped_studio(site)
+    if image := dig(data, ("poster_src", "cover_photo")):
+        scene["image"] = image
+    if duration := data.get("duration"):
+        scene["duration"] = duration
 
-    if details := raw_gallery.get("description"):
-        scraped["details"] = BeautifulSoup(details, "html.parser").get_text()
+    return scene
 
-    if tags := raw_gallery.get("tags"):
-        scraped["tags"] = [ScrapedTag(name=t["name"]) for t in tags]
 
-    if cast := raw_gallery.get("casts"):
-        scraped["performers"] = [ScrapedPerformer(name=p["screen_name"]) for p in cast]
+def to_scraped_gallery(
+    data: dict[str, Any], site: dict[str, Any] | None
+) -> ScrapedGallery:
+    gallery: ScrapedGallery = {}
+    if title := data.get("title"):
+        gallery["title"] = title
+    if date := data.get("publish_date"):
+        gallery["date"] = date.split("T")[0]
+    if (details := data.get("description")) and (text := _details(details)):
+        gallery["details"] = text
+    if tags := data.get("tags"):
+        gallery["tags"] = [ScrapedTag(name=t["name"]) for t in tags]
+    if performers := data.get("casts"):
+        gallery["performers"] = [ScrapedPerformer(name=p["screen_name"]) for p in performers]
+    if site:
+        gallery["studio"] = to_scraped_studio(site)
 
-    scraped["studio"] = studio
-
-    return scraped
+    return gallery
 
 
 def scene_from_url(scene_url: str) -> ScrapedScene:
-    """
-    Scrapes a scene from the given URL.
+    return to_scraped_scene(*_page(scene_url))
 
-    Parameters
-    ----------
-    scene_url : str
-        The URL of the scene to scrape.
 
-    Returns
-    -------
-    ScrapedScene
-        The scraped scene data.
-    """
-    html = _fetch_page(scene_url)
-    studio: ScrapedStudio = _fetch_studio(html, scene_url)
-    raw_scene = _extract_nextjs_video_data(html)
-    if not raw_scene:
-        log.error(f"Could not extract video data from Next.js payload at '{scene_url}'")
-        sys.exit(-1)
-
-    scraped: ScrapedScene = {}
-
-    if title := raw_scene.get("title"):
-        scraped["title"] = title
-
-    if _id := raw_scene.get("id"):
-        scraped["code"] = str(_id)
-
-    if date := raw_scene.get("publish_date"):
-        scraped["date"] = date.split("T")[0]
-
-    if details := raw_scene.get("description"):
-        scraped["details"] = BeautifulSoup(details, "html.parser").get_text()
-
-    if tags := raw_scene.get("tags"):
-        scraped["tags"] = [ScrapedTag(name=t["name"]) for t in tags]
-
-    if cast := raw_scene.get("casts"):
-        scraped["performers"] = [ScrapedPerformer(name=p["screen_name"]) for p in cast]
-
-    if image := dig(raw_scene, ("poster_src", "cover_photo")):
-        scraped["image"] = image
-
-    scraped["studio"] = studio
-
-    return scraped
+def gallery_from_url(gallery_url: str) -> ScrapedGallery:
+    return to_scraped_gallery(*_page(gallery_url))
 
 
 if __name__ == "__main__":
