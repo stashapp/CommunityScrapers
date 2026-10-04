@@ -5,15 +5,16 @@ Types for outputs that scrapers can produce and that Stash will accept
 """
 
 # export specific types for eternal inclusion
+# Title case matches what Stash itself writes when importing from stash-box
 type Ethnicity = Literal[
-    "CAUCASIAN",
-    "BLACK",
-    "ASIAN",
-    "INDIAN",
-    "LATIN",
-    "MIDDLE_EASTERN",
-    "MIXED",
-    "OTHER",
+    "Caucasian",
+    "Black",
+    "Asian",
+    "Indian",
+    "Latin",
+    "Middle Eastern",
+    "Mixed",
+    "Other",
 ]
 
 type Gender = Literal[
@@ -25,17 +26,18 @@ type Gender = Literal[
     "NON_BINARY",
 ]
 
-type EyeColor = Literal["BLUE", "BROWN", "GREEN", "GREY", "HAZEL", "RED"]
+type EyeColor = Literal["Blue", "Brown", "Green", "Grey", "Hazel", "Red"]
 type HairColor = Literal[
-    "BLONDE",
-    "BRUNETTE",
-    "BLACK",
-    "RED",
-    "AUBURN",
-    "GREY",
-    "BALD",
-    "VARIOUS",
-    "OTHER",
+    "Blonde",
+    "Brunette",
+    "Black",
+    "Red",
+    "Auburn",
+    "Grey",
+    "Bald",
+    "Various",
+    "White",
+    "Other",
 ]
 
 
@@ -64,7 +66,7 @@ class ScrapedPerformer(TypedDict, total=False):
     "Not validated"
     eye_color: EyeColor
     hair_color: HairColor
-    "Hair color, can be 'VARIOUS' or 'OTHER' if the performer has multiple hair colors"
+    "Hair color, can be 'Various' or 'Other' if the performer has multiple hair colors"
     height: str
     "Height in centimeters"
     weight: str
