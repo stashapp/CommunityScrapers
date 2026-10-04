@@ -1,4 +1,5 @@
 name: Babepedia
+# requires: py_common
 performerByURL:
   - action: script
     url:

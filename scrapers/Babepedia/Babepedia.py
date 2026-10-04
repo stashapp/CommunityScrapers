@@ -15,8 +15,19 @@ from py_common.types import ScrapedPerformer, PerformerSearchResult, Ethnicity, 
 
 scraper = StashRequests(cloudflare=True)
 
+def get_headers() -> dict[str, str]:
+  """Return browser-like headers to reduce 403 blocks from Babepedia"""
+  return {
+      "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+      "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+      "Accept-Language": "en-US,en;q=0.5",
+      "Accept-Encoding": "gzip, deflate",
+      "Connection": "keep-alive",
+      "Upgrade-Insecure-Requests": "1",
+  }
+
 def fetch_as_base64(url: str) -> str | None:
-  data = base64.b64encode(scraper.get(url).content).decode('utf-8')
+  data = base64.b64encode(scraper.get(url, headers=get_headers()).content).decode('utf-8')
   return f"data:image/jpg;base64,{data}"
 
 def biography_xpath_test(tree, html_name: str, selector: str) -> str | None:
@@ -61,7 +72,7 @@ def sanitize_fake_tits(value: str) -> str | None:
     return mapping.get(value.lower().strip())
 
 def performer_from_url(url) -> ScrapedPerformer:
-    scraped = scraper.get(url)
+    scraped = scraper.get(url, headers=get_headers())
     scraped.raise_for_status()
     tree = html.fromstring(scraped.text)
 
@@ -207,7 +218,7 @@ def map_performer_search(performer) -> PerformerSearchResult:
 def performer_by_name(name) -> list[PerformerSearchResult]:
     # dashes stripped #2671
     search_name = name.replace("-", " ")
-    scraped = scraper.get("https://www.babepedia.com/ajax-search.php", params={"term": search_name})
+    scraped = scraper.get("https://www.babepedia.com/ajax-search.php", params={"term": search_name}, headers=get_headers())
     scraped.raise_for_status()
     data = scraped.json()
     return list(map(map_performer_search,data))
