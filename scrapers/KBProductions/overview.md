@@ -13,6 +13,7 @@ Scraper has been tested on 2026-10-02
 | Benefit Monkey        | https://www.benefitmonkey.com/scenes/anna-de-ville-dirty-maid-gives-me-a-messy-saliva-filled-blowjob                          |
 | Big Gulp Girls        | https://tour.biggulpgirls.com/scenes/rose-caarter-1                                                                           |
 | BJ Raw                | https://bjraw.com/videos/face-painting-isabella                                                                               |
+| Blake Mason           | https://blakemason.com/videos/BM1650_Max_Duran_And_Roni_Yarz                                                                  |
 | Bopping Babes         | https://boppingbabes.com/videos/red-or-dead                                                                                   |
 | Collective Corruption | https://collectivecorruption.com/videos/connective-tissues                                                                    |
 | Come Inside           | https://www.comeinside.com/videos/a-two-cock-massage-for-victoria                                                             |

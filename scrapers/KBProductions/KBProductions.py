@@ -1,3 +1,4 @@
+import html
 import json
 import re
 import sys
@@ -26,6 +27,8 @@ studio_map = {
     "biggulpgirls.com": "Big Gulp Girls",
     "bjraw.com": "BJ Raw",
     "blackbullchallenge.com": "Black Bull Challenge",
+    "blakemason.com": "Blake Mason",
+    "blakemason-after-hours.com": "Blake Mason",
     "boppingbabes.com": "Bopping Babes",
     "cannonprod.com": "Cannon Productions",
     "collectivecorruption.com": "Collective Corruption",
@@ -128,6 +131,7 @@ studio_map = {
 # live on a network host instead, so links point at the page's own host
 NO_SITE_OF_THEIR_OWN = {
     "3rdwheel.toughlovex.com",
+    "blakemason-after-hours.com",
     "drkarl.toughlovex.com",
     "karlskasting.toughlovex.com",
     "karlsworld.toughlovex.com",
@@ -281,6 +285,7 @@ def to_scraped_performer(raw_performer: dict, page_url: str) -> ScrapedPerformer
 
     # Studios that do not use units for measurements, but are obviously not metric.
     STUDIO_USES_IMPERIAL = [
+        "blakemason.com",
         "joeschmoevideos.com",
         "jizzaddiction.com",
         "shehergirls.com",
@@ -322,21 +327,18 @@ def to_scraped_performer(raw_performer: dict, page_url: str) -> ScrapedPerformer
     if ethnicity := dig(raw_performer, ("ethnicity", "race")):
         performer["ethnicity"] = ethnicity
 
-    if (height_ft := raw_performer.get("height")) and (
-        h := re.match(r"(\d+)\D+(\d+).+", height_ft)
-    ):
+    # Some sites entity-encode the feet/inch marks: 5&#039;8&quot;
+    height = html.unescape(raw_performer.get("height") or "")
+    if h := re.match(r"(\d+)\D+(\d+).+", height):
         height_cm = feetinches_to_cm(h.group(1), h.group(2))
         performer["height"] = str(height_cm)
-    elif (height_m := raw_performer.get("height")) and (
-        h := re.match(r"^(\d\.\d\d)$", height_m)
-    ):
+    elif h := re.match(r"^(\d+)'$", height):
+        performer["height"] = feetinches_to_cm(h.group(1), 0)
+    elif h := re.match(r"^(\d\.\d\d)$", height):
         height_cm = float(h.group(1)) * 100
         performer["height"] = str(height_cm)
-
-    elif (height_cm := raw_performer.get("height")) and (
-        h := re.match(r"^(\d)+$", height_cm)
-    ):
-        performer["height"] = str(h)
+    elif h := re.match(r"^\d+$", height):
+        performer["height"] = h.group(0)
 
     if (weight_lb := raw_performer.get("weight")) and (
         w := re.match(r"(\d+)\slbs?", weight_lb)
@@ -432,7 +434,7 @@ def to_scraped_scene_from_content(raw_scene: dict, page_url: str) -> ScrapedScen
         scene["performers"] = [
             {
                 "name": x["name"],
-                "image": x["thumb"],
+                "images": [re.sub(r"^//", "https://", x["thumb"])],
                 "urls": [make_performer_url(x["slug"], site, page_url)],
             }
             for x in models
