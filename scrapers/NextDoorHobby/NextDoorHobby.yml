@@ -49,7 +49,7 @@ performerByName:
 performerByURL:
   - action: script
     url:
-      - NextDoorHobby.com/model/
+      - nextdoorhobby.com/model/
     script:
       - python
       - NextDoorHobby.py
@@ -63,11 +63,10 @@ performerByFragment:
 groupByURL:
   - action: script
     url:
-      - NextDoorHobby.com/movie
+      - nextdoorhobby.com/movie
       # Since scenes link to the movie we can scrape movies from scenes
       - nextdoorhobby.com/scene
     script:
       - python
       - NextDoorHobby.py
       - movie-by-url
-# Last Updated August 06, 2024
