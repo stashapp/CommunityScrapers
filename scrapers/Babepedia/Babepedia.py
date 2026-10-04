@@ -15,53 +15,114 @@ from py_common.types import ScrapedPerformer, PerformerSearchResult, Ethnicity, 
 
 scraper = StashRequests(cloudflare=True)
 
+def get_headers() -> dict[str, str]:
+  """Return browser-like headers to reduce 403 blocks from Babepedia"""
+  return {
+      "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+      "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+      "Accept-Language": "en-US,en;q=0.5",
+      "Accept-Encoding": "gzip, deflate",
+      "Connection": "keep-alive",
+      "Upgrade-Insecure-Requests": "1",
+  }
+
 def fetch_as_base64(url: str) -> str | None:
-  data = base64.b64encode(scraper.get(url).content).decode('utf-8')
+  data = base64.b64encode(scraper.get(url, headers=get_headers()).content).decode('utf-8')
   return f"data:image/jpg;base64,{data}"
 
 def biography_xpath_test(tree, html_name: str, selector: str) -> str | None:
   elem = tree.xpath(f'//span[contains(text(), "{html_name}")]/following-sibling::span{selector}/text()')
   return elem[0].strip() if elem else None
 
-def sanitize_ethnicity(str) -> Ethnicity:
-    str_upper = str.upper()
-    if str_upper in ["CAUCASIAN","BLACK","ASIAN","INDIAN","LATIN","MIDDLE_EASTERN","MIXED","OTHER"]:
-        return str_upper
-    # catch mixed-race
-    if "MIXED" in str_upper:
-        return str_upper
-    return str # type: ignore
+def sanitize_ethnicity(value: str) -> Ethnicity | None:
+    """Map ethnicity values to Stash enum (title case, not uppercase)."""
+    if not value:
+        return None
+    mapping = {
+        "caucasian": "Caucasian",
+        "white": "Caucasian",
+        "black": "Black",
+        "asian": "Asian",
+        "indian": "Indian",
+        "latin": "Latin",
+        "latina": "Latin",
+        "middle eastern": "Middle Eastern",
+        "middle_eastern": "Middle Eastern",
+        "mixed": "Mixed",
+        "other": "Other",
+    }
+    normalized = value.lower().strip()
+    if normalized in mapping:
+        return mapping[normalized]
+    # Catch partial matches for mixed race
+    if "mixed" in normalized:
+        return "Mixed"
+    return None  # type: ignore
 
-def sanitize_eye_color(str) -> EyeColor | None:
-    str_upper = str.upper()
-    if str_upper in ["Blue","Brown","Green","Grey","Hazel","Red"]:
-        return str_upper
-    return str
+def sanitize_eye_color(value: str) -> EyeColor | None:
+    """Map eye color values to Stash enum (title case)."""
+    if not value:
+        return None
+    mapping = {
+        "blue": "Blue",
+        "brown": "Brown",
+        "green": "Green",
+        "grey": "Grey",
+        "gray": "Grey",  # American spelling
+        "hazel": "Hazel",
+        "red": "Red",
+    }
+    normalized = value.lower().strip()
+    if normalized in mapping:
+        return mapping[normalized]
+    return None  # type: ignore
 
-def sanitize_hair_color(str) -> HairColor:
-    # brown to brunette
-    if str.lower() == "brown":
-        return "Brunette" # type: ignore
-    return str
+def sanitize_hair_color(value: str) -> HairColor | None:
+    """Map hair color values to Stash enum (title case)."""
+    if not value:
+        return None
+    mapping = {
+        "blond": "Blond",
+        "blonde": "Blond",  # American spelling variant
+        "brown": "Brown",
+        "brunette": "Brown",  # Common alternative for brown
+        "black": "Black",
+        "red": "Red",
+        "auburn": "Auburn",
+        "grey": "Grey",
+        "gray": "Grey",  # American spelling
+        "white": "White",
+        "bald": "Bald",
+        "various": "Various",
+        "other": "Other",
+    }
+    normalized = value.lower().strip()
+    if normalized in mapping:
+        return mapping[normalized]
+    return None  # type: ignore
 
 def sanitize_fake_tits(value: str) -> str | None:
     # Maps Babepedia's breast type labels to Stash's valid fake_tits values:
-    # "Fake", "Natural", or "Na". We never return "Na" here — if Babepedia
-    # has no data, it's cleaner to leave the field unset than to store "Na".
+    # Valid Stash values: "Augmented", "Natural", "Unknown"
+    if not value:
+        return "Unknown"
     mapping = {
-        "fake/enhanced": "Fake",    # observed on Babepedia
-        "real/natural":  "Natural", # observed on Babepedia
-        "fake":          "Fake",    # defensive
-        "enhanced":      "Fake",    # defensive
-        "augmented":     "Fake",    # defensive
-        "natural":       "Natural", # defensive
-        "real":          "Natural", # defensive
+        "fake/enhanced": "Augmented",   # observed on Babepedia
+        "real/natural":  "Natural",     # observed on Babepedia
+        "fake":          "Augmented",   # defensive
+        "enhanced":      "Augmented",   # defensive
+        "augmented":     "Augmented",   # defensive
+        "natural":       "Natural",     # defensive
+        "real":          "Natural",     # defensive
+        "none":          "Unknown",     # no data
+        "n/a":           "Unknown",     # no data
+        "unknown":       "Unknown",     # no data
     }
-    # Anything unrecognised returns None, which the caller treats as no data.
-    return mapping.get(value.lower().strip())
+    # Return mapped value or "Unknown" for unmapped/missing values
+    return mapping.get(value.lower().strip(), "Unknown")
 
 def performer_from_url(url) -> ScrapedPerformer:
-    scraped = scraper.get(url)
+    scraped = scraper.get(url, headers=get_headers())
     scraped.raise_for_status()
     tree = html.fromstring(scraped.text)
 
@@ -145,7 +206,7 @@ def performer_from_url(url) -> ScrapedPerformer:
     # get fake/naturals
     breast_type = biography_xpath_test(tree, "Boobs", "/a")
     if breast_type:
-        breast_type_str = "Natural" if "Real" in breast_type else "Fake" if "Fake" in breast_type else None
+        breast_type_str = sanitize_fake_tits(breast_type)
         if breast_type_str:
             performer['fake_tits'] = breast_type_str
     # get tattoos
@@ -207,7 +268,7 @@ def map_performer_search(performer) -> PerformerSearchResult:
 def performer_by_name(name) -> list[PerformerSearchResult]:
     # dashes stripped #2671
     search_name = name.replace("-", " ")
-    scraped = scraper.get("https://www.babepedia.com/ajax-search.php", params={"term": search_name})
+    scraped = scraper.get("https://www.babepedia.com/ajax-search.php", params={"term": search_name}, headers=get_headers())
     scraped.raise_for_status()
     data = scraped.json()
     return list(map(map_performer_search,data))
