@@ -1,164 +1,172 @@
-import datetime
 import json
 import re
 import sys
+from datetime import UTC, datetime
+from typing import Any
 
-import requests
-from py_common.deps import ensure_requirements
-from py_common.util import scraper_args
 from py_common import log
+from py_common.deps import ensure_requirements
+from py_common.types import ScrapedPerformer, ScrapedScene, ScrapedStudio, ScrapedTag
+from py_common.util import scraper_args
 
-
-ensure_requirements("lxml")
+ensure_requirements("requests", "lxml")
+import requests  # noqa: E402
 from lxml import html  # noqa: E402
 
-scraper = requests.Session()
+BASE_URL = "https://www.noodledude.io"
+STUDIO: ScrapedStudio = {"name": "NoodleDudePMV"}
+
+session = requests.Session()
 
 
-def xpath_string(tree, selector):
-    raw = tree.xpath(selector)
-    if not raw or len(raw) < 1:
-        return ""
-    return raw[0].strip()
-
-
-def scrape(url: str, retries=0):
-    if retries > 2:
-        log.error(f"Giving up on '{url}' after 3 retries")
+def fetch(url: str) -> html.HtmlElement | None:
     try:
-        scraped = scraper.get(url, timeout=(3, 7))
-    except requests.exceptions.Timeout as exc_time:
-        log.debug(f"Timeout: {exc_time}")
-        return scrape(url, retries + 1)
-    except Exception as e:
-        log.error(f"scrape error {e}")
-        sys.exit(1)
-    if scraped.status_code >= 400:
-        log.error(f"HTTP Error: {scraped.status_code}")
-        sys.exit(1)
-    return html.fromstring(scraped.content)
+        response = session.get(url, timeout=(3, 10))
+    except requests.RequestException as e:
+        log.error(f"Failed to fetch '{url}': {e}")
+        return None
+    if response.status_code != 200:
+        log.error(f"Fetching '{url}' returned status {response.status_code}")
+        return None
+    return html.fromstring(response.content)
 
 
-def scene_title(tree):
-    return (
-        xpath_string(tree, "//meta[@property='og:title']/@content")
-        .split("|")[0]
-        .strip()
+def decode_prop(value: Any) -> Any:
+    "Astro serializes island props as [type, value] pairs: 0 is a plain value, 1 an array"
+    match value:
+        case [0, dict() as obj]:
+            return {k: decode_prop(v) for k, v in obj.items()}
+        case [0, plain]:
+            return plain
+        case [1, list() as items]:
+            return [decode_prop(item) for item in items]
+    return value
+
+
+def island_props(tree: html.HtmlElement, component: str) -> dict[str, Any]:
+    for island in tree.xpath("//astro-island[@props]"):
+        if f"/{component}." in island.get("component-url", ""):
+            return {
+                k: decode_prop(v) for k, v in json.loads(island.get("props")).items()
+            }
+    return {}
+
+
+def text_from_html(fragment: str) -> str:
+    root = html.fromstring(f"<div>{fragment}</div>")
+    if blocks := root.xpath("./*"):
+        text = "\n\n".join(block.text_content().strip() for block in blocks)
+    else:
+        text = root.text_content()
+    return re.sub(r"\n{3,}", "\n\n", text).strip()
+
+
+def to_scraped_performer(performer: dict[str, Any]) -> ScrapedPerformer:
+    scraped: ScrapedPerformer = {
+        "name": performer["name"],
+        "urls": [
+            f"{BASE_URL}/creators/{performer['slug']}",
+            *performer.get("social_urls", []),
+        ],
+    }
+    if aliases := performer.get("aliases"):
+        scraped["aliases"] = ", ".join(aliases)
+    if image := performer.get("image"):
+        scraped["images"] = [image]
+    if birthdate := performer.get("date_of_birth"):
+        scraped["birthdate"] = birthdate
+    return scraped
+
+
+def scene_details(video: dict[str, Any]) -> str:
+    parts = []
+    if (description := video.get("description")) and (
+        text := text_from_html(description)
+    ):
+        parts.append(text)
+    if songs := video.get("songs"):
+        parts.append(
+            "Songs:\n" + "\n".join(f"{s['artist']} - {s['name']}" for s in songs)
+        )
+    return "\n\n".join(parts)
+
+
+def to_scraped_scene(video: dict[str, Any], title: str | None) -> ScrapedScene:
+    scene: ScrapedScene = {"studio": STUDIO}
+    if title := title or video.get("name"):
+        scene["title"] = title
+    if released := video.get("release_date"):
+        # milliseconds since the epoch
+        scene["date"] = datetime.fromtimestamp(released / 1000, tz=UTC).strftime(
+            "%Y-%m-%d"
+        )
+    if details := scene_details(video):
+        scene["details"] = details
+    if image := video.get("thumbnail"):
+        scene["image"] = image
+    if (length := video.get("length")) and length >= 10:
+        scene["duration"] = length
+    if tags := video.get("tags"):
+        scene["tags"] = [ScrapedTag(name=t["name"]) for t in tags]
+    if performers := video.get("performers"):
+        scene["performers"] = [to_scraped_performer(p) for p in performers]
+    return scene
+
+
+def scene_from_url(url: str) -> ScrapedScene | None:
+    if (tree := fetch(url)) is None:
+        return None
+    if not (video := island_props(tree, "Player").get("initialVideo")):
+        log.error(f"No video data found on '{url}'")
+        return None
+    # "Let Me Keep My Socks On - A Socks & Skirts PMV | NoodleDude PMVs"
+    title = next(
+        (
+            t.rsplit(" | ", 1)[0]
+            for t in tree.xpath("//meta[@property='og:title']/@content")
+        ),
+        None,
     )
+    return to_scraped_scene(video, title)
 
 
-def scene_date(tree):
-    stash_date = "%Y-%m-%d"
-    date_format = "%B %d, %Y"
-    raw = tree.xpath(
-        "//div[contains(@class, 'video_info_wrapper')]//span[@id='release_date']/@title"
-    )[0]
-    raw = re.sub(r"(\d)(st|nd|rd|th)", r"\1", raw)
-    return datetime.datetime.strptime(raw, date_format).strftime(stash_date)
-
-
-def scene_details(tree):
-    rawDescription = tree.xpath("//*[contains(@class, 'video_description')]")
-    details = rawDescription[0].text_content()
-
-    songs = ""
-    rawSong = tree.xpath("//a[contains(@class, 'song_link')]//span/text()")
-    rawSongs = zip(rawSong[::2], rawSong[1::2])
-    for songTitle, songAuthor in rawSongs:
-        songs += "\n" + songAuthor + " - " + songTitle
-
-    if songs != "":
-        details = details + "\n\nSongs:" + songs
-    return details
-
-
-def scene_tags(tree):
-    # Tags do not appear anymore on the site
-    return []
-
-
-def parse_performer_card(tree):
-    performer = {}
-    imgUrl = tree.xpath("img/@src")
-    if imgUrl and len(imgUrl) == 1 and imgUrl[0] != "/static/images/placeholder.svg":
-        performer["images"] = [imgUrl[0]]
-    performer["name"] = tree.xpath("div/span[1]/text()")[0]
-
-    performer["urls"] = ["https://www.noodledude.io" + tree.xpath("@href")[0]]
+def performer_from_url(url: str) -> ScrapedPerformer | None:
+    if (tree := fetch(url)) is None:
+        return None
+    if not (info := tree.xpath("//div[contains(@class, 'performer-main-info')]")):
+        log.error(f"No performer found on '{url}'")
+        return None
+    info = info[0]
+    performer: ScrapedPerformer = {
+        "name": info.xpath("string(h1)").strip(),
+        "urls": [url, *info.xpath("div[@class='performer-links']/a/@href")],
+    }
+    # "Aliases: Lili • hot404found", the label and separators are child spans
+    if aliases := [
+        a.strip()
+        for a in info.xpath("span[contains(@class, 'fs-s')]/text()")
+        if a.strip()
+    ]:
+        performer["aliases"] = ", ".join(aliases)
+    if birthdate := info.xpath("span/span[@title]/@title"):
+        performer["birthdate"] = birthdate[0]
+    if details := tree.xpath(
+        "string(//div[contains(@class, 'performer-description')]/p)"
+    ).strip():
+        performer["details"] = details
+    if images := tree.xpath("//img[contains(@class, 'performer-image')]/@src"):
+        performer["images"] = images
     return performer
 
 
-def get_performers(tree):
-    detailsUrl = tree.xpath(
-        "//*[@id='current-video']//button[contains(@class, 'btn-plus')]/@hx-get"
-    )
-    if not detailsUrl or len(detailsUrl) < 1:
-        return []
-
-    scrapedPerformers = scrape("https://www.noodledude.io" + detailsUrl[0])
-    performerNodes = scrapedPerformers.xpath("//a[contains(@class, 'performer_card')]")
-    return [parse_performer_card(p) for p in performerNodes]
-
-
-def scene_image(tree):
-    return tree.xpath("//video[@id='player']/@poster")[0]
-
-
-def performer_name(tree):
-    return xpath_string(tree, "h1/text()")
-
-
-def performer_birthdate(tree):
-    return xpath_string(tree, "span[not(@class)]/span[@class='fc2']/@title")
-
-
-def performer_aliases(tree):
-    raw = tree.xpath("span[@class='fs-s']/text()")
-    if not raw or len(raw) == 0:
-        return ""
-    return ",".join(raw)
-
-
-def performer_urls(tree):
-    raw = tree.xpath("div[@class='performer-links']/a/@href")
-    if not raw or len(raw) == 0:
-        return []
-    return raw
-
-
-def scene_from_tree(tree):
-    return {
-        "title": scene_title(tree),
-        "date": scene_date(tree),
-        "details": scene_details(tree),
-        "tags": scene_tags(tree),
-        "image": scene_image(tree),
-        "studio": {"name": "NoodleDudePMV"},
-        "performers": get_performers(tree),
-    }
-
-
-def performer_from_tree(tree):
-    performerTree = tree.xpath("//div[contains(@class, 'performer-main-info')]")[0]
-    return {
-        "name": performer_name(tree),
-        "urls": performer_urls(performerTree),
-        "birthdate": performer_birthdate(performerTree),
-        "aliases": performer_aliases(performerTree),
-        "images": tree.xpath("//img[@class='performer-image']/@src"),
-    }
-
-
 if __name__ == "__main__":
-    op, args = scraper_args(prog="NoodleDude scraper")
-
+    op, args = scraper_args()
     result = None
-
     match op, args:
-        case "scene-by-url", {"url": url}:
-            result = scene_from_tree(scrape(url))
-        case "performer-by-url", {"url": url}:
-            result = performer_from_tree(scrape(url))
+        case "scene-by-url", {"url": url} if url:
+            result = scene_from_url(url)
+        case "performer-by-url", {"url": url} if url:
+            result = performer_from_url(url)
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
             sys.exit(1)
