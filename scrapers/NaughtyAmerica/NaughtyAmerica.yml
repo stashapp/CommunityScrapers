@@ -1,11 +1,12 @@
 # requires: py_common
 name: Naughty America
-# scrapes: 2 Chicks Same Time, American Daydreams, Asian 1 On 1, Housewife 1 on 1, Latin Adultery, Live Naughty Nurse, My First Sex Teacher, My Friend's Hot Mom, My Sister's Hot Friend, My Wife's Hot Friend, Naughty America, Naughty Bookworms, Naughty Office, Neighbor Affair, Pornstar Wife, Seduced By A Cougar, The Dorm Room, The Dressing Room, The Gym, The Spa, Tonight's Girlfriend
+# scrapes: 2 Chicks Same Time, American Daydreams, Asian 1 On 1, Housewife 1 on 1, Latin Adultery, Live Naughty Nurse, My First Sex Teacher, My Friend's Hot Mom, My Sister's Hot Friend, My Wife's Hot Friend, Naughty America, Naughty America 3D, Naughty Bookworms, Naughty Office, Neighbor Affair, Pornstar Wife, Seduced By A Cougar, The Dorm Room, The Dressing Room, The Gym, The Spa, Thundercock, Tonight's Girlfriend, Tonight's TS
 sceneByURL:
   - url: &urls
       - myfriendshotmom.com/scene/
       - mysistershotfriend.com/scene/
       - naughtyamerica.com/scene/
+      - naughtyamerica.com/vr-porn-3d/scene/
       - naughtyamericavr.com/scene/
       - thundercock.com/scene/
       - tonightsgirlfriend.com/scene/
@@ -22,4 +23,3 @@ galleryByURL:
       - python
       - NaughtyAmerica.py
       - gallery-by-url
-# Last Updated April 1, 2026
