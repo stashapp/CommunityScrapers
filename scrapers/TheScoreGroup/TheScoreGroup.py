@@ -289,25 +289,28 @@ def page_metadata(url: str) -> ScrapedScene:
     tree = html.fromstring(result.content)
 
     if not (
-        video_page := tree.xpath(
-            '//article[@id="videos_page-page" or @id="mixed_page-page"]'
+        page := tree.xpath(
+            '//article[@id="videos_page-page" or @id="mixed_page-page" or @id="photos_page-page"]'
         )
     ):
         log.error("Page layout has changed, scraper needs updating")
         return scene
 
-    video_page = video_page[0]
+    page = page[0]
 
     # title
-    match video_page.xpath("//h1"):
+    match page.xpath("//h1"):
         case [title] | [title, _]:
-            scene["title"] = title.text_content().strip()
+            # Unreleased sets prefix the title with a "coming soon:" badge
+            scene["title"] = "".join(
+                title.xpath('text()|*[not(contains(@class, "accent-text"))]//text()')
+            ).strip()
         case _:
             log.debug("Could not find title in page, scraper needs updating")
 
     # date
-    if raw_date := video_page.xpath(
-        '//div[contains(concat(" ",normalize-space(@class)," ")," mb-3 ")]//span[contains(.,"Date:")]/following-sibling::span'
+    if raw_date := page.xpath(
+        '//span[@class="label" and contains(.,"Date:")]/following-sibling::span'
     ):
         scene["date"] = (
             datetime.strptime(  # noqa: DTZ007
@@ -324,23 +327,26 @@ def page_metadata(url: str) -> ScrapedScene:
 
     # Original studio is determinable by looking at the CDN links (<source src="//cdn77.scoreuniverse.com/naughtymag/scenes...)
     # this helps set studio for PornMegaLoad URLs as nothing is released directly by the network
-    if video_src := video_page.xpath("//video/source/@src"):
+    # Photo pages have no video, but their thumbnails follow the same scheme (.../naughtymag/gallys/...)
+    if cdn_src := page.xpath("//video/source/@src") or page.xpath(
+        '//img[contains(@src, "/gallys/")]/@src'
+    ):
         studio_ref = re.sub(
-            r".*\.com/(.+?)\/(video|scene).*", r"\1", next(iter(video_src))
+            r".*\.com/(.+?)\/(video|scene|gallys).*", r"\1", next(iter(cdn_src))
         )
         scene["studio"] = {"name": STUDIO_MAP.get(studio_ref, studio_ref)}
 
-    if description := video_page.xpath(
+    if description := page.xpath(
         '//div[@class="p-desc p-3" or contains(@class, "desc")]/text()'
     ):
         scene["details"] = "\n\n".join(
             [p.strip() for p in description if len(p.strip())]
         )
 
-    if tags := video_page.xpath('//a[contains(@href, "-tag")]'):
+    if tags := page.xpath('//a[contains(@href, "-tag")]'):
         scene["tags"] = [{"name": tag.text} for tag in iter(tags)]
 
-    if performers := video_page.xpath(
+    if performers := page.xpath(
         '//span[contains(.,"Featuring:")]/following-sibling::span/a'
     ):
         scene["performers"] = [{"name": p.text} for p in iter(performers)]
