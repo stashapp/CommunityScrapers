@@ -15,19 +15,8 @@ from py_common.types import ScrapedPerformer, PerformerSearchResult, Ethnicity, 
 
 scraper = StashRequests(cloudflare=True)
 
-def get_headers() -> dict[str, str]:
-  """Return browser-like headers to reduce 403 blocks from Babepedia"""
-  return {
-      "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
-      "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-      "Accept-Language": "en-US,en;q=0.5",
-      "Accept-Encoding": "gzip, deflate",
-      "Connection": "keep-alive",
-      "Upgrade-Insecure-Requests": "1",
-  }
-
 def fetch_as_base64(url: str) -> str | None:
-  data = base64.b64encode(scraper.get(url, headers=get_headers()).content).decode('utf-8')
+  data = base64.b64encode(scraper.get(url).content).decode('utf-8')
   return f"data:image/jpg;base64,{data}"
 
 def biography_xpath_test(tree, html_name: str, selector: str) -> str | None:
@@ -82,10 +71,10 @@ def sanitize_hair_color(value: str) -> HairColor | None:
     if not value:
         return None
     mapping = {
-        "blond": "Blond",
-        "blonde": "Blond",  # American spelling variant
-        "brown": "Brown",
-        "brunette": "Brown",  # Common alternative for brown
+        "blond": "Blonde",
+        "blonde": "Blonde",
+        "brown": "Brunette",
+        "brunette": "Brunette",
         "black": "Black",
         "red": "Red",
         "auburn": "Auburn",
@@ -102,27 +91,21 @@ def sanitize_hair_color(value: str) -> HairColor | None:
     return None  # type: ignore
 
 def sanitize_fake_tits(value: str) -> str | None:
-    # Maps Babepedia's breast type labels to Stash's valid fake_tits values:
-    # Valid Stash values: "Augmented", "Natural", "Unknown"
-    if not value:
-        return "Unknown"
+    # "Fake"/"Natural" is what Stash itself writes when importing from stash-box
     mapping = {
-        "fake/enhanced": "Augmented",   # observed on Babepedia
-        "real/natural":  "Natural",     # observed on Babepedia
-        "fake":          "Augmented",   # defensive
-        "enhanced":      "Augmented",   # defensive
-        "augmented":     "Augmented",   # defensive
-        "natural":       "Natural",     # defensive
-        "real":          "Natural",     # defensive
-        "none":          "Unknown",     # no data
-        "n/a":           "Unknown",     # no data
-        "unknown":       "Unknown",     # no data
+        "fake/enhanced": "Fake",    # observed on Babepedia
+        "real/natural":  "Natural", # observed on Babepedia
+        "fake":          "Fake",
+        "enhanced":      "Fake",
+        "augmented":     "Fake",
+        "natural":       "Natural",
+        "real":          "Natural",
     }
-    # Return mapped value or "Unknown" for unmapped/missing values
-    return mapping.get(value.lower().strip(), "Unknown")
+    # Anything unrecognised returns None, which the caller treats as no data.
+    return mapping.get(value.lower().strip())
 
 def performer_from_url(url) -> ScrapedPerformer:
-    scraped = scraper.get(url, headers=get_headers())
+    scraped = scraper.get(url)
     scraped.raise_for_status()
     tree = html.fromstring(scraped.text)
 
@@ -170,8 +153,8 @@ def performer_from_url(url) -> ScrapedPerformer:
             performer['country'] = match.group(1).upper()
     # get ethnicity
     ethnicity = biography_xpath_test(tree, "Ethnicity", "/a")
-    if ethnicity:
-        performer['ethnicity'] = sanitize_ethnicity(ethnicity)
+    if ethnicity and (ethnicity_str := sanitize_ethnicity(ethnicity)):
+        performer['ethnicity'] = ethnicity_str
     # get eye color
     eye_color = biography_xpath_test(tree, "Eye color", "/a")
     if eye_color:
@@ -180,8 +163,8 @@ def performer_from_url(url) -> ScrapedPerformer:
             performer['eye_color'] = eye_color_str
     # get hair color
     hair_color = biography_xpath_test(tree, "Hair color", "/a")
-    if hair_color:
-        performer['hair_color'] = sanitize_hair_color(hair_color)
+    if hair_color and (hair_color_str := sanitize_hair_color(hair_color)):
+        performer['hair_color'] = hair_color_str
     # get height
     height = biography_xpath_test(tree, "Height", "")
     if height:
@@ -268,10 +251,11 @@ def map_performer_search(performer) -> PerformerSearchResult:
 def performer_by_name(name) -> list[PerformerSearchResult]:
     # dashes stripped #2671
     search_name = name.replace("-", " ")
-    scraped = scraper.get("https://www.babepedia.com/ajax-search.php", params={"term": search_name}, headers=get_headers())
+    scraped = scraper.get("https://www.babepedia.com/ajax-search.php", params={"term": search_name})
     scraped.raise_for_status()
     data = scraped.json()
-    return list(map(map_performer_search,data))
+    # The trailing "Search for <name>..." entry links to the full results page, not a performer
+    return [map_performer_search(p) for p in data if p.get("type") != "search"]
 
 if __name__ == "__main__":
     op, args = scraper_args()
