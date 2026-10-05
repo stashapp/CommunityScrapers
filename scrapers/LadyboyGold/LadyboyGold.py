@@ -30,7 +30,7 @@ def get_domain_configs():
 
     def get_domain_config(domain: str):
         log.debug(f"get_domain_config for {domain}")
-        config_partial: Config = {domain: { 'studio_name': config[domain]["studio_name"] }}
+        config_partial: Config = { domain: config[domain] }
         # fetch nats CMS app config, for cms_area_id
         natscms_app_config: dict[str, str] = requests.get(
             f"https://www.{domain}.com/natscms-app/config.json",
