@@ -30,7 +30,7 @@ def get_domain_configs():
 
     def get_domain_config(domain: str):
         log.debug(f"get_domain_config for {domain}")
-        config_partial: Config = {domain: {}}
+        config_partial: Config = {domain: { 'studio_name': config[domain]["studio_name"] }}
         # fetch nats CMS app config, for cms_area_id
         natscms_app_config: dict[str, str] = requests.get(
             f"https://www.{domain}.com/natscms-app/config.json",
@@ -246,6 +246,8 @@ def parse_set_as_scene(domain: str, cms_set: Any, cdn_servers: dict[str, Any]) -
 
     if studio := resolve_studio(cms_set):
         scene["studio"] = studio
+    else:
+        scene["studio"] = { "name": config[domain]["studio_name"] }
 
     categories = extract_names(cms_set, "Category")
     tags = extract_names(cms_set, "Tags")
@@ -417,6 +419,7 @@ def resolve_studio(cms_set: Any) -> ScrapedStudio | None:
         # not one of our configured studios, fall back to its own display name
         names = extract_names(cms_set, tag)
         return studio_with_parent(names[0] if names else values[0])
+    log.debug("No Section or MainWebsite data_types in cms_set")
     return None
 
 @cache_to_disk(ttl=600)
