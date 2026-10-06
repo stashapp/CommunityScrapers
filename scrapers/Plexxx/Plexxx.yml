@@ -1,0 +1,44 @@
+name: PLEXXX
+# scrapes: Banged Rough, Black My Holes, Gang Bang Dates, Squad Inside, Throat Limit
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - bangedrough.com/
+      - blackmyholes.com/
+      - gangbangdates.com/
+      - squadinside.com/
+      - throatlimit.com/
+    scraper: sceneScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: ^.*/videos/([^/?#]+).*$
+          with: https://api.plexxx.com/api/app/v1/catalog/scenes/${1}
+
+jsonScrapers:
+  sceneScraper:
+    scene:
+      Title: card.title
+      Details:
+        selector: card.full_description
+        postProcess:
+          - replace:
+              - regex: \*\*
+                with: ""
+      Date:
+        selector: card.release_date
+        postProcess:
+          - parseDate: 2006-01-02T15:04:05Z
+      # TODO: enable when scrape dialog can show durations
+      # Duration: card.duration_seconds
+      URLs:
+        selector: "{card.series.slug,card.scene_slug}"
+        postProcess:
+          - replace:
+              - regex: ^\{"slug":"(.+)-com","scene_slug":"(.+)"\}$
+                with: https://${1}.com/en/videos/${2}
+      Image: card.media.scene_cover_full.nsfw.variants.#(key=="l").url
+      Studio:
+        Name: card.series.label
+      Performers:
+        Name: card.models.#.name
