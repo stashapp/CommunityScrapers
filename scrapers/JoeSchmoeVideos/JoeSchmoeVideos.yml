@@ -1,0 +1,50 @@
+name: Joe Schmoe Videos
+# requires: py_common
+sceneByURL:
+  - action: script
+    url:
+      - joeschmoevideos.com/scenes/
+    script:
+      - python
+      - JoeSchmoeVideos.py
+      - scene-by-url
+sceneByName:
+  action: script
+  script:
+    - python
+    - JoeSchmoeVideos.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - JoeSchmoeVideos.py
+    - scene-by-query-fragment
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - JoeSchmoeVideos.py
+    - scene-by-fragment
+performerByURL:
+  - action: script
+    url:
+      - joeschmoevideos.com/models/
+    script:
+      - python
+      - JoeSchmoeVideos.py
+      - performer-by-url
+performerByName:
+  action: script
+  script:
+    - python
+    - JoeSchmoeVideos.py
+    - performer-by-name
+performerByFragment:
+  action: script
+  script:
+    - python
+    - JoeSchmoeVideos.py
+    - performer-by-fragment
+
+# Last Updated October 07, 2026
