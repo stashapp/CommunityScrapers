@@ -1,0 +1,43 @@
+name: ManSurferTV
+# requires: py_common
+
+groupByURL:
+  - action: script
+    url:
+      - mansurfer.tv/dispatcher/movieDetail
+    script:
+      - python
+      - ManSurferTV.py
+      - movie-by-url
+
+sceneByURL:
+  - action: script
+    url:
+      - mansurfer.tv/dispatcher/movieDetail
+    script:
+      - python
+      - ManSurferTV.py
+      - scene-by-url
+
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - ManSurferTV.py
+    - scene-by-fragment
+
+sceneByName:
+  action: script
+  script:
+    - python
+    - ManSurferTV.py
+    - scene-by-name
+
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - ManSurferTV.py
+    - scene-by-query-fragment
+
+# Last Updated March 15, 2026
