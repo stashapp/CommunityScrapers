@@ -21,7 +21,55 @@ from py_common.util import dig, guess_nationality, scraper_args
 
 NETWORK = "Ladyboy Gold"
 
-CONFIG = {
+type Config = dict[str, dict[str, str]]
+
+@cache_to_disk(ttl=86400)
+def get_domain_configs():
+    "Dynamically get config IDs from the site"
+    _config: Config = {}
+
+    def get_domain_config(domain: str):
+        log.debug(f"get_domain_config for {domain}")
+        config_partial: Config = { domain: config[domain] }
+        # fetch nats CMS app config, for cms_area_id
+        natscms_app_config: dict[str, str] = requests.get(
+            f"https://www.{domain}.com/natscms-app/config.json",
+            timeout=REQUESTS_TIMEOUT
+        ).json()
+        config_partial[domain]["cms_area_id"] = natscms_app_config["cms_area_id"]
+
+        # fetch tour_api home page config
+        tour_api_home_page_config = requests.get(
+            "https://nats.islanddollars.com/tour_api.php/content/page",
+            headers=headers_for_domain(domain),
+            params={ "slug": "/" },
+            timeout=REQUESTS_TIMEOUT
+        ).json()
+        set_list_cms_block_id_list = [
+            block["cms_block_id"]
+            for block in tour_api_home_page_config["blocks"]
+            if block["settings"]["type"] == "set_list"
+        ]
+        log.debug(f"Found cms_block_id list for set_list type: {", ".join(set_list_cms_block_id_list)}")
+        # first block id is (usually?) latest videos, so use that
+        config_partial[domain]["cms_block_id"] = set_list_cms_block_id_list[0]
+        log.debug(f"Found partial config: {config_partial}")
+        return config_partial
+
+    with ThreadPoolExecutor() as executor:
+        futures = {executor.submit(get_domain_config, domain): domain for domain in config}
+        for future in as_completed(futures):
+            try:
+                _config.update(future.result())
+            except Exception as e:  # noqa: BLE001
+                # one domain being down or changing shape must not sink the rest
+                log.error(f"Error processing domain {futures[future]}: {e}")
+                log.debug(traceback.format_exc())
+
+    log.debug(f"Config found: {_config}")
+    return _config
+
+config = {
     "ladyboycrush": {
         "cms_area_id": "74175374-c756-4ae9-97b2-e011512a1521",
         "studio_name": "Ladyboy Crush",
@@ -33,9 +81,9 @@ CONFIG = {
         "cms_block_id": "109727",
     },
     "ladyboygold": {
-        "cms_area_id": "cd9a5600-5cda-4ed0-b356-f62af1887d96", # from homepage call to /config.json
+        "cms_area_id": "cd9a5600-5cda-4ed0-b356-f62af1887d96", # from homepage call to /natscms-app/config.json
         "studio_name": "Ladyboy Gold",
-        "cms_block_id": "114793", # from scene page call to /sets, query param
+        "cms_block_id": "114793", # from home page call to https://nats.islanddollars.com/tour_api.php/content/page
     },
     "ladyboypussy": {
         "cms_area_id": "3b74725d-ad01-45a1-8186-ac6be1bc1661",
@@ -66,7 +114,7 @@ REQUESTS_TIMEOUT = 10
 
 def domain_from_url(url: str) -> str | None:
     url_lower = url.lower()
-    return next((d for d in CONFIG if f"{d}.com" in url_lower), None)
+    return next((d for d in config if f"{d}.com" in url_lower), None)
 
 def urls_match(url_a: str, url_b: str, path_segment: str) -> bool:
     pattern = re.compile(rf'/{path_segment}/([^/]+)')
@@ -107,23 +155,26 @@ def headers_for_domain(domain: str) -> dict[str, str]:
         "sec-fetch-site": "cross-site",
         "sec-gpc": "1",
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
-        "x-nats-cms-area-id": f"{CONFIG[domain]['cms_area_id']}",
+        "x-nats-cms-area-id": f"{config[domain]['cms_area_id']}",
         "x-nats-entity-decode": f"{1}",
         "x-nats-natscode": "MC4wLjAuMC4wLjAuMC4wLjA"
     }
 
-def get_cdn_servers(domain: str) -> dict[str, Any]:
+def get_tour_api_config(cms_area_id: str) -> dict[str, Any]:
     search_params = {
-        "cms_area_id": CONFIG[domain]["cms_area_id"]
+        "cms_area_id": cms_area_id
     }
     headers = {
-        "x-nats-cms-area-id": f"{CONFIG[domain]['cms_area_id']}",
+        "x-nats-cms-area-id": cms_area_id,
         "x-nats-entity-decode": f"{1}",
         "x-nats-natscode": "MC4wLjAuMC4wLjAuMC4wLjA"
     }
     url = "https://nats.islanddollars.com/tour_api.php/content/config"
     res = requests.get(url, params=search_params, headers=headers, timeout=REQUESTS_TIMEOUT)
-    _result = res.json()
+    return res.json()
+
+def get_cdn_servers(domain: str) -> dict[str, Any]:
+    _result = get_tour_api_config(config[domain]["cms_area_id"])
     return _result['servers']
 
 def image_url(cdn_servers: dict[str, Any], renditions: Mapping[str, Any]) -> str | None:
@@ -195,6 +246,8 @@ def parse_set_as_scene(domain: str, cms_set: Any, cdn_servers: dict[str, Any]) -
 
     if studio := resolve_studio(cms_set):
         scene["studio"] = studio
+    else:
+        scene["studio"] = { "name": config[domain]["studio_name"] }
 
     categories = extract_names(cms_set, "Category")
     tags = extract_names(cms_set, "Tags")
@@ -361,11 +414,12 @@ def resolve_studio(cms_set: Any) -> ScrapedStudio | None:
         if not values:
             continue
         key = re.sub(r'\..*$', '', values[0], flags=re.IGNORECASE).lower()
-        if key in CONFIG:
-            return studio_with_parent(CONFIG[key]["studio_name"])
+        if key in config:
+            return studio_with_parent(config[key]["studio_name"])
         # not one of our configured studios, fall back to its own display name
         names = extract_names(cms_set, tag)
         return studio_with_parent(names[0] if names else values[0])
+    log.debug("No Section or MainWebsite data_types in cms_set")
     return None
 
 @cache_to_disk(ttl=600)
@@ -375,7 +429,7 @@ def get_models(domain: str, start: int = 0, name: str | None = None, slug: str |
         "start": f"{start}",
         "count": "10",
         "orderby": "published_desc",
-        "cms_block_id": CONFIG[domain]["cms_block_id"],
+        "cms_block_id": config[domain]["cms_block_id"],
         "name": name,
         "slug": slug
     }
@@ -410,10 +464,10 @@ def get_sets(
         "content_count": "1",
         "count": "5",
         "start": f"{start}",
-        "cms_block_id": CONFIG[domain]["cms_block_id"],
+        "cms_block_id": config[domain]["cms_block_id"],
         "orderby": "published_desc",
         "status": "enabled",
-        "cms_area_id": CONFIG[domain]["cms_area_id"],
+        "cms_area_id": config[domain]["cms_area_id"],
     }
     if cms_set_id is not None:
         search_params["cms_set_ids"] = f"[{cms_set_id}]"
@@ -424,7 +478,7 @@ def get_sets(
     if text_search is not None:
         search_params["text_search"] = text_search
     headers = headers_for_domain(domain)
-    log.debug(f"Searching domain {domain} with params: {search_params} and headers: {headers}")
+    log.trace(f"Searching domain {domain} with params: {search_params} and headers: {headers}")
     url = "https://nats.islanddollars.com/tour_api.php/content/sets"
     res = requests.get(url, params=search_params, headers=headers, timeout=REQUESTS_TIMEOUT)
     log.trace(f"Content-Length: {res.headers.get('Content-Length')}")
@@ -525,7 +579,7 @@ def scene_from_fragment(
         if slug_match := re.search(r'/video/([^/]+)', fragment.get("url", "")):
             match["urls"] = known_urls(fragment["url"], url_domain, slug_match.group(1), "video")
         if not match.get("studio"):
-            match["studio"] = studio_with_parent(CONFIG[url_domain]["studio_name"])
+            match["studio"] = studio_with_parent(config[url_domain]["studio_name"])
 
     return match
 
@@ -559,7 +613,7 @@ def gallery_from_fragment(
         if slug_match := re.search(r'/photo/([^/]+)', fragment.get("url", "")):
             match["urls"] = known_urls(fragment["url"], url_domain, slug_match.group(1), "photo")
         if not match.get("studio"):
-            match["studio"] = studio_with_parent(CONFIG[url_domain]["studio_name"])
+            match["studio"] = studio_with_parent(config[url_domain]["studio_name"])
 
     return match
 
@@ -604,7 +658,7 @@ def gallery_by_url(
         url_domain = domain_from_url(url)
         first_match["urls"] = known_urls(url, url_domain, slug, "photo") if url_domain else [url]
         if not first_match.get("studio") and url_domain:
-            first_match["studio"] = studio_with_parent(CONFIG[url_domain]["studio_name"])
+            first_match["studio"] = studio_with_parent(config[url_domain]["studio_name"])
     return first_match
 
 def performer_by_url(
@@ -650,7 +704,7 @@ def scene_by_url(
         url_domain = domain_from_url(url)
         first_match["urls"] = known_urls(url, url_domain, slug, "video") if url_domain else [url]
         if not first_match.get("studio") and url_domain:
-            first_match["studio"] = studio_with_parent(CONFIG[url_domain]["studio_name"])
+            first_match["studio"] = studio_with_parent(config[url_domain]["studio_name"])
 
     return first_match
 
@@ -677,7 +731,8 @@ def get_matching_performer(fragment, search_results: list[ScrapedPerformer]) -> 
     return first_match
 
 if __name__ == "__main__":
-    domains = list(CONFIG.keys())
+    config = get_domain_configs()
+    domains = list(config.keys())
     op, args = scraper_args()
 
     result = None
