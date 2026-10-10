@@ -1,0 +1,42 @@
+name: John Tron X
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - johntronx.com/video/
+    scraper: sceneScraper
+sceneByName:
+  action: scrapeJson
+  queryURL: https://johntronx.com/includes/ajax.search_suggestions.php?q={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+jsonScrapers:
+  sceneSearch:
+    scene:
+      Title: videos.#.title
+      URLs: videos.#.url
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: //div[contains(@class, "video-info__el")]
+    scene:
+      Title: //h1[@class="video-info__title"]
+      Details: //p[@class="video-info__description"]
+      URLs: //meta[@property="og:url"]/@content
+      Image: //meta[@property="og:image"]/@content
+      Date:
+        selector: $info[i[contains(@class, "fa-calendar")]]
+        postProcess:
+          - parseDate: January 2, 2006
+      # TODO: enable when scrape dialog can show durations
+      # Duration: $info[i[contains(@class, "fa-clock")]]
+      Performers:
+        Name: $info/a[contains(@href, "/pornstars/")]/span
+        URLs: $info/a[contains(@href, "/pornstars/")]/@href
+      Tags:
+        Name: //a[@class="tag"]
+      Studio:
+        Name:
+          fixed: John Tron X
