@@ -508,6 +508,15 @@ def scene_search(
     return gather_by_domain(search_domains, fetch_domain)
 
 
+def dedupe_by_set(scenes: list[ScrapedScene]) -> list[ScrapedScene]:
+    kept: dict[str, ScrapedScene] = {}
+    for scene in scenes:
+        key = scene.get("code", "")
+        if key not in kept or ("studio" in scene and "studio" not in kept[key]):
+            kept[key] = scene
+    return list(kept.values())
+
+
 def gallery_search(
     query: str | None = None,
     slug: str | None = None,
@@ -735,7 +744,7 @@ if __name__ == "__main__":
         case "performer-by-url", {"url": url} if url:
             result = performer_by_url(url, search_domains=domains)
         case "scene-by-name", {"name": name} if name:
-            result = scene_search(name, search_domains=domains)
+            result = dedupe_by_set(scene_search(name, search_domains=domains))
         case "scene-by-fragment" | "scene-by-query-fragment", args:
             result = scene_from_fragment(args, search_domains=domains)
         case "scene-by-url", {"url": url} if url:
