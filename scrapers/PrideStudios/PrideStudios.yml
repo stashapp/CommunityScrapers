@@ -1,11 +1,19 @@
 # requires: Altwolia
 name: "Pride Studios"
-# scrapes: Extra Big Dicks, Family Creep, Men Over 30, Pride Studios
+# scrapes: Bearback, Boyz Party, Circle Jerk Boys, Cock Virgins, Dylan Lucas, Extra Big Dicks, Family Creep, High Performance Men, Men Over 30, Pride Studios
 sceneByURL:
   - action: script
     url:
+      - bearback.com/en/video/
+      - boyzparty.com/en/video/
+      - circlejerkboys.com/en/film/
+      - circlejerkboys.com/en/video/
+      - cockvirgins.com/en/film/
+      - dylanlucas.com/en/film/
+      - dylanlucas.com/en/video/
       - extrabigdicks.com/en/video/
       - familycreep.com/en/video/
+      - highperformancemen.com/en/video/
       - menover30.com/en/video/
       - pridestudios.com/en/video/
     script:
@@ -33,10 +41,19 @@ sceneByQueryFragment:
 galleryByURL:
   - action: script
     url:
+      - bearback.com/en/video/
+      - boyzparty.com/en/video/
+      - circlejerkboys.com/en/video/
+      - dylanlucas.com/en/video/
       - extrabigdicks.com/en/photo/
+      - extrabigdicks.com/en/video/
       - familycreep.com/en/photo/
+      - familycreep.com/en/video/
+      - highperformancemen.com/en/video/
       - menover30.com/en/photo/
+      - menover30.com/en/video/
       - pridestudios.com/en/photo/
+      - pridestudios.com/en/video/
     script:
       - python
       - PrideStudios.py
