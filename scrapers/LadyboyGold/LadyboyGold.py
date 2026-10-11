@@ -8,6 +8,7 @@ from datetime import date, datetime
 from typing import Any, TypeVar
 
 import requests
+
 from py_common import log
 from py_common.cache import cache_to_disk
 from py_common.types import (
@@ -24,52 +25,40 @@ NETWORK = "Ladyboy Gold"
 type Config = dict[str, dict[str, str]]
 
 @cache_to_disk(ttl=86400)
-def get_domain_configs():
-    "Dynamically get config IDs from the site"
-    _config: Config = {}
+def live_cms_block_id(domain: str) -> str:
+    """
+    The tour API requires a cms_block_id that exists in the area, but blocks
+    are homepage widgets that get replaced whenever the homepage is edited.
+    Any set_list block returns the area's full set list, so take the first.
+    Raises on failure so a transient error is never cached.
+    """
+    page = requests.get(
+        "https://nats.islanddollars.com/tour_api.php/content/page",
+        headers=headers_for_domain(domain),
+        params={"slug": "/"},
+        timeout=REQUESTS_TIMEOUT,
+    ).json()
+    return next(
+        block["cms_block_id"]
+        for block in page["blocks"]
+        if block["settings"]["type"] == "set_list"
+    )
 
-    def get_domain_config(domain: str):
-        log.debug(f"get_domain_config for {domain}")
-        config_partial: Config = { domain: config[domain] }
-        # fetch nats CMS app config, for cms_area_id
-        natscms_app_config: dict[str, str] = requests.get(
-            f"https://www.{domain}.com/natscms-app/config.json",
-            timeout=REQUESTS_TIMEOUT
-        ).json()
-        config_partial[domain]["cms_area_id"] = natscms_app_config["cms_area_id"]
 
-        # fetch tour_api home page config
-        tour_api_home_page_config = requests.get(
-            "https://nats.islanddollars.com/tour_api.php/content/page",
-            headers=headers_for_domain(domain),
-            params={ "slug": "/" },
-            timeout=REQUESTS_TIMEOUT
-        ).json()
-        set_list_cms_block_id_list = [
-            block["cms_block_id"]
-            for block in tour_api_home_page_config["blocks"]
-            if block["settings"]["type"] == "set_list"
-        ]
-        log.debug(f"Found cms_block_id list for set_list type: {", ".join(set_list_cms_block_id_list)}")
-        # first block id is (usually?) latest videos, so use that
-        config_partial[domain]["cms_block_id"] = set_list_cms_block_id_list[0]
-        log.debug(f"Found partial config: {config_partial}")
-        return config_partial
+def get_domain_configs() -> Config:
+    "Static config with each domain's cms_block_id refreshed from the tour API"
+
+    def with_live_block_id(domain: str) -> tuple[str, dict[str, str]]:
+        try:
+            return domain, {**config[domain], "cms_block_id": live_cms_block_id(domain)}
+        except Exception as e:  # noqa: BLE001
+            log.warning(f"Using the stored cms_block_id for {domain}: {e}")
+            return domain, config[domain]
 
     with ThreadPoolExecutor() as executor:
-        futures = {executor.submit(get_domain_config, domain): domain for domain in config}
-        for future in as_completed(futures):
-            try:
-                _config.update(future.result())
-            except Exception as e:  # noqa: BLE001
-                # one domain being down or changing shape must not sink the rest
-                log.error(f"Error processing domain {futures[future]}: {e}")
-                log.debug(traceback.format_exc())
+        return dict(executor.map(with_live_block_id, config))
 
-    log.debug(f"Config found: {_config}")
-    return _config
-
-config = {
+config: Config = {
     "ladyboycrush": {
         "cms_area_id": "74175374-c756-4ae9-97b2-e011512a1521",
         "studio_name": "Ladyboy Crush",
@@ -93,12 +82,12 @@ config = {
     "ladyboysfuckedbareback": {
         "cms_area_id": "126f96ec-ffdc-4f4b-a459-c9a2e78b9b67",
         "studio_name": "Ladyboys Fucked Bareback",
-        "cms_block_id": "105724",
+        "cms_block_id": "115508",
     },
     "ladyboyvice": {
         "cms_area_id": "c594b28c-ab09-44da-9166-0a332d33469f",
         "studio_name": "Ladyboy Vice",
-        "cms_block_id": "101951",
+        "cms_block_id": "105921",
     },
     "tsraw": {
         "cms_area_id": "cc6bd0ac-a417-47d1-9868-7855b25986e5",
@@ -246,8 +235,6 @@ def parse_set_as_scene(domain: str, cms_set: Any, cdn_servers: dict[str, Any]) -
 
     if studio := resolve_studio(cms_set):
         scene["studio"] = studio
-    else:
-        scene["studio"] = { "name": config[domain]["studio_name"] }
 
     categories = extract_names(cms_set, "Category")
     tags = extract_names(cms_set, "Tags")
@@ -627,7 +614,7 @@ def get_matching_gallery(fragment, search_results: list[ScrapedGallery]) -> Scra
     )
     return first_match
 
-def best_match(candidates: list, url: str) -> Any | None:
+def best_match(candidates: list[Any], url: str) -> Any | None:
     # tries to find the candidate that best fits the URL used to scrape
     if not candidates:
         return None
