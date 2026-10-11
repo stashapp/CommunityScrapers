@@ -133,11 +133,19 @@ def to_scraped_tag(res: dict[str, Any]) -> ScrapedTag:
     }
 
 
-def to_scraped_studio(res: dict[str, Any]) -> ScrapedStudio | None:
-    # Sets without a video have an empty studio_name
-    if name := res.get("studio_name", "").strip() or res.get("sitename_pretty"):
-        return {"name": name}
-    return None
+def to_scraped_studio(res: dict[str, Any]) -> ScrapedStudio:
+    # Sets without a video have an empty studio_name, and their sitename can
+    # be a subscriber tier (Playboyplus-vip) that postdates the content
+    return {"name": res.get("studio_name", "").strip() or "Playboy Plus"}
+
+
+def update_urls(photoset: dict[str, Any]) -> list[str]:
+    # Members following the public URL get sent to the members homepage
+    path = f"en/update/{photoset['url_title']}/{photoset['set_id']}"
+    return [
+        f"https://www.playboyplus.com/{path}",
+        f"https://members.playboyplus.com/{path}",
+    ]
 
 
 def director_names(res: dict[str, Any]) -> str:
@@ -222,11 +230,12 @@ def to_scraped_performer(res: dict[str, Any]) -> ScrapedPerformer:
 
 def to_scraped_gallery(res: dict[str, Any]) -> ScrapedGallery:
     gallery: ScrapedGallery = {
-        "title": res["title"],
+        "title": res["title"].strip(),
+        "code": str(res["set_id"]),
+        "urls": update_urls(res),
         "date": res["date_online"],
+        "studio": to_scraped_studio(res),
     }
-    if studio := to_scraped_studio(res):
-        gallery["studio"] = studio
     if description := dig(res, "description"):
         gallery["details"] = clean_description(description)
 
@@ -244,11 +253,10 @@ def to_scraped_gallery(res: dict[str, Any]) -> ScrapedGallery:
 
 def to_scraped_scene(res: dict[str, Any]) -> ScrapedScene:
     scene: ScrapedScene = {
-        "title": res["title"],
+        "title": res["title"].strip(),
         "date": res["release_date"],
+        "studio": to_scraped_studio(res),
     }
-    if studio := to_scraped_studio(res):
-        scene["studio"] = studio
     if (length := res.get("length")) and length >= 10:
         scene["duration"] = length
     if description := dig(res, "description"):
@@ -293,13 +301,17 @@ def scene_from_url(url: str) -> ScrapedScene | None:
         return
 
     scene = to_scraped_scene(clip)
+    scene["code"] = set_id
+    scene["urls"] = update_urls(photoset)
 
     # Image workaround: the scene image covers in the API aren't actually shown
     # on their site so we fall back to using the hero image from the photoset
     if image := dig(photoset, "multicontent_data", "nsfw", 0, "file"):  # type: ignore
         scene["image"] = f"https://transform.gammacdn.com/media/{image}"
 
-    if not dig(scene, "details") and (description := dig(photoset, "description")):
+    # The update page shows the photoset's description; the clip's is a
+    # separately edited copy (different quotes, sometimes different text)
+    if description := dig(photoset, "description"):
         scene["details"] = clean_description(description)
 
     return scene
