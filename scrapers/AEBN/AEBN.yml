@@ -1,4 +1,5 @@
 name: "AEBN"
+# requires: py_common
 performerByURL:
   - action: scrapeXPath
     url:
@@ -6,14 +7,29 @@ performerByURL:
       - aebn.com/gay/stars
     scraper: performerScraper
 sceneByURL:
-  - action: scrapeXPath
-    url: &urls
+  - action: script
+    url:
       - aebn.com/straight/movies
       - aebn.com/gay/movies
-    scraper: sceneScraper
+      - mansurfer.tv/dispatcher/movieDetail
+    script:
+      - python
+      - AEBN.py
+      - scene-by-url
 groupByURL:
   - action: scrapeXPath
-    url: *urls
+    url:
+      - aebn.com/straight/movies
+      - aebn.com/gay/movies
+    scraper: movieScraper
+  - action: scrapeXPath
+    url:
+      - mansurfer.tv/dispatcher/movieDetail
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: .+[?&]movieId=(\d+).*
+          with: https://gay.aebn.com/gay/movies/$1
     scraper: movieScraper
 xPathScrapers:
   performerScraper:
@@ -62,54 +78,37 @@ xPathScrapers:
                 with: "https://"
               - regex: \?.*$
                 with: ""
-  sceneScraper:
-    scene:
-      Title: &title //div[@class="dts-section-page-heading-title"]/h1
-      URLs: &urls //link[@rel="canonical"]/@href
-      Date: &date
+  movieScraper:
+    group:
+      Name: //div[@class="dts-section-page-heading-title"]/h1
+      URLs: //link[@rel="canonical"]/@href
+      Director:
+        selector: //li[@class="section-detail-list-item-director"]//a
+        concat: ", "
+      Duration: //li[@class="section-detail-list-item-duration"][contains(span,"Running Time")]/text()
+      Date:
         selector: //li[@class="section-detail-list-item-release-date"]/text()
         postProcess:
           - replace:
               - regex: "Sept"
                 with: "Sep"
           - parseDate: Jan 2, 2006
-      ProductionDate:
-        selector: //a[@id="footerMovieSpecific2257Link"]/@href
-        postProcess:
-          - replace:
-              - regex: .*\/movies\/(\d+).*
-                with: "https://m.aebn.net/movie/2257/$1"
-          - subScraper:
-              selector: //div[contains(text(), "Production Date")]/span[@class="description"]
-          - parseDate: Jan 2, 2006
-      Details: &details //div[@class="dts-section-page-detail-description-body"]
-      Director: &director
-        selector: //li[@class="section-detail-list-item-director"]//a
-        concat: ", "
-      Duration: &duration //li[@class="section-detail-list-item-duration"][contains(span,"Running Time")]/text()
-      Studio: &studio
-        Name: //li[@class="section-detail-list-item-studio"]//a
-      Performers:
-        Name: //div[contains(@class,"movie-meta-information")]//a[contains(@class,"dts-movie-star-wrapper")]
-      Tags: &tags
+      Synopsis: //div[@class="dts-section-page-detail-description-body"]
+      Studio:
+        Name:
+          selector: //li[@class="section-detail-list-item-studio"]//a
+          postProcess:
+            - replace:
+                - regex: ",$"
+                  with: ""
+      Tags:
         Name: //div[contains(@class,"dts-detail-movie-categories-content")]/a
-      Image: &image
+      FrontImage:
         selector: //img[contains(@class,"dts-modal-boxcover-front")]/@src
         postProcess:
           - replace:
               - regex: ^//
                 with: "https://"
-  movieScraper:
-    group:
-      Name: *title
-      URLs: *urls
-      Director: *director
-      Duration: *duration
-      Date: *date
-      Synopsis: *details
-      Studio: *studio
-      Tags: *tags
-      FrontImage: *image
       BackImage:
         selector: //img[contains(@class,"dts-modal-boxcover-back")]/@src
         postProcess:
@@ -134,11 +133,5 @@ driver:
       Cookies:
         - Name: "ageGated"
           Domain: "straight.aebn.com"
-          Value: "true"
-          Path: "/"
-    - CookieURL: "https://m.aebn.net"
-      Cookies:
-        - Name: "ageGated"
-          Domain: "m.aebn.net"
           Value: "true"
           Path: "/"
