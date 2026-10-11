@@ -1,4 +1,5 @@
 name: "PremiumBukkake"
+# requires: py_common
 sceneByURL:
   - url:
       - free.premiumbukkake.com/updates
@@ -8,5 +9,4 @@ sceneByURL:
     script:
       - python
       - PremiumBukkake.py
-      - query
-# Last Updated September 11, 2025
+      - scene-by-url
