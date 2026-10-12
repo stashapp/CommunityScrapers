@@ -16,7 +16,7 @@ from py_common import log
 from py_common.config import get_config
 from py_common.types import (
     ScrapedGallery,
-    ScrapedMovie,
+    ScrapedGroup,
     ScrapedPerformer,
     ScrapedScene,
     ScrapedStudio,
@@ -46,7 +46,7 @@ def default_postprocess(obj: Any, _) -> Any:
 
 
 ## Temporary function to add markers to scenes, remove when/if Stash gets native support
-def add_markers(scene_id: str, markers: list[dict]):
+def add_markers(scene_id: str, markers: list[dict[str, Any]]):
     from itertools import filterfalse, tee
 
     def partition(pred, iterable):
@@ -125,7 +125,7 @@ def __raw_request(url, headers) -> requests.Response:
     return response
 
 
-def __api_request(url: str, headers: dict) -> dict | None:
+def __api_request(url: str, headers: dict[str, str]) -> Any:
     result = __raw_request(url, headers)
     api_response = result.json()
     if isinstance(api_response, list):
@@ -167,7 +167,7 @@ def _create_headers_for(domain: str) -> dict[str, str]:
     return api_headers
 
 
-def _construct_url(api_result: dict) -> str | None:
+def _construct_url(api_result: dict[str, Any]) -> str | None:
     """
     Tries to construct a valid public URL for an API result
 
@@ -189,14 +189,14 @@ def _construct_url(api_result: dict) -> str | None:
     return f"https://www.{brand}.com/{type_}/{id_}/{slug}"
 
 
-def _construct_performer_url(api_result: dict, site: str) -> str:
+def _construct_performer_url(api_result: dict[str, Any], site: str) -> str:
     id_ = api_result["id"]
     slug = slugify(api_result["name"])
     return f"https://www.{site}.com/model/{id_}/{slug}"
 
 
 ## Helper functions for the objects returned from Aylo's API
-def get_studio(api_object: dict) -> ScrapedStudio | None:
+def get_studio(api_object: dict[str, Any]) -> ScrapedStudio | None:
     studio_name = dig(api_object, "collections", 0, "name")
     parent_name = dig(api_object, "brandMeta", ("displayName", "name", "shortName"))
     if studio_name:
@@ -240,20 +240,20 @@ tags_map = {
 }
 
 
-def to_tag(api_object: dict) -> ScrapedTag:
+def to_tag(api_object: dict[str, Any]) -> ScrapedTag:
     tag_id: int = api_object["id"]
     name: str = api_object["name"].strip()
     mapped_tag = tags_map.get(tag_id, name)
     return {"name": mapped_tag}
 
 
-def to_tags(api_object: dict) -> list[ScrapedTag]:
+def to_tags(api_object: dict[str, Any]) -> list[ScrapedTag]:
     tags = api_object.get("tags", [])
-    valid_tags = [x for x in tags if "name" in x or x.get("id") in tags_map.keys()]
+    valid_tags = [x for x in tags if "name" in x or x.get("id") in tags_map]
     return [to_tag(x) for x in valid_tags]
 
 
-def to_marker(api_object: dict) -> dict:
+def to_marker(api_object: dict[str, Any]) -> dict[str, Any]:
     return {
         **to_tag(api_object),
         "seconds": api_object["startTime"],
@@ -262,7 +262,7 @@ def to_marker(api_object: dict) -> dict:
 
 ## Helper functions to convert from Aylo's API to Stash's scaper return types
 def to_scraped_performer(
-    performer_from_api: dict, site: str | None = None
+    performer_from_api: dict[str, Any], site: str | None = None
 ) -> ScrapedPerformer:
     if (type_ := dig(performer_from_api, "brand")) and type_ not in (
         "actorsandtags",
@@ -329,39 +329,41 @@ def to_scraped_performer(
     return performer
 
 
-def to_scraped_movie(movie_from_api: dict) -> ScrapedMovie:
-    if movie_from_api["type"] not in ("movie", "serie"):
-        wrong_type = movie_from_api["type"]
-        wrong_id = movie_from_api["id"]
-        log.error(f"Attempted to scrape a '{wrong_type}' (ID: {wrong_id}) as a movie.")
-        raise ValueError("Invalid movie from API")
+def to_scraped_group(group_from_api: dict[str, Any]) -> ScrapedGroup:
+    if group_from_api["type"] not in ("movie", "serie"):
+        wrong_type = group_from_api["type"]
+        wrong_id = group_from_api["id"]
+        log.error(f"Attempted to scrape a '{wrong_type}' (ID: {wrong_id}) as a group.")
+        raise ValueError("Invalid group from API")
 
-    movie: ScrapedMovie = {
-        "name": movie_from_api["title"],
-        "url": _construct_url(movie_from_api),
+    group: ScrapedGroup = {
+        "name": group_from_api["title"],
     }
 
-    if synopsis := dig(movie_from_api, "description"):
-        movie["synopsis"] = synopsis
+    if url := _construct_url(group_from_api):
+        group["urls"] = [url]
 
-    if front_image := dig(movie_from_api, "images", "cover", "0", "xx", "url"):
-        movie["front_image"] = re.sub(r"/m=[^/]+", "", front_image)
-    elif poster := dig(movie_from_api, "images", "poster", "0", "xx", "url"):
-        movie["front_image"] = re.sub(r"/m=[^/]+", "", poster)
+    if synopsis := dig(group_from_api, "description"):
+        group["synopsis"] = synopsis
 
-    if date := dig(movie_from_api, "dateReleased"):
-        movie["date"] = datetime.strptime(date, "%Y-%m-%dT%H:%M:%S%z").strftime(
+    if front_image := dig(group_from_api, "images", "cover", "0", "xx", "url"):
+        group["front_image"] = re.sub(r"/m=[^/]+", "", front_image)
+    elif poster := dig(group_from_api, "images", "poster", "0", "xx", "url"):
+        group["front_image"] = re.sub(r"/m=[^/]+", "", poster)
+
+    if date := dig(group_from_api, "dateReleased"):
+        group["date"] = datetime.strptime(date, "%Y-%m-%dT%H:%M:%S%z").strftime(
             "%Y-%m-%d"
         )
 
-    if studio := get_studio(movie_from_api):
-        movie["studio"] = studio
+    if studio := get_studio(group_from_api):
+        group["studio"] = studio
 
-    return movie
+    return group
 
 
-def to_scraped_scene(scene_from_api: dict) -> ScrapedScene:
-    if not scene_from_api["type"] == "scene":
+def to_scraped_scene(scene_from_api: dict[str, Any]) -> ScrapedScene:
+    if scene_from_api["type"] != "scene":
         wrong_type = scene_from_api["type"]
         wrong_id = scene_from_api["id"]
         log.error(f"Attempted to scrape a '{wrong_type}' (ID: {wrong_id}) as a scene.")
@@ -373,13 +375,15 @@ def to_scraped_scene(scene_from_api: dict) -> ScrapedScene:
         "date": datetime.strptime(
             scene_from_api["dateReleased"], "%Y-%m-%dT%H:%M:%S%z"
         ).strftime("%Y-%m-%d"),
-        "url": _construct_url(scene_from_api),
         "performers": [
             to_scraped_performer(p, dig(scene_from_api, "brand"))
             for p in scene_from_api["actors"]
         ],
         "tags": to_tags(scene_from_api),
     }
+
+    if url := _construct_url(scene_from_api):
+        scene["urls"] = [url]
 
     if (details := dig(scene_from_api, "description")) or (
         details := dig(scene_from_api, "parent", "description")
@@ -402,33 +406,50 @@ def to_scraped_scene(scene_from_api: dict) -> ScrapedScene:
     ):
         scene["image"] = re.sub(r"/m=[^/]+", "", image)
 
-    if (length := dig(scene_from_api, "videos", "mediabook", "length")) and length >= 10:
+    if (
+        length := dig(scene_from_api, "videos", "mediabook", "length")
+    ) and length >= 10:
         scene["duration"] = length
 
     if dig(scene_from_api, "parent", "type") in ("movie", "serie"):
-        scene["movies"] = [to_scraped_movie(scene_from_api["parent"])]
+        scene["groups"] = [to_scraped_group(scene_from_api["parent"])]
 
     if studio := get_studio(scene_from_api):
         scene["studio"] = studio
 
     if config.scrape_markers and (markers := scene_from_api.get("timeTags")):
-        scene["markers"] = [to_marker(m) for m in markers]  # type: ignore
+        scene["markers"] = [to_marker(m) for m in markers]  # pyright: ignore[reportGeneralTypeIssues]
 
     return scene
 
 
 def to_scraped_gallery(scraped_scene: ScrapedScene) -> ScrapedGallery:
-    gallery_keys = ScrapedGallery.__required_keys__ | ScrapedGallery.__optional_keys__
-    gallery: ScrapedGallery = {
-        k: v for k, v in scraped_scene.items() if k in gallery_keys
-    }  # type: ignore
-
+    gallery: ScrapedGallery = {}
+    if title := scraped_scene.get("title"):
+        gallery["title"] = title
+    if code := scraped_scene.get("code"):
+        gallery["code"] = code
+    if details := scraped_scene.get("details"):
+        gallery["details"] = details
+    if urls := scraped_scene.get("urls"):
+        gallery["urls"] = urls
+    if date := scraped_scene.get("date"):
+        gallery["date"] = date
+    if studio := scraped_scene.get("studio"):
+        gallery["studio"] = studio
+    if tags := scraped_scene.get("tags"):
+        gallery["tags"] = tags
+    if performers := scraped_scene.get("performers"):
+        gallery["performers"] = performers
     return gallery
 
 
 ## Primary functions used to scrape from Aylo's API
 def scene_from_url(
-    url, postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess
+    url,
+    postprocess: Callable[
+        [ScrapedScene, dict[str, Any]], ScrapedScene
+    ] = default_postprocess,
 ) -> ScrapedScene | None:
     """
     Scrapes a scene from a URL, running an optional postprocess function on the result
@@ -469,7 +490,9 @@ def scene_from_url(
 
 def gallery_from_url(
     url,
-    postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess,
+    postprocess: Callable[
+        [ScrapedScene, dict[str, Any]], ScrapedScene
+    ] = default_postprocess,
 ) -> ScrapedGallery | None:
     """
     Scrapes a gallery from a URL, running an optional postprocess function on the result
@@ -477,30 +500,15 @@ def gallery_from_url(
     Note that most Aylo sites do not have public links to galleries, so this will treat scenes as galleries
     """
 
-    scene = scene_from_url(url, postprocess=postprocess)
-    if not scene:
+    if not (scene := scene_from_url(url, postprocess=postprocess)):
         return None
-
-    temp = {
-        "title": scene.get("title"),
-        "details": scene.get("details"),
-        "url": scene.get("url"),
-        "date": scene.get("date"),
-        "studio": scene.get("studio"),
-        "tags": scene.get("tags"),
-        "performers": scene.get("performers"),
-        "code": scene.get("code"),
-    }
-
-    gallery: ScrapedGallery = {k: v for k, v in temp.items() if v is not None}  # type: ignore
-
-    return gallery
+    return to_scraped_gallery(scene)
 
 
 def performer_from_url(
     url,
     postprocess: Callable[
-        [ScrapedPerformer, dict], ScrapedPerformer
+        [ScrapedPerformer, dict[str, Any]], ScrapedPerformer
     ] = default_postprocess,
 ) -> ScrapedPerformer | None:
     """
@@ -530,45 +538,47 @@ def performer_from_url(
 
 
 def movie_from_url(
-    url, postprocess: Callable[[ScrapedMovie, dict], ScrapedMovie] = default_postprocess
-) -> ScrapedMovie | None:
+    url: str,
+    postprocess: Callable[
+        [ScrapedGroup, dict[str, Any]], ScrapedGroup
+    ] = default_postprocess,
+) -> ScrapedGroup | None:
     """
-    Scrapes a movie from a URL, running an optional postprocess function on the result
+    Scrapes a group from a URL, running an optional postprocess function on the result
     """
 
     if not (match := re.search(r"/(\d+)/", url)):
         log.error(
-            "Can't get the ID of the movie. "
+            "Can't get the ID of the group. "
             "Are you sure that URL is from a site in the Aylo Network?"
         )
         return None
-    movie_id = match.group(1)
+    group_id = match.group(1)
 
-    log.debug(f"Movie ID: {movie_id}")
+    log.debug(f"Group ID: {group_id}")
 
     # Extract the domain from the URL
     domain = urlparse(url).netloc.split(".")[-2]
 
-    api_URL = f"https://site-api.project1service.com/v2/releases/{movie_id}"
+    api_URL = f"https://site-api.project1service.com/v2/releases/{group_id}"
     api_headers = _create_headers_for(domain)
-    api_movie_json = __api_request(api_URL, api_headers)
-    if not api_movie_json:
+    api_group_json = __api_request(api_URL, api_headers)
+    if not api_group_json:
         return None
 
-    if dig(api_movie_json, "type") in ("movie", "serie"):
-        return postprocess(to_scraped_movie(api_movie_json), api_movie_json)
+    if dig(api_group_json, "type") in ("movie", "serie"):
+        return postprocess(to_scraped_group(api_group_json), api_group_json)
 
-    # If you scrape a scene or trailer, we can still get the correct movie data
-    if dig(api_movie_json, "parent", "type") in ("movie", "serie"):
-        log.debug("Result is a scene or trailer, getting movie data from parent")
+    # If you scrape a scene or trailer, we can still get the correct group data
+    if dig(api_group_json, "parent", "type") in ("movie", "serie"):
+        log.debug("Result is a scene or trailer, getting group data from parent")
         return movie_from_url(
-            url.replace(f"/{movie_id}/", f"/{api_movie_json['parent']['id']}/"),
+            url.replace(f"/{group_id}/", f"/{api_group_json['parent']['id']}/"),
             postprocess=postprocess,
         )
-    if not (parent := api_movie_json.get("parent")):
-        log.error(f"Release {movie_id} is not part of a movie or series")
-        return None
-    return postprocess(to_scraped_movie(parent), parent)
+
+    log.error(f"Release {group_id} is not part of a movie or series")
+    return None
 
 
 # Since the "Scrape with..." function in Stash expects a single result, we provide
@@ -578,7 +588,9 @@ def find_scene(
     query: str,
     search_domains: list[str] | None = None,
     min_ratio: float = 0.9,
-    postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess,
+    postprocess: Callable[
+        [ScrapedScene, dict[str, Any]], ScrapedScene
+    ] = default_postprocess,
 ) -> ScrapedScene | None:
     """
     Searches the Aylo API for scenes matching the given query and returns the
@@ -653,7 +665,7 @@ def find_performer(
     search_domains: list[str] | None = None,
     min_ratio: float = 0.9,
     postprocess: Callable[
-        [ScrapedPerformer, dict], ScrapedPerformer
+        [ScrapedPerformer, dict[str, Any]], ScrapedPerformer
     ] = default_postprocess,
 ) -> ScrapedPerformer | None:
     """
@@ -724,7 +736,9 @@ def find_performer(
 def scene_search(
     query: str,
     search_domains: list[str] | None = None,
-    postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess,
+    postprocess: Callable[
+        [ScrapedScene, dict[str, Any]], ScrapedScene
+    ] = default_postprocess,
 ) -> list[ScrapedScene]:
     """
     Searches the Aylo API for the given query and returns a list of ScrapedScene
@@ -756,7 +770,7 @@ def scene_search(
             difflib.SequenceMatcher(
                 None,
                 query.lower(),
-                candidate["title"].lower(),  # type: ignore (title is always set)
+                candidate.get("title", "").lower(),
             ).ratio(),
             3,
         )
@@ -799,7 +813,7 @@ def performer_search(
     query: str,
     search_domains: list[str] | None = None,
     postprocess: Callable[
-        [ScrapedPerformer, dict], ScrapedPerformer
+        [ScrapedPerformer, dict[str, Any]], ScrapedPerformer
     ] = default_postprocess,
 ) -> list[ScrapedPerformer]:
     """
@@ -834,7 +848,7 @@ def performer_search(
             difflib.SequenceMatcher(
                 None,
                 query.lower(),
-                candidate["name"].lower(),  # type: ignore (name is always set)
+                candidate.get("name", "").lower(),
             ).ratio(),
             3,
         )
@@ -873,15 +887,31 @@ def performer_search(
     return sorted(search_results, key=matcher, reverse=True)
 
 
+def fragment_urls(fragment: dict[str, Any]) -> list[str]:
+    """
+    The fragment's URLs, those on domains we already hold a token for first:
+    an unknown domain costs a request to the URL itself to look for one
+    """
+    known = set(domains.all_domains())
+
+    def known_domain(url: str) -> bool:
+        host = urlparse(url).netloc.split(".")
+        return len(host) > 1 and host[-2] in known
+
+    return sorted(fragment.get("urls") or [], key=lambda url: not known_domain(url))
+
+
 def scene_from_fragment(
-    fragment: dict,
+    fragment: dict[str, Any],
     search_domains: list[str] | None = None,
     min_ratio=config.minimum_similarity,
-    postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess,
+    postprocess: Callable[
+        [ScrapedScene, dict[str, Any]], ScrapedScene
+    ] = default_postprocess,
 ) -> ScrapedScene | None:
     """
     Scrapes a scene from a fragment, which must contain at least one of the following:
-    - url: the URL of the scene
+    - urls: URLs of the scene
     - title: the title of the scene
 
     If domains is provided it will only search those domains,
@@ -893,7 +923,7 @@ def scene_from_fragment(
     If postprocess is provided it will be called on the result before returning
     """
     log.debug(f"Fragment scraping scene {fragment['id']}")
-    if url := fragment.get("url"):
+    for url in fragment_urls(fragment):
         log.debug(f"Using scene URL: '{url}'")
         if scene := scene_from_url(url, postprocess=postprocess):
             if markers := dig(scene, "markers", default=[]):
@@ -918,14 +948,16 @@ def scene_from_fragment(
 
 
 def gallery_from_fragment(
-    fragment: dict,
+    fragment: dict[str, Any],
     search_domains: list[str] | None = None,
     min_ratio=config.minimum_similarity,
-    postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess,
+    postprocess: Callable[
+        [ScrapedScene, dict[str, Any]], ScrapedScene
+    ] = default_postprocess,
 ) -> ScrapedGallery | None:
     """
     Scrapes a gallery from a fragment, which must contain at least one of the following:
-    - url: the URL of the scene the gallery belongs to
+    - urls: URLs of the scene the gallery belongs to
     - title: the title of the scene the gallery belongs to
 
     If domains is provided it will only search those domains,
@@ -937,7 +969,7 @@ def gallery_from_fragment(
     If postprocess is provided it will be called on the result before returning
     """
     log.debug(f"Fragment scraping gallery {fragment['id']}")
-    if url := fragment.get("url"):
+    for url in fragment_urls(fragment):
         log.debug(f"Using gallery URL: '{url}'")
         if gallery := gallery_from_url(url, postprocess=postprocess):
             return gallery
@@ -954,16 +986,16 @@ def gallery_from_fragment(
 
 
 def performer_from_fragment(
-    fragment: dict,
+    fragment: dict[str, Any],
     search_domains: list[str] | None = None,
     min_ratio=0.9,
     postprocess: Callable[
-        [ScrapedPerformer, dict], ScrapedPerformer
+        [ScrapedPerformer, dict[str, Any]], ScrapedPerformer
     ] = default_postprocess,
 ) -> ScrapedPerformer | None:
     """
     Scrapes a performer from a fragment, which must contain one of the following:
-    - url: the URL of the performer page (anywhere in the Aylo network)
+    - urls: URLs of the performer page (anywhere in the Aylo network)
     - name: the name of the performer
 
     If domains is provided it will only search those domains,
@@ -975,10 +1007,12 @@ def performer_from_fragment(
     If postprocess is provided it will be called on the result before returning
     """
     log.debug("Fragment scraping performer...")
-    if url := fragment.get("url"):
+    for url in fragment_urls(fragment):
         log.debug(f"Using performer URL: '{url}'")
-        return performer_from_url(url, postprocess=postprocess)
-    elif name := fragment.get("name"):
+        if performer := performer_from_url(url, postprocess=postprocess):
+            return performer
+        log.debug("Failed to scrape performer from URL")
+    if name := fragment.get("name"):
         log.debug(f"Searching for '{name}'")
         return find_performer(name, search_domains, min_ratio, postprocess=postprocess)
 

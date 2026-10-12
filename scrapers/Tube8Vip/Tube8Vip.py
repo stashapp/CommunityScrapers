@@ -1,28 +1,27 @@
 import json
 import sys
 from typing import Any
-from py_common import log
-from py_common.util import replace_at, replace_all
+
 from AyloAPI.scrape import (
+    gallery_from_fragment,
     gallery_from_url,
-    scraper_args,
+    movie_from_url,
+    performer_from_fragment,
+    performer_from_url,
+    performer_search,
+    scene_from_fragment,
     scene_from_url,
     scene_search,
-    scene_from_fragment,
-    performer_from_url,
-    performer_from_fragment,
-    performer_search,
-    movie_from_url,
+    scraper_args,
 )
+from py_common import log
+from py_common.util import replace_all, replace_at
 
 
 def tube8vip(obj: Any, _) -> Any:
     # comes back as weird studio name Premium with parent Elite
     # so we flatten all studios to just "Tube8Vip" to match StashDB
     fixed = replace_at(obj, "studio", replacement=lambda _: {"name": "Tube8Vip"})
-    fixed = replace_all(
-        fixed, "url", replacement=lambda url: url.replace("elite.com", "tube8vip.com")
-    )
     fixed = replace_all(
         fixed, "urls", replacement=lambda url: url.replace("elite.com", "tube8vip.com")
     )
@@ -37,8 +36,12 @@ if __name__ == "__main__":
     result = None
 
     match op, args:
-        case "gallery-by-url" | "gallery-by-fragment", {"url": url} if url:
+        case "gallery-by-url", {"url": url} if url:
             result = gallery_from_url(url, postprocess=tube8vip)
+        case "gallery-by-fragment", args:
+            result = gallery_from_fragment(
+                args, search_domains=domains, postprocess=tube8vip
+            )
         case "scene-by-url", {"url": url} if url:
             result = scene_from_url(url, postprocess=tube8vip)
         case "scene-by-name", {"name": name} if name:
@@ -50,7 +53,9 @@ if __name__ == "__main__":
         case "performer-by-url", {"url": url}:
             result = performer_from_url(url, postprocess=tube8vip)
         case "performer-by-fragment", args:
-            result = performer_from_fragment(args)
+            result = performer_from_fragment(
+                args, search_domains=domains, postprocess=tube8vip
+            )
         case "performer-by-name", {"name": name} if name:
             result = performer_search(
                 name, search_domains=domains, postprocess=tube8vip

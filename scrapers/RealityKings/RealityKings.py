@@ -1,31 +1,34 @@
 import json
 import sys
 from typing import Any
-from py_common import log
-from py_common.util import dig, replace_all, replace_at
+
 from AyloAPI.scrape import (
-    gallery_from_url,
     gallery_from_fragment,
-    scraper_args,
+    gallery_from_url,
+    movie_from_url,
+    performer_from_fragment,
+    performer_from_url,
+    performer_search,
+    scene_from_fragment,
     scene_from_url,
     scene_search,
-    scene_from_fragment,
-    performer_from_url,
-    performer_from_fragment,
-    performer_search,
-    movie_from_url,
+    scraper_args,
 )
+from py_common import log
+from py_common.util import dig, replace_all, replace_at
 
 studio_map = {
     "rks": "RK Shorts",
 }
 
 
+def rename_studio(name: str) -> str:
+    return studio_map.get(name, name)
+
+
 def rk(obj: Any, _) -> Any:
     # Rename certain studios according to the map
-    fixed = replace_at(
-        obj, "studio", "name", replacement=lambda x: studio_map.get(x, x)
-    )
+    fixed = replace_at(obj, "studio", "name", replacement=rename_studio)
 
     domain = None
     match dig(fixed, "studio", "name"):
@@ -34,11 +37,6 @@ def rk(obj: Any, _) -> Any:
         case _:
             domain = "realitykings.com"
 
-    fixed = replace_all(
-        fixed,
-        "url",
-        lambda x: x.replace("realitykings.com", domain),
-    )
     fixed = replace_all(
         fixed,
         "urls",
@@ -70,7 +68,9 @@ if __name__ == "__main__":
         case "performer-by-url", {"url": url}:
             result = performer_from_url(url, postprocess=rk)
         case "performer-by-fragment", args:
-            result = performer_from_fragment(args)
+            result = performer_from_fragment(
+                args, search_domains=domains, postprocess=rk
+            )
         case "performer-by-name", {"name": name} if name:
             result = performer_search(name, search_domains=domains, postprocess=rk)
         case "movie-by-url", {"url": url} if url:

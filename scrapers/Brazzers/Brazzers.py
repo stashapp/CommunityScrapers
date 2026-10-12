@@ -24,6 +24,10 @@ studio_map = {
 }
 
 
+def rename_studio(name: str) -> str:
+    return studio_map.get(name, name)
+
+
 def brazzers(obj: Any, api_result: Any) -> Any:
     # Brazzers still hosts all of their VR content on a separate domain
     domain = "brazzersvr.com" if dig(api_result, "isVR") else "brazzers.com"
@@ -32,23 +36,16 @@ def brazzers(obj: Any, api_result: Any) -> Any:
     # and /pornstar/ instead of the standard /model
     fixed = replace_all(
         obj,
-        "url",
-        lambda x: x.replace("/scene/", "/video/")
-        .replace("/model/", "/pornstar/")
-        .replace("brazzers.com", domain),
-    )
-    fixed = replace_all(
-        fixed,
         "urls",
-        lambda x: x.replace("/scene/", "/video/")
-        .replace("/model/", "/pornstar/")
-        .replace("brazzers.com", domain),
+        lambda x: (
+            x.replace("/scene/", "/video/")
+            .replace("/model/", "/pornstar/")
+            .replace("brazzers.com", domain)
+        ),
     )
 
     # Rename certain studios according to the map
-    fixed = replace_at(
-        fixed, "studio", "name", replacement=lambda x: studio_map.get(x, x)
-    )
+    fixed = replace_at(fixed, "studio", "name", replacement=rename_studio)
 
     # Brazzers Live special case: if the scene has the tag "Brazzers Live" we need to set the studio name to "Brazzers Live"
     if any(t["name"] == "Brazzers Live" for t in dig(obj, "tags", default=[])):
@@ -82,7 +79,9 @@ if __name__ == "__main__":
         case "performer-by-url", {"url": url}:
             result = performer_from_url(url, postprocess=brazzers)
         case "performer-by-fragment", args:
-            result = performer_from_fragment(args)
+            result = performer_from_fragment(
+                args, search_domains=domains, postprocess=brazzers
+            )
         case "performer-by-name", {"name": name} if name:
             result = performer_search(
                 name, search_domains=domains, postprocess=brazzers

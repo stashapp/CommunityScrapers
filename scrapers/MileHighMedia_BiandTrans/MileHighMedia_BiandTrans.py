@@ -3,6 +3,7 @@ import sys
 from typing import Any
 
 from AyloAPI.scrape import (
+    gallery_from_fragment,
     gallery_from_url,
     movie_from_url,
     performer_from_fragment,
@@ -21,8 +22,12 @@ studio_map = {
 }
 
 
+def rename_studio(name: str) -> str:
+    return studio_map.get(name, name)
+
+
 def milehigh(obj: Any, _) -> Any:
-    fixed = replace_all(obj, "name", replacement=lambda x: studio_map.get(x, x))
+    fixed = replace_all(obj, "name", replacement=rename_studio)
 
     replacement = None
     match dig(fixed, "studio", "name"):
@@ -35,7 +40,6 @@ def milehigh(obj: Any, _) -> Any:
 
     # Replace the studio name in all URLs: even if there's no specific studio,
     # milehigh.com is wrong and needs to be replaced with milehighmedia.com
-    fixed = replace_all(fixed, "url", lambda x: x.replace("milehigh.com", replacement))
     fixed = replace_all(fixed, "urls", lambda x: x.replace("milehigh.com", replacement))
 
     return fixed
@@ -52,8 +56,12 @@ if __name__ == "__main__":
     result = None
 
     match op, args:
-        case "gallery-by-url" | "gallery-by-fragment", {"url": url} if url:
+        case "gallery-by-url", {"url": url} if url:
             result = gallery_from_url(url, postprocess=milehigh)
+        case "gallery-by-fragment", args:
+            result = gallery_from_fragment(
+                args, search_domains=domains, postprocess=milehigh
+            )
         case "scene-by-url", {"url": url} if url:
             result = scene_from_url(url, postprocess=milehigh)
         case "scene-by-name", {"name": name} if name:

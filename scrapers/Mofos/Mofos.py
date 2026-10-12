@@ -3,6 +3,7 @@ import sys
 from typing import Any
 
 from AyloAPI.scrape import (
+    gallery_from_fragment,
     gallery_from_url,
     movie_from_url,
     performer_from_fragment,
@@ -22,11 +23,13 @@ studio_map = {
 }
 
 
+def rename_studio(name: str) -> str:
+    return studio_map.get(name, name)
+
+
 def mofos(obj: Any, _) -> Any:
     # Rename certain studios according to the map
-    fixed = replace_at(
-        obj, "studio", "name", replacement=lambda x: studio_map.get(x, x)
-    )
+    fixed = replace_at(obj, "studio", "name", replacement=rename_studio)
 
     domain = None
     match dig(fixed, "studio", "name"):
@@ -35,11 +38,6 @@ def mofos(obj: Any, _) -> Any:
         case _:
             domain = "mofos.com"
 
-    fixed = replace_all(
-        fixed,
-        "url",
-        lambda x: x.replace("mofos.com", domain),
-    )
     fixed = replace_all(
         fixed,
         "urls",
@@ -57,8 +55,12 @@ if __name__ == "__main__":
     result = None
 
     match op, args:
-        case "gallery-by-url" | "gallery-by-fragment", {"url": url} if url:
+        case "gallery-by-url", {"url": url} if url:
             result = gallery_from_url(url, postprocess=mofos)
+        case "gallery-by-fragment", args:
+            result = gallery_from_fragment(
+                args, search_domains=domains, postprocess=mofos
+            )
         case "scene-by-url", {"url": url} if url:
             result = scene_from_url(url, postprocess=mofos)
         case "scene-by-name", {"name": name} if name:
