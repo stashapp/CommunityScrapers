@@ -54,8 +54,8 @@ xPathScrapers:
     scene:
       Title: //h1
       Details:
-        selector: //div[contains(@class, "videoDescription")]/p
-        concat: "\n"
+        selector: //div[contains(@class, "videoDescription")]//node()[(self::p and not(br) and normalize-space()) or (self::text() and normalize-space() and ../br)]
+        concat: "\n\n"
       Date:
         selector: //div[@class="contentT"]/ul[@class="contentInfo"]/li[./i[contains(@class, "fa-calendar")]]
         postProcess:
