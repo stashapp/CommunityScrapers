@@ -8,11 +8,12 @@ from functools import lru_cache
 from typing import Any
 
 from Altwolia import domains
+from Altwolia.utils import without_scene_number
 from py_common import log
 from py_common.deps import ensure_requirements
 from py_common.types import (
     ScrapedGallery,
-    ScrapedMovie,
+    ScrapedGroup,
     ScrapedPerformer,
     ScrapedScene,
     ScrapedTag,
@@ -190,28 +191,28 @@ def to_scraped_performer(api_performer: dict[str, Any], site: str) -> ScrapedPer
     return performer
 
 
-def movie_from_api_scene(api_scene: dict[str, Any], site: str) -> ScrapedMovie:
+def group_from_api_scene(api_scene: dict[str, Any], site: str) -> ScrapedGroup:
     """
-    Builds the movie stub attached to a scene's `movies` field. Uses the same
-    date logic as `to_scraped_movie` so that re-scraping this movie's own URL
+    Builds the group stub attached to a scene's `groups` field. Uses the same
+    date logic as `to_scraped_group` so that re-scraping this group's own URL
     never contradicts what was attached here.
     """
-    movie: ScrapedMovie = {}
+    group: ScrapedGroup = {}
     if not (movie_title := api_scene.get("movie_title")):
-        return movie
-    movie["name"] = movie_title
+        return group
+    group["name"] = movie_title
     if movie_id := api_scene.get("movie_id"):
         if date := (
             movie_release_date(movie_id, site) or api_scene.get("movie_date_created")
         ):
-            movie["date"] = date
+            group["date"] = date
     elif movie_date_created := api_scene.get("movie_date_created"):
-        movie["date"] = movie_date_created
+        group["date"] = movie_date_created
     if movie_desc := api_scene.get("movie_desc"):
-        movie["synopsis"] = clean_text(movie_desc)
+        group["synopsis"] = clean_text(movie_desc)
     if (url_movie_title := api_scene.get("url_movie_title")) and movie_id:
-        movie["urls"] = [movie_url(site, url_movie_title, movie_id)]
-    return movie
+        group["urls"] = [movie_url(site, url_movie_title, movie_id)]
+    return group
 
 
 @lru_cache
@@ -278,7 +279,7 @@ def to_scraped_scene(api_scene: dict[str, Any], site: str) -> ScrapedScene:
     if (length := api_scene.get("length")) and length >= 10:
         scene["duration"] = length
     if (movie_id := api_scene.get("movie_id")) and movie_exists(movie_id, site):
-        scene["movies"] = [movie_from_api_scene(api_scene, site)]
+        scene["groups"] = [group_from_api_scene(api_scene, site)]
 
     tags = name_values_as_list(api_scene.get("categories", []))
     tags += list_to_name_values(api_scene.get("content_tags", []))
@@ -396,43 +397,43 @@ def movie_release_date(movie_id: int | str, site: str) -> str | None:
     return max(dates) if dates else None
 
 
-def to_scraped_movie(api_movie: dict[str, Any], site: str) -> ScrapedMovie:
-    movie: ScrapedMovie = {}
+def to_scraped_group(api_movie: dict[str, Any], site: str) -> ScrapedGroup:
+    group: ScrapedGroup = {}
     if title := api_movie.get("title"):
-        movie["name"] = title.strip()
+        group["name"] = title.strip()
     if movie_id := api_movie.get("movie_id"):
         if date := (
             movie_release_date(movie_id, site) or api_movie.get("date_created")
         ):
-            movie["date"] = date
+            group["date"] = date
     elif date_created := api_movie.get("date_created"):
-        movie["date"] = date_created
+        group["date"] = date_created
     if length := api_movie.get("length"):
-        movie["duration"] = str(length)
+        group["duration"] = str(length)
     if director := name_values_as_csv(api_movie.get("directors", [])):
-        movie["director"] = director
+        group["director"] = director
     if description := api_movie.get("description"):
-        movie["synopsis"] = clean_text(description)
+        group["synopsis"] = clean_text(description)
     if studio_name := api_movie.get("studio_name"):
-        movie["studio"] = {"name": studio_name}
+        group["studio"] = {"name": studio_name}
 
     front_image, back_image = movie_cover_image_urls(api_movie, site)
     if front_image:
-        movie["front_image"] = front_image
+        group["front_image"] = front_image
     if back_image:
-        movie["back_image"] = back_image
+        group["back_image"] = back_image
 
     if (url_title := api_movie.get("url_title")) and (
         movie_id := api_movie.get("movie_id")
     ):
-        movie["urls"] = [movie_url(site, url_title, movie_id)]
+        group["urls"] = [movie_url(site, url_title, movie_id)]
 
     tags = name_values_as_list(api_movie.get("categories", []))
     tags += list_to_name_values(api_movie.get("content_tags", []))
     if tags:
-        movie["tags"] = tags
+        group["tags"] = tags
 
-    return movie
+    return group
 
 
 ## Closeness-of-match scoring, used to rank search results against a fragment
@@ -532,7 +533,9 @@ def scene_from_id(
     clip_id: str,
     site: str,
     fragment: dict[str, Any] | None = None,
-    postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess,
+    postprocess: Callable[
+        [ScrapedScene, dict[str, Any]], ScrapedScene
+    ] = default_postprocess,
 ) -> ScrapedScene | None:
     if not (api_scene := api_scene_from_id(clip_id, site, fragment)):
         return None
@@ -543,7 +546,9 @@ def scene_from_url(
     url: str,
     site: str,
     fragment: dict[str, Any] | None = None,
-    postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess,
+    postprocess: Callable[
+        [ScrapedScene, dict[str, Any]], ScrapedScene
+    ] = default_postprocess,
 ) -> ScrapedScene | None:
     if not (clip_id := id_from_url(url)):
         return None
@@ -553,7 +558,9 @@ def scene_from_url(
 def gallery_from_scene_id(
     clip_id: str,
     site: str,
-    postprocess: Callable[[ScrapedGallery, dict], ScrapedGallery] = default_postprocess,
+    postprocess: Callable[
+        [ScrapedGallery, dict[str, Any]], ScrapedGallery
+    ] = default_postprocess,
 ) -> ScrapedGallery | None:
     if not (api_scene := api_scene_from_id(clip_id, site)):
         return None
@@ -570,7 +577,9 @@ def gallery_from_scene_id(
 def gallery_from_set_id(
     set_id: str,
     site: str,
-    postprocess: Callable[[ScrapedGallery, dict], ScrapedGallery] = default_postprocess,
+    postprocess: Callable[
+        [ScrapedGallery, dict[str, Any]], ScrapedGallery
+    ] = default_postprocess,
 ) -> ScrapedGallery | None:
     if not (client := get_search_client(site)):
         return None
@@ -591,7 +600,9 @@ def gallery_from_set_id(
 def gallery_from_url(
     url: str,
     site: str,
-    postprocess: Callable[[ScrapedGallery, dict], ScrapedGallery] = default_postprocess,
+    postprocess: Callable[
+        [ScrapedGallery, dict[str, Any]], ScrapedGallery
+    ] = default_postprocess,
 ) -> ScrapedGallery | None:
     if not (url_id := id_from_url(url)):
         return None
@@ -607,8 +618,10 @@ def gallery_from_url(
 def movie_from_url(
     url: str,
     site: str,
-    postprocess: Callable[[ScrapedMovie, dict], ScrapedMovie] = default_postprocess,
-) -> ScrapedMovie | None:
+    postprocess: Callable[
+        [ScrapedGroup, dict[str, Any]], ScrapedGroup
+    ] = default_postprocess,
+) -> ScrapedGroup | None:
     if not (movie_id := id_from_url(url)):
         return None
     if not (client := get_search_client(site)):
@@ -624,14 +637,14 @@ def movie_from_url(
     if not response.nb_hits:
         return None
     api_movie = response.hits[0].to_dict()
-    return postprocess(to_scraped_movie(api_movie, site), api_movie)
+    return postprocess(to_scraped_group(api_movie, site), api_movie)
 
 
 def performer_from_url(
     url: str,
     site: str,
     postprocess: Callable[
-        [ScrapedPerformer, dict], ScrapedPerformer
+        [ScrapedPerformer, dict[str, Any]], ScrapedPerformer
     ] = default_postprocess,
 ) -> ScrapedPerformer | None:
     if not (actor_id := id_from_url(url)):
@@ -656,7 +669,9 @@ def scene_search(
     query: str,
     site: str,
     fragment: dict[str, Any] | None = None,
-    postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess,
+    postprocess: Callable[
+        [ScrapedScene, dict[str, Any]], ScrapedScene
+    ] = default_postprocess,
 ) -> list[ScrapedScene]:
     if not (client := get_search_client(site)):
         return []
@@ -677,7 +692,9 @@ def gallery_search(
     query: str,
     site: str,
     fragment: dict[str, Any] | None = None,
-    postprocess: Callable[[ScrapedGallery, dict], ScrapedGallery] = default_postprocess,
+    postprocess: Callable[
+        [ScrapedGallery, dict[str, Any]], ScrapedGallery
+    ] = default_postprocess,
 ) -> list[ScrapedGallery]:
     if not (client := get_search_client(site)):
         return []
@@ -698,7 +715,7 @@ def performer_search(
     query: str,
     site: str,
     postprocess: Callable[
-        [ScrapedPerformer, dict], ScrapedPerformer
+        [ScrapedPerformer, dict[str, Any]], ScrapedPerformer
     ] = default_postprocess,
 ) -> list[ScrapedPerformer]:
     if not (client := get_search_client(site)):
@@ -719,24 +736,36 @@ def performer_search(
 def scene_from_fragment(
     fragment: dict[str, Any],
     site: str,
-    postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess,
+    postprocess: Callable[
+        [ScrapedScene, dict[str, Any]], ScrapedScene
+    ] = default_postprocess,
 ) -> ScrapedScene | None:
     if urls := fragment.get("urls"):
         return scene_from_url(urls[0], site, fragment, postprocess)
     if code := fragment.get("code"):
         return scene_from_id(code, site, fragment, postprocess)
     if (title := fragment.get("title")) and (
-        scenes := scene_search(title, site, fragment, postprocess)
+        scenes := scene_search(without_scene_number(title), site, fragment, postprocess)
     ):
-        # best match is sorted first
-        return scenes[0]
+        # The ranking compares API titles, which lack any scene number the postprocess
+        # appended, so every scene of a movie ranks the same: prefer an exact match
+        return next(
+            (
+                s
+                for s in scenes
+                if (s.get("title") or "").casefold() == title.casefold()
+            ),
+            scenes[0],
+        )
     return None
 
 
 def gallery_from_fragment(
     fragment: dict[str, Any],
     site: str,
-    postprocess: Callable[[ScrapedGallery, dict], ScrapedGallery] = default_postprocess,
+    postprocess: Callable[
+        [ScrapedGallery, dict[str, Any]], ScrapedGallery
+    ] = default_postprocess,
 ) -> ScrapedGallery | None:
     if url := fragment.get("url"):
         return gallery_from_url(url, site, postprocess)
@@ -753,7 +782,7 @@ def performer_from_fragment(
     fragment: dict[str, Any],
     site: str,
     postprocess: Callable[
-        [ScrapedPerformer, dict], ScrapedPerformer
+        [ScrapedPerformer, dict[str, Any]], ScrapedPerformer
     ] = default_postprocess,
 ) -> ScrapedPerformer | None:
     if url := fragment.get("url") or next(iter(fragment.get("urls") or []), None):

@@ -50,7 +50,7 @@ def _postprocess(scene: ScrapedScene, api_scene: dict[str, Any]) -> ScrapedScene
         scene["title"] = title
 
     scene["urls"] = _build_urls(api_scene)
-    scene.pop("movies", None)
+    scene.pop("groups", None)
 
     if nsfw := dig(api_scene, "multicontent_data", "nsfw"):
         img_file = next(

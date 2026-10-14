@@ -7,6 +7,7 @@ from py_common.types import ScrapedScene
 # meaningful scene number when the clip is part of its original multi-scene release
 _clip_position = re.compile(r"_(\d+)$")
 _numbered_title = re.compile(r"\bScene\s*#?\s*\d+\b", re.IGNORECASE)
+_scene_number_suffix = re.compile(r"\s*[,-]\s*Scene\s*#?\s*\d+\s*$", re.IGNORECASE)
 
 
 def _normalized(title: str) -> str:
@@ -37,3 +38,11 @@ def append_scene_number(
     ):
         scene["title"] = f"{title}{separator}Scene {int(position.group(1))}"
     return scene
+
+
+def without_scene_number(title: str) -> str:
+    """
+    The search query for a title that append_scene_number may have produced:
+    "Turn It Up, Scene 3" -> "Turn It Up", since the API only knows the movie title
+    """
+    return _scene_number_suffix.sub("", title) or title

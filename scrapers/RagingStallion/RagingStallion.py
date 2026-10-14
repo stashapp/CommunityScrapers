@@ -3,6 +3,8 @@ import sys
 from typing import Any
 
 from Altwolia.scrape import (
+    gallery_from_fragment,
+    gallery_from_url,
     movie_from_url,
     performer_from_fragment,
     performer_from_url,
@@ -21,10 +23,14 @@ studio_map = {
 }
 
 
+def rename_studio(studio: dict[str, Any]) -> dict[str, Any]:
+    if isinstance(name := studio.get("name"), str):
+        return {**studio, "name": studio_map.get(name, name)}
+    return studio
+
+
 def rename_studios(obj: Any) -> Any:
-    return replace_all(
-        obj, "studio", lambda s: {**s, "name": studio_map.get(s["name"], s["name"])}
-    )
+    return replace_all(obj, "studio", rename_studio)
 
 
 def ragingstallion(scene: Any, api_scene: dict[str, Any]) -> Any:
@@ -33,6 +39,10 @@ def ragingstallion(scene: Any, api_scene: dict[str, Any]) -> Any:
 
 def ragingstallion_group(group: Any, _) -> Any:
     return rename_studios(group)
+
+
+def ragingstallion_gallery(gallery: Any, _) -> Any:
+    return rename_studios(gallery)
 
 
 if __name__ == "__main__":
@@ -47,6 +57,12 @@ if __name__ == "__main__":
             result = scene_search(name, site, postprocess=ragingstallion)
         case "scene-by-fragment" | "scene-by-query-fragment", args:
             result = scene_from_fragment(args, site, postprocess=ragingstallion)
+        case "gallery-by-url", {"url": url} if url:
+            result = gallery_from_url(url, site, postprocess=ragingstallion_gallery)
+        case "gallery-by-fragment", args:
+            result = gallery_from_fragment(
+                args, site, postprocess=ragingstallion_gallery
+            )
         case "performer-by-url", {"url": url}:
             result = performer_from_url(url, site)
         case "performer-by-fragment", args:
