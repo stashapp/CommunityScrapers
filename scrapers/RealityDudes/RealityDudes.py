@@ -5,7 +5,6 @@ from typing import Any
 from AyloAPI.scrape import (
     gallery_from_fragment,
     gallery_from_url,
-    movie_from_url,
     performer_from_fragment,
     performer_from_url,
     performer_search,
@@ -15,27 +14,26 @@ from AyloAPI.scrape import (
     scraper_args,
 )
 from py_common import log
-from py_common.util import dig, replace_all
+from py_common.types import ScrapedGallery, ScrapedScene
+from py_common.util import replace_all
 
 
 def realitydudes(obj: Any, _) -> Any:
-    if dig(obj, "studio", "name") != "Papi":
-        return obj
-
-    # Papi still uses the old domain and model URL
-    domain = "papi.com"
-    model = "/pornstar/"
-
-    fixed = replace_all(
+    # papi.com is only a landing page: Papi's scenes and models live on realitydudes.com
+    return replace_all(
         obj,
         "urls",
-        lambda x: x.replace("realitydudes.com", domain).replace("/model/", model),
+        lambda url: url.replace("www.papi.com/", "www.realitydudes.com/"),
     )
 
-    return fixed
+
+def is_reality_dudes(obj: ScrapedScene | ScrapedGallery | None) -> bool:
+    # The papi token also searches Men, Sean Cody and Bromo releases
+    return any("realitydudes.com/" in url for url in (obj or {}).get("urls", []))
 
 
 if __name__ == "__main__":
+    # papi's token is the only one that sees Boys First Time, Gay Revenge and Reality Thugs
     domains = [
         "realitydudes",
         "papi",
@@ -47,19 +45,29 @@ if __name__ == "__main__":
         case "gallery-by-url", {"url": url} if url:
             result = gallery_from_url(url, postprocess=realitydudes)
         case "gallery-by-fragment", args:
-            result = gallery_from_fragment(
-                args, search_domains=domains, postprocess=realitydudes
-            )
+            if is_reality_dudes(
+                gallery := gallery_from_fragment(
+                    args, search_domains=domains, postprocess=realitydudes
+                )
+            ):
+                result = gallery
         case "scene-by-url", {"url": url} if url:
             result = scene_from_url(url, postprocess=realitydudes)
         case "scene-by-name", {"name": name} if name:
-            result = scene_search(
-                name, search_domains=domains, postprocess=realitydudes
-            )
+            result = [
+                scene
+                for scene in scene_search(
+                    name, search_domains=domains, postprocess=realitydudes
+                )
+                if is_reality_dudes(scene)
+            ]
         case "scene-by-fragment" | "scene-by-query-fragment", args:
-            result = scene_from_fragment(
-                args, search_domains=domains, postprocess=realitydudes
-            )
+            if is_reality_dudes(
+                scene := scene_from_fragment(
+                    args, search_domains=domains, postprocess=realitydudes
+                )
+            ):
+                result = scene
         case "performer-by-url", {"url": url}:
             result = performer_from_url(url, postprocess=realitydudes)
         case "performer-by-fragment", args:
@@ -70,8 +78,6 @@ if __name__ == "__main__":
             result = performer_search(
                 name, search_domains=domains, postprocess=realitydudes
             )
-        case "movie-by-url", {"url": url} if url:
-            result = movie_from_url(url, postprocess=realitydudes)
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
             sys.exit(1)
