@@ -27,14 +27,14 @@ xPathScrapers:
   htmlScraper:
     scene:
       # meta og:title is sometimes different to the actual title
-      Title: //img[@class="vds-poster"]/@alt
+      Title: //img[@class="vds-poster" or @class="media-poster-image"]/@alt
       Date: &date
         selector: //h1/following-sibling::div[contains(@class, "items-center")]//span[@class="block"]
         postProcess:
           - parseDate: Jan 2, 2006
       Details: &detailsSel //span[text()="Description:"]/following-sibling::span
       Performers:
-        Name: &performersSel //span[text()="Models:"]/following-sibling::div//a//span
+        Name: &performersSel //span[text()="Models:"]/following-sibling::div//a/text()
       Tags:
         Name: &tagsSel //a[contains(@href, "/categories/")]
       URLs: &urlSel //meta[@property="og:url"]/@content
@@ -114,4 +114,4 @@ xPathScrapers:
                 with: "${1}0x0${2}"
       Tags:
         Name: *tagsSel
-# Last Updated September 22, 2026
+# Last Updated October 15, 2026
