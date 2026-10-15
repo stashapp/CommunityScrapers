@@ -34,7 +34,7 @@ xPathScrapers:
           - parseDate: Jan 2, 2006
       Details: &detailsSel //span[text()="Description:"]/following-sibling::span
       Performers:
-        Name: &performersSel //span[text()="Models:"]/following-sibling::div//a//span
+        Name: &performersSel //span[text()="Models:"]/following-sibling::div//a/text()
       Tags:
         Name: &tagsSel //a[contains(@href, "/categories/")]
       URLs: &urlSel //meta[@property="og:url"]/@content
