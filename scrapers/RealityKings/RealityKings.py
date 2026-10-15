@@ -5,7 +5,6 @@ from typing import Any
 from AyloAPI.scrape import (
     gallery_from_fragment,
     gallery_from_url,
-    movie_from_url,
     performer_from_fragment,
     performer_from_url,
     performer_search,
@@ -73,8 +72,6 @@ if __name__ == "__main__":
             )
         case "performer-by-name", {"name": name} if name:
             result = performer_search(name, search_domains=domains, postprocess=rk)
-        case "movie-by-url", {"url": url} if url:
-            result = movie_from_url(url, postprocess=rk)
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
             sys.exit(1)
