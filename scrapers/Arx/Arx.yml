@@ -27,7 +27,7 @@ xPathScrapers:
   htmlScraper:
     scene:
       # meta og:title is sometimes different to the actual title
-      Title: //img[@class="vds-poster"]/@alt
+      Title: //img[@class="vds-poster" or @class="media-poster-image"]/@alt
       Date: &date
         selector: //h1/following-sibling::div[contains(@class, "items-center")]//span[@class="block"]
         postProcess:
