@@ -34,8 +34,6 @@ def rename_studios(obj: Any) -> Any:
 
 
 def ragingstallion(scene: Any, api_scene: dict[str, Any]) -> Any:
-    if (scene.get("studio") or {}).get("name") == "Naked Sword Originals":
-        scene["date"] = api_scene.get("movie_date_created")
     return rename_studios(append_scene_number(scene, api_scene))
 
 
