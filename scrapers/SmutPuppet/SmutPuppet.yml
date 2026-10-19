@@ -1,3 +1,4 @@
+# Same Rogue Bucks template as DreamTranny: any fixes made here might apply there as well
 name: SmutPuppet
 sceneByURL:
   - action: scrapeXPath
@@ -37,7 +38,75 @@ sceneByURL:
       - goldenslut.com/update
       - suggabunny.com/update
     scraper: subSiteScraperNoDate
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://porngutter.com/updates/?step=2&show_bonus_sites=1&q={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: networkScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - porngutter.com/models/
+      - 3wayfuck.com/models/
+      - blackandbig.com/models/
+      - blondeslovedick.com/models/
+      - brunetteslovedick.com/models/
+      - cougarkingdom.com/models/
+      - darksodomy.com/models/
+      - dothewife.com/models/
+      - eurosex4k.com/models/
+      - genlez.com/models/
+      - goldenslut.com/models/
+      - grannyvsbbc.com/models/
+      - groupfucksite.com/models/
+      - hcjav.com/models/
+      - jeffsmodels.com/models/
+      - maturefucksteen.com/models/
+      - milfsodomy.com/models/
+      - porn-uk.com/models/
+      - smutmerchants.com/models/
+      - suggabunny.com/models/
+      - teamfucksgirl.com/models/
+      - teenerotica.xxx/models/
+    scraper: performerScraper
 xPathScrapers:
+  sceneSearch:
+    common:
+      $card: //div[contains(@class, "video-item")]//div[@class="item-content"]
+    scene:
+      Title: $card/div[1]/a
+      Image: //div[contains(@class, "video-item")]//a[@class="item-thumb"]/img/@src
+      Date:
+        selector: $card/div[2]/p/text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+      URLs:
+        selector: $card/div[1]/a/@href
+        postProcess:
+          - replace:
+              - regex: ^(/[^?]*).*
+                with: https://porngutter.com$1
+  performerScraper:
+    performer:
+      Name: //h1[@class="model-title"]
+      Gender:
+        selector: //a[contains(@class,"item-talent")][text()=//h1[@class="model-title"]/text()]/@class
+        postProcess:
+          - map:
+              item-talent female: Female
+              item-talent trans-girl: Transgender Female
+      Images: //div[@class="model-img"]/a/img[@class="img"]/@src
+      Country: //div[@class="model-content"]/p/span[text()="NATIONALITY"]/following-sibling::span[1]
+      Birthdate:
+        selector: //div[@class="model-content"]/p/span[text()="DATE OF BIRTH"]/following-sibling::span[1]
+        postProcess:
+          - replace:
+              - regex: (\d)(st|[nr]d|th)
+                with: "$1"
+          - parseDate: January 2, 2006
   networkScraper:
     scene:
       Title: &title //div[@class="section-title"]
