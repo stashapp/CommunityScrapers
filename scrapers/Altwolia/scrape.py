@@ -260,6 +260,47 @@ def largest_scene_image(api_scene: dict[str, Any]) -> str | None:
     return None
 
 
+@lru_cache
+def release_date_on(clip_id: int | str, site: str) -> str | None:
+    # Each site keeps its own record of a clip, with its own release date
+    if not (client := get_search_client(site)):
+        return None
+    response = client.search_single_index(
+        index_name="all_scenes",
+        search_params={
+            "attributesToHighlight": [],
+            "attributesToRetrieve": ["release_date"],
+            "filters": f"clip_id:{clip_id}",
+            "hitsPerPage": 1,
+        },
+    )
+    return next(
+        (date for hit in response.hits if (date := hit.to_dict().get("release_date"))),
+        None,
+    )
+
+
+def first_release_date(api_scene: dict[str, Any], site: str) -> str | None:
+    # Some sites re-release each other's scenes (Falcon re-releases Raging Stallion and NakedSword scenes years later)
+    # and compilations re-release a site's own scenes under a new clip_id: the earliest copy approximates the original release
+    dates: list[str] = []
+    if clip_id := api_scene.get("clip_id"):
+        dates += [
+            date
+            for other in api_scene.get("availableOnSite", [])
+            if other != site
+            and domains.has_own_site(other)
+            and (date := release_date_on(clip_id, other))
+        ]
+    if (
+        api_scene.get("compilation") == "1"
+        and (source_clip_id := api_scene.get("source_clip_id"))
+        and (date := release_date_on(source_clip_id, site))
+    ):
+        dates.append(date)
+    return min(dates, default=None)
+
+
 def to_scraped_scene(api_scene: dict[str, Any], site: str) -> ScrapedScene:
     scene: ScrapedScene = {}
     if clip_id := api_scene.get("clip_id"):
@@ -272,6 +313,10 @@ def to_scraped_scene(api_scene: dict[str, Any], site: str) -> ScrapedScene:
         scene["urls"] = urls
     if release_date := api_scene.get("release_date"):
         scene["date"] = release_date
+        if (
+            first_release := first_release_date(api_scene, site)
+        ) and first_release < release_date:
+            scene["production_date"] = first_release
     if image := largest_scene_image(api_scene):
         scene["image"] = f"{IMAGE_CDN}/movies{image}"
     if studio_name := api_scene.get("studio_name"):
