@@ -1,29 +1,17 @@
-# JavGuru
-#   Scene by URL / search, Performer (actress) by URL.
-#   Scene pages:   https://jav.guru/<id>/<slug>/
-#   Actress pages: https://jav.guru/actress/<slug>/
 name: JavGuru
-
-# ---- Scene -------------------------------------------------------------
 sceneByURL:
   - action: scrapeXPath
     url:
       - jav.guru/
     scraper: sceneScraper
-
-# "Name" search box on the Scene edit page
 sceneByName:
   action: scrapeXPath
   queryURL: https://jav.guru/?s={}
   scraper: sceneSearch
-
-# Scrapes the full scene once a search result is chosen
 sceneByQueryFragment:
   action: scrapeXPath
   queryURL: "{url}"
   scraper: sceneScraper
-
-# ---- Performer (actress) ----------------------------------------------
 performerByURL:
   - action: scrapeXPath
     url:
@@ -31,27 +19,31 @@ performerByURL:
     scraper: performerScraper
 
 xPathScrapers:
-  # Full scene page
   sceneScraper:
     common:
       $info: //div[@class="infoleft"]
+      $performers: //div[@class="infoleft"]//li[strong[contains(text(),"Actress") or contains(text(),"Actor")]]/a
     scene:
       Title:
-        selector: //h1[@class="titl"]/text()
+        selector: //h1[@class="titl"]
         postProcess:
-          # drop the leading "[CODE] " prefix; Code is captured separately
-          - replace:
-              - regex: ^\s*\[[^\]]*\]\s*
-                with: ""
-      Details:
-        # jav.guru scenes have no synopsis; mirror the cleaned title
-        selector: //h1[@class="titl"]/text()
-        postProcess:
-          - replace:
-              - regex: ^\s*\[[^\]]*\]\s*
-                with: ""
-      URL:
-        fixed: "{inputURL}"
+          - &cleanTitle
+            javascript: |
+              var unmasked = {
+                "f*rced": "forced",
+                "drugg*d": "drugged",
+                "ch*king": "choking",
+                "k*d": "kid",
+                "l*li": "loli",
+                "r*pe": "rape"
+              };
+              return value
+                .replace(/^\s*\[[^\]]*\]\s*/, "")
+                .replace(/[A-Za-z]*\*[A-Za-z]*/g, function (word) {
+                  var full = unmasked[word.toLowerCase()];
+                  return full ? word.charAt(0) + full.slice(1) : word;
+                });
+      URLs: //link[@rel="canonical"]/@href
       Code: $info//li[strong/span[contains(text(),"Code")]]/text()
       Date:
         selector: $info//li[strong/span[contains(text(),"Release Date")]]/text()
@@ -60,57 +52,45 @@ xPathScrapers:
       Image:
         selector: //div[@class="large-screenimg"]/img/@src
         postProcess:
-          # cdn.javmiku.com is Cloudflare-challenged for server-side fetches;
-          # cdn.javnorth.com mirrors the same paths and is reachable.
-          - replace:
+          - &ownCdn
+            replace:
               - regex: cdn\.javmiku\.com
                 with: cdn.javnorth.com
       Director: $info//li[strong[contains(text(),"Director")]]/a
       Studio:
         Name: $info//li[strong[contains(text(),"Studio")]]/a
-        URL: $info//li[strong[contains(text(),"Studio")]]/a/@href
+        URLs: $info//li[strong[contains(text(),"Studio")]]/a/@href
       Tags:
         Name: $info//li[strong[contains(text(),"Tags")]]/a
       Performers:
-        Name: $info//li[strong[contains(text(),"Actress")]]/a
-        URLs: $info//li[strong[contains(text(),"Actress")]]/a/@href
+        Name: $performers
+        URLs: $performers/@href
 
-  # Search results page (one or more cards)
   sceneSearch:
     common:
       $item: //div[@class="inside-article"][div[@class="imgg"]]
     scene:
       Title:
-        selector: $item//div[@class="grid1"]/h2/a/text()
+        selector: $item//div[@class="grid1"]/h2/a
         postProcess:
-          - replace:
-              - regex: ^\s*\[[^\]]*\]\s*
-                with: ""
-      URL: $item//div[@class="imgg"]/a/@href
+          - *cleanTitle
+      URLs: $item//div[@class="imgg"]/a/@href
       Image:
         selector: $item//div[@class="imgg"]/a/img/@src
         postProcess:
-          - replace:
-              - regex: cdn\.javmiku\.com
-                with: cdn.javnorth.com
+          - *ownCdn
 
   performerScraper:
     performer:
-      Name: //h1[@class="profile-h1"]/text()
-      Image:
+      Name: //h1[@class="profile-h1"]
+      Aliases: //strong[text()="Alias:"]/following-sibling::text()[1]
+      Images:
         selector: //img[@class="cp-avatar"]/@src
         postProcess:
-          - replace:
-              - regex: cdn\.javmiku\.com
-                with: cdn.javnorth.com
-      URLs:
-        fixed: "{inputURL}"
-      Country:
-        fixed: Japan
+          - *ownCdn
+      URLs: //link[@rel="canonical"]/@href
 
-# jav.guru rejects requests without a normal browser UA
 driver:
   headers:
     - Key: User-Agent
-      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36
-# Last Updated June 14, 2026
+      Value: stash-scraper/1.0
