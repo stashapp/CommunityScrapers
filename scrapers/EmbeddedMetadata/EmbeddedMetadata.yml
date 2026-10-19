@@ -3,6 +3,6 @@ name: EmbeddedMetadata
 imageByFragment:
   action: script
   script:
-  - python3
-  - embedded-metadata.py
-  - image-by-fragment
+    - python3
+    - EmbeddedMetadata.py
+    - image-by-fragment
