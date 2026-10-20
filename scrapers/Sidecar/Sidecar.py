@@ -1,9 +1,12 @@
 import base64
 import json
+import posixpath
 import re
 import sys
+import zipfile
 from collections.abc import Iterable, Iterator
 from dataclasses import dataclass
+from datetime import UTC, datetime
 from html import unescape
 from itertools import chain
 from pathlib import Path, PureWindowsPath
@@ -163,7 +166,32 @@ DIALECTS: dict[str, Dialect] = {
 }
 
 # Sidecars named after their media file, most specific first
-OWN_SIDECARS = ("{stem}.nfo", ".nfo/{stem}.nfo", "{stem}.xml")
+OWN_SIDECARS = (
+    "{stem}.nfo",
+    ".nfo/{stem}.nfo",
+    "{stem}.xml",
+    "{stem}.info.json",
+    "{stem}.json",
+    "{name}.json",
+)
+
+# gallery-dl names a file's metadata after the file as downloaded, so a .png
+# re-encoded to .jpg afterwards still has its metadata under the .png name
+REENCODED_SUFFIXES = (
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".webp",
+    ".gif",
+    ".avif",
+    ".jxl",
+    ".mp4",
+    ".webm",
+    ".mkv",
+)
+
+# Stash addresses a file inside an archive as "<archive path>/<path in archive>"
+ARCHIVE_SUFFIXES = (".zip", ".cbz")
 
 # Sidecars describing the whole folder. Lower priority than the file's own, and
 # used as defaults: a studio set here applies to every scene in the folder
@@ -174,6 +202,7 @@ FOLDER_SIDECARS = (
     "tvshow.nfo",
     "series.xml",
     ".plexmatch",
+    "info.json",
 )
 
 # Cover-image keywords, best first:
@@ -238,7 +267,74 @@ COMPOSITE_TITLE = re.compile(r"^(?P<studio>.+?) - \d+x\S+ - (?P<title>.+)$")
 STRAY_AMPERSAND = re.compile(rb"&(?![a-zA-Z][a-zA-Z0-9]*;|#[0-9]+;|#[xX][0-9a-fA-F]+;)")
 
 
-def candidate_sidecars(media: Path) -> Iterator[tuple[Path, bool]]:
+@dataclass(frozen=True)
+class Member:
+    "A sidecar stored inside a zip archive rather than beside the media"
+
+    archive: Path
+    path: str
+
+    @property
+    def name(self) -> str:
+        return posixpath.basename(self.path)
+
+    def read_bytes(self) -> bytes:
+        with zipfile.ZipFile(self.archive) as archive:
+            return archive.read(self.path)
+
+    def __str__(self) -> str:
+        return f"{self.archive}/{self.path}"
+
+
+Source = Path | Member
+
+
+def own_sidecar_names(stem: str, name: str) -> list[str]:
+    return [t.format(stem=stem, name=name) for t in OWN_SIDECARS] + [
+        f"{stem}{suffix}.json" for suffix in REENCODED_SUFFIXES
+    ]
+
+
+def archive_member(media: Path) -> Member | None:
+    "The archive and path inside it, when `media` is a file Stash found in an archive"
+    for parent in media.parents:
+        if parent.suffix.casefold() in ARCHIVE_SUFFIXES and parent.is_file():
+            return Member(parent, media.relative_to(parent).as_posix())
+    return None
+
+
+def archive_names(archive: Path) -> set[str]:
+    try:
+        with zipfile.ZipFile(archive) as opened:
+            return set(opened.namelist())
+    except (OSError, zipfile.BadZipFile) as exc:
+        log.debug(f"Could not open {archive}: {exc}")
+        return set()
+
+
+def sidecars_in_archive(member: Member) -> Iterator[tuple[Source, bool]]:
+    "Sidecars beside a file inside an archive, which are in the archive too"
+    names = archive_names(member.archive)
+    directory = posixpath.dirname(member.path)
+    name = posixpath.basename(member.path)
+    stem = posixpath.splitext(name)[0]
+    folder = [(posixpath.join(directory, n), True) for n in FOLDER_SIDECARS]
+    own = [(posixpath.join(directory, n), False) for n in own_sidecar_names(stem, name)]
+    for path, is_folder_level in dict.fromkeys(folder + own):
+        if path in names:
+            yield Member(member.archive, path), is_folder_level
+
+
+def archive_folder_sidecars(archive: Path) -> Iterator[tuple[Source, bool]]:
+    "A zipped gallery's own folder-level sidecars: the shallowest of each name"
+    names = archive_names(archive)
+    for wanted in FOLDER_SIDECARS:
+        matches = [n for n in names if posixpath.basename(n) == wanted]
+        if matches:
+            yield Member(archive, min(matches, key=lambda n: n.count("/"))), True
+
+
+def candidate_sidecars(media: Path) -> Iterator[tuple[Source, bool]]:
     """
     Yield every sidecar that could describe `media`, least specific first, paired
     with whether it describes the whole folder rather than this file
@@ -246,12 +342,19 @@ def candidate_sidecars(media: Path) -> Iterator[tuple[Path, bool]]:
     Yielding in this order lets the caller merge by overwriting:
     a title in the file's own .nfo lands on top of one from the folder's
     """
+    if member := archive_member(media):
+        yield from sidecars_in_archive(member)
+        return
+
     # A gallery can be a folder of loose images rather than a single file
     directory = media if media.is_dir() else media.parent
     stem = media.name if media.is_dir() else media.stem
 
+    if media.is_file() and media.suffix.casefold() in ARCHIVE_SUFFIXES:
+        yield from archive_folder_sidecars(media)
+
     folder = [(directory / name, True) for name in FOLDER_SIDECARS]
-    own = [(directory / t.format(stem=stem), False) for t in OWN_SIDECARS]
+    own = [(directory / name, False) for name in own_sidecar_names(stem, media.name)]
 
     seen: set[Path] = set()
     for path, is_folder_level in folder + own:
@@ -514,15 +617,169 @@ def parse_plexmatch(raw: bytes) -> ScrapedScene:
     return scraped
 
 
-def read_sidecar(path: Path, media: Path) -> ScrapedScene:
+def yt_dlp_date(yyyymmdd: Any) -> str | None:
+    if isinstance(yyyymmdd, str) and re.fullmatch(r"\d{8}", yyyymmdd):
+        return f"{yyyymmdd[:4]}-{yyyymmdd[4:6]}-{yyyymmdd[6:]}"
+    return None
+
+
+def parse_json(raw: bytes, media: Path) -> ScrapedScene:
+    "JSON sidecars are told apart by content, any other JSON beside the media is ignored"
+    try:
+        info = json.loads(raw)
+    except ValueError:
+        return {}
+    if not isinstance(info, dict):
+        return {}
+    if "extractor" in info and "webpage_url" in info:
+        return parse_yt_dlp(info, media)
+    if "category" in info and "subcategory" in info:
+        return parse_gallery_dl(info)
+    return {}
+
+
+# Namespaces that are part of the tag's meaning rather than just a heading
+GALLERY_DL_KEPT_NAMESPACES = {"male", "language"}
+GALLERY_DL_PERFORMER_NAMESPACES = {"character", "cosplayer", "model"}
+
+
+def gallery_dl_values(value: Any, *, tag_string: bool = False) -> list[str]:
+    match value:
+        case list():
+            return [text for item in value if (text := str(item).strip())]
+        case str() if tag_string and "," in value:
+            return [text for part in value.split(",") if (text := part.strip())]
+        # booru tag strings: space-separated, with underscores for spaces
+        case str() if tag_string:
+            return [part.replace("_", " ") for part in value.split()]
+        case str() if value.strip():
+            return [value.strip()]
+        case _:
+            return []
+
+
+def gallery_dl_date(value: Any) -> str | None:
+    match value:
+        case bool():
+            return None
+        case int() | float():
+            # Millisecond timestamps are ten times past anything 32-bit seconds can hold
+            seconds = value / 1000 if value > 2147483647 * 10 else value
+            return datetime.fromtimestamp(seconds, UTC).date().isoformat()
+        case str():
+            try:
+                return datetime.fromisoformat(value.strip()).date().isoformat()
+            except ValueError:
+                return parse_date(value)
+        case _:
+            return None
+
+
+def parse_gallery_dl(info: dict[str, Any]) -> ScrapedScene:
+    "gallery-dl's --write-info-json (info.json) and --write-metadata (<file>.json)"
+    keys = {key.casefold(): value for key, value in info.items()}
+    artists = gallery_dl_values(keys.get("artist")) + gallery_dl_values(
+        keys.get("artists")
+    )
+    groups = [
+        group
+        for key in ("group", "groups", "circle", "studio", "studios")
+        for group in gallery_dl_values(keys.get(key))
+    ]
+    performers = [
+        name
+        for key in ("characters", "models", "performers")
+        for name in gallery_dl_values(keys.get(key))
+    ]
+    tags: list[str] = []
+    for key in ("tags", "categories", "parody"):
+        for tag in gallery_dl_values(keys.get(key), tag_string=key == "tags"):
+            namespace, separator, value = tag.partition(":")
+            if not separator:
+                tags.append(tag)
+            elif namespace == "artist":
+                artists.append(value)
+            elif namespace == "group":
+                groups.append(value)
+            elif namespace in GALLERY_DL_PERFORMER_NAMESPACES:
+                performers.append(value)
+            elif namespace in GALLERY_DL_KEPT_NAMESPACES:
+                tags.append(tag)
+            else:
+                tags.append(value)
+
+    scraped: ScrapedScene = {}
+    titles = [keys.get("title")] + [
+        v for k, v in keys.items() if k.startswith("title_")
+    ]
+    if title := next(
+        (t.strip() for t in titles if isinstance(t, str) and t.strip()), None
+    ):
+        scraped["title"] = title
+    if isinstance(details := keys.get("description"), str) and details.strip():
+        scraped["details"] = details.strip()
+    if date := gallery_dl_date(keys.get("date")):
+        scraped["date"] = date
+    # The artist made the work; a group or circle only published it
+    if studio := next(iter(artists + groups), None):
+        scraped["studio"] = ScrapedStudio(name=studio)
+    if performers:
+        scraped["performers"] = [ScrapedPerformer(name=name) for name in performers]
+    if tags:
+        scraped["tags"] = [ScrapedTag(name=tag) for tag in tags]
+    return scraped
+
+
+def parse_yt_dlp(info: dict[str, Any], media: Path) -> ScrapedScene:
+    "yt-dlp's --write-info-json output"
+    scraped: ScrapedScene = {}
+    if title := info.get("title"):
+        scraped["title"] = title
+    if details := (info.get("description") or "").strip():
+        scraped["details"] = details
+    scraped["urls"] = [info["webpage_url"]]
+    # release_date is the original release when the site states one, upload_date the posting
+    if date := yt_dlp_date(info.get("release_date")) or yt_dlp_date(
+        info.get("upload_date")
+    ):
+        scraped["date"] = date
+    if (duration := info.get("duration")) and duration >= 10:
+        scraped["duration"] = int(duration)
+    if cast_list := info.get("cast"):
+        scraped["performers"] = [
+            ScrapedPerformer(name=name) for name in cast_list if name
+        ]
+
+    # Categories first: where both exist they're the site's curated spelling of the tags
+    tags: dict[str, str] = {}
+    for tag in (info.get("categories") or []) + (info.get("tags") or []):
+        if tag:
+            tags.setdefault(tag.casefold(), tag)
+    if tags:
+        scraped["tags"] = [ScrapedTag(name=tag) for tag in tags.values()]
+
+    # --write-thumbnail saves the cover beside the video, and the JSON's own
+    # thumbnail URL is often a signed CDN link that expires
+    if image := next(
+        (uri for path in candidate_images(media) if (uri := data_uri(path))),
+        info.get("thumbnail"),
+    ):
+        scraped["image"] = image
+    return scraped
+
+
+def read_sidecar(path: Source, media: Path) -> ScrapedScene:
     try:
         raw = path.read_bytes()
-    except OSError as exc:
+    except (OSError, KeyError, zipfile.BadZipFile) as exc:
         log.warning(f"Could not read {path}: {exc}")
         return {}
 
     if path.name == ".plexmatch":
         return parse_plexmatch(raw)
+
+    if path.name.endswith(".json"):
+        return parse_json(raw, media)
 
     scraped: ScrapedScene = {}
     if urls := [m.decode("utf-8", "replace") for m in BARE_URL.findall(raw)]:
@@ -627,12 +884,13 @@ def scrape_media(paths: list[Path]) -> ScrapedScene | None:
 def media_paths(args: dict[str, Any]) -> list[Path]:
     """Every file behind the object being scraped, skipping ones we cannot see"""
     paths = [Path(p) for f in args.get("files", []) if (p := dig(f, "path"))]
-    if missing := [p for p in paths if not p.exists()]:
+    readable = [p for p in paths if p.exists() or archive_member(p)]
+    if missing := [p for p in paths if p not in readable]:
         log.warning(
             "Stash sees these files at paths this scraper cannot read, which"
             f" usually means differing mount points: {', '.join(map(str, missing))}"
         )
-    return [p for p in paths if p.exists()]
+    return readable
 
 
 def gallery_paths(args: dict[str, Any]) -> list[Path]:
