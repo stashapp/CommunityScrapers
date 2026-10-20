@@ -3,7 +3,8 @@ import re
 import sys
 from argparse import ArgumentParser
 from collections.abc import Callable, Mapping, Sequence
-from functools import reduce
+from functools import cache, reduce
+from pathlib import Path
 from typing import Any, Literal, TypeVar, cast, overload
 from urllib.error import URLError
 from urllib.request import Request, urlopen
@@ -263,6 +264,49 @@ def is_valid_url(url):
             return 200 <= response.getcode() < 300
     except URLError:
         return False
+
+
+@cache
+def own_url_patterns() -> tuple[str, ...]:
+    """
+    The `url:` patterns declared in this scraper's YAML file(s)
+
+    Stash runs a script from its scraper's directory, so these are read from the
+    YAML files next to the invoked script that refer to it by name
+    """
+    script = Path(sys.argv[0]).resolve()
+    patterns: list[str] = []
+    for yml in sorted(script.parent.glob("*.yml")):
+        if script.name not in (text := yml.read_text(encoding="utf-8")):
+            continue
+        url_indent = None
+        for line in text.splitlines():
+            if not (stripped := line.strip()) or stripped.startswith("#"):
+                continue
+            indent = len(line) - len(line.lstrip())
+            if key := re.fullmatch(r"(-\s+)?url:(\s+&\S+)?", stripped):
+                url_indent = indent + len(key.group(1) or "")
+            elif (
+                url_indent is not None
+                and indent >= url_indent
+                and stripped.startswith("- ")
+            ):
+                item = stripped[2:].strip().strip("'\"")
+                # queryURLReplace also has a `url:` key, but its items are mappings
+                if not re.match(r"[\w-]+:(\s|$)", item):
+                    patterns.append(item)
+            else:
+                url_indent = None
+    return tuple(dict.fromkeys(patterns))
+
+
+def is_own_url(url: str) -> bool:
+    """
+    Checks if an URL matches one of this scraper's own `url:` patterns, the same
+    way Stash matches them: useful for skipping the unrelated URLs (IAFD, ThePornDB, etc.)
+    that can be in a fragment's `urls`
+    """
+    return any(pattern in url for pattern in own_url_patterns())
 
 
 def __default_parser(**kwargs: Any) -> ArgumentParser:
