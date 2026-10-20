@@ -1,0 +1,63 @@
+name: realbooru
+# https://github.com/stashapp/CommunityScrapers/issues/2273
+# loosely based on danbooru
+sceneByURL:
+  - action: scrapeXPath
+    url: &urls
+      - https://realbooru.com/
+    scraper: postScraper
+imageByURL:
+  - action: scrapeXPath
+    url: *urls
+    scraper: postScraper
+
+sceneByFragment: &fragmentScraper
+  action: scrapeXPath
+  queryURL: "{filename}{checksum}"
+  queryURLReplace:
+    filename:
+      - regex: "^realbooru_(\\d+)_.*$"
+        with: "https://realbooru.com/index.php?page=post&s=view&id=$1#"
+      - regex: "^[^#]*$"
+        with: ""
+    checksum:
+      - regex: "^(.+)$"
+        with: "https://realbooru.com/index.php?page=post&s=list&md5=$1"
+  scraper: postScraper
+imageByFragment: *fragmentScraper
+
+xPathScrapers:
+  postScraper:
+    common:
+      $posted: //span[contains(text(),"Posted at")]
+    image:
+      Date: &date
+        selector: "$posted/text()[1]"
+        postProcess:
+          - replace:
+              - regex: "Posted at (.+) by"
+                with: "$1"
+          - parseDate: Jan, 2 2006
+      Performers: &performers
+        Name: //a[@class="character" and $posted]/text()
+      Studio: &model
+        Name: //a[@class="model" and $posted]/text()
+      Tags: &tag_string
+        Name: //a[@class="tag-type-general" and $posted]/text()
+      URLs: &url
+        selector: //form[@id="comment_form"]/@action
+        postProcess:
+          - replace:
+              - regex: .*[?&]id=(\d+).*
+                with: https://realbooru.com/index.php?page=post&s=view&id=$1
+    scene:
+      Date: *date
+      Performers: *performers
+      Studio: *model
+      Tags: *tag_string
+      URLs: *url
+
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stashapp/stash scraper

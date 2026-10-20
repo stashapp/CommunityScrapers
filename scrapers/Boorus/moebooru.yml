@@ -14,6 +14,23 @@ imageByURL:
     url: *urls
     scraper: postScraper
 
+sceneByFragment: &fragmentScraper
+  action: scrapeXPath
+  queryURL: "{filename}{checksum}"
+  queryURLReplace:
+    filename:
+      - regex: "^yandere_(\\d+)_.*$"
+        with: "https://yande.re/post/show/$1#"
+      - regex: "^konachan_(\\d+)_.*$"
+        with: "https://konachan.com/post/show/$1#"
+      - regex: "^[^#]*$"
+        with: ""
+    checksum:
+      - regex: "^(.+)$"
+        with: "https://yande.re/post/show?md5=$1"
+  scraper: postScraper
+imageByFragment: *fragmentScraper
+
 xPathScrapers:
   postScraper:
     image:
@@ -25,15 +42,12 @@ xPathScrapers:
                 with: ""
           - parseDate: Mon Jan 2 2006
       Performers: &performers
-        Name:
-          selector: //li[contains(@class,"tag-type-character")]/a[last()]
+        Name: //li[contains(@class,"tag-type-character")]/a[last()]
       Studio: &artist
         Name: //li[contains(@class,"tag-type-artist")]/a[last()]
       Tags: &tag_string
-        Name:
-          selector: //li[contains(@class,"tag-type-general")]/a[last()]
-      URLs: &source
-        selector: '//li[contains(text(),"Source:")]/a/@href'
+        Name: //li[contains(@class,"tag-type-general")]/a[last()]
+      URLs: &source //link[@rel="canonical"]/@href | //li[contains(text(),"Source:")]/a/@href
     scene:
       Date: *date
       Performers: *performers

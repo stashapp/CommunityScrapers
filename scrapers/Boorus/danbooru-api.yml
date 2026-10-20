@@ -33,6 +33,21 @@ imageByURL:
         - regex: '(https:\/\/.+\/posts\/)(\d+)(?:(\?.+)|(\#.+)|(\/.+))?'
           with: "$1$2.json"
 
+sceneByFragment: &fragmentScraper
+  action: scrapeJson
+  queryURL: "{filename}{checksum}"
+  queryURLReplace:
+    filename:
+      - regex: "^danbooru_(\\d+)_.*$"
+        with: "https://danbooru.donmai.us/posts/$1.json#"
+      - regex: "^[^#]*$"
+        with: ""
+    checksum:
+      - regex: "^(.+)$"
+        with: "https://danbooru.donmai.us/posts.json?md5=$1"
+  scraper: postScraper
+imageByFragment: *fragmentScraper
+
 jsonScrapers:
   postScraper:
     image:
@@ -40,8 +55,8 @@ jsonScrapers:
         selector: created_at
         postProcess:
           - replace:
-            - regex: "T.+"
-              with: ""
+              - regex: "T.+"
+                with: ""
           - parseDate: 2006-01-02
       Performers: &performers
         Name:
@@ -54,7 +69,11 @@ jsonScrapers:
           selector: tag_string_general
           split: " "
       URLs: &source
-        selector: source
+        selector: "[id,source]"
+        postProcess:
+          - replace:
+              - regex: ^(\d+)$
+                with: https://danbooru.donmai.us/posts/$1
     scene:
       Date: *date
       Performers: *performers
@@ -71,5 +90,3 @@ driver:
     #  Value: "Basic ="
     - Key: "User-Agent"
       Value: "stashapp/stash scraper"
-
-# Last Updated April 19, 2025
