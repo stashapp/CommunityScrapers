@@ -1,11 +1,12 @@
-from argparse import ArgumentParser
-from functools import reduce
-from typing import Any, Callable, Literal, Mapping, Sequence, TypeVar, cast, overload
-from urllib.error import URLError
-from urllib.request import Request, urlopen
 import json
 import re
 import sys
+from argparse import ArgumentParser
+from collections.abc import Callable, Mapping, Sequence
+from functools import reduce
+from typing import Any, Literal, TypeVar, cast, overload
+from urllib.error import URLError
+from urllib.request import Request, urlopen
 
 _MISSING = object()
 
@@ -29,13 +30,19 @@ ScraperOperation = Literal[
 
 
 @overload
-def dig(c: Mapping | Sequence, *keys: str | int | tuple[str | int, ...]) -> Any: ...
+def dig(
+    c: Mapping[Any, Any] | Sequence[Any], *keys: str | int | tuple[str | int, ...]
+) -> Any: ...
 @overload
 def dig(
-    c: Mapping | Sequence, *keys: str | int | tuple[str | int, ...], default: T
+    c: Mapping[Any, Any] | Sequence[Any],
+    *keys: str | int | tuple[str | int, ...],
+    default: T,
 ) -> T | Any: ...
 def dig(
-    c: Mapping | Sequence, *keys: str | int | tuple[str | int, ...], default: Any = None
+    c: Mapping[Any, Any] | Sequence[Any],
+    *keys: str | int | tuple[str | int, ...],
+    default: Any = None,
 ) -> Any:
     """
     Helper function to get a value from a nested Mapping (e.g. dict) or Sequence
@@ -145,7 +152,7 @@ def replace_at(obj: M, *path: str, replacement: Callable[[T], T]) -> M:
     {'a': {'b': ['c', 'd'], 'f': {'g': 'h'}}}
     """
 
-    def inner(d: M, *keys: str):
+    def inner(d: Any, *keys: str) -> Any:
         match keys:
             case [k] if isinstance(d, dict) and k in d:
                 if isinstance(d[k], list):
@@ -156,43 +163,59 @@ def replace_at(obj: M, *path: str, replacement: Callable[[T], T]) -> M:
             case _:
                 return d
 
-    return inner(obj, *path)
+    return cast(M, inner(obj, *path))
 
 
-def feet_to_cm(value: str) -> str:
+def imperial_length_to_cm(value: str) -> str:
     """
-    Converts a string representing height (feet and inches) to centimeters.
+    Converts a length in feet and/or inches to centimeters.
+
+    Each number takes the unit written after it; a unitless number counts as
+    inches, except that two bare numbers ("5 7") are read as feet then inches.
 
     Examples handled:
     - "5'7\"" -> "170"
     - "5ft 7in" -> "170"
     - "6'" -> "183"
+    - "5'5''" -> "165"
+    - "5`11``" -> "180"
+    - "7.5\"" -> "19"
+    - "7.50" -> "19"
 
     :param value: The string to parse
-    :return: The height in cm as a string, rounded to the nearest integer.
+    :return: The length in cm as a string, rounded to the nearest integer.
              Returns empty string if input is empty or if no numbers found.
     """
-    if not value:
+    pattern = r"""
+        (\d+(?:\.\d+)?)           # the number, decimals included
+        \s*
+        (?:                       # optional unit: a number without one is inches
+            (?P<inches>
+                ''|’’|``          # doubled marks before single ones, so '' isn't two feet marks
+                |["”″]
+                |inch(?:es)?\b|in\b
+            )
+            |(?P<feet>
+                ['’′`]
+                |f(?:oo|ee)?t\b   # ft, foot, feet
+            )
+        )?
+    """
+    if not value or not (
+        parts := re.findall(pattern, value, re.IGNORECASE | re.VERBOSE)
+    ):
         return ""
 
-    FOOT_IN_CM = 30.48
-    INCH_IN_CM = 2.54
+    match parts:
+        case [(feet, "", ""), (inches, "", "")]:
+            inches_total = float(feet) * 12 + float(inches)
+        case _:
+            inches_total = sum(
+                float(number) * (12 if feet_marker else 1)
+                for number, _, feet_marker in parts
+            )
 
-    filtered = re.findall(r"\d+", value)
-
-    if len(filtered) == 0:
-        return ""
-
-    feet = 0.0
-    inches = 0.0
-
-    if len(filtered) > 0:
-        feet = float(filtered[0])
-    if len(filtered) > 1:
-        inches = float(filtered[1])
-
-    length = feet * FOOT_IN_CM + inches * INCH_IN_CM
-    rounded = round(length)
+    rounded = round(inches_total * 2.54)
     return str(rounded) if rounded > 0 else ""
 
 

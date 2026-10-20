@@ -20,8 +20,8 @@ from py_common.types import (
 )
 from py_common.util import (
     dig,
-    feet_to_cm,
     guess_nationality,
+    imperial_length_to_cm,
     is_valid_url,
     lb_to_kg,
     scraper_args,
@@ -172,11 +172,11 @@ def to_scraped_performer(api_performer: dict[str, Any], site: str) -> ScrapedPer
     if alternate_names := dig(api_performer, "attributes", "alternate_names"):
         performer["aliases"] = alternate_names.strip()
     if height := dig(api_performer, "attributes", "height"):
-        performer["height"] = feet_to_cm(height.strip())
+        performer["height"] = imperial_length_to_cm(height.strip())
     if weight := dig(api_performer, "attributes", "weight"):
         performer["weight"] = lb_to_kg(weight.strip())
     if endowment := dig(api_performer, "attributes", "endowment"):
-        performer["penis_length"] = feet_to_cm("0'" + endowment.strip())
+        performer["penis_length"] = imperial_length_to_cm(endowment.strip())
     if home := dig(api_performer, "attributes", "home"):
         performer["country"] = guess_nationality(home.strip())
     if api_performer.get("has_pictures") and (

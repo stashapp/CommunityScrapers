@@ -13,7 +13,7 @@ from py_common.types import (
     ScrapedPerformer,
     ScrapedScene,
 )
-from py_common.util import feet_to_cm, is_valid_url, lb_to_kg, scraper_args
+from py_common.util import imperial_length_to_cm, is_valid_url, lb_to_kg, scraper_args
 
 ensure_requirements("lxml", "curl_cffi")
 
@@ -272,7 +272,7 @@ def performer_from_url(url: str) -> ScrapedPerformer | None:
             performer["hair_color"] = mapped_hair
         else:
             log.warning(f"Unmapped hair color '{hair_color}'")
-    if height := feet_to_cm(stat("Height")):
+    if height := imperial_length_to_cm(stat("Height")):
         performer["height"] = height
     if weight := lb_to_kg(stat("Weight")):
         performer["weight"] = weight
