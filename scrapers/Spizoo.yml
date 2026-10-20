@@ -32,7 +32,7 @@ xPathScrapers:
       $row: //div[@class="model-update row"]
     scene:
       Title: $row//h3
-      URL: $row//h3/../@href
+      URLs: $row//h3/../@href
       Image: $row//img/@src
       Details: $row//p[contains(@class, "model-update-description")]
 
@@ -42,7 +42,7 @@ xPathScrapers:
       $video_section: (//section[@id="trailer-video" or @id="scene" or @id="scene-video"] | //div[contains(@class, "videoHolder")])
     scene:
       Title:
-        selector: //div[@class="title" or @class="row"]//h1 | //div[@class="title-trailer"]//h2 | //h2[contains(@class, "titular")] | //title
+        selector: //div[(@class="title" or @class="row") and $scene_info]//h1 | //div[@class="title-trailer" and $scene_info]//h2 | //h2[contains(@class, "titular") and $scene_info] | //title[$scene_info]
         postProcess:
           # RawAttack titles have leading "Tour - " and trailing " - "
           - replace:
@@ -83,7 +83,7 @@ xPathScrapers:
                 tagteampov: Tag Team POV
                 vlogxxx: Vlog XXX
       Image:
-        selector: $video_section//video/@poster | //img[contains(@class, "update_thumb") or contains(@class, "trailer-thumb")]/@src
+        selector: $video_section//video[$scene_info]/@poster | //img[(contains(@class, "update_thumb") or contains(@class, "trailer-thumb")) and $scene_info]/@src
         postProcess:
           - replace:
               # Remove any resizing parameters for the image, we want the original
