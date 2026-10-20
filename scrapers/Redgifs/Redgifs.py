@@ -1,25 +1,27 @@
-from base64 import b64encode
-from datetime import datetime
-from pathlib import Path
 import json
 import re
 import sys
+from collections.abc import Iterator
+from datetime import UTC, datetime
+from pathlib import Path
+from typing import Any
+
+from py_common import log
+from py_common.cache import cache_to_disk
+from py_common.deps import ensure_requirements
+from py_common.types import ScrapedImage, ScrapedPerformer, ScrapedScene
+from py_common.util import scraper_args
+
+ensure_requirements("requests")
+
 import requests
 
-import py_common.log as log
-from py_common.cache import cache_to_disk
-from py_common.types import ScrapedImage, ScrapedScene
-from py_common.util import dig, scraper_args
-
-PROXIES = {}
-TIMEOUT = 10
-
 session = requests.Session()
-session.proxies.update(PROXIES)
 
 
-@cache_to_disk(ttl=24 * 60 * 60)
-def auth_token():
+# Temporary tokens expire exactly 24 hours after they're issued
+@cache_to_disk(ttl=23 * 60 * 60)
+def auth_token() -> str:
     req = session.get("https://api.redgifs.com/v2/auth/temporary")
     req.raise_for_status()
     return req.json()["token"]
@@ -28,7 +30,7 @@ def auth_token():
 session.headers.update({"Authorization": "Bearer " + auth_token()})
 
 
-def fetch_data(gif_id: str) -> dict | None:
+def fetch_data(gif_id: str) -> dict[str, Any] | None:
     # The RedGIFs API only works with lowercased IDs, though other IDs are case-insensitive
     api_url = f"https://api.redgifs.com/v2/gifs/{gif_id.lower()}?users=yes"
 
@@ -40,149 +42,159 @@ def fetch_data(gif_id: str) -> dict | None:
     return req.json()
 
 
-def to_scraped_scene(data: dict) -> ScrapedScene | None:
+def to_date(timestamp: int) -> str:
+    return datetime.fromtimestamp(timestamp, tz=UTC).date().isoformat()
+
+
+def to_performers(user: dict[str, Any]) -> list[ScrapedPerformer]:
+    performers: list[ScrapedPerformer] = []
+    if name := user.get("name"):
+        performer: ScrapedPerformer = {"name": name}
+        if urls := [
+            url for key, url in user.items() if key.startswith("socialUrl") and url
+        ]:
+            performer["urls"] = urls
+        performers.append(performer)
+    if (username := user.get("username")) and username != name:
+        performers.append({"name": username})
+    return performers
+
+
+def to_scraped_scene(data: dict[str, Any]) -> ScrapedScene:
     gif = data["gif"]
     user = data["user"]
 
     scene: ScrapedScene = {
-        "tags": [{"name": t} for t in gif.get("tags")],
-        "date": datetime.fromtimestamp(gif["createDate"]).date().isoformat(),
-        "url": f"https://www.redgifs.com/watch/{gif['id']}",
-        "performers": [],
+        "date": to_date(gif["createDate"]),
+        "urls": [f"https://www.redgifs.com/watch/{gif['id']}"],
     }
-
-    if title := gif.get("title"):
-        scene["title"] = title
-    # We cannot return the image URL because you need the token to access it
-    # and Stash does not have our token: base64 encoding the image instead
-    if img := dig(gif, "urls", ("poster", "hd", "sd")):
-        image_data = session.get(img).content
-        base64_encoded = b64encode(image_data).decode("utf-8")
-        scene["image"] = f"data:image/jpeg;base64,{base64_encoded}"
-
+    if details := gif.get("description"):
+        scene["details"] = details
+    if tags := gif.get("tags"):
+        scene["tags"] = [{"name": t} for t in tags]
+    if duration := gif.get("duration"):
+        scene["duration"] = round(duration)
+    if poster := gif["urls"].get("poster"):
+        scene["image"] = poster
     if name := user.get("name"):
-        scene["studio"] = {"name": name, "url": user["url"]}
-        urls = [
-            url for url in [dig(user, f"socialUrl{i}") for i in range(1, 16)] if url
-        ]
-        scene["performers"] = [{"name": name, "urls": urls}]
-
-    if (username := user.get("username")) and username != name:
-        scene["performers"].append({"name": username})
+        scene["studio"] = {"name": name, "urls": [user["url"]]}
+    if performers := to_performers(user):
+        scene["performers"] = performers
 
     return scene
 
 
-def to_scraped_image(data: dict) -> ScrapedImage | None:
+def to_scraped_image(data: dict[str, Any]) -> ScrapedImage:
     gif = data["gif"]
     user = data["user"]
 
     image: ScrapedImage = {
-        "tags": [{"name": t} for t in gif.get("tags")],
-        "date": datetime.fromtimestamp(gif["createDate"]).date().isoformat(),
+        "date": to_date(gif["createDate"]),
         "urls": [f"https://www.redgifs.com/watch/{gif['id']}"],
-        "performers": [],
     }
-
-    if title := gif.get("title"):
-        image["title"] = title
-
+    if details := gif.get("description"):
+        image["details"] = details
+    if tags := gif.get("tags"):
+        image["tags"] = [{"name": t} for t in tags]
     if name := user.get("name"):
-        image["studio"] = {"name": name, "url": user["url"]}
-        urls = [
-            url for url in [dig(user, f"socialUrl{i}") for i in range(1, 16)] if url
-        ]
-        image["performers"] = [{"name": name, "urls": urls}]
-
-    if (username := user.get("username")) and username != name:
-        image["performers"].append({"name": username})
+        image["studio"] = {"name": name, "urls": [user["url"]]}
+    if performers := to_performers(user):
+        image["performers"] = performers
 
     return image
 
 
-def extract_id(string: str):
+def extract_id(string: str) -> str | None:
     # Redgifs URLs are in the format https://www.redgifs.com/watch/identifier
     if match := re.search(r"redgifs.com/watch/(\w+)", string):
         return match.group(1)
 
     # Filenames are either 'Redgifs_identifier' or 'Title of Clip [identifier]'
     filename = Path(string).stem
-    if match := re.search(r"Redgifs_(\w+)", filename):
-        return match.group(1)
-    elif match := re.search(r"\[(\w+)\]", filename):
+    if (match := re.search(r"Redgifs_(\w+)", filename)) or (
+        match := re.search(r"\[(\w+)\]", filename)
+    ):
         return match.group(1)
 
+    return None
+
+
+def fragment_ids(fragment: dict[str, Any]) -> Iterator[str]:
+    "Candidate IDs from a fragment, most reliable first"
+    # Other sites' URLs (IAFD, StashDB, ...) can share the list
+    for url in fragment.get("urls") or []:
+        if identifier := extract_id(url):
+            yield identifier
+    paths = [f["path"] for f in fragment.get("files") or [] if f.get("path")]
+    if title := fragment.get("title"):
+        paths.append(title)
+    for path in paths:
+        if identifier := extract_id(path):
+            yield identifier
+    # Media downloaded as-is is named after the ID, e.g. 'ColorfulCapitalGermanspaniel-silent.mp4'
+    for path in paths:
+        if re.fullmatch(r"[A-Za-z]+", stem := Path(path).stem.split("-")[0]):
+            yield stem
+
+
+def data_from_fragment(fragment: dict[str, Any]) -> dict[str, Any] | None:
+    for identifier in dict.fromkeys(i.lower() for i in fragment_ids(fragment)):
+        if data := fetch_data(identifier):
+            return data
+    log.error("Could not find a Redgifs ID in the fragment's URLs, files or title")
     return None
 
 
 def scene_by_url(url: str) -> ScrapedScene | None:
     if not (identifier := extract_id(url)):
         log.error(f"Could not extract ID from URL: {url}")
-        return
-
+        return None
     if not (data := fetch_data(identifier)):
-        return
-
+        return None
     return to_scraped_scene(data)
 
 
-def scene_by_fragment(fragment: dict) -> ScrapedScene | None:
-    if (
-        (url := dig(fragment, "url"))
-        and (identifier := extract_id(url))
-        and (data := fetch_data(identifier))
-    ):
-        return to_scraped_scene(data)
-    if not (filename := dig(fragment, "files", 0, "path")):
-        log.error(
-            "Could not extract ID from fragment: need to have a file or a Redgifs URL"
-        )
+def scene_by_name(name: str) -> list[ScrapedScene]:
+    "Searching only works by ID or URL"
+    identifier = extract_id(name) or name.strip()
+    if not (data := fetch_data(identifier)):
+        return []
+    return [to_scraped_scene(data)]
+
+
+def scene_by_fragment(fragment: dict[str, Any]) -> ScrapedScene | None:
+    if not (data := data_from_fragment(fragment)):
         return None
-    if (identifier := extract_id(filename)) and (data := fetch_data(identifier)):
-        return to_scraped_scene(data)
-    if data := fetch_data(Path(filename).stem):
-        return to_scraped_scene(data)
-    log.debug("Unable to scrape this fragment from Redgifs")
+    return to_scraped_scene(data)
 
 
 def image_by_url(url: str) -> ScrapedImage | None:
     if not (identifier := extract_id(url)):
         log.error(f"Could not extract ID from URL: {url}")
-        return
+        return None
     if not (data := fetch_data(identifier)):
         log.error(f"Could not fetch data for '{identifier}', removed from site?")
-        return
+        return None
     return to_scraped_image(data)
 
 
-def image_by_fragment(fragment: dict) -> ScrapedImage | None:
-    if (
-        (url := dig(fragment, "url"))
-        and (identifier := extract_id(url))
-        and (data := fetch_data(identifier))
-    ):
-        return to_scraped_image(data)
-    if (identifier := extract_id(fragment["title"])) and (
-        data := fetch_data(identifier)
-    ):
-        return to_scraped_image(data)
-
-    if data := fetch_data(Path(fragment["title"]).stem):
-        return to_scraped_image(data)
-    log.debug("Unable to scrape this fragment from Redgifs")
+def image_by_fragment(fragment: dict[str, Any]) -> ScrapedImage | None:
+    if not (data := data_from_fragment(fragment)):
+        return None
+    return to_scraped_image(data)
 
 
 if __name__ == "__main__":
     op, args = scraper_args()
     result = None
     match op, args:
-        case "scene-by-url" | "scene-by-query-fragment", {"url": url}:
+        case "scene-by-url", {"url": url} if url:
             result = scene_by_url(url)
-        case "scene-by-name", {"name": identifier}:
-            result = [s for s in [to_scraped_scene(identifier.strip())] if s]
-        case "scene-by-fragment", fragment:
+        case "scene-by-name", {"name": name} if name:
+            result = scene_by_name(name)
+        case "scene-by-fragment" | "scene-by-query-fragment", fragment:
             result = scene_by_fragment(fragment)
-        case "image-by-url", {"url": url}:
+        case "image-by-url", {"url": url} if url:
             result = image_by_url(url)
         case "image-by-fragment", fragment:
             result = image_by_fragment(fragment)
