@@ -3,14 +3,6 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - houseofgord.com/d
-    queryURL: "{url}"
-    queryURLReplace:
-      # Age-gate acceptance is tracked server-side against the session cookie,
-      # not just readable from a static client cookie value and routing through
-      # the real accept endpoint is what actually gets past it
-      url:
-        - regex: ^(https?://[^/]+)(/d/.*)$
-          with: $1/legal/accept/?original_page=$2
     scraper: sceneScraper
 
 xPathScrapers:
@@ -27,6 +19,15 @@ xPathScrapers:
                 with: $1
           - parseDate: 02 Jan 2006
       Details: //div[@id="main_content"]//p[@sanitize="false"]
+      Image:
+        selector: //form[contains(@action, "scene_id=")]/@action | //div[@id="main_content"]//td/img/@src
+        concat: "|"
+        postProcess:
+          - javascript: |
+              const id = value.match(/scene_id=(\d+)/);
+              const still = value.match(/filename%3D%22(.+?)%22/);
+              if (!id || !still) return "";
+              return "https://media.houseofgord.com/previews/" + id[1].padStart(4, "0") + "/" + still[1];
       Performers:
         # lists both performers and any bondage apparatus used, e.g.
         # "Featuring: Lydia McLane - Treadmill" but only the names before the
@@ -40,6 +41,9 @@ xPathScrapers:
 
 driver:
   useCDP: true
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0
   cookies:
     - Cookies:
         - Name: legal_accepted2
