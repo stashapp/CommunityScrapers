@@ -1,12 +1,11 @@
 # yaml-language-server: $schema=../../validator/scraper.schema.json
 name: RealityLovers
 # requires: py_common
-# scrapes: Reality Lovers, TS Virtual Lovers
+# scrapes: Play Girl Stories, Reality Lovers, TS Virtual Lovers, We Are Crazy
 
 performerByURL:
   - action: script
     url:
-      - kinkvr.com/girl/
       - playgirlstories.com/girl/
       - realitylovers.com/girl/
       - tsvirtuallovers.com/girl/
@@ -14,11 +13,10 @@ performerByURL:
     script:
       - python
       - RealityLovers.py
-      - performerByURL
+      - performer-by-url
 sceneByURL:
   - action: script
     url:
-      - kinkvr.com/vd/
       - playgirlstories.com/vd/
       - realitylovers.com/vd/
       - tsvirtuallovers.com/vd/
@@ -26,23 +24,22 @@ sceneByURL:
     script:
       - python
       - RealityLovers.py
-      - sceneByURL
+      - scene-by-url
 sceneByName:
   action: script
   script:
     - python
     - RealityLovers.py
-    - sceneByName
+    - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
     - RealityLovers.py
-    - sceneByQueryFragment
+    - scene-by-query-fragment
 sceneByFragment:
   action: script
   script:
     - python
     - RealityLovers.py
-    - sceneByFragment
-# Last Updated December 2, 2025
+    - scene-by-fragment
