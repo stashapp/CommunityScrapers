@@ -186,6 +186,7 @@ def to_scraped_performer(api_performer: dict[str, Any]) -> ScrapedPerformer:
 
 
 def to_scraped_scene(api_scene: dict[str, Any]) -> ScrapedScene:
+    log.debug(api_scene)
     site = api_scene.get("site_slug", "")
     scene: ScrapedScene = {}
     if object_id := api_scene.get("objectID"):
@@ -200,6 +201,10 @@ def to_scraped_scene(api_scene: dict[str, Any]) -> ScrapedScene:
         scene["date"] = published_at[:10]
     if cover := api_scene.get("cover_url"):
         scene["image"] = cover
+    elif poster_conversion_url := api_scene.get("poster_conversion_url"):
+        scene["image"] = poster_conversion_url.replace(
+            "/conversions/", "/"
+        ).replace("-video-list", "")
     if site in CONFIG:
         scene["studio"] = {"name": CONFIG[site]["studio_name"]}
 
