@@ -8,7 +8,7 @@ from functools import lru_cache
 from typing import Any
 
 from Altwolia import domains
-from Altwolia.utils import without_scene_number
+from Altwolia.utils import same_title, without_scene_number
 from py_common import log
 from py_common.deps import ensure_requirements
 from py_common.types import (
@@ -22,6 +22,7 @@ from py_common.util import (
     dig,
     guess_nationality,
     imperial_length_to_cm,
+    is_own_url,
     is_valid_url,
     lb_to_kg,
     scraper_args,
@@ -785,8 +786,11 @@ def scene_from_fragment(
         [ScrapedScene, dict[str, Any]], ScrapedScene
     ] = default_postprocess,
 ) -> ScrapedScene | None:
-    if urls := fragment.get("urls"):
-        return scene_from_url(urls[0], site, fragment, postprocess)
+    for url in fragment.get("urls") or []:
+        if is_own_url(url) and (
+            scene := scene_from_url(url, site, fragment, postprocess)
+        ):
+            return scene
     if code := fragment.get("code"):
         return scene_from_id(code, site, fragment, postprocess)
     if (title := fragment.get("title")) and (
@@ -795,11 +799,7 @@ def scene_from_fragment(
         # The ranking compares API titles, which lack any scene number the postprocess
         # appended, so every scene of a movie ranks the same: prefer an exact match
         return next(
-            (
-                s
-                for s in scenes
-                if (s.get("title") or "").casefold() == title.casefold()
-            ),
+            (s for s in scenes if same_title(s.get("title") or "", title)),
             scenes[0],
         )
     return None
@@ -812,8 +812,9 @@ def gallery_from_fragment(
         [ScrapedGallery, dict[str, Any]], ScrapedGallery
     ] = default_postprocess,
 ) -> ScrapedGallery | None:
-    if url := fragment.get("url"):
-        return gallery_from_url(url, site, postprocess)
+    for url in fragment.get("urls") or []:
+        if is_own_url(url) and (gallery := gallery_from_url(url, site, postprocess)):
+            return gallery
     if code := fragment.get("code"):
         return gallery_from_set_id(code, site, postprocess)
     if (title := fragment.get("title")) and (
@@ -830,8 +831,11 @@ def performer_from_fragment(
         [ScrapedPerformer, dict[str, Any]], ScrapedPerformer
     ] = default_postprocess,
 ) -> ScrapedPerformer | None:
-    if url := fragment.get("url") or next(iter(fragment.get("urls") or []), None):
-        return performer_from_url(url, site, postprocess)
+    for url in fragment.get("urls") or []:
+        if is_own_url(url) and (
+            performer := performer_from_url(url, site, postprocess)
+        ):
+            return performer
     # Without a URL only an exact name match is safe to follow
     if (
         (name := fragment.get("name"))

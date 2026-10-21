@@ -40,6 +40,14 @@ def append_scene_number(
     return scene
 
 
+def same_title(a: str, b: str) -> bool:
+    """
+    Title equality that also ignores spacing and the separator before a scene number,
+    since filename-derived titles drop apostrophes: "Kellys - Scene 4" == "Kelly's, Scene 4"
+    """
+    return _normalized(a).replace(" ", "") == _normalized(b).replace(" ", "")
+
+
 def without_scene_number(title: str) -> str:
     """
     The search query for a title that append_scene_number may have produced:

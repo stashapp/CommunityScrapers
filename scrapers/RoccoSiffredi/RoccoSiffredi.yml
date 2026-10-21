@@ -38,7 +38,34 @@ galleryByURL:
   - action: script
     url:
       - roccosiffredi.com/en/photo/
+      - roccosiffredi.com/en/video/
     script:
       - python
       - RoccoSiffredi.py
       - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - RoccoSiffredi.py
+    - gallery-by-fragment
+performerByURL:
+  - action: script
+    url:
+      - roccosiffredi.com/en/pornstar/
+    script:
+      - python
+      - RoccoSiffredi.py
+      - performer-by-url
+performerByName:
+  action: script
+  script:
+    - python
+    - RoccoSiffredi.py
+    - performer-by-name
+performerByFragment:
+  action: script
+  script:
+    - python
+    - RoccoSiffredi.py
+    - performer-by-fragment
