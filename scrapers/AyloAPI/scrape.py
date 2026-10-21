@@ -404,7 +404,13 @@ def to_scraped_scene(scene_from_api: dict[str, Any]) -> ScrapedScene:
         ("xx", "xl", "lg", "md", "sm", "xs"),
         "url",
     ):
-        scene["image"] = re.sub(r"/m=[^/]+", "", image)
+        # scrape the largest preset resolution
+        scene["image"] = image
+        # log out the full/original resolution URL
+        log.info(
+            f'Full resolution cover image for "{scene["title"]}": ' +
+            re.sub(r"/m=[^/]+", "", image)
+        )
 
     if (
         length := dig(scene_from_api, "videos", "mediabook", "length")
