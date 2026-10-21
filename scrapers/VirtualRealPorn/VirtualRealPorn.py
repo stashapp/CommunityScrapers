@@ -186,7 +186,6 @@ def to_scraped_performer(api_performer: dict[str, Any]) -> ScrapedPerformer:
 
 
 def to_scraped_scene(api_scene: dict[str, Any]) -> ScrapedScene:
-    log.debug(api_scene)
     site = api_scene.get("site_slug", "")
     scene: ScrapedScene = {}
     if object_id := api_scene.get("objectID"):
