@@ -19,11 +19,10 @@ xPathScrapers:
   performerScraper:
     performer:
       Name: //h1
-      Details: //h3[contains(text(),"About:")]/following-sibling::p[1]/text()
-      Image:
+      Details: //h3[contains(text(),"About:")]/following-sibling::p[1]
+      Images:
         selector: //img[@id="mainAva"]/@src
         postProcess:
           - replace:
               - regex: "^"
                 with: "https://www.theenglishmansion.com"
-# Updated April 13, 2026
