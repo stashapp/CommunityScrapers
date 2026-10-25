@@ -345,9 +345,11 @@ def page_metadata(url: str) -> ScrapedScene:
         )
         scene["studio"] = {"name": STUDIO_MAP.get(studio_ref, studio_ref)}
 
+    # Video pages cut the visible description short behind a join link, but their
+    # VideoObject metadata carries it in full; photo pages show it in full
     if description := page.xpath(
-        '//div[@class="p-desc p-3" or contains(@class, "desc")]/text()'
-    ):
+        '//*[@itemtype="https://schema.org/VideoObject"]/meta[@itemprop="description"]/@content'
+    ) or page.xpath('//div[@class="p-desc p-3" or contains(@class, "desc")]/text()'):
         scene["details"] = "\n\n".join(
             [p.strip() for p in description if len(p.strip())]
         )
