@@ -5,7 +5,6 @@ from typing import Any
 from AyloAPI.scrape import (
     gallery_from_fragment,
     gallery_from_url,
-    movie_from_url,
     performer_from_fragment,
     performer_from_url,
     performer_search,
@@ -15,7 +14,7 @@ from AyloAPI.scrape import (
     scraper_args,
 )
 from py_common import log
-from py_common.util import dig, replace_all
+from py_common.util import dig, replace_all, replace_at
 
 
 def sexyhub(obj: Any, _) -> Any:
@@ -36,6 +35,13 @@ def sexyhub(obj: Any, _) -> Any:
         lambda x: x.replace("/model/", "/modelprofile/").replace(
             "sexyhub.com", replacement
         ),
+    )
+    fixed = replace_at(
+        fixed,
+        "studio",
+        "parent",
+        "name",
+        replacement=lambda name: "Sexy Hub" if name == "SexyHub" else name,
     )
 
     return fixed
@@ -73,8 +79,6 @@ if __name__ == "__main__":
             )
         case "performer-by-name", {"name": name} if name:
             result = performer_search(name, search_domains=domains, postprocess=sexyhub)
-        case "movie-by-url", {"url": url} if url:
-            result = movie_from_url(url, postprocess=sexyhub)
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
             sys.exit(1)
