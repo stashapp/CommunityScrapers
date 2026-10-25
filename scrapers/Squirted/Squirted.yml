@@ -58,15 +58,5 @@ performerByFragment:
   script:
     - python
     - ../AyloAPI/scrape.py
+    - squirted
     - performer-by-fragment
-groupByURL:
-  - action: script
-    url:
-      - squirted.com/movie/
-      # Since scenes link to the movie we can scrape movies from scenes
-      - squirted.com/scene/
-    script:
-      - python
-      - ../AyloAPI/scrape.py
-      - movie-by-url
-# Last Updated January 13, 2024
