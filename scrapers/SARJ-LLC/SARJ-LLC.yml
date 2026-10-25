@@ -6,16 +6,14 @@ sceneByName:
   script:
     - python3
     - SARJ-LLC.py
-    - search
-    - scene
+    - scene-by-name
 
 sceneByQueryFragment:
   action: script
   script:
     - python3
     - SARJ-LLC.py
-    - query
-    - scene
+    - scene-by-query-fragment
 
 sceneByURL:
   - action: script
@@ -39,16 +37,14 @@ sceneByURL:
     script:
       - python3
       - SARJ-LLC.py
-      - scrape
-      - scene
+      - scene-by-url
 
 sceneByFragment:
   action: script
   script:
     - python3
     - SARJ-LLC.py
-    - query
-    - scene
+    - scene-by-fragment
 
 galleryByURL:
   - action: script
@@ -56,16 +52,14 @@ galleryByURL:
     script:
       - python3
       - SARJ-LLC.py
-      - scrape
-      - gallery
+      - gallery-by-url
 
 galleryByFragment:
   action: script
   script:
     - python3
     - SARJ-LLC.py
-    - query
-    - gallery
+    - gallery-by-fragment
 
 performerByURL:
   - action: script
@@ -73,23 +67,18 @@ performerByURL:
     script:
       - python3
       - SARJ-LLC.py
-      - scrape
-      - performer
+      - performer-by-url
 
 performerByFragment:
   action: script
   script:
     - python3
     - SARJ-LLC.py
-    - query
-    - performer
+    - performer-by-fragment
 
 performerByName:
   action: script
   script:
     - python3
     - SARJ-LLC.py
-    - search
-    - performer
-
-# Last Updated December 5, 2025
+    - performer-by-name

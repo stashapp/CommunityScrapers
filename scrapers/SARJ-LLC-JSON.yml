@@ -49,7 +49,12 @@ performerByURL:
     queryURLReplace:
       url:
         - regex: '\S+\.(?P<host>\S+)\.com/model/(?P<name>[^\s/]+)'
-          with: https://www.$host.com/api/model?name=$name&order=DATE&direction=DESC
+          with: https://www.$host.com/api/model?order=DATE&direction=DESC&name=$name
+        - &slugHyphen
+          regex: (name=[^&]*)-
+          with: ${1}+
+        - *slugHyphen
+        - *slugHyphen
 
 jsonScrapers:
   galleryScraper:
@@ -85,7 +90,7 @@ jsonScrapers:
               var path = value.substring(32);
               var domain = domains[uuid];
               return domain ? 'https://www.' + domain + path : null;
-      Date: &date
+      Date:
         selector: publishedAt
         postProcess:
           - parseDate: "2006-01-02T15:04:05.9Z"
@@ -102,11 +107,11 @@ jsonScrapers:
                 E7DFB70DF31C45B3B5E0BF10D733D349: "MetArt X"
                 D0E7E33329311E3BB6E0800200C93255: "Domai"
                 5592E33324211E3FF640800200C93111: "Goddess Nudes"
-                94DB3D0036FC11E1B86C0800200C9A66: "Sex Art"
+                94DB3D0036FC11E1B86C0800200C9A66: "SexArt"
                 4F23028982B542FA9C6DAAA747E9B5B3: "Viv Thomas"
                 FDAFDF209DC311E0AA820800200C9A66: "The Life Erotic"
                 3D345D1E156910B44DB5A80CDD746318: "Straplez"
-                15A9FFA04E3511DF98790800200C9A66: "ErroticaArchives"
+                15A9FFA04E3511DF98790800200C9A66: "Errotica Archives"
                 FDA021004E3411DF98790800200C9A66: "Erotic Beauty"
                 18A2E47EAEFD45F29033A5FCAF1F5B91: "Stunning 18"
                 D99236C04DD011E1B86C0800200C9A66: "Rylsky Art"
@@ -122,41 +127,44 @@ jsonScrapers:
       Gender:
         selector: gender
         postProcess:
-          - javascript: |
-              // capitalise the first letter
-              if (value && value.length) {
-                return value[0].toUpperCase() + value.substring(1)
-              }
+          - &capitalize
+            javascript: |
+              return value ? value[0].toUpperCase() + value.substring(1) : "";
       Ethnicity:
         selector: ethnicity
         postProcess:
-          - javascript: |
-              // capitalise the first letter
-              if (value && value.length) {
-                return value[0].toUpperCase() + value.substring(1)
-              }
+          - *capitalize
       HairColor:
         selector: hair
         postProcess:
-          - javascript: |
-              // capitalise the first letter
-              if (value && value.length) {
-                return value[0].toUpperCase() + value.substring(1)
-              }
+          - *capitalize
       EyeColor:
         selector: eyes
         postProcess:
-          - javascript: |
-              // capitalise the first letter
-              if (value && value.length) {
-                return value[0].toUpperCase() + value.substring(1)
-              }
-      Country: country.name
-      Height: height
-      Weight: weight
-      Measurements: size
+          - *capitalize
+      Country:
+        selector: country.name
+        postProcess:
+          - replace:
+              - regex: ^Unknown$
+                with: ""
+      Height:
+        selector: height
+        postProcess:
+          - &unknownZero
+            replace:
+              - regex: ^0$
+                with: ""
+      Weight:
+        selector: weight
+        postProcess:
+          - *unknownZero
+      Measurements:
+        selector: size
+        postProcess:
+          - *unknownZero
       Details: biography
-      Image:
+      Images:
         selector: "[siteUUID,headshotImagePath].@tostr"
         postProcess:
           - replace:
