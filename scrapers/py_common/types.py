@@ -77,6 +77,11 @@ class ScrapedPerformer(TypedDict, total=False):
     penis_length: str
     circumcised: str
     career_length: str
+    "The 'career_length' field is deprecated, use 'career_start' and 'career_end' instead"
+    career_start: str
+    "Year, year-month or full date"
+    career_end: str
+    "Year, year-month or full date"
     tattoos: str
     piercings: str
     aliases: str
