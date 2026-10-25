@@ -271,13 +271,19 @@ def own_url_patterns() -> tuple[str, ...]:
     """
     The `url:` patterns declared in this scraper's YAML file(s)
 
-    Stash runs a script from its scraper's directory, so these are read from the
-    YAML files next to the invoked script that refer to it by name
+    These are read from the YAML files next to the invoked script that refer to it
+    by name, and from the YAML files in the working directory that refer to it by the
+    exact path Stash was given: Stash runs a script from its scraper's directory, which
+    isn't the script's own when a YAML file calls another scraper's script directly
+    like for example with `../Altwolia/scrape.py`
     """
     script = Path(sys.argv[0]).resolve()
+    candidates = [(yml, script.name) for yml in sorted(script.parent.glob("*.yml"))]
+    if Path.cwd().resolve() != script.parent:
+        candidates += [(yml, sys.argv[0]) for yml in sorted(Path.cwd().glob("*.yml"))]
     patterns: list[str] = []
-    for yml in sorted(script.parent.glob("*.yml")):
-        if script.name not in (text := yml.read_text(encoding="utf-8")):
+    for yml, needle in candidates:
+        if needle not in (text := yml.read_text(encoding="utf-8")):
             continue
         url_indent = None
         for line in text.splitlines():
