@@ -46,40 +46,73 @@ xPathScrapers:
       Image: //video[@class="wp-video-shortcode"]/@poster
       Tags:
         Name:
-          # The site renders no clickable tag (or performer) links anywhere
-          # on the scene page; the only signal is this CSS class dump, which
-          # mixes descriptive tags and performer names in the same flat
-          # taxonomy with no reliable way to tell them apart per-page. So
-          # everything here - including performer names - comes through as
-          # a Tag.
           selector: //div[contains(@class, "t7-video-single")]/@class
           postProcess:
             - javascript: |
-                if (!value) return [];
-                return value
-                  .split(/\s+/)
-                  .filter(function (c) {
-                    return c.indexOf("video-category-") === 0;
-                  })
-                  .map(function (c) {
-                    return c
-                      .replace("video-category-", "")
+                var tags = {
+                  "anal": "Anal", "arabic": "Arabic", "asian": "Asian",
+                  "black": "Black", "bwc": "BWC", "european": "European",
+                  "glory-hole": "Glory Hole", "hairy": "Hairy", "latino": "Latino",
+                  "mixed": "Mixed", "oral": "Oral", "solo": "Solo", "white": "White",
+                  "bbc-keywords": "BBC", "construction-worker": "Construction Worker",
+                  "doggy": "Doggy", "dominant": "Dominant", "edging": "Edging",
+                  "face-fucking": "Face Fucking", "facial": "Facial", "feet": "Feet",
+                  "group-sex": "Group Sex", "hairy-2": "Hairy", "hung": "Hung",
+                  "kiss": "Kiss", "married": "Married", "missionary": "Missionary",
+                  "moaning": "Moaning", "muscle": "Muscle", "pov": "POV",
+                  "riding": "Riding", "rimming": "Rimming", "shower": "Shower",
+                  "swallow": "Swallow", "verbal": "Verbal"
+                };
+                var out = [];
+                (value || "").split(/\s+/).forEach(function (c) {
+                  var name = tags[c.replace(/^video-category-/, "")];
+                  if (c.indexOf("video-category-") === 0 && name && out.indexOf(name) < 0) {
+                    out.push(name);
+                  }
+                });
+                return out.join(",");
+          split: ","
+      Performers:
+        Name:
+          selector: //div[contains(@class, "t7-video-single")]/@class
+          postProcess:
+            - javascript: |
+                var notPerformers = [
+                  "anal", "arabic", "asian", "beefcakes", "black", "bwc", "european",
+                  "glory-hole", "hairy", "keywords", "latino", "mixed", "oral", "solo",
+                  "white", "bbc-keywords", "construction-worker", "doggy", "dominant",
+                  "edging", "face-fucking", "facial", "feet", "group-sex", "hairy-2",
+                  "hung", "kiss", "married", "missionary", "moaning", "muscle", "pov",
+                  "riding", "rimming", "shower", "swallow", "verbal"
+                ];
+                var names = {
+                  "jc": ["JC"],
+                  "michael-s": ["Michael S."],
+                  "prince-sergio": ["Prince", "Sergio"]
+                };
+                var classes = (value || "").split(/\s+/);
+                var out =
+                  classes.indexOf("video-category-solo") >= 0 ? [] : ["Victor"];
+                classes.forEach(function (c) {
+                  if (c.indexOf("video-category-") !== 0) return;
+                  var slug = c.replace(/^video-category-/, "");
+                  if (notPerformers.indexOf(slug) >= 0) return;
+                  var guests = names[slug] || [
+                    slug
                       .split("-")
                       .map(function (w) {
                         return w.charAt(0).toUpperCase() + w.slice(1);
                       })
-                      .join(" ");
+                      .join(" "),
+                  ];
+                  guests.forEach(function (g) {
+                    if (out.indexOf(g) < 0) out.push(g);
                   });
+                });
+                return out.join(",");
           split: ","
-      Performers:
-        Name:
-          # Victor is the site's host/narrator and is on-screen having sex
-          # with the guest model in every scene, so he's always credited.
-          # The guest model can't be reliably identified (see Tags above),
-          # so is intentionally left out of Performers.
-          fixed: Victor
       Studio:
         Name:
           fixed: Beefcake Hunter
-        URL:
+        URLs:
           fixed: https://beefcakehunter.com/
