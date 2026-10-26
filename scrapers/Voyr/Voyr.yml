@@ -22,28 +22,28 @@ sceneByFragment:
   script:
     - python
     - ../AyloAPI/scrape.py
-    - Voyr
+    - voyr
     - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
     - ../AyloAPI/scrape.py
-    - Voyr
+    - voyr
     - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
     - ../AyloAPI/scrape.py
-    - Voyr
+    - voyr
     - scene-by-query-fragment
 performerByName:
   action: script
   script:
     - python
     - ../AyloAPI/scrape.py
-    - Voyr
+    - voyr
     - performer-by-name
 performerByURL:
   - action: script
@@ -58,15 +58,5 @@ performerByFragment:
   script:
     - python
     - ../AyloAPI/scrape.py
+    - voyr
     - performer-by-fragment
-groupByURL:
-  - action: script
-    url:
-      - voyr.com/movie/
-      # Since scenes link to the movie we can scrape movies from scenes
-      - voyr.com/scene/
-    script:
-      - python
-      - ../AyloAPI/scrape.py
-      - movie-by-url
-# Last Updated January 13, 2024
