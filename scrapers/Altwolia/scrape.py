@@ -188,8 +188,18 @@ def to_scraped_performer(api_performer: dict[str, Any], site: str) -> ScrapedPer
     if (url_name := api_performer.get("url_name")) and (
         actor_id := api_performer.get("actor_id")
     ):
-        performer["urls"] = [performer_url(site, url_name, actor_id)]
+        performer["urls"] = [
+            performer_url(performer_site(api_performer, site), url_name, actor_id)
+        ]
     return performer
+
+
+def performer_site(api_performer: dict[str, Any], site: str) -> str:
+    # Shared network indexes return performers whose profile only exists on their own sites
+    available_on = api_performer.get("availableOnSite") or []
+    if site in available_on:
+        return site
+    return next((other for other in available_on if domains.has_own_site(other)), site)
 
 
 def group_from_api_scene(api_scene: dict[str, Any], site: str) -> ScrapedGroup:
