@@ -1,0 +1,57 @@
+name: YouTube
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - youtube.com/watch
+      - youtube.com/shorts/
+      - youtube.com/live/
+      - youtube.com/embed/
+      - youtube.com/v/
+      - youtu.be/
+    scraper: sceneScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: '^.*(?:v=|\.be/|/shorts/|/live/|/embed/|/v/|vi=)([\w-]{11}).*$'
+          with: https://www.youtube.com/watch?v=${1}
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $author: //span[@itemprop="author"]
+    scene:
+      Title: //meta[@property="og:title"]/@content
+      URLs:
+        selector: //meta[@itemprop="identifier"]/@content
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.youtube.com/watch?v=
+      Date:
+        selector: //meta[@itemprop="datePublished"]/@content
+        postProcess:
+          - parseDate: 2006-01-02T15:04:05-07:00
+      Details:
+        selector: //script[contains(., "var ytInitialPlayerResponse = ")]
+        postProcess:
+          - javascript: |
+              const response = JSON.parse(value.slice(value.indexOf("{"), value.lastIndexOf("}") + 1));
+              return (response.videoDetails?.shortDescription || "").trim();
+      Image: //meta[@property="og:image"]/@content
+      Tags:
+        Name: //meta[@property="og:video:tag"]/@content
+      Studio:
+        Name: $author/link[@itemprop="name"]/@content
+        URLs:
+          selector: $author/link[@itemprop="url"]/@href
+          postProcess:
+            - replace:
+                - regex: ^http://
+                  with: https://
+      # TODO: enable when scrape dialog can show durations
+      # Duration:
+      #   selector: //meta[@itemprop="duration"]/@content
+      #   postProcess:
+      #     - javascript: |
+      #         const [, h, m, s] = value.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+      #         return String((+h || 0) * 3600 + (+m || 0) * 60 + (+s || 0));
