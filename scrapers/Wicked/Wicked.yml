@@ -30,10 +30,17 @@ galleryByURL:
   - action: script
     url:
       - wicked.com/en/photo/
+      - wicked.com/en/video/
     script:
       - python
       - Wicked.py
       - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - Wicked.py
+    - gallery-by-fragment
 groupByURL:
   - action: script
     url:
