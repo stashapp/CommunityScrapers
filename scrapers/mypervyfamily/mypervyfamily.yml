@@ -4,37 +4,61 @@ sceneByURL:
   - action: script
     url:
       - mypervyfamily.com/video/
+      - mypervyfamily.com/en/video/
     script:
       - python
-      - ../AyloAPI/scrape.py
+      - mypervyfamily.py
       - scene-by-url
 sceneByFragment:
-    action: script
-    script:
-      - python
-      - ../AyloAPI/scrape.py
-      - mypervyfamily
-      - scene-by-fragment
+  action: script
+  script:
+    - python
+    - mypervyfamily.py
+    - scene-by-fragment
 sceneByName:
-    action: script
-    script:
-      - python
-      - ../AyloAPI/scrape.py
-      - mypervyfamily
-      - scene-by-name
+  action: script
+  script:
+    - python
+    - mypervyfamily.py
+    - scene-by-name
 sceneByQueryFragment:
-    action: script
-    script:
-      - python
-      - ../AyloAPI/scrape.py
-      - mypervyfamily
-      - scene-by-query-fragment
+  action: script
+  script:
+    - python
+    - mypervyfamily.py
+    - scene-by-query-fragment
 galleryByURL:
   - action: script
     url:
-      - mypervyfamily.com/photo/
+      - mypervyfamily.com/video/
+      - mypervyfamily.com/en/video/
     script:
       - python
-      - ../AyloAPI/scrape.py
+      - mypervyfamily.py
       - gallery-by-url
-# Last Updated December 22, 2022
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - mypervyfamily.py
+    - gallery-by-fragment
+performerByURL:
+  - action: script
+    url:
+      - mypervyfamily.com/model/
+    script:
+      - python
+      - mypervyfamily.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - mypervyfamily.py
+    - performer-by-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - mypervyfamily.py
+    - performer-by-name

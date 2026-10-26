@@ -4,38 +4,61 @@ sceneByURL:
   - action: script
     url:
       - touchmywife.com/video/
+      - touchmywife.com/en/video/
     script:
       - python
-      - ../AyloAPI/scrape.py
+      - touchmywife.py
       - scene-by-url
 sceneByFragment:
-    action: script
-    script:
-      - python
-      - ../AyloAPI/scrape.py
-      - touchmywife
-      - scene-by-fragment
+  action: script
+  script:
+    - python
+    - touchmywife.py
+    - scene-by-fragment
 sceneByName:
-    action: script
-    script:
-      - python
-      - ../AyloAPI/scrape.py
-      - touchmywife
-      - scene-by-name
+  action: script
+  script:
+    - python
+    - touchmywife.py
+    - scene-by-name
 sceneByQueryFragment:
-    action: script
-    script:
-      - python
-      - ../AyloAPI/scrape.py
-      - touchmywife
-      - cene-by-query-fragment
+  action: script
+  script:
+    - python
+    - touchmywife.py
+    - scene-by-query-fragment
 galleryByURL:
   - action: script
     url:
-      - touchmywife.com/photo/
+      - touchmywife.com/video/
+      - touchmywife.com/en/video/
     script:
       - python
-      - ../AyloAPI/scrape.py
-      - touchmywife
+      - touchmywife.py
       - gallery-by-url
-# Last Updated December 22, 2022
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - touchmywife.py
+    - gallery-by-fragment
+performerByURL:
+  - action: script
+    url:
+      - touchmywife.com/model/
+    script:
+      - python
+      - touchmywife.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - touchmywife.py
+    - performer-by-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - touchmywife.py
+    - performer-by-name
