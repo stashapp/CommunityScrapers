@@ -1,40 +1,11 @@
 name: WowNetworkVenus
-# requires: py_common
 
 sceneByURL:
-  - action: script
-    script:
-      - python
-      - WowNetworkVenus.py
-      - url
-    url:
-      - venus.ultrafilms.com
-      - venus.wowgirls.com
-      - venus.wowporn.com
-      - venus.allfinegirls.com
   - action: scrapeXPath
     url:
       - ultrafilms.xxx
       - wowgirlsblog.com
     scraper: blogScraper
-sceneByName:
-  action: script
-  script:
-    - python
-    - WowNetworkVenus.py
-    - search
-sceneByQueryFragment:
-  action: script
-  script:
-    - python
-    - WowNetworkVenus.py
-    - fragment
-sceneByFragment:
-  action: script
-  script:
-    - python
-    - WowNetworkVenus.py
-    - query
 
 xPathScrapers:
   blogScraper:
