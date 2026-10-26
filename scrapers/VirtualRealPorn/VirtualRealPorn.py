@@ -1,10 +1,11 @@
 import json
 import re
 import sys
-from typing import Any
+from typing import Any, cast
 from urllib.parse import unquote, urlparse
 
 import requests
+
 from Altwolia import domains
 from Altwolia.scrape import (
     clean_text,
@@ -18,19 +19,16 @@ from Altwolia.scrape import (
 )
 from py_common import log
 from py_common.types import (
+    EyeColor,
     Gender,
+    HairColor,
     ScrapedGallery,
     ScrapedPerformer,
     ScrapedScene,
     ScrapedTag,
 )
-from py_common.util import guess_nationality, scraper_args
+from py_common.util import guess_nationality, is_own_url, scraper_args
 
-# virtualrealamateurporn.com is dead (confirmed live: both the bare domain
-# and www. return a Cloudflare 530, origin unreachable) - dropped entirely.
-# Every other site shares one Algolia app/key; studio names below are
-# already exactly what the API's own site_slug implies and match StashDB,
-# no override needed.
 CONFIG = {
     "virtualrealgay": {
         "video_path": "vr-gay-porn-video",
@@ -66,6 +64,33 @@ GENDER_MAP: dict[str, Gender] = {
     "SHEMALE": "TRANSGENDER_FEMALE",
 }
 
+# Codes without a match in py_common's vocabulary keep the site's own label
+EYE_COLOR_MAP = {
+    "BLACK": "Black",
+    "BLUE": "Blue",
+    "BLUE_GRAY": "Blue-Gray",
+    "BROWN": "Brown",
+    "GRAY": "Grey",
+    "GREEN": "Green",
+    "HAZEL": "Hazel",
+}
+HAIR_COLOR_MAP = {
+    "AUBURN": "Auburn",
+    "BLACK": "Black",
+    "BLOND": "Blonde",
+    "BROWN": "Brunette",
+    "CHESTNUT": "Chestnut",
+    "GRAY_AND_WHITE": "Gray and White",
+    "RED": "Red",
+}
+
+
+def parse_color(code: str, color_map: dict[str, str]) -> str:
+    if color := color_map.get(code):
+        return color
+    log.warning(f"Unmapped color '{code}'")
+    return code.replace("_", " ").capitalize()
+
 
 def parse_gender(gender: str) -> Gender | None:
     return GENDER_MAP.get(gender)
@@ -88,11 +113,12 @@ def actor_url(site: str, slug: str) -> str:
 
 
 def slug_from_url(url: str) -> str:
-    # Algolia's search doesn't reliably match a raw hyphen-joined slug as a
-    # single token - converting to space-separated words fixes it (verified
-    # live: 0 hits with hyphens, 1 exact hit with spaces)
-    slug = urlparse(url).path.rstrip("/").split("/")[-1]
-    return unquote(slug).replace("-", " ")
+    return unquote(urlparse(url).path.rstrip("/").split("/")[-1])
+
+
+def slug_query(slug: str) -> str:
+    # Algolia doesn't match a hyphen-joined slug as words
+    return slug.replace("-", " ")
 
 
 def fetch_instance_token(url: str) -> tuple[str, str] | None:
@@ -110,8 +136,7 @@ def fetch_instance_token(url: str) -> tuple[str, str] | None:
 
 
 def get_search_client():
-    # The whole network shares one Algolia app/key, fetched from any one
-    # site's homepage - cached under a single "virtualrealporn" key
+    # The whole network shares one Algolia app/key
     return algolia_search_client(
         "virtualrealporn",
         fetch_token=fetch_instance_token,
@@ -152,8 +177,7 @@ def sort_actors_by_match(
 def scene_actors_to_performers(
     actors: list[dict[str, Any]], site: str
 ) -> list[ScrapedPerformer]:
-    # Scene-embedded actor stubs only carry name/slug/avatar - no gender or
-    # country, unlike the standalone models index
+    # Scene-embedded actors only carry name/slug/avatar
     performers: list[ScrapedPerformer] = []
     for actor in actors:
         performer: ScrapedPerformer = {"name": actor["name"].strip()}
@@ -173,9 +197,11 @@ def to_scraped_performer(api_performer: dict[str, Any]) -> ScrapedPerformer:
     if description := api_performer.get("description"):
         performer["details"] = clean_text(description)
     if eyes_color := api_performer.get("eyes_color"):
-        performer["eye_color"] = eyes_color.strip().capitalize()
+        performer["eye_color"] = cast(EyeColor, parse_color(eyes_color, EYE_COLOR_MAP))
     if hair_color := api_performer.get("hair_color"):
-        performer["hair_color"] = hair_color.strip().capitalize()
+        performer["hair_color"] = cast(
+            HairColor, parse_color(hair_color, HAIR_COLOR_MAP)
+        )
     if country_code := api_performer.get("country_code"):
         performer["country"] = guess_nationality(country_code.strip())
     if avatar := api_performer.get("avatar_url"):
@@ -198,13 +224,17 @@ def to_scraped_scene(api_scene: dict[str, Any]) -> ScrapedScene:
         scene["urls"] = [video_url(site, slug)]
     if published_at := api_scene.get("published_at"):
         scene["date"] = published_at[:10]
+    if duration := api_scene.get("duration"):
+        scene["duration"] = duration
     if cover := api_scene.get("cover_url"):
         scene["image"] = cover
     if site in CONFIG:
-        scene["studio"] = {"name": CONFIG[site]["studio_name"]}
+        scene["studio"] = {
+            "name": CONFIG[site]["studio_name"],
+            "parent": {"name": "VirtualRealPorn Network"},
+        }
 
-    # "tags" on this API is internal/promotional labels (e.g. "most-viewed",
-    # "exclusive-video"), not content descriptors - only categories qualify
+    # The API's "tags" are promotional labels like "most-viewed"
     tags: list[ScrapedTag] = [{"name": c} for c in api_scene.get("categories", [])]
     tags.append({"name": "Virtual Reality"})
     scene["tags"] = tags
@@ -215,8 +245,7 @@ def to_scraped_scene(api_scene: dict[str, Any]) -> ScrapedScene:
 
 
 def to_scraped_gallery(api_scene: dict[str, Any]) -> ScrapedGallery:
-    # VirtualRealPorn has no separate photo sets - scene pages double as
-    # galleries, so a gallery is just a scene's fields relabelled
+    # There are no separate photo sets: scene pages double as galleries
     scene = to_scraped_scene(api_scene)
     gallery: ScrapedGallery = {}
     if title := scene.get("title"):
@@ -239,7 +268,7 @@ def to_scraped_gallery(api_scene: dict[str, Any]) -> ScrapedGallery:
 
 
 def api_scenes_search(
-    query: str, sites: list[str], length: int = 5
+    query: str, sites: list[str], length: int = 20
 ) -> list[dict[str, Any]]:
     if not (client := get_search_client()):
         return []
@@ -302,17 +331,37 @@ def scene_search(
     ]
 
 
-def scene_from_url(url: str, site: str) -> ScrapedScene | None:
-    scenes = scene_search(slug_from_url(url), [site])
-    return scenes[0] if scenes else None
+def api_scene_from_url(url: str) -> dict[str, Any] | None:
+    # url_slug isn't filterable, so search its words and match it exactly
+    site = domains.site_name(url)
+    slug = slug_from_url(url)
+    # A repeated title gets a numbered slug like "i-need-a-massage-2"
+    for query in dict.fromkeys((slug, re.sub(r"-\d+$", "", slug))):
+        if api_scene := next(
+            (
+                s
+                for s in api_scenes_search(slug_query(query), [site])
+                if unquote(s.get("url_slug") or "") == slug
+            ),
+            None,
+        ):
+            return api_scene
+    log.error(f"No scene with the slug '{slug}' on {site}")
+    return None
+
+
+def scene_from_url(url: str) -> ScrapedScene | None:
+    if api_scene := api_scene_from_url(url):
+        return to_scraped_scene(api_scene)
+    return None
 
 
 def scene_from_fragment(
     fragment: dict[str, Any], sites: list[str]
 ) -> ScrapedScene | None:
-    if url := fragment.get("url"):
-        site = domains.site_name(url)
-        return scene_from_url(url, site)
+    for url in fragment.get("urls") or []:
+        if is_own_url(url) and (scene := scene_from_url(url)):
+            return scene
     if code := fragment.get("code"):
         return scene_from_id(code, sites, fragment)
     if (title := fragment.get("title")) and (
@@ -322,19 +371,18 @@ def scene_from_fragment(
     return None
 
 
-def gallery_from_url(url: str, site: str) -> ScrapedGallery | None:
-    api_scenes = api_scenes_search(slug_from_url(url), [site])
-    if not api_scenes:
-        return None
-    return to_scraped_gallery(sort_scenes_by_match(api_scenes, None)[0])
+def gallery_from_url(url: str) -> ScrapedGallery | None:
+    if api_scene := api_scene_from_url(url):
+        return to_scraped_gallery(api_scene)
+    return None
 
 
 def gallery_from_fragment(
     fragment: dict[str, Any], sites: list[str]
 ) -> ScrapedGallery | None:
-    if url := fragment.get("url"):
-        site = domains.site_name(url)
-        return gallery_from_url(url, site)
+    for url in fragment.get("urls") or []:
+        if is_own_url(url) and (gallery := gallery_from_url(url)):
+            return gallery
     if code := fragment.get("code"):
         if api_scene := api_scene_from_id(code, sites, fragment):
             return to_scraped_gallery(api_scene)
@@ -370,15 +418,16 @@ def performer_search(query: str, sites: list[str]) -> list[ScrapedPerformer]:
 
 def performer_from_url(url: str) -> ScrapedPerformer | None:
     site = domains.site_name(url)
-    performers = performer_search(slug_from_url(url), [site])
+    performers = performer_search(slug_query(slug_from_url(url)), [site])
     return performers[0] if performers else None
 
 
 def performer_from_fragment(
     fragment: dict[str, Any], sites: list[str]
 ) -> ScrapedPerformer | None:
-    if url := fragment.get("url"):
-        return performer_from_url(url)
+    for url in fragment.get("urls") or []:
+        if is_own_url(url) and (performer := performer_from_url(url)):
+            return performer
     if (name := fragment.get("name")) and (performers := performer_search(name, sites)):
         return performers[0]
     return None
@@ -390,14 +439,14 @@ if __name__ == "__main__":
     log.debug(f"args: {args}")
     match op, args:
         case "scene-by-url", {"url": url} if url:
-            result = scene_from_url(url, domains.site_name(url))
+            result = scene_from_url(url)
         case "scene-by-name", {"name": name, "extra": extra} if name and extra:
             result = scene_search(name, extra)
         case "scene-by-fragment" | "scene-by-query-fragment", args:
             sites = args.pop("extra")
             result = scene_from_fragment(args, sites)
         case "gallery-by-url", {"url": url} if url:
-            result = gallery_from_url(url, domains.site_name(url))
+            result = gallery_from_url(url)
         case "gallery-by-fragment", args:
             sites = args.pop("extra")
             result = gallery_from_fragment(args, sites)
