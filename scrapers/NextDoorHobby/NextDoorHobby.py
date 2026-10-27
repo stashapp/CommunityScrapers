@@ -3,8 +3,8 @@ import sys
 from typing import Any
 
 from AyloAPI.scrape import (
+    gallery_from_fragment,
     gallery_from_url,
-    movie_from_url,
     performer_from_fragment,
     performer_from_url,
     performer_search,
@@ -36,8 +36,12 @@ if __name__ == "__main__":
     result = None
 
     match op, args:
-        case "gallery-by-url" | "gallery-by-fragment", {"url": url} if url:
+        case "gallery-by-url", {"url": url} if url:
             result = gallery_from_url(url, postprocess=ndh)
+        case "gallery-by-fragment", args:
+            result = gallery_from_fragment(
+                args, search_domains=domains, postprocess=ndh
+            )
         case "scene-by-url", {"url": url} if url:
             result = scene_from_url(url, postprocess=ndh)
         case "scene-by-name", {"name": name} if name:
@@ -52,8 +56,6 @@ if __name__ == "__main__":
             )
         case "performer-by-name", {"name": name} if name:
             result = performer_search(name, search_domains=domains, postprocess=ndh)
-        case "movie-by-url", {"url": url} if url:
-            result = movie_from_url(url, postprocess=ndh)
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
             sys.exit(1)
