@@ -13,13 +13,22 @@ from Altwolia.scrape import (
     scene_from_url,
     scene_search,
 )
-
 from py_common import log
-from py_common.util import scraper_args, replace_all
+from py_common.util import replace_all, scraper_args
+
+# The index also holds a few scenes credited to other studios, like OpenLife
+NETWORK_STUDIOS = {"AllBlackX", "DarkX", "EroticaX", "HardX", "LesbianX"}
+
+
+def with_network(studio: dict[str, Any]) -> dict[str, Any]:
+    if studio.get("name") in NETWORK_STUDIOS:
+        return {**studio, "parent": {"name": "XEmpire"}}
+    return studio
 
 
 def xempire(obj: Any, api_object: dict[str, Any]) -> Any:
-    return replace_all(obj, "name", lambda n: "XEmpire" if n == "Xempire" else n)
+    obj = replace_all(obj, "name", lambda n: "XEmpire" if n == "Xempire" else n)
+    return replace_all(obj, "studio", with_network)
 
 
 if __name__ == "__main__":
