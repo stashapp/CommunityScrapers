@@ -34,19 +34,54 @@ groupByURL:
   - action: script
     url:
       - 3rddegreefilms.com/en/movie/
+      - addicted2girls.com/en/movie/
       - diabolic.com/en/movie/
       - zerotolerancefilms.com/en/movie/
     script:
       - python
       - zerotolerancefilms.py
       - movie-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - zerotolerancefilms.py
+    - gallery-by-fragment
 galleryByURL:
   - action: script
     url:
       - 3rddegreefilms.com/en/photo/
+      - 3rddegreefilms.com/en/video/
       - addicted2girls.com/en/photo/
+      - addicted2girls.com/en/video/
+      - diabolic.com/en/photo/
+      - diabolic.com/en/video/
       - zerotolerancefilms.com/en/photo/
+      - zerotolerancefilms.com/en/video/
     script:
       - python
       - zerotolerancefilms.py
       - gallery-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - zerotolerancefilms.py
+    - performer-by-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - zerotolerancefilms.py
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - 3rddegreefilms.com/en/pornstar/
+      - addicted2girls.com/en/pornstar/
+      - diabolic.com/en/pornstar/
+      - zerotolerancefilms.com/en/pornstar/
+    script:
+      - python
+      - zerotolerancefilms.py
+      - performer-by-url
