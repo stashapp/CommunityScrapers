@@ -7,7 +7,7 @@ from urllib.parse import urljoin, urlparse
 from py_common import log
 from py_common.deps import ensure_requirements
 from py_common.types import ScrapedPerformer, ScrapedScene, ScrapedStudio, ScrapedTag
-from py_common.util import scraper_args
+from py_common.util import is_own_url, scraper_args
 
 ensure_requirements("requests", "bs4:beautifulsoup4")
 
@@ -23,6 +23,7 @@ USER_AGENT = (
     "Chrome/152.0.0.0 Safari/537.36"
 )
 POSTER_RE = re.compile(r"""poster:\s*["']([^"']+)["']""")
+
 
 def new_session() -> requests.Session:
     """Create a NewMFX session and pass the Laravel age gate."""
@@ -48,8 +49,8 @@ def new_session() -> requests.Session:
         raise RuntimeError("Could not find NewMFX age-gate CSRF token")
 
     form = token_input.find_parent("form")
-    action = form.get("action") if form else BASE_URL
-    action_url = urljoin(BASE_URL, action or BASE_URL)
+    action = form.get("action") if form else None
+    action_url = urljoin(BASE_URL, action if isinstance(action, str) else BASE_URL)
 
     log.debug(f"Submitting NewMFX age gate to {action_url}")
     response = session.post(
@@ -64,9 +65,11 @@ def new_session() -> requests.Session:
     log.debug(f"NewMFX age gate completed at {response.url}")
     return session
 
+
 def clean_text(value: str | None) -> str:
     """Collapse whitespace in text extracted from HTML."""
     return " ".join(value.split()) if value else ""
+
 
 def parse_date(value: str | None) -> str:
     """Convert NewMFX dates such as 'Oct 28, 2012' to '2012-10-28'."""
@@ -80,6 +83,7 @@ def parse_date(value: str | None) -> str:
         log.warning(f"Could not parse NewMFX date: {value}")
         return ""
 
+
 def validate_scene_url(url: str) -> bool:
     """Return True only for HTTP(S) URLs hosted by newmfx.com."""
     try:
@@ -90,11 +94,9 @@ def validate_scene_url(url: str) -> bool:
     return (
         parsed.scheme in ("http", "https")
         and parsed.hostname is not None
-        and (
-            parsed.hostname == "newmfx.com"
-            or parsed.hostname.endswith(".newmfx.com")
-        )
+        and (parsed.hostname == "newmfx.com" or parsed.hostname.endswith(".newmfx.com"))
     )
+
 
 def scene_image(soup: BeautifulSoup) -> str | None:
     for script in soup.find_all("script"):
@@ -105,6 +107,7 @@ def scene_image(soup: BeautifulSoup) -> str | None:
         return str(src)
 
     return None
+
 
 def scene_from_url(url: str) -> ScrapedScene | None:
     """Scrape a complete NewMFX scene page."""
@@ -159,8 +162,7 @@ def scene_from_url(url: str) -> ScrapedScene | None:
             continue
 
         performer: ScrapedPerformer = {"name": name}
-        href = performer_link.get("href")
-        if href:
+        if isinstance(href := performer_link.get("href"), str) and href:
             performer["urls"] = [urljoin(BASE_URL, href)]
         performers.append(performer)
 
@@ -185,6 +187,7 @@ def scene_from_url(url: str) -> ScrapedScene | None:
 
     return scene
 
+
 def parse_search_results(html: str) -> list[ScrapedScene]:
     """Parse scene metadata from a NewMFX search-results page."""
     soup = BeautifulSoup(html, "html.parser")
@@ -198,7 +201,7 @@ def parse_search_results(html: str) -> list[ScrapedScene]:
 
         title = clean_text(title_element.get_text())
         href = scene_link.get("href")
-        if not title or not href:
+        if not title or not isinstance(href, str) or not href:
             continue
 
         scene: ScrapedScene = {
@@ -207,8 +210,8 @@ def parse_search_results(html: str) -> list[ScrapedScene]:
         }
 
         image = scene_link.select_one("img")
-        if image and image.get("src"):
-            scene["image"] = urljoin(BASE_URL, image["src"])
+        if image and isinstance(src := image.get("src"), str) and src:
+            scene["image"] = urljoin(BASE_URL, src)
 
         date_element = card.select_one(".date-video")
         if date_element:
@@ -225,8 +228,10 @@ def parse_search_results(html: str) -> list[ScrapedScene]:
                     continue
 
                 performer: ScrapedPerformer = {"name": name}
-                performer_href = performer_link.get("href")
-                if performer_href:
+                if (
+                    isinstance(performer_href := performer_link.get("href"), str)
+                    and performer_href
+                ):
                     performer["urls"] = [urljoin(BASE_URL, performer_href)]
                 performers.append(performer)
 
@@ -243,6 +248,7 @@ def parse_search_results(html: str) -> list[ScrapedScene]:
         results.append(scene)
 
     return results
+
 
 def perform_search(
     session: requests.Session,
@@ -262,6 +268,7 @@ def perform_search(
     results = parse_search_results(response.text)
     log.debug(f"Found {len(results)} NewMFX search results for: {query}")
     return results
+
 
 def scene_search(query: str) -> list[ScrapedScene]:
     """Search NewMFX, retrying ASCII apostrophes as U+2019 when necessary."""
@@ -283,6 +290,7 @@ def scene_search(query: str) -> list[ScrapedScene]:
 
     return results
 
+
 if __name__ == "__main__":
     op, args = scraper_args()
     result = None
@@ -295,10 +303,16 @@ if __name__ == "__main__":
             result = scene_search(name)
 
         case "scene-by-query-fragment", args:
-            if url := args.get("url"):
-                result = scene_from_url(url)
-            else:
-                log.error("scene-by-query-fragment received no URL")
+            result = next(
+                (
+                    scene
+                    for url in args.get("urls") or []
+                    if is_own_url(url) and (scene := scene_from_url(url))
+                ),
+                None,
+            )
+            if not result:
+                log.error("scene-by-query-fragment received no NewMFX URL")
 
         case _:
             log.error(f"Operation {op} not implemented")

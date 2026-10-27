@@ -4,13 +4,15 @@ import sys
 from collections.abc import Callable
 from urllib.parse import urlencode, urlparse
 
-import cloudscraper
-from bs4 import BeautifulSoup, Comment, Tag
-
 from py_common import log
 from py_common.config import get_config
-from py_common.types import ScrapedMovie, ScrapedPerformer, ScrapedScene, ScrapedStudio
-from py_common.util import guess_nationality, scraper_args
+from py_common.deps import ensure_requirements
+from py_common.types import ScrapedGroup, ScrapedPerformer, ScrapedScene, ScrapedStudio
+from py_common.util import guess_nationality, is_own_url, scraper_args
+
+ensure_requirements("cloudscraper", "bs4:beautifulsoup4")
+import cloudscraper  # noqa: E402
+from bs4 import BeautifulSoup, Comment, Tag  # noqa: E402
 
 config = get_config(
     default="""# Should we include the parenthesized disambiguation in performer names?
@@ -157,9 +159,11 @@ def scene_from_url(url: str) -> ScrapedScene | None:
 
 
 def scene_from_fragment(args: dict) -> ScrapedScene | None:
-    if url := args.get("url"):
-        return scene_from_url(url)
-    log.error("Cannot scrape scene without a URL")
+    # Episode and performer pages share their layout, so match the page type too
+    for url in args.get("urls") or []:
+        if is_own_url(url) and "/episode" in url and (scene := scene_from_url(url)):
+            return scene
+    log.error("Cannot scrape scene without a GEVI episode URL")
 
 
 hair_map = {
@@ -205,7 +209,7 @@ def performer_from_url(url: str) -> ScrapedPerformer | None:
     if (image := soup.find("img", src=containing("Stars"))) and isinstance(
         src := image.get("src"), str
     ):
-        performer["image"] = abs_url(src)
+        performer["images"] = [abs_url(src)]
 
     if (hair_color := from_table(soup, "Hair:")) and (hair := hair_map.get(hair_color)):
         performer["hair_color"] = hair.split(",")[0]  # type: ignore because we've mapped all hair colors
@@ -262,9 +266,14 @@ def performer_from_url(url: str) -> ScrapedPerformer | None:
 
 
 def performer_from_fragment(args: dict) -> ScrapedPerformer | None:
-    if url := args.get("url"):
-        return performer_from_url(url)
-    elif (
+    for url in args.get("urls") or []:
+        if (
+            is_own_url(url)
+            and "/performer" in url
+            and (performer := performer_from_url(url))
+        ):
+            return performer
+    if (
         (name := args.get("name"))
         and (candidate := next(iter(performer_search(name)), None))
         and (urls := candidate.get("urls"))
@@ -293,7 +302,7 @@ def performer_search(name: str) -> list[ScrapedPerformer]:
     ]
 
 
-def movie_from_url(url: str) -> ScrapedMovie | None:
+def movie_from_url(url: str) -> ScrapedGroup | None:
     res = scraper.get(url)
     soup = BeautifulSoup(res.text, "html.parser")
     movie_section = next(iter(soup.select("section#data section")), None)
@@ -301,7 +310,7 @@ def movie_from_url(url: str) -> ScrapedMovie | None:
         log.error(f"Cannot find movie section in {url}")
         return None
 
-    movie: ScrapedMovie = {}
+    movie: ScrapedGroup = {}
 
     if name := movie_section.find("h1"):
         movie["name"] = name.get_text(strip=True)

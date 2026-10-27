@@ -1,6 +1,5 @@
-# yaml-language-server: $schema=../../validator/scraper.schema.json
-name: MarsMedia (Network)
 # requires: py_common
+name: MarsMedia (Network)
 # scrapes: Badpuppy, Bareback That Hole, Bear Films, CAUSA, Daddy on Twink, Hairy and Raw, Hard Brit Lads, Southern Strokes, Touch That Boy, Twinks in Shorts
 sceneByURL:
   - action: script

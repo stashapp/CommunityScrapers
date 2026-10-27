@@ -1,4 +1,5 @@
 import json
+import re
 import sys
 from collections.abc import Callable
 from typing import Any
@@ -18,7 +19,7 @@ from Altwolia.scrape import (
 from py_common import log
 from py_common.deps import ensure_requirements
 from py_common.types import ScrapedGallery, ScrapedScene
-from py_common.util import replace_all, scraper_args
+from py_common.util import is_own_url, replace_all, scraper_args
 
 ensure_requirements("algoliasearch")
 from algoliasearch.http.exceptions import AlgoliaException  # noqa: E402
@@ -68,12 +69,13 @@ def scene_by_url(url: str) -> ScrapedScene | None:
     )
 
 
+# A title search on the network key always finds something, so a URL only the
+# site's own key can see has to be tried before it
 def scene_by_fragment(fragment: dict[str, Any]) -> ScrapedScene | None:
-    return scene_from_fragment(
-        fragment, SITE, postprocess=nextdoorstudios
-    ) or from_own_site(
-        scene_from_fragment, fragment, next(iter(fragment.get("urls") or []), None)
-    )
+    for url in fragment.get("urls") or []:
+        if is_own_url(url) and "/video/" in url and (scene := scene_by_url(url)):
+            return scene
+    return scene_from_fragment(fragment, SITE, postprocess=nextdoorstudios)
 
 
 def gallery_by_url(url: str) -> ScrapedGallery | None:
@@ -83,9 +85,14 @@ def gallery_by_url(url: str) -> ScrapedGallery | None:
 
 
 def gallery_by_fragment(fragment: dict[str, Any]) -> ScrapedGallery | None:
-    return gallery_from_fragment(
-        fragment, SITE, postprocess=nextdoorstudios
-    ) or from_own_site(gallery_from_fragment, fragment, fragment.get("url"))
+    for url in fragment.get("urls") or []:
+        if (
+            is_own_url(url)
+            and re.search(r"/(?:photo|video)/", url)
+            and (gallery := gallery_by_url(url))
+        ):
+            return gallery
+    return gallery_from_fragment(fragment, SITE, postprocess=nextdoorstudios)
 
 
 if __name__ == "__main__":

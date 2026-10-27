@@ -1,9 +1,9 @@
-name: Jellyfin
 # requires: py_common
+name: Jellyfin
 sceneByURL:
   - action: script
+    # Change this to your Jellyfin URL, same as in config.ini
     url: &baseJellyfinURL
-      # Change this to your Jellyfin URL, same as in config.ini
       - localhost:8096
     script:
       - python
@@ -53,4 +53,3 @@ groupByURL:
       - python
       - Jellyfin.py
       - movie-by-url
-# Last Updated January 30, 2024
