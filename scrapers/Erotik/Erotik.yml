@@ -6,6 +6,5 @@ groupByURL:
       - erotik.com
     script:
       - python
-      - Ersties.py
+      - Erotik.py
       - group-by-url
-# Last Updated: February 27, 2026
