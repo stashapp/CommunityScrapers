@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=../../validator/scraper.schema.json
+# requires: py_common
 name: Pornopedia
 performerByURL:
   - action: script
@@ -8,4 +8,3 @@ performerByURL:
       - python
       - Pornopedia.py
       - performer-by-url
-# Last Updated December 3, 2025
