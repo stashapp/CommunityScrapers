@@ -142,6 +142,19 @@ def own_site_url(api_scene: dict[str, Any], site: str) -> str | None:
     return None
 
 
+def hub_performer_url(api_performer: dict[str, Any], site: str, hub: str) -> str | None:
+    "Performers listed only on retired sites still render on the network's hub"
+    available_on = api_performer.get("availableOnSite") or []
+    if (
+        any(available_on)
+        and performer_site(api_performer, site) not in available_on
+        and (url_name := api_performer.get("url_name"))
+        and (actor_id := api_performer.get("actor_id"))
+    ):
+        return performer_url(hub, url_name, actor_id)
+    return None
+
+
 # StashDB's names for partner channels, where the API spells them differently
 PARTNER_STUDIOS = {
     "3rdDegreeFilms": "3rd Degree",

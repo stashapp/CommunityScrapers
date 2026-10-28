@@ -8,6 +8,7 @@ from Altwolia.domains import site_name
 from Altwolia.scrape import (
     gallery_from_fragment,
     gallery_from_url,
+    hub_performer_url,
     movie_from_url,
     own_site_url,
     performer_from_fragment,
@@ -19,7 +20,7 @@ from Altwolia.scrape import (
 )
 from py_common import log
 from py_common.deps import ensure_requirements
-from py_common.types import ScrapedGallery, ScrapedScene
+from py_common.types import ScrapedGallery, ScrapedPerformer, ScrapedScene
 from py_common.util import is_own_url, replace_all, scraper_args
 
 ensure_requirements("algoliasearch")
@@ -68,6 +69,14 @@ def nextdoorstudios_scene(
     ):
         scene["urls"] = [url]
     return scene
+
+
+def nextdoorstudios_performer(
+    performer: ScrapedPerformer, api_performer: dict[str, Any]
+) -> ScrapedPerformer:
+    if url := hub_performer_url(api_performer, SITE, "asgmax"):
+        performer["urls"] = [url]
+    return performer
 
 
 def from_own_site(
@@ -134,11 +143,15 @@ if __name__ == "__main__":
         case "gallery-by-fragment", args:
             result = gallery_by_fragment(args)
         case "performer-by-url", {"url": url}:
-            result = performer_from_url(url, SITE)
+            result = performer_from_url(
+                url, SITE, postprocess=nextdoorstudios_performer
+            )
         case "performer-by-fragment", args:
-            result = performer_from_fragment(args, SITE)
+            result = performer_from_fragment(
+                args, SITE, postprocess=nextdoorstudios_performer
+            )
         case "performer-by-name", {"name": name} if name:
-            result = performer_search(name, SITE)
+            result = performer_search(name, SITE, postprocess=nextdoorstudios_performer)
         case "movie-by-url", {"url": url} if url:
             result = movie_from_url(url, SITE, postprocess=nextdoorstudios)
         case _:

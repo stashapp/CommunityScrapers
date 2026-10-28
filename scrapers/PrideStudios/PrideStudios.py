@@ -6,6 +6,8 @@ from typing import Any
 from Altwolia.scrape import (
     gallery_from_fragment,
     gallery_from_url,
+    hub_performer_url,
+    own_site_url,
     performer_from_fragment,
     performer_from_url,
     performer_search,
@@ -13,10 +15,12 @@ from Altwolia.scrape import (
     scene_from_id,
     scene_from_url,
     scene_search,
-    scene_url,
 )
 from py_common import log
+from py_common.types import ScrapedPerformer
 from py_common.util import replace_all, scraper_args
+
+SITE = "pridestudios"
 
 # studio_name is generic "Pride Studios" for every channel; scenes name the
 # channel in mainChannel, photosets only in channels (which labels the
@@ -47,19 +51,23 @@ def pridestudios(obj: Any, api_object: dict[str, Any]) -> Any:
 def pridestudios_scene(scene: Any, api_scene: dict[str, Any]) -> Any:
     scene = pridestudios(scene, api_scene)
     # retired channel domains redirect to the hub, so Altwolia emits no URL for them
-    if not scene.get("urls") and (
-        (sitename := api_scene.get("sitename"))
-        and (url_title := api_scene.get("url_title"))
-        and (clip_id := api_scene.get("clip_id"))
-    ):
-        scene["urls"] = [scene_url("pridestudios", sitename, url_title, str(clip_id))]
+    if not scene.get("urls") and (url := own_site_url(api_scene, SITE)):
+        scene["urls"] = [url]
     return scene
+
+
+def pridestudios_performer(
+    performer: ScrapedPerformer, api_performer: dict[str, Any]
+) -> ScrapedPerformer:
+    if url := hub_performer_url(api_performer, SITE, "asgmax"):
+        performer["urls"] = [url]
+    return performer
 
 
 if __name__ == "__main__":
     op, args = scraper_args()
 
-    site = "pridestudios"
+    site = SITE
     log.debug(f"args: {args}")
     match op, args:
         case "scene-by-url", {"url": url} if url and (
@@ -77,11 +85,13 @@ if __name__ == "__main__":
         case "gallery-by-fragment", args:
             result = gallery_from_fragment(args, site, postprocess=pridestudios)
         case "performer-by-url", {"url": url}:
-            result = performer_from_url(url, site)
+            result = performer_from_url(url, site, postprocess=pridestudios_performer)
         case "performer-by-fragment", args:
-            result = performer_from_fragment(args, site)
+            result = performer_from_fragment(
+                args, site, postprocess=pridestudios_performer
+            )
         case "performer-by-name", {"name": name} if name:
-            result = performer_search(name, site)
+            result = performer_search(name, site, postprocess=pridestudios_performer)
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
             sys.exit(1)

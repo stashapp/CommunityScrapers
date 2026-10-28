@@ -2,8 +2,8 @@ import atexit
 import base64
 import datetime
 import json
+from collections.abc import Callable
 from pathlib import Path
-from typing import Callable
 from urllib.parse import parse_qs, urlparse
 
 """
@@ -101,7 +101,10 @@ def has_own_site(site: str) -> bool:
 
     Cached for two weeks because honestly how often do they retire domains?
     """
-    cutoff = (datetime.datetime.today() - datetime.timedelta(days=14)).strftime(
+    # Some records list an empty site name
+    if not site:
+        return False
+    cutoff = (datetime.datetime.now() - datetime.timedelta(days=14)).strftime(
         "%Y-%m-%d"
     )
     if (entry := __OWN_SITE_CACHE.get(site)) and entry["checked"] >= cutoff:
@@ -125,7 +128,7 @@ def has_own_site(site: str) -> bool:
 
     __OWN_SITE_CACHE[site] = {
         "resolves": resolves,
-        "checked": datetime.datetime.today().strftime("%Y-%m-%d"),
+        "checked": datetime.datetime.now().strftime("%Y-%m-%d"),
     }
     return resolves
 

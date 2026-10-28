@@ -5,6 +5,7 @@ from typing import Any
 from Altwolia.scrape import (
     gallery_from_fragment,
     gallery_from_url,
+    hub_performer_url,
     performer_from_fragment,
     performer_from_url,
     performer_search,
@@ -13,8 +14,10 @@ from Altwolia.scrape import (
     scene_search,
 )
 from py_common import log
-from py_common.types import ScrapedStudio
+from py_common.types import ScrapedPerformer, ScrapedStudio
 from py_common.util import dig, replace_all, scraper_args
+
+SITE = "activeduty"
 
 # The Algolia index is shared by every Alpha Studio Group site, and Active Duty's
 # DVD releases carry their own studio_name without a mainChannel on photosets
@@ -32,10 +35,18 @@ def activeduty(obj: Any, api_object: dict[str, Any]) -> Any:
     return obj
 
 
+def activeduty_performer(
+    performer: ScrapedPerformer, api_performer: dict[str, Any]
+) -> ScrapedPerformer:
+    if url := hub_performer_url(api_performer, SITE, "asgmax"):
+        performer["urls"] = [url]
+    return performer
+
+
 if __name__ == "__main__":
     op, args = scraper_args()
 
-    site = "activeduty"
+    site = SITE
     log.debug(f"args: {args}")
     match op, args:
         case "scene-by-url", {"url": url} if url:
@@ -49,11 +60,13 @@ if __name__ == "__main__":
         case "gallery-by-fragment", args:
             result = gallery_from_fragment(args, site, postprocess=activeduty)
         case "performer-by-url", {"url": url}:
-            result = performer_from_url(url, site)
+            result = performer_from_url(url, site, postprocess=activeduty_performer)
         case "performer-by-fragment", args:
-            result = performer_from_fragment(args, site)
+            result = performer_from_fragment(
+                args, site, postprocess=activeduty_performer
+            )
         case "performer-by-name", {"name": name} if name:
-            result = performer_search(name, site)
+            result = performer_search(name, site, postprocess=activeduty_performer)
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
             sys.exit(1)
