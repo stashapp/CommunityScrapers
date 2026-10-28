@@ -131,6 +131,47 @@ def scene_url(site: str, sitename: str, url_title: str, clip_id: str) -> str:
     return f"https://www.{site.lower()}.com/en/video/{sitename.lower()}/{url_title}/{clip_id}"
 
 
+def own_site_url(api_scene: dict[str, Any], site: str) -> str | None:
+    "Scenes listed only on a retired sub-site still render under the network's own site"
+    if (
+        (sitename := api_scene.get("sitename"))
+        and (url_title := api_scene.get("url_title"))
+        and (clip_id := api_scene.get("clip_id"))
+    ):
+        return scene_url(site, sitename, url_title, clip_id)
+    return None
+
+
+# StashDB's names for partner channels, where the API spells them differently
+PARTNER_STUDIOS = {
+    "3rdDegreeFilms": "3rd Degree",
+    "Addicted2Girls": "Addicted 2 Girls",
+    "AdultTime": "Adult Time",
+    "Adulttime": "Adult Time",
+    "ASGmax": "ASGmax Originals",
+    "Chaos Men": "ChaosMen",
+    "Chaosmen": "ChaosMen",
+    "Gloryhole": "GloryHole",
+    "Hardx": "HardX",
+    "ZeroToleranceFilms": "Zero Tolerance Films",
+}
+
+# Partner channels that label a kind of content rather than a studio
+NOT_A_PARTNER = {"Bonus Content"}
+
+
+def partner_studio(api_object: dict[str, Any]) -> dict[str, str] | None:
+    "The studio of a release that a network's site reposts from another studio"
+    for channel in api_object.get("channels") or []:
+        if (
+            channel.get("type") == "Partner Channel"
+            and (name := (channel.get("name") or "").strip())
+            and name not in NOT_A_PARTNER
+        ):
+            return {"name": PARTNER_STUDIOS.get(name, name)}
+    return None
+
+
 def name_values_as_csv(objects: list[dict[str, Any]]) -> str:
     return ", ".join(name for obj in objects if (name := obj.get("name")))
 

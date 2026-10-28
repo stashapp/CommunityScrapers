@@ -4,6 +4,7 @@ from typing import Any
 
 from Altwolia.scrape import (
     movie_from_url,
+    own_site_url,
     performer_from_fragment,
     performer_from_url,
     performer_search,
@@ -14,6 +15,11 @@ from Altwolia.scrape import (
 from Altwolia.utils import append_scene_number
 from py_common import log
 from py_common.util import replace_all, scraper_args
+
+SITE = "falconstudios"
+
+# Retired sites whose releases still render under falconstudios.com
+RETIRED_SITES = {"falconstudiospartners"}
 
 studio_map = {
     "Hot House": "Hot House Entertainment",
@@ -28,7 +34,14 @@ def rename_studios(obj: Any) -> Any:
 
 
 def falconstudios(scene: Any, api_scene: dict[str, Any]) -> Any:
-    return rename_studios(append_scene_number(scene, api_scene))
+    scene = rename_studios(append_scene_number(scene, api_scene))
+    if (
+        not scene.get("urls")
+        and api_scene.get("sitename") in RETIRED_SITES
+        and (url := own_site_url(api_scene, SITE))
+    ):
+        scene["urls"] = [url]
+    return scene
 
 
 def falconstudios_group(group: Any, _) -> Any:
@@ -37,7 +50,7 @@ def falconstudios_group(group: Any, _) -> Any:
 
 if __name__ == "__main__":
     op, args = scraper_args()
-    site = "falconstudios"
+    site = SITE
     log.debug(f"args: {args}")
 
     match op, args:
