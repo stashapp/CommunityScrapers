@@ -112,16 +112,17 @@ class FlareSolverrBackend(RequestBackend):
 
 FLARESOLVERR_URL = os.environ.get("FLARESOLVERR_URL", "http://localhost:8191/v1")
 
+# Raises when FlareSolverr is unreachable, so only a successful check gets cached:
+# otherwise starting FlareSolverr would go unnoticed until the cache expired
 @cache_to_disk(ttl=86400)
-def check_flaresolverr(url):
+def _flaresolverr_detected(url) -> bool:
+  requests.get(url, timeout=5)
+  log.debug(f"[proxy] FlareSolverr detected at {url}")
+  return True
+
+def check_flaresolverr(url) -> bool:
   try:
-    requests.get(url, timeout=5)
-    log.debug(f"[proxy] FlareSolverr detected at {url}")
-    return True
-  except requests.exceptions.HTTPError as httperr:
-    if httperr.response.status_code == 405:
-      log.debug(f"[proxy] FlareSolverr detected at {url}")
-      return True
+    return _flaresolverr_detected(url)
   except requests.exceptions.RequestException:
     log.info(f"[proxy] FlareSolverr not detected at {url}. Requests will be used without bypassing.")
     return False

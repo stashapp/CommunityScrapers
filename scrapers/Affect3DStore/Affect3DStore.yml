@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=../../validator/scraper.schema.json
+# requires: py_common
 name: Affect3DStore
 sceneByFragment:
   action: script
@@ -26,4 +26,3 @@ sceneByURL:
       - python
       - Affect3DStore.py
       - scene-by-url
-# Last Updated September 3, 2026
