@@ -198,3 +198,8 @@ xPathScrapers:
           - replace:
               - regex: \?.*$
                 with: ""
+
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0
