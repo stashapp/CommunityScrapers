@@ -92,6 +92,10 @@ class CloudscraperBackend(RequestBackend):
 class FlareSolverrBackend(RequestBackend):
   name = "flaresolverr"
 
+  def __init__(self, proxies=None):
+    # FlareSolverr takes a single proxy for every scheme
+    self.proxy = next(iter((proxies or {}).values()), None)
+
   def request(self, method, url, **kwargs):
     if check_flaresolverr(FLARESOLVERR_URL):
       log.info(f"[proxy] trying FlareSolverr for {url}")
@@ -101,7 +105,7 @@ class FlareSolverrBackend(RequestBackend):
         log.warning("[proxy] HEAD not supported by FlareSolverr, using GET instead")
       try:
         post_data = (kwargs.get("json") or kwargs.get("data")) if method == "post" else None
-        return flaresolverr_req(url, method=method, postData=post_data, proxy=PROXY_URL)
+        return flaresolverr_req(url, method=method, postData=post_data, proxy=self.proxy)
       except Exception as e:
         log.warning(f"[proxy] FlareSolverr request failed: {e}")
     else:
@@ -195,13 +199,14 @@ cookie_cache = CookieCache()
 class BackendManager:
   def __init__(self, backends=None):
     proxies = { "http": PROXY_URL, "https": PROXY_URL } if PROXY_URL else {}
+    self.backends: list[RequestBackend]
     if not backends:
       self.backends = [
         RequestsBackend(proxies=proxies, useragent="inherit"),
         CloudscraperBackend(proxies=proxies),
       ]
       if check_flaresolverr(FLARESOLVERR_URL):
-        self.backends.append(FlareSolverrBackend())
+        self.backends.append(FlareSolverrBackend(proxies=proxies))
     else:
       # populate backends based on name
       backend_classes = {
