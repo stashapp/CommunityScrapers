@@ -942,7 +942,7 @@ def to_gallery(scene: ScrapedScene) -> ScrapedGallery:
 
 
 def to_image(scene: ScrapedScene) -> ScrapedImage:
-    return ScrapedImage(**to_gallery(scene))  # type: ignore[typeddict-item]
+    return cast(ScrapedImage, to_gallery(scene))
 
 
 def clean(scraped: Any) -> Any:

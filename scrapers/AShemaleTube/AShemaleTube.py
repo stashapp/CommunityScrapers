@@ -2,13 +2,19 @@ import json
 import re
 import sys
 import time
-from typing import Any
+from typing import Any, cast
 from urllib.parse import urljoin, urlparse, urlunparse
 
 from py_common import log
 from py_common.deps import ensure_requirements
-from py_common.types import ScrapedPerformer, ScrapedScene
-from py_common.util import scraper_args
+from py_common.types import (
+    Ethnicity,
+    EyeColor,
+    HairColor,
+    ScrapedPerformer,
+    ScrapedScene,
+)
+from py_common.util import is_own_url, scraper_args
 
 ensure_requirements("cloudscraper", "lxml")
 import cloudscraper
@@ -127,12 +133,13 @@ def performer_from_url(url: str) -> ScrapedPerformer | None:
         performer["death_date"] = date
     if country := info(tree, "Country"):
         performer["country"] = country
+    # Stash takes free text here, so the site's own labels pass through as-is
     if eye_color := info(tree, "Eye Color"):
-        performer["eye_color"] = eye_color
+        performer["eye_color"] = cast(EyeColor, eye_color)
     if hair_color := info(tree, "Hair Color"):
-        performer["hair_color"] = hair_color
+        performer["hair_color"] = cast(HairColor, hair_color)
     if ethnicity := info(tree, "Ethnicity"):
-        performer["ethnicity"] = ethnicity
+        performer["ethnicity"] = cast(Ethnicity, ethnicity)
     if (height := info(tree, "Height")) and (match := re.match(r"(\d+) cm", height)):
         performer["height"] = match.group(1)
     if tags := tree.xpath('//a[@class="tag-item"]/text()'):
@@ -152,10 +159,19 @@ if __name__ == "__main__":
     match op, args:
         case "performer-by-url", {"url": url} if url:
             result = performer_from_url(url)
-        case "scene-by-url" | "scene-by-query-fragment", {"url": url} if url:
+        case "scene-by-url", {"url": url} if url:
             result = scene_from_url(url)
-        case "scene-by-query-fragment", {"urls": [url, *_]} if url:
-            result = scene_from_url(url)
+        case "scene-by-query-fragment", args:
+            result = next(
+                (
+                    scene
+                    for url in args.get("urls") or []
+                    if is_own_url(url)
+                    and "/videos/" in url
+                    and (scene := scene_from_url(url))
+                ),
+                None,
+            )
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
             sys.exit(1)
