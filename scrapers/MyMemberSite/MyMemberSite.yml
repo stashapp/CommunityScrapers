@@ -394,7 +394,7 @@ sceneByFragment:
   script:
     - python3
     - MyMemberSite.py
-    - scene-by-url
+    - scene-by-fragment
 
 sceneByURL:
   - action: script
