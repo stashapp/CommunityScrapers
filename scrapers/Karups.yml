@@ -13,25 +13,25 @@ galleryByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      # Studio badge is missing as of 2026-09-06
-      # but it might return in the future
       Studio: &studio
         Name:
-          selector: //span[@class="sup-title"]/span
+          selector: //span[@class="sup-title"]/span/@class
           postProcess:
+            - replace:
+                - regex: ^site\s+
+                  with: ""
             - map:
                 kow: Karups Older Women
                 kha: Karups Hometown Amateurs
                 kpc: Karups Private Collection
       Title: &title //h1[@class="page-heading"]/span[@class="title"]
-      Details: //div[@class="content-information-description"]/p
+      Details: &details
+        selector: //div[@class="tour-detail-description-body"]/text()
+        concat: "\n\n"
       Date: &date
         selector: //span[@class="date"]/span[@class="content"]
         postProcess:
-          - replace:
-              - regex: (st|nd|rd|th)\,
-                with: ","
-          - parseDate: Jan 02, 2006
+          - parseDate: 02 Jan 2006
       Performers: &performers
         Name: //span[@class="models"]/span[@class="content"]//a
       Image:
@@ -45,6 +45,7 @@ xPathScrapers:
     gallery:
       Studio: *studio
       Title: *title
+      Details: *details
       Date: *date
       Performers: *performers
 
