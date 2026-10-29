@@ -7,9 +7,7 @@ from py_common.types import ScrapedStudio
 from py_common.util import dig
 
 
-def to_scraped_studio(
-    api_object: dict, product: str, lang: str = "en"
-) -> ScrapedStudio:
+def to_scraped_studio(api_object: dict, product: str) -> ScrapedStudio:
     slug = api_object["slug"]
     # A series newer than this table: its name is known, its network isn't
     unknown: ScrapedStudio = {"name": api_object["title"]}
@@ -18,7 +16,8 @@ def to_scraped_studio(
     if series_id is None:
         return unknown
 
-    studio = dig(studio_map, series_id, lang, default=unknown)
+    # Studios keep their English names whichever language the scene was scraped in
+    studio = dig(studio_map, series_id, "en", default=unknown)
     return cast(ScrapedStudio, {key: value for key, value in studio.items() if value})
 
 

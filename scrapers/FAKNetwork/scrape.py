@@ -117,7 +117,7 @@ def to_scraped_scene(data: dict, lang="en") -> ScrapedScene:
     if image := cover_image(data):
         scene["image"] = image
 
-    studio = to_scraped_studio(data["serie"], site_name, lang)
+    studio = to_scraped_studio(data["serie"], site_name)
     if config.flatten_hierarchy and (parent := studio.get("parent")):
         studio = parent
 
