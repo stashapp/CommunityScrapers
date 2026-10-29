@@ -197,8 +197,10 @@ def _construct_performer_url(api_result: dict[str, Any], site: str) -> str:
 
 ## Helper functions for the objects returned from Aylo's API
 def get_studio(api_object: dict[str, Any]) -> ScrapedStudio | None:
-    studio_name = dig(api_object, "collections", 0, "name")
-    parent_name = dig(api_object, "brandMeta", ("displayName", "name", "shortName"))
+    studio_name = (dig(api_object, "collections", 0, "name") or "").strip()
+    parent_name = (
+        dig(api_object, "brandMeta", ("displayName", "name", "shortName")) or ""
+    ).strip()
     if studio_name:
         if parent_name and parent_name.lower() != studio_name.lower():
             return {
