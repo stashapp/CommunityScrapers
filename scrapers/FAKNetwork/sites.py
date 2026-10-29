@@ -1,20 +1,25 @@
 # All series fetched from the API on 2026-10-03
 # https://api.faknetworks.com/v1/series?lang=<en|es|pt>&page=1&take=1000
 
+from typing import cast
+
+from py_common.types import ScrapedStudio
 from py_common.util import dig
 
 
-def to_scraped_studio(api_object: dict, product: str, lang: str = "en") -> dict:
+def to_scraped_studio(
+    api_object: dict, product: str, lang: str = "en"
+) -> ScrapedStudio:
     slug = api_object["slug"]
     # A series newer than this table: its name is known, its network isn't
-    unknown = {"name": api_object["title"]}
+    unknown: ScrapedStudio = {"name": api_object["title"]}
 
     series_id = dig(slug_index, product, slug)
     if series_id is None:
         return unknown
 
     studio = dig(studio_map, series_id, lang, default=unknown)
-    return {key: value for key, value in studio.items() if value}
+    return cast(ScrapedStudio, {key: value for key, value in studio.items() if value})
 
 
 slug_index = {
@@ -255,33 +260,33 @@ slug_index = {
 }
 
 
-studio_map = {
+studio_map: dict[int, dict[str, ScrapedStudio]] = {
     102: {
         "en": {
             "name": "Fuck me, fool!",
             "aliases": "Follame Tonto, Me fode, idiota",
-            "url": "https://www.fakings.com/en/serie/fuck-me-fool",
+            "urls": ["https://www.fakings.com/en/serie/fuck-me-fool"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "Follame Tonto",
             "aliases": "Fuck me, fool!, Me fode, idiota",
-            "url": "https://www.fakings.com/es/serie/follame-tonto",
+            "urls": ["https://www.fakings.com/es/serie/follame-tonto"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Me fode, idiota",
             "aliases": "Fuck me, fool!, Follame Tonto",
-            "url": "https://www.fakings.com/pt/serie/me-fode-idiota",
+            "urls": ["https://www.fakings.com/pt/serie/me-fode-idiota"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -289,28 +294,28 @@ studio_map = {
         "en": {
             "name": "Big Rubber Cocks",
             "aliases": "Pollazas de Goma, Paus de borraxa",
-            "url": "https://www.fakings.com/en/serie/big-rubber-cocks",
+            "urls": ["https://www.fakings.com/en/serie/big-rubber-cocks"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "Pollazas de Goma",
             "aliases": "Big Rubber Cocks, Paus de borraxa",
-            "url": "https://www.fakings.com/es/serie/pollazas-de-goma",
+            "urls": ["https://www.fakings.com/es/serie/pollazas-de-goma"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Paus de borraxa",
             "aliases": "Big Rubber Cocks, Pollazas de Goma",
-            "url": "https://www.fakings.com/pt/serie/paus-de-borraxa",
+            "urls": ["https://www.fakings.com/pt/serie/paus-de-borraxa"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -318,28 +323,28 @@ studio_map = {
         "en": {
             "name": "Free Couples",
             "aliases": "Parejitas Libres, Casais liberais",
-            "url": "https://www.fakings.com/en/serie/free-couples",
+            "urls": ["https://www.fakings.com/en/serie/free-couples"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "Parejitas Libres",
             "aliases": "Free Couples, Casais liberais",
-            "url": "https://www.fakings.com/es/serie/parejitas-libres",
+            "urls": ["https://www.fakings.com/es/serie/parejitas-libres"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Casais liberais",
             "aliases": "Free Couples, Parejitas Libres",
-            "url": "https://www.fakings.com/pt/serie/casais-liberais",
+            "urls": ["https://www.fakings.com/pt/serie/casais-liberais"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -347,28 +352,28 @@ studio_map = {
         "en": {
             "name": "Exchange Student Girls",
             "aliases": "Alumnas De Intercambio, Alunas de intercâmbio",
-            "url": "https://www.fakings.com/en/serie/exchange-student-girls",
+            "urls": ["https://www.fakings.com/en/serie/exchange-student-girls"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "Alumnas De Intercambio",
             "aliases": "Exchange Student Girls, Alunas de intercâmbio",
-            "url": "https://www.fakings.com/es/serie/alumnas-de-intercambio",
+            "urls": ["https://www.fakings.com/es/serie/alumnas-de-intercambio"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Alunas de intercâmbio",
             "aliases": "Exchange Student Girls, Alumnas De Intercambio",
-            "url": "https://www.fakings.com/pt/serie/alunas-de-intercmbio",
+            "urls": ["https://www.fakings.com/pt/serie/alunas-de-intercmbio"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -376,28 +381,28 @@ studio_map = {
         "en": {
             "name": "FAKings Series",
             "aliases": "Serie FAKings, Série FAKings",
-            "url": "https://www.fakings.com/en/serie/fakings-series",
+            "urls": ["https://www.fakings.com/en/serie/fakings-series"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "Serie FAKings",
             "aliases": "FAKings Series, Série FAKings",
-            "url": "https://www.fakings.com/es/serie/fakings-series",
+            "urls": ["https://www.fakings.com/es/serie/fakings-series"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Série FAKings",
             "aliases": "FAKings Series, Serie FAKings",
-            "url": "https://www.fakings.com/pt/serie/serie-fakings",
+            "urls": ["https://www.fakings.com/pt/serie/serie-fakings"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -405,28 +410,28 @@ studio_map = {
         "en": {
             "name": "Fuck them!",
             "aliases": "Follatelos, Fuder com eles",
-            "url": "https://www.fakings.com/en/serie/fuck-them",
+            "urls": ["https://www.fakings.com/en/serie/fuck-them"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "Follatelos",
             "aliases": "Fuck them!, Fuder com eles",
-            "url": "https://www.fakings.com/es/serie/follatelos",
+            "urls": ["https://www.fakings.com/es/serie/follatelos"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Fuder com eles",
             "aliases": "Fuck them!, Follatelos",
-            "url": "https://www.fakings.com/pt/serie/fuder-com-eles",
+            "urls": ["https://www.fakings.com/pt/serie/fuder-com-eles"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -434,28 +439,28 @@ studio_map = {
         "en": {
             "name": "Swingers Life:",
             "aliases": "Vidas Liberales, Vidas Liberais",
-            "url": "https://www.fakings.com/en/serie/swingers-life",
+            "urls": ["https://www.fakings.com/en/serie/swingers-life"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "Vidas Liberales",
             "aliases": "Swingers Life:, Vidas Liberais",
-            "url": "https://www.fakings.com/es/serie/vidas-liberales",
+            "urls": ["https://www.fakings.com/es/serie/vidas-liberales"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Vidas Liberais",
             "aliases": "Swingers Life:, Vidas Liberales",
-            "url": "https://www.fakings.com/pt/serie/vidas-liberais",
+            "urls": ["https://www.fakings.com/pt/serie/vidas-liberais"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -463,28 +468,28 @@ studio_map = {
         "en": {
             "name": "Very Voyeur",
             "aliases": "Muy Voyeur, Muito voyeur",
-            "url": "https://www.fakings.com/en/serie/very-voyeur",
+            "urls": ["https://www.fakings.com/en/serie/very-voyeur"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "Muy Voyeur",
             "aliases": "Very Voyeur, Muito voyeur",
-            "url": "https://www.fakings.com/es/serie/muy-voyeur",
+            "urls": ["https://www.fakings.com/es/serie/muy-voyeur"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Muito voyeur",
             "aliases": "Very Voyeur, Muy Voyeur",
-            "url": "https://www.fakings.com/pt/serie/muito-voyeur",
+            "urls": ["https://www.fakings.com/pt/serie/muito-voyeur"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -492,28 +497,28 @@ studio_map = {
         "en": {
             "name": "MILF Club",
             "aliases": "Club Maduras, Clube de coroas",
-            "url": "https://www.fakings.com/en/serie/milf-club",
+            "urls": ["https://www.fakings.com/en/serie/milf-club"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "Club Maduras",
             "aliases": "MILF Club, Clube de coroas",
-            "url": "https://www.fakings.com/es/serie/club-maduras",
+            "urls": ["https://www.fakings.com/es/serie/club-maduras"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Clube de coroas",
             "aliases": "MILF Club, Club Maduras",
-            "url": "https://www.fakings.com/pt/serie/clube-de-coroas",
+            "urls": ["https://www.fakings.com/pt/serie/clube-de-coroas"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -521,28 +526,28 @@ studio_map = {
         "en": {
             "name": "The Naughty Bet",
             "aliases": "Porno Dolares, Dólares pornô",
-            "url": "https://www.fakings.com/en/serie/the-naughty-bet",
+            "urls": ["https://www.fakings.com/en/serie/the-naughty-bet"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "Porno Dolares",
             "aliases": "The Naughty Bet, Dólares pornô",
-            "url": "https://www.fakings.com/es/serie/porno-dolares",
+            "urls": ["https://www.fakings.com/es/serie/porno-dolares"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Dólares pornô",
             "aliases": "The Naughty Bet, Porno Dolares",
-            "url": "https://www.fakings.com/pt/serie/dolares-porn",
+            "urls": ["https://www.fakings.com/pt/serie/dolares-porn"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -550,28 +555,28 @@ studio_map = {
         "en": {
             "name": "My first DP",
             "aliases": "Mi primera DP, Minha primeira DP",
-            "url": "https://www.fakings.com/en/serie/my-first-dp",
+            "urls": ["https://www.fakings.com/en/serie/my-first-dp"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "Mi primera DP",
             "aliases": "My first DP, Minha primeira DP",
-            "url": "https://www.fakings.com/es/serie/mi-primera-dp",
+            "urls": ["https://www.fakings.com/es/serie/mi-primera-dp"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Minha primeira DP",
             "aliases": "My first DP, Mi primera DP",
-            "url": "https://www.fakings.com/pt/serie/minha-primeira-dp",
+            "urls": ["https://www.fakings.com/pt/serie/minha-primeira-dp"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -579,28 +584,28 @@ studio_map = {
         "en": {
             "name": "FAKins Wild Party",
             "aliases": "Fiestas FAKings, Festas FAKings",
-            "url": "https://www.fakings.com/en/serie/fakins-wild-party",
+            "urls": ["https://www.fakings.com/en/serie/fakins-wild-party"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "Fiestas FAKings",
             "aliases": "FAKins Wild Party, Festas FAKings",
-            "url": "https://www.fakings.com/es/serie/fiestas-fakings",
+            "urls": ["https://www.fakings.com/es/serie/fiestas-fakings"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Festas FAKings",
             "aliases": "FAKins Wild Party, Fiestas FAKings",
-            "url": "https://www.fakings.com/pt/serie/festas-fakings",
+            "urls": ["https://www.fakings.com/pt/serie/festas-fakings"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -608,28 +613,28 @@ studio_map = {
         "en": {
             "name": "Ainara's Diary",
             "aliases": "Diario de Ainara, Diário de Ainara",
-            "url": "https://www.fakings.com/en/serie/ainaras-diary",
+            "urls": ["https://www.fakings.com/en/serie/ainaras-diary"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "Diario de Ainara",
             "aliases": "Ainara's Diary, Diário de Ainara",
-            "url": "https://www.fakings.com/es/serie/diario-de-ainara",
+            "urls": ["https://www.fakings.com/es/serie/diario-de-ainara"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Diário de Ainara",
             "aliases": "Ainara's Diary, Diario de Ainara",
-            "url": "https://www.fakings.com/pt/serie/diario-de-ainara",
+            "urls": ["https://www.fakings.com/pt/serie/diario-de-ainara"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -637,28 +642,28 @@ studio_map = {
         "en": {
             "name": "FAKings Castings",
             "aliases": "Castings de FAKings, Casting de FAKings",
-            "url": "https://www.fakings.com/en/serie/fakings-castings",
+            "urls": ["https://www.fakings.com/en/serie/fakings-castings"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "Castings de FAKings",
             "aliases": "FAKings Castings, Casting de FAKings",
-            "url": "https://www.fakings.com/es/serie/castings-de-fakings",
+            "urls": ["https://www.fakings.com/es/serie/castings-de-fakings"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Casting de FAKings",
             "aliases": "FAKings Castings, Castings de FAKings",
-            "url": "https://www.fakings.com/pt/serie/casting-de-fakings",
+            "urls": ["https://www.fakings.com/pt/serie/casting-de-fakings"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -666,28 +671,28 @@ studio_map = {
         "en": {
             "name": "I sell my girlfriend",
             "aliases": "Vendo a mi Novia, Vendo minha namorada",
-            "url": "https://www.fakings.com/en/serie/i-sell-my-girlfriend",
+            "urls": ["https://www.fakings.com/en/serie/i-sell-my-girlfriend"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "Vendo a mi Novia",
             "aliases": "I sell my girlfriend, Vendo minha namorada",
-            "url": "https://www.fakings.com/es/serie/vendo-a-mi-novia",
+            "urls": ["https://www.fakings.com/es/serie/vendo-a-mi-novia"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Vendo minha namorada",
             "aliases": "I sell my girlfriend, Vendo a mi Novia",
-            "url": "https://www.fakings.com/pt/serie/vendo-minha-namorada",
+            "urls": ["https://www.fakings.com/pt/serie/vendo-minha-namorada"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -695,28 +700,28 @@ studio_map = {
         "en": {
             "name": "FAKings Academy",
             "aliases": "La escuela de fakings, A escola de FAKings",
-            "url": "https://www.fakings.com/en/serie/fakings-academy",
+            "urls": ["https://www.fakings.com/en/serie/fakings-academy"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "La escuela de fakings",
             "aliases": "FAKings Academy, A escola de FAKings",
-            "url": "https://www.fakings.com/es/serie/la-escuela-de-fakings",
+            "urls": ["https://www.fakings.com/es/serie/la-escuela-de-fakings"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "A escola de FAKings",
             "aliases": "FAKings Academy, La escuela de fakings",
-            "url": "https://www.fakings.com/pt/serie/a-escola-de-fakings",
+            "urls": ["https://www.fakings.com/pt/serie/a-escola-de-fakings"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -724,28 +729,28 @@ studio_map = {
         "en": {
             "name": "I'm a Webcam girl.",
             "aliases": "Soy webcamer, Sou câmera web",
-            "url": "https://www.fakings.com/en/serie/im-a-webcam-girl",
+            "urls": ["https://www.fakings.com/en/serie/im-a-webcam-girl"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "Soy webcamer",
             "aliases": "I'm a Webcam girl., Sou câmera web",
-            "url": "https://www.fakings.com/es/serie/soy-webcamer",
+            "urls": ["https://www.fakings.com/es/serie/soy-webcamer"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Sou câmera web",
             "aliases": "I'm a Webcam girl., Soy webcamer",
-            "url": "https://www.fakings.com/pt/serie/sou-cmera-web",
+            "urls": ["https://www.fakings.com/pt/serie/sou-cmera-web"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -753,28 +758,28 @@ studio_map = {
         "en": {
             "name": "1ST TOURNAMENT: 2016",
             "aliases": "I TORNEO: 2016",
-            "url": "https://www.madlifes.com/en/serie/i-edicion-20152016",
+            "urls": ["https://www.madlifes.com/en/serie/i-edicion-20152016"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
         "es": {
             "name": "I TORNEO: 2016",
             "aliases": "",
-            "url": "https://www.madlifes.com/es/serie/i-edicion-20152016",
+            "urls": ["https://www.madlifes.com/es/serie/i-edicion-20152016"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
         "pt": {
             "name": "I TORNEO: 2016",
             "aliases": "",
-            "url": "https://www.madlifes.com/pt/serie/i-edicion-20152016",
+            "urls": ["https://www.madlifes.com/pt/serie/i-edicion-20152016"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
     },
@@ -782,28 +787,28 @@ studio_map = {
         "en": {
             "name": "2ND TOURNAMENT: 2017",
             "aliases": "II TORNEO: 2017",
-            "url": "https://www.madlifes.com/en/serie/ii-torneo-2017",
+            "urls": ["https://www.madlifes.com/en/serie/ii-torneo-2017"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
         "es": {
             "name": "II TORNEO: 2017",
             "aliases": "",
-            "url": "https://www.madlifes.com/es/serie/ii-torneo-2017",
+            "urls": ["https://www.madlifes.com/es/serie/ii-torneo-2017"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
         "pt": {
             "name": "II TORNEO: 2017",
             "aliases": "",
-            "url": "https://www.madlifes.com/pt/serie/ii-torneo-2017",
+            "urls": ["https://www.madlifes.com/pt/serie/ii-torneo-2017"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
     },
@@ -811,28 +816,28 @@ studio_map = {
         "en": {
             "name": "Our First Porn",
             "aliases": "Nuestra Primera Porno",
-            "url": "https://www.pepeporn.com/en/serie/nuestra-primera-porno",
+            "urls": ["https://www.pepeporn.com/en/serie/nuestra-primera-porno"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
         "es": {
             "name": "Nuestra Primera Porno",
             "aliases": "",
-            "url": "https://www.pepeporn.com/es/serie/nuestra-primera-porno",
+            "urls": ["https://www.pepeporn.com/es/serie/nuestra-primera-porno"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
         "pt": {
             "name": "Nuestra Primera Porno",
             "aliases": "",
-            "url": "https://www.pepeporn.com/pt/serie/nuestra-primera-porno",
+            "urls": ["https://www.pepeporn.com/pt/serie/nuestra-primera-porno"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
     },
@@ -840,28 +845,28 @@ studio_map = {
         "en": {
             "name": "Am I good for porn?",
             "aliases": "¿Valgo para el Porno?",
-            "url": "https://www.pepeporn.com/en/serie/valgo-para-el-porno",
+            "urls": ["https://www.pepeporn.com/en/serie/valgo-para-el-porno"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
         "es": {
             "name": "¿Valgo para el Porno?",
             "aliases": "",
-            "url": "https://www.pepeporn.com/es/serie/valgo-para-el-porno",
+            "urls": ["https://www.pepeporn.com/es/serie/valgo-para-el-porno"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
         "pt": {
             "name": "¿Valgo para el Porno?",
             "aliases": "",
-            "url": "https://www.pepeporn.com/pt/serie/valgo-para-el-porno",
+            "urls": ["https://www.pepeporn.com/pt/serie/valgo-para-el-porno"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
     },
@@ -869,28 +874,28 @@ studio_map = {
         "en": {
             "name": "Fulfilled Fantasies",
             "aliases": "Fantasias Cumplidas",
-            "url": "https://www.pepeporn.com/en/serie/fantasias-cumplidas",
+            "urls": ["https://www.pepeporn.com/en/serie/fantasias-cumplidas"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
         "es": {
             "name": "Fantasias Cumplidas",
             "aliases": "",
-            "url": "https://www.pepeporn.com/es/serie/fantasias-cumplidas",
+            "urls": ["https://www.pepeporn.com/es/serie/fantasias-cumplidas"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
         "pt": {
             "name": "Fantasias Cumplidas",
             "aliases": "",
-            "url": "https://www.pepeporn.com/pt/serie/fantasias-cumplidas",
+            "urls": ["https://www.pepeporn.com/pt/serie/fantasias-cumplidas"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
     },
@@ -898,28 +903,28 @@ studio_map = {
         "en": {
             "name": "Amor Propio",
             "aliases": "",
-            "url": "https://www.pepeporn.com/en/serie/amor-propio",
+            "urls": ["https://www.pepeporn.com/en/serie/amor-propio"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
         "es": {
             "name": "Amor Propio",
             "aliases": "",
-            "url": "https://www.pepeporn.com/es/serie/amor-propio",
+            "urls": ["https://www.pepeporn.com/es/serie/amor-propio"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
         "pt": {
             "name": "Amor Propio",
             "aliases": "",
-            "url": "https://www.pepeporn.com/pt/serie/amor-propio",
+            "urls": ["https://www.pepeporn.com/pt/serie/amor-propio"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
     },
@@ -927,28 +932,28 @@ studio_map = {
         "en": {
             "name": "Las Becerradas de Pepe",
             "aliases": "",
-            "url": "https://www.pepeporn.com/en/serie/las-becerradas-de-pepe",
+            "urls": ["https://www.pepeporn.com/en/serie/las-becerradas-de-pepe"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
         "es": {
             "name": "Las Becerradas de Pepe",
             "aliases": "",
-            "url": "https://www.pepeporn.com/es/serie/las-becerradas-de-pepe",
+            "urls": ["https://www.pepeporn.com/es/serie/las-becerradas-de-pepe"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
         "pt": {
             "name": "Las Becerradas de Pepe",
             "aliases": "",
-            "url": "https://www.pepeporn.com/pt/serie/las-becerradas-de-pepe",
+            "urls": ["https://www.pepeporn.com/pt/serie/las-becerradas-de-pepe"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
     },
@@ -956,28 +961,28 @@ studio_map = {
         "en": {
             "name": "18 years old",
             "aliases": "18 añitos",
-            "url": "https://www.pepeporn.com/en/serie/18-anitos",
+            "urls": ["https://www.pepeporn.com/en/serie/18-anitos"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
         "es": {
             "name": "18 añitos",
             "aliases": "",
-            "url": "https://www.pepeporn.com/es/serie/18-anitos",
+            "urls": ["https://www.pepeporn.com/es/serie/18-anitos"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
         "pt": {
             "name": "18 añitos",
             "aliases": "",
-            "url": "https://www.pepeporn.com/pt/serie/18-anitos",
+            "urls": ["https://www.pepeporn.com/pt/serie/18-anitos"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
     },
@@ -985,28 +990,28 @@ studio_map = {
         "en": {
             "name": "Jealous couple",
             "aliases": "Pareja de celosos",
-            "url": "https://www.pepeporn.com/en/serie/pareja-de-celosos",
+            "urls": ["https://www.pepeporn.com/en/serie/pareja-de-celosos"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
         "es": {
             "name": "Pareja de celosos",
             "aliases": "",
-            "url": "https://www.pepeporn.com/es/serie/pareja-de-celosos",
+            "urls": ["https://www.pepeporn.com/es/serie/pareja-de-celosos"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
         "pt": {
             "name": "Pareja de celosos",
             "aliases": "",
-            "url": "https://www.pepeporn.com/pt/serie/pareja-de-celosos",
+            "urls": ["https://www.pepeporn.com/pt/serie/pareja-de-celosos"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
     },
@@ -1014,28 +1019,28 @@ studio_map = {
         "en": {
             "name": "Maduritos and Maduritas",
             "aliases": "Maduritos y Maduritas",
-            "url": "https://www.pepeporn.com/en/serie/maduritos-y-maduritas",
+            "urls": ["https://www.pepeporn.com/en/serie/maduritos-y-maduritas"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
         "es": {
             "name": "Maduritos y Maduritas",
             "aliases": "",
-            "url": "https://www.pepeporn.com/es/serie/maduritos-y-maduritas",
+            "urls": ["https://www.pepeporn.com/es/serie/maduritos-y-maduritas"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
         "pt": {
             "name": "Maduritos y Maduritas",
             "aliases": "",
-            "url": "https://www.pepeporn.com/pt/serie/maduritos-y-maduritas",
+            "urls": ["https://www.pepeporn.com/pt/serie/maduritos-y-maduritas"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
     },
@@ -1043,28 +1048,28 @@ studio_map = {
         "en": {
             "name": "Busted!",
             "aliases": "Cazadas, Caçadas",
-            "url": "https://www.fakings.com/en/serie/busted",
+            "urls": ["https://www.fakings.com/en/serie/busted"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "Cazadas",
             "aliases": "Busted!, Caçadas",
-            "url": "https://www.fakings.com/es/serie/pilladas",
+            "urls": ["https://www.fakings.com/es/serie/pilladas"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Caçadas",
             "aliases": "Busted!, Cazadas",
-            "url": "https://www.fakings.com/pt/serie/cacadas",
+            "urls": ["https://www.fakings.com/pt/serie/cacadas"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -1072,28 +1077,28 @@ studio_map = {
         "en": {
             "name": "First FAKings !!",
             "aliases": "First FAKings",
-            "url": "https://www.fakings.com/en/serie/first-fakings",
+            "urls": ["https://www.fakings.com/en/serie/first-fakings"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "First FAKings",
             "aliases": "First FAKings !!",
-            "url": "https://www.fakings.com/es/serie/first-fakings",
+            "urls": ["https://www.fakings.com/es/serie/first-fakings"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "First FAKings",
             "aliases": "First FAKings !!",
-            "url": "https://www.fakings.com/pt/serie/first-fakings",
+            "urls": ["https://www.fakings.com/pt/serie/first-fakings"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -1101,28 +1106,28 @@ studio_map = {
         "en": {
             "name": "Perverting couples",
             "aliases": "Pervirtiendo Parejas, Casais pervertidos",
-            "url": "https://www.fakings.com/en/serie/perverting-couples",
+            "urls": ["https://www.fakings.com/en/serie/perverting-couples"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "Pervirtiendo Parejas",
             "aliases": "Perverting couples, Casais pervertidos",
-            "url": "https://www.fakings.com/es/serie/pervirtiendo-parejas",
+            "urls": ["https://www.fakings.com/es/serie/pervirtiendo-parejas"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Casais pervertidos",
             "aliases": "Perverting couples, Pervirtiendo Parejas",
-            "url": "https://www.fakings.com/pt/serie/casais-pervertidos",
+            "urls": ["https://www.fakings.com/pt/serie/casais-pervertidos"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -1130,28 +1135,28 @@ studio_map = {
         "en": {
             "name": "Next door girl",
             "aliases": "Es tu vecina, Ela é sua vizinha",
-            "url": "https://www.fakings.com/en/serie/next-door-girl",
+            "urls": ["https://www.fakings.com/en/serie/next-door-girl"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "Es tu vecina",
             "aliases": "Next door girl, Ela é sua vizinha",
-            "url": "https://www.fakings.com/es/serie/es-tu-vecina",
+            "urls": ["https://www.fakings.com/es/serie/es-tu-vecina"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Ela é sua vizinha",
             "aliases": "Next door girl, Es tu vecina",
-            "url": "https://www.fakings.com/pt/serie/ela-e-sua-vizinha",
+            "urls": ["https://www.fakings.com/pt/serie/ela-e-sua-vizinha"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -1159,28 +1164,28 @@ studio_map = {
         "en": {
             "name": "NERD BUSTER!",
             "aliases": "Los Cazatolas, Os caçadores",
-            "url": "https://www.fakings.com/en/serie/nerd-buster",
+            "urls": ["https://www.fakings.com/en/serie/nerd-buster"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "Los Cazatolas",
             "aliases": "NERD BUSTER!, Os caçadores",
-            "url": "https://www.fakings.com/es/serie/los-cazatolas",
+            "urls": ["https://www.fakings.com/es/serie/los-cazatolas"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Os caçadores",
             "aliases": "NERD BUSTER!, Los Cazatolas",
-            "url": "https://www.fakings.com/pt/serie/os-cacadores",
+            "urls": ["https://www.fakings.com/pt/serie/os-cacadores"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -1188,28 +1193,28 @@ studio_map = {
         "en": {
             "name": "Talk to them",
             "aliases": "Hable con ellas, Fale com elas",
-            "url": "https://www.fakings.com/en/serie/talk-to-them",
+            "urls": ["https://www.fakings.com/en/serie/talk-to-them"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "Hable con ellas",
             "aliases": "Talk to them, Fale com elas",
-            "url": "https://www.fakings.com/es/serie/hable-con-ellas",
+            "urls": ["https://www.fakings.com/es/serie/hable-con-ellas"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Fale com elas",
             "aliases": "Talk to them, Hable con ellas",
-            "url": "https://www.fakings.com/pt/serie/fale-com-elas",
+            "urls": ["https://www.fakings.com/pt/serie/fale-com-elas"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -1217,28 +1222,28 @@ studio_map = {
         "en": {
             "name": "I Fiesta Madlifes",
             "aliases": "",
-            "url": "https://www.madlifes.com/en/serie/i-fiesta-madlifes",
+            "urls": ["https://www.madlifes.com/en/serie/i-fiesta-madlifes"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
         "es": {
             "name": "I Fiesta Madlifes",
             "aliases": "",
-            "url": "https://www.madlifes.com/es/serie/i-fiesta-madlifes",
+            "urls": ["https://www.madlifes.com/es/serie/i-fiesta-madlifes"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
         "pt": {
             "name": "I Fiesta Madlifes",
             "aliases": "",
-            "url": "https://www.madlifes.com/pt/serie/i-fiesta-madlifes",
+            "urls": ["https://www.madlifes.com/pt/serie/i-fiesta-madlifes"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
     },
@@ -1246,28 +1251,28 @@ studio_map = {
         "en": {
             "name": "II Madlifes Party",
             "aliases": "II Fiesta Madlifes",
-            "url": "https://www.madlifes.com/en/serie/ii-fiesta-madlifes",
+            "urls": ["https://www.madlifes.com/en/serie/ii-fiesta-madlifes"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
         "es": {
             "name": "II Fiesta Madlifes",
             "aliases": "",
-            "url": "https://www.madlifes.com/es/serie/ii-fiesta-madlifes",
+            "urls": ["https://www.madlifes.com/es/serie/ii-fiesta-madlifes"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
         "pt": {
             "name": "II Fiesta Madlifes",
             "aliases": "",
-            "url": "https://www.madlifes.com/pt/serie/ii-fiesta-madlifes",
+            "urls": ["https://www.madlifes.com/pt/serie/ii-fiesta-madlifes"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
     },
@@ -1275,28 +1280,28 @@ studio_map = {
         "en": {
             "name": "III MadLifes Party",
             "aliases": "III Fiesta MadLifes",
-            "url": "https://www.madlifes.com/en/serie/iii-fiesta-madlifes",
+            "urls": ["https://www.madlifes.com/en/serie/iii-fiesta-madlifes"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
         "es": {
             "name": "III Fiesta MadLifes",
             "aliases": "",
-            "url": "https://www.madlifes.com/es/serie/iii-fiesta-madlifes",
+            "urls": ["https://www.madlifes.com/es/serie/iii-fiesta-madlifes"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
         "pt": {
             "name": "III Fiesta MadLifes",
             "aliases": "",
-            "url": "https://www.madlifes.com/pt/serie/iii-fiesta-madlifes",
+            "urls": ["https://www.madlifes.com/pt/serie/iii-fiesta-madlifes"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
     },
@@ -1304,28 +1309,28 @@ studio_map = {
         "en": {
             "name": "IV MadLifes Party",
             "aliases": "IV Fiesta MadLifes",
-            "url": "https://www.madlifes.com/en/serie/iv-fiesta-madlifes",
+            "urls": ["https://www.madlifes.com/en/serie/iv-fiesta-madlifes"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
         "es": {
             "name": "IV Fiesta MadLifes",
             "aliases": "",
-            "url": "https://www.madlifes.com/es/serie/iv-fiesta-madlifes",
+            "urls": ["https://www.madlifes.com/es/serie/iv-fiesta-madlifes"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
         "pt": {
             "name": "IV Fiesta MadLifes",
             "aliases": "",
-            "url": "https://www.madlifes.com/pt/serie/iv-fiesta-madlifes",
+            "urls": ["https://www.madlifes.com/pt/serie/iv-fiesta-madlifes"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
     },
@@ -1333,28 +1338,28 @@ studio_map = {
         "en": {
             "name": "V MadLifes Party",
             "aliases": "V Fiesta MadLifes",
-            "url": "https://www.madlifes.com/en/serie/v-fiesta-madlifes",
+            "urls": ["https://www.madlifes.com/en/serie/v-fiesta-madlifes"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
         "es": {
             "name": "V Fiesta MadLifes",
             "aliases": "",
-            "url": "https://www.madlifes.com/es/serie/v-fiesta-madlifes",
+            "urls": ["https://www.madlifes.com/es/serie/v-fiesta-madlifes"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
         "pt": {
             "name": "V Fiesta MadLifes",
             "aliases": "",
-            "url": "https://www.madlifes.com/pt/serie/v-fiesta-madlifes",
+            "urls": ["https://www.madlifes.com/pt/serie/v-fiesta-madlifes"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
     },
@@ -1362,28 +1367,28 @@ studio_map = {
         "en": {
             "name": "VI MadLifes Party",
             "aliases": "VI Fiesta MadLifes",
-            "url": "https://www.madlifes.com/en/serie/vi-fiesta-madlifes",
+            "urls": ["https://www.madlifes.com/en/serie/vi-fiesta-madlifes"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
         "es": {
             "name": "VI Fiesta MadLifes",
             "aliases": "",
-            "url": "https://www.madlifes.com/es/serie/vi-fiesta-madlifes",
+            "urls": ["https://www.madlifes.com/es/serie/vi-fiesta-madlifes"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
         "pt": {
             "name": "VI Fiesta MadLifes",
             "aliases": "",
-            "url": "https://www.madlifes.com/pt/serie/vi-fiesta-madlifes",
+            "urls": ["https://www.madlifes.com/pt/serie/vi-fiesta-madlifes"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
     },
@@ -1391,28 +1396,28 @@ studio_map = {
         "en": {
             "name": "VII MadLifes Party",
             "aliases": "VII Fiesta MadLifes",
-            "url": "https://www.madlifes.com/en/serie/vii-fiesta-madlifes",
+            "urls": ["https://www.madlifes.com/en/serie/vii-fiesta-madlifes"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
         "es": {
             "name": "VII Fiesta MadLifes",
             "aliases": "",
-            "url": "https://www.madlifes.com/es/serie/vii-fiesta-madlifes",
+            "urls": ["https://www.madlifes.com/es/serie/vii-fiesta-madlifes"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
         "pt": {
             "name": "VII Fiesta MadLifes",
             "aliases": "",
-            "url": "https://www.madlifes.com/pt/serie/vii-fiesta-madlifes",
+            "urls": ["https://www.madlifes.com/pt/serie/vii-fiesta-madlifes"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
     },
@@ -1420,28 +1425,28 @@ studio_map = {
         "en": {
             "name": "I Reality",
             "aliases": "",
-            "url": "https://www.madgays.com/en/serie/i-reality-madgays",
+            "urls": ["https://www.madgays.com/en/serie/i-reality-madgays"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
         "es": {
             "name": "I Reality",
             "aliases": "",
-            "url": "https://www.madgays.com/es/serie/i-reality-madgays",
+            "urls": ["https://www.madgays.com/es/serie/i-reality-madgays"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
         "pt": {
             "name": "I Reality",
             "aliases": "",
-            "url": "https://www.madgays.com/pt/serie/i-reality-madgays",
+            "urls": ["https://www.madgays.com/pt/serie/i-reality-madgays"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
     },
@@ -1449,28 +1454,28 @@ studio_map = {
         "en": {
             "name": "Heteropajas",
             "aliases": "",
-            "url": "https://www.madgays.com/en/serie/heteropajas",
+            "urls": ["https://www.madgays.com/en/serie/heteropajas"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
         "es": {
             "name": "Heteropajas",
             "aliases": "",
-            "url": "https://www.madgays.com/es/serie/heteropajas",
+            "urls": ["https://www.madgays.com/es/serie/heteropajas"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
         "pt": {
             "name": "Heteropajas",
             "aliases": "",
-            "url": "https://www.madgays.com/pt/serie/heteropajas",
+            "urls": ["https://www.madgays.com/pt/serie/heteropajas"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
     },
@@ -1478,28 +1483,28 @@ studio_map = {
         "en": {
             "name": "VIII MadLifes Party",
             "aliases": "VIII Fiesta MadLifes",
-            "url": "https://www.madlifes.com/en/serie/viii-fiesta-madlifes",
+            "urls": ["https://www.madlifes.com/en/serie/viii-fiesta-madlifes"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
         "es": {
             "name": "VIII Fiesta MadLifes",
             "aliases": "",
-            "url": "https://www.madlifes.com/es/serie/viii-fiesta-madlifes",
+            "urls": ["https://www.madlifes.com/es/serie/viii-fiesta-madlifes"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
         "pt": {
             "name": "VIII Fiesta MadLifes",
             "aliases": "",
-            "url": "https://www.madlifes.com/pt/serie/viii-fiesta-madlifes",
+            "urls": ["https://www.madlifes.com/pt/serie/viii-fiesta-madlifes"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
     },
@@ -1507,28 +1512,28 @@ studio_map = {
         "en": {
             "name": "Telepillados",
             "aliases": "",
-            "url": "https://www.madgays.com/en/serie/telepillados",
+            "urls": ["https://www.madgays.com/en/serie/telepillados"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
         "es": {
             "name": "Telepillados",
             "aliases": "",
-            "url": "https://www.madgays.com/es/serie/telepillados",
+            "urls": ["https://www.madgays.com/es/serie/telepillados"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
         "pt": {
             "name": "Telepillados",
             "aliases": "",
-            "url": "https://www.madgays.com/pt/serie/telepillados",
+            "urls": ["https://www.madgays.com/pt/serie/telepillados"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
     },
@@ -1536,28 +1541,28 @@ studio_map = {
         "en": {
             "name": "MadLifes Festivities - 2018",
             "aliases": "Fiestas MadLifes - 2018",
-            "url": "https://www.madlifes.com/en/serie/fiestas-madlifes-2018",
+            "urls": ["https://www.madlifes.com/en/serie/fiestas-madlifes-2018"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
         "es": {
             "name": "Fiestas MadLifes - 2018",
             "aliases": "",
-            "url": "https://www.madlifes.com/es/serie/fiestas-madlifes-2018",
+            "urls": ["https://www.madlifes.com/es/serie/fiestas-madlifes-2018"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
         "pt": {
             "name": "Fiestas MadLifes - 2018",
             "aliases": "",
-            "url": "https://www.madlifes.com/pt/serie/fiestas-madlifes-2018",
+            "urls": ["https://www.madlifes.com/pt/serie/fiestas-madlifes-2018"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
     },
@@ -1565,28 +1570,28 @@ studio_map = {
         "en": {
             "name": "Polvazos Actores Consagrados",
             "aliases": "",
-            "url": "https://www.madgays.com/en/serie/polvazos-actores-consagrados",
+            "urls": ["https://www.madgays.com/en/serie/polvazos-actores-consagrados"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
         "es": {
             "name": "Polvazos Actores Consagrados",
             "aliases": "",
-            "url": "https://www.madgays.com/es/serie/polvazos-actores-consagrados",
+            "urls": ["https://www.madgays.com/es/serie/polvazos-actores-consagrados"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
         "pt": {
             "name": "Polvazos Actores Consagrados",
             "aliases": "",
-            "url": "https://www.madgays.com/pt/serie/polvazos-actores-consagrados",
+            "urls": ["https://www.madgays.com/pt/serie/polvazos-actores-consagrados"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
     },
@@ -1594,28 +1599,28 @@ studio_map = {
         "en": {
             "name": "II  Reality",
             "aliases": "",
-            "url": "https://www.madgays.com/en/serie/ii-reality",
+            "urls": ["https://www.madgays.com/en/serie/ii-reality"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
         "es": {
             "name": "II  Reality",
             "aliases": "",
-            "url": "https://www.madgays.com/es/serie/ii-reality",
+            "urls": ["https://www.madgays.com/es/serie/ii-reality"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
         "pt": {
             "name": "II  Reality",
             "aliases": "",
-            "url": "https://www.madgays.com/pt/serie/ii-reality",
+            "urls": ["https://www.madgays.com/pt/serie/ii-reality"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
     },
@@ -1623,28 +1628,28 @@ studio_map = {
         "en": {
             "name": "Amigos Martin Mazza",
             "aliases": "",
-            "url": "https://www.madgays.com/en/serie/amigos-de-martin-mazza",
+            "urls": ["https://www.madgays.com/en/serie/amigos-de-martin-mazza"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
         "es": {
             "name": "Amigos Martin Mazza",
             "aliases": "",
-            "url": "https://www.madgays.com/es/serie/amigos-de-martin-mazza",
+            "urls": ["https://www.madgays.com/es/serie/amigos-de-martin-mazza"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
         "pt": {
             "name": "Amigos Martin Mazza",
             "aliases": "",
-            "url": "https://www.madgays.com/pt/serie/amigos-de-martin-mazza",
+            "urls": ["https://www.madgays.com/pt/serie/amigos-de-martin-mazza"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
     },
@@ -1652,28 +1657,28 @@ studio_map = {
         "en": {
             "name": "EnClaveGay 2018",
             "aliases": "",
-            "url": "https://www.madgays.com/en/serie/enclavegay-2018",
+            "urls": ["https://www.madgays.com/en/serie/enclavegay-2018"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
         "es": {
             "name": "EnClaveGay 2018",
             "aliases": "",
-            "url": "https://www.madgays.com/es/serie/enclavegay-2018",
+            "urls": ["https://www.madgays.com/es/serie/enclavegay-2018"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
         "pt": {
             "name": "EnClaveGay 2018",
             "aliases": "",
-            "url": "https://www.madgays.com/pt/serie/enclavegay-2018",
+            "urls": ["https://www.madgays.com/pt/serie/enclavegay-2018"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
     },
@@ -1681,28 +1686,28 @@ studio_map = {
         "en": {
             "name": "Trans FAKings",
             "aliases": "",
-            "url": "https://www.fakings.com/en/serie/trans-fakings",
+            "urls": ["https://www.fakings.com/en/serie/trans-fakings"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "Trans FAKings",
             "aliases": "",
-            "url": "https://www.fakings.com/es/serie/trans-fakings",
+            "urls": ["https://www.fakings.com/es/serie/trans-fakings"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Trans FAKings",
             "aliases": "",
-            "url": "https://www.fakings.com/pt/serie/trans-fakings",
+            "urls": ["https://www.fakings.com/pt/serie/trans-fakings"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -1710,28 +1715,28 @@ studio_map = {
         "en": {
             "name": "My first casting",
             "aliases": "Mi primer casting, Meu primeiro casting",
-            "url": "https://www.madgays.com/en/serie/my-first-casting",
+            "urls": ["https://www.madgays.com/en/serie/my-first-casting"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
         "es": {
             "name": "Mi primer casting",
             "aliases": "My first casting, Meu primeiro casting",
-            "url": "https://www.madgays.com/es/serie/mi-primer-casting",
+            "urls": ["https://www.madgays.com/es/serie/mi-primer-casting"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
         "pt": {
             "name": "Meu primeiro casting",
             "aliases": "My first casting, Mi primer casting",
-            "url": "https://www.madgays.com/pt/serie/meu-primeiro-casting",
+            "urls": ["https://www.madgays.com/pt/serie/meu-primeiro-casting"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
     },
@@ -1739,28 +1744,28 @@ studio_map = {
         "en": {
             "name": "MadLifes Festivities - 2019",
             "aliases": "Fiestas MadLifes - 2019",
-            "url": "https://www.madlifes.com/en/serie/fiestas-madlifes-2019",
+            "urls": ["https://www.madlifes.com/en/serie/fiestas-madlifes-2019"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
         "es": {
             "name": "Fiestas MadLifes - 2019",
             "aliases": "",
-            "url": "https://www.madlifes.com/es/serie/fiestas-madlifes-2019",
+            "urls": ["https://www.madlifes.com/es/serie/fiestas-madlifes-2019"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
         "pt": {
             "name": "Fiestas MadLifes - 2019",
             "aliases": "",
-            "url": "https://www.madlifes.com/pt/serie/fiestas-madlifes-2019",
+            "urls": ["https://www.madlifes.com/pt/serie/fiestas-madlifes-2019"],
             "parent": {
                 "name": "MadLifes",
-                "url": "https://www.madlifes.com",
+                "urls": ["https://www.madlifes.com"],
             },
         },
     },
@@ -1768,28 +1773,28 @@ studio_map = {
         "en": {
             "name": "HotGay 2019",
             "aliases": "",
-            "url": "https://www.madgays.com/en/serie/hotgay-2019",
+            "urls": ["https://www.madgays.com/en/serie/hotgay-2019"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
         "es": {
             "name": "HotGay 2019",
             "aliases": "",
-            "url": "https://www.madgays.com/es/serie/hotgay-2019",
+            "urls": ["https://www.madgays.com/es/serie/hotgay-2019"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
         "pt": {
             "name": "HotGay 2019",
             "aliases": "",
-            "url": "https://www.madgays.com/pt/serie/hotgay-2019",
+            "urls": ["https://www.madgays.com/pt/serie/hotgay-2019"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
     },
@@ -1797,28 +1802,28 @@ studio_map = {
         "en": {
             "name": "Gaypajas",
             "aliases": "",
-            "url": "https://www.madgays.com/en/serie/gaypaja",
+            "urls": ["https://www.madgays.com/en/serie/gaypaja"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
         "es": {
             "name": "Gaypajas",
             "aliases": "",
-            "url": "https://www.madgays.com/es/serie/gaypaja",
+            "urls": ["https://www.madgays.com/es/serie/gaypaja"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
         "pt": {
             "name": "Gaypajas",
             "aliases": "",
-            "url": "https://www.madgays.com/pt/serie/gaypaja",
+            "urls": ["https://www.madgays.com/pt/serie/gaypaja"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
     },
@@ -1826,28 +1831,28 @@ studio_map = {
         "en": {
             "name": "FREE pussy day",
             "aliases": "El día del coño GRATIS, O dia da buceta GRATIS",
-            "url": "https://www.fakings.com/en/serie/free-pussy-day",
+            "urls": ["https://www.fakings.com/en/serie/free-pussy-day"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "El día del coño GRATIS",
             "aliases": "FREE pussy day, O dia da buceta GRATIS",
-            "url": "https://www.fakings.com/es/serie/el-dia-del-cono-gratis",
+            "urls": ["https://www.fakings.com/es/serie/el-dia-del-cono-gratis"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "O dia da buceta GRATIS",
             "aliases": "FREE pussy day, El día del coño GRATIS",
-            "url": "https://www.fakings.com/pt/serie/o-dia-da-buceta-gratis",
+            "urls": ["https://www.fakings.com/pt/serie/o-dia-da-buceta-gratis"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -1855,28 +1860,28 @@ studio_map = {
         "en": {
             "name": "My first anal",
             "aliases": "Mi primer anal, Meu primeiro anal",
-            "url": "https://www.fakings.com/en/serie/my-first-anal",
+            "urls": ["https://www.fakings.com/en/serie/my-first-anal"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "Mi primer anal",
             "aliases": "My first anal, Meu primeiro anal",
-            "url": "https://www.fakings.com/es/serie/mi-primer-anal",
+            "urls": ["https://www.fakings.com/es/serie/mi-primer-anal"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Meu primeiro anal",
             "aliases": "My first anal, Mi primer anal",
-            "url": "https://www.fakings.com/pt/serie/meu-primeiro-anal",
+            "urls": ["https://www.fakings.com/pt/serie/meu-primeiro-anal"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -1884,28 +1889,28 @@ studio_map = {
         "en": {
             "name": "FAKings PornStars",
             "aliases": "Estrelas pornôs FAKings",
-            "url": "https://www.fakings.com/en/serie/fakings-pornstars",
+            "urls": ["https://www.fakings.com/en/serie/fakings-pornstars"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "FAKings PornStars",
             "aliases": "Estrelas pornôs FAKings",
-            "url": "https://www.fakings.com/es/serie/fakings-old-stars",
+            "urls": ["https://www.fakings.com/es/serie/fakings-old-stars"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Estrelas pornôs FAKings",
             "aliases": "FAKings PornStars",
-            "url": "https://www.fakings.com/pt/serie/estrelas-porns-fakings",
+            "urls": ["https://www.fakings.com/pt/serie/estrelas-porns-fakings"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -1913,28 +1918,28 @@ studio_map = {
         "en": {
             "name": "Curvy Girls",
             "aliases": "Chicas Curvis, Garotas com curvas",
-            "url": "https://www.fakings.com/en/serie/curvy-girls",
+            "urls": ["https://www.fakings.com/en/serie/curvy-girls"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "Chicas Curvis",
             "aliases": "Curvy Girls, Garotas com curvas",
-            "url": "https://www.fakings.com/es/serie/chicas-curvis",
+            "urls": ["https://www.fakings.com/es/serie/chicas-curvis"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Garotas com curvas",
             "aliases": "Curvy Girls, Chicas Curvis",
-            "url": "https://www.fakings.com/pt/serie/garotas-com-curvas",
+            "urls": ["https://www.fakings.com/pt/serie/garotas-com-curvas"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -1942,28 +1947,28 @@ studio_map = {
         "en": {
             "name": "Newbies... or so they say ;)",
             "aliases": "Novatas... O eso dicen ;), Novatas… ou isso dizem",
-            "url": "https://www.fakings.com/en/serie/newbies-or-so-they-say-",
+            "urls": ["https://www.fakings.com/en/serie/newbies-or-so-they-say-"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "Novatas... O eso dicen ;)",
             "aliases": "Newbies... or so they say ;), Novatas… ou isso dizem",
-            "url": "https://www.fakings.com/es/serie/novatas",
+            "urls": ["https://www.fakings.com/es/serie/novatas"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Novatas… ou isso dizem",
             "aliases": "Newbies... or so they say ;), Novatas... O eso dicen ;)",
-            "url": "https://www.fakings.com/pt/serie/novatas-ou-isso-dizem",
+            "urls": ["https://www.fakings.com/pt/serie/novatas-ou-isso-dizem"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -1971,28 +1976,28 @@ studio_map = {
         "en": {
             "name": "EnClaveGay 2019",
             "aliases": "",
-            "url": "https://www.madgays.com/en/serie/enclavegay-2019",
+            "urls": ["https://www.madgays.com/en/serie/enclavegay-2019"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
         "es": {
             "name": "EnClaveGay 2019",
             "aliases": "",
-            "url": "https://www.madgays.com/es/serie/enclavegay-2019",
+            "urls": ["https://www.madgays.com/es/serie/enclavegay-2019"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
         "pt": {
             "name": "EnClaveGay 2019",
             "aliases": "",
-            "url": "https://www.madgays.com/pt/serie/enclavegay-2019",
+            "urls": ["https://www.madgays.com/pt/serie/enclavegay-2019"],
             "parent": {
                 "name": "MadGays",
-                "url": "https://www.madgays.com",
+                "urls": ["https://www.madgays.com"],
             },
         },
     },
@@ -2000,28 +2005,28 @@ studio_map = {
         "en": {
             "name": "Parejas.NET",
             "aliases": "",
-            "url": "https://www.fakings.com/en/serie/parejasnet",
+            "urls": ["https://www.fakings.com/en/serie/parejasnet"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "Parejas.NET",
             "aliases": "",
-            "url": "https://www.fakings.com/es/serie/parejasnet",
+            "urls": ["https://www.fakings.com/es/serie/parejasnet"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Parejas.NET",
             "aliases": "",
-            "url": "https://www.fakings.com/pt/serie/parejasnet",
+            "urls": ["https://www.fakings.com/pt/serie/parejasnet"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -2029,28 +2034,28 @@ studio_map = {
         "en": {
             "name": "MEGA COCKS",
             "aliases": "MEGA RABOS",
-            "url": "https://www.fakings.com/en/serie/elephant-tails",
+            "urls": ["https://www.fakings.com/en/serie/elephant-tails"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "MEGA RABOS",
             "aliases": "MEGA COCKS",
-            "url": "https://www.fakings.com/es/serie/rabos-de-caballo",
+            "urls": ["https://www.fakings.com/es/serie/rabos-de-caballo"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "MEGA RABOS",
             "aliases": "MEGA COCKS",
-            "url": "https://www.fakings.com/pt/serie/rabos-de-elefante",
+            "urls": ["https://www.fakings.com/pt/serie/rabos-de-elefante"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -2058,28 +2063,28 @@ studio_map = {
         "en": {
             "name": "Quarantine Stories",
             "aliases": "Historias de Cuarentena, Histórias de quarentena",
-            "url": "https://www.fakings.com/en/serie/quarantine-stories",
+            "urls": ["https://www.fakings.com/en/serie/quarantine-stories"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "Historias de Cuarentena",
             "aliases": "Quarantine Stories, Histórias de quarentena",
-            "url": "https://www.fakings.com/es/serie/historias-de-cuarentena",
+            "urls": ["https://www.fakings.com/es/serie/historias-de-cuarentena"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Histórias de quarentena",
             "aliases": "Quarantine Stories, Historias de Cuarentena",
-            "url": "https://www.fakings.com/pt/serie/historias-de-quarentena",
+            "urls": ["https://www.fakings.com/pt/serie/historias-de-quarentena"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -2087,28 +2092,28 @@ studio_map = {
         "en": {
             "name": "LoverFANS",
             "aliases": "LoverFans",
-            "url": "https://www.loverfans.com/en/serie/loverfans",
+            "urls": ["https://www.loverfans.com/en/serie/loverfans"],
             "parent": {
                 "name": "Loverfans",
-                "url": "https://www.loverfans.com",
+                "urls": ["https://www.loverfans.com"],
             },
         },
         "es": {
             "name": "LoverFANS",
             "aliases": "LoverFans",
-            "url": "https://www.loverfans.com/es/serie/loverfans",
+            "urls": ["https://www.loverfans.com/es/serie/loverfans"],
             "parent": {
                 "name": "Loverfans",
-                "url": "https://www.loverfans.com",
+                "urls": ["https://www.loverfans.com"],
             },
         },
         "pt": {
             "name": "LoverFans",
             "aliases": "LoverFANS",
-            "url": "https://www.loverfans.com/pt/serie/loverfans",
+            "urls": ["https://www.loverfans.com/pt/serie/loverfans"],
             "parent": {
                 "name": "Loverfans",
-                "url": "https://www.loverfans.com",
+                "urls": ["https://www.loverfans.com"],
             },
         },
     },
@@ -2116,28 +2121,28 @@ studio_map = {
         "en": {
             "name": "Recorded at home",
             "aliases": "Grabado en casa",
-            "url": "https://www.pepeporn.com/en/serie/porno-en-casa",
+            "urls": ["https://www.pepeporn.com/en/serie/porno-en-casa"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
         "es": {
             "name": "Grabado en casa",
             "aliases": "",
-            "url": "https://www.pepeporn.com/es/serie/porno-en-casa",
+            "urls": ["https://www.pepeporn.com/es/serie/porno-en-casa"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
         "pt": {
             "name": "Grabado en casa",
             "aliases": "",
-            "url": "https://www.pepeporn.com/pt/serie/porno-en-casa",
+            "urls": ["https://www.pepeporn.com/pt/serie/porno-en-casa"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
     },
@@ -2145,28 +2150,28 @@ studio_map = {
         "en": {
             "name": "Fuck my partner",
             "aliases": "Follate a mi pareja",
-            "url": "https://www.pepeporn.com/en/serie/follate-a-mi-pareja",
+            "urls": ["https://www.pepeporn.com/en/serie/follate-a-mi-pareja"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
         "es": {
             "name": "Follate a mi pareja",
             "aliases": "",
-            "url": "https://www.pepeporn.com/es/serie/follate-a-mi-pareja",
+            "urls": ["https://www.pepeporn.com/es/serie/follate-a-mi-pareja"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
         "pt": {
             "name": "Follate a mi pareja",
             "aliases": "",
-            "url": "https://www.pepeporn.com/pt/serie/follate-a-mi-pareja",
+            "urls": ["https://www.pepeporn.com/pt/serie/follate-a-mi-pareja"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
     },
@@ -2174,28 +2179,28 @@ studio_map = {
         "en": {
             "name": "I Want to Be a Cuckold",
             "aliases": "Quiero ser Cornudo",
-            "url": "https://www.pepeporn.com/en/serie/quiero-ser-cornudo",
+            "urls": ["https://www.pepeporn.com/en/serie/quiero-ser-cornudo"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
         "es": {
             "name": "Quiero ser Cornudo",
             "aliases": "",
-            "url": "https://www.pepeporn.com/es/serie/quiero-ser-cornudo",
+            "urls": ["https://www.pepeporn.com/es/serie/quiero-ser-cornudo"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
         "pt": {
             "name": "Quiero ser Cornudo",
             "aliases": "",
-            "url": "https://www.pepeporn.com/pt/serie/quiero-ser-cornudo",
+            "urls": ["https://www.pepeporn.com/pt/serie/quiero-ser-cornudo"],
             "parent": {
                 "name": "PepePorn",
-                "url": "https://www.pepeporn.com",
+                "urls": ["https://www.pepeporn.com"],
             },
         },
     },
@@ -2203,28 +2208,28 @@ studio_map = {
         "en": {
             "name": "LoverFans",
             "aliases": "LiverFans",
-            "url": "https://www.fakings.com/en/serie/loverfans",
+            "urls": ["https://www.fakings.com/en/serie/loverfans"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "LoverFans",
             "aliases": "LiverFans",
-            "url": "https://www.fakings.com/es/serie/loverfans",
+            "urls": ["https://www.fakings.com/es/serie/loverfans"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "LiverFans",
             "aliases": "LoverFans",
-            "url": "https://www.fakings.com/pt/serie/liverfans",
+            "urls": ["https://www.fakings.com/pt/serie/liverfans"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -2232,28 +2237,28 @@ studio_map = {
         "en": {
             "name": "La Porno House",
             "aliases": "",
-            "url": "https://www.fakings.com/en/serie/la-porno-house",
+            "urls": ["https://www.fakings.com/en/serie/la-porno-house"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "La Porno House",
             "aliases": "",
-            "url": "https://www.fakings.com/es/serie/la-porno-house",
+            "urls": ["https://www.fakings.com/es/serie/la-porno-house"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "La Porno House",
             "aliases": "",
-            "url": "https://www.fakings.com/pt/serie/la-porno-house",
+            "urls": ["https://www.fakings.com/pt/serie/la-porno-house"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -2261,28 +2266,28 @@ studio_map = {
         "en": {
             "name": "Blind date",
             "aliases": "Citas a ciegas, Encontros às cegas",
-            "url": "https://www.fakings.com/en/serie/blind-date",
+            "urls": ["https://www.fakings.com/en/serie/blind-date"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "Citas a ciegas",
             "aliases": "Blind date, Encontros às cegas",
-            "url": "https://www.fakings.com/es/serie/citas-a-ciegas",
+            "urls": ["https://www.fakings.com/es/serie/citas-a-ciegas"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Encontros às cegas",
             "aliases": "Blind date, Citas a ciegas",
-            "url": "https://www.fakings.com/pt/serie/encontros-s-cegas",
+            "urls": ["https://www.fakings.com/pt/serie/encontros-s-cegas"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -2290,28 +2295,28 @@ studio_map = {
         "en": {
             "name": "Girls get nigged",
             "aliases": "Negrateadas, Escurecidos",
-            "url": "https://www.nigged.com/en/serie/girls-get-nigged",
+            "urls": ["https://www.nigged.com/en/serie/girls-get-nigged"],
             "parent": {
                 "name": "Nigged",
-                "url": "https://www.nigged.com",
+                "urls": ["https://www.nigged.com"],
             },
         },
         "es": {
             "name": "Negrateadas",
             "aliases": "Girls get nigged, Escurecidos",
-            "url": "https://www.nigged.com/es/serie/negrateadas",
+            "urls": ["https://www.nigged.com/es/serie/negrateadas"],
             "parent": {
                 "name": "Nigged",
-                "url": "https://www.nigged.com",
+                "urls": ["https://www.nigged.com"],
             },
         },
         "pt": {
             "name": "Escurecidos",
             "aliases": "Girls get nigged, Negrateadas",
-            "url": "https://www.nigged.com/pt/serie/escurecidos",
+            "urls": ["https://www.nigged.com/pt/serie/escurecidos"],
             "parent": {
                 "name": "Nigged",
-                "url": "https://www.nigged.com",
+                "urls": ["https://www.nigged.com"],
             },
         },
     },
@@ -2319,28 +2324,28 @@ studio_map = {
         "en": {
             "name": "Ivan Amor",
             "aliases": "Ivan amor",
-            "url": "https://www.fakings.com/en/serie/ivan-amor",
+            "urls": ["https://www.fakings.com/en/serie/ivan-amor"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "Ivan Amor",
             "aliases": "Ivan amor",
-            "url": "https://www.fakings.com/es/serie/ivan-amor",
+            "urls": ["https://www.fakings.com/es/serie/ivan-amor"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Ivan amor",
             "aliases": "Ivan Amor",
-            "url": "https://www.fakings.com/pt/serie/ivan-amor",
+            "urls": ["https://www.fakings.com/pt/serie/ivan-amor"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -2348,28 +2353,28 @@ studio_map = {
         "en": {
             "name": "A present for my wife",
             "aliases": "Un regalo para mi mujer, Um presente para minha mulher",
-            "url": "https://www.nigged.com/en/serie/a-present-for-my-wf",
+            "urls": ["https://www.nigged.com/en/serie/a-present-for-my-wf"],
             "parent": {
                 "name": "Nigged",
-                "url": "https://www.nigged.com",
+                "urls": ["https://www.nigged.com"],
             },
         },
         "es": {
             "name": "Un regalo para mi mujer",
             "aliases": "A present for my wife, Um presente para minha mulher",
-            "url": "https://www.nigged.com/es/serie/un-regalo-para-mi-mujer",
+            "urls": ["https://www.nigged.com/es/serie/un-regalo-para-mi-mujer"],
             "parent": {
                 "name": "Nigged",
-                "url": "https://www.nigged.com",
+                "urls": ["https://www.nigged.com"],
             },
         },
         "pt": {
             "name": "Um presente para minha mulher",
             "aliases": "A present for my wife, Un regalo para mi mujer",
-            "url": "https://www.nigged.com/pt/serie/um-presente-para-minha-mulher",
+            "urls": ["https://www.nigged.com/pt/serie/um-presente-para-minha-mulher"],
             "parent": {
                 "name": "Nigged",
-                "url": "https://www.nigged.com",
+                "urls": ["https://www.nigged.com"],
             },
         },
     },
@@ -2377,28 +2382,28 @@ studio_map = {
         "en": {
             "name": "Help my mamma",
             "aliases": "Ayuda a mi madre, Ajuda a minha mãe",
-            "url": "https://www.nigged.com/en/serie/help-my-mamma",
+            "urls": ["https://www.nigged.com/en/serie/help-my-mamma"],
             "parent": {
                 "name": "Nigged",
-                "url": "https://www.nigged.com",
+                "urls": ["https://www.nigged.com"],
             },
         },
         "es": {
             "name": "Ayuda a mi madre",
             "aliases": "Help my mamma, Ajuda a minha mãe",
-            "url": "https://www.nigged.com/es/serie/ayuda-a-mi-madre",
+            "urls": ["https://www.nigged.com/es/serie/ayuda-a-mi-madre"],
             "parent": {
                 "name": "Nigged",
-                "url": "https://www.nigged.com",
+                "urls": ["https://www.nigged.com"],
             },
         },
         "pt": {
             "name": "Ajuda a minha mãe",
             "aliases": "Help my mamma, Ayuda a mi madre",
-            "url": "https://www.nigged.com/pt/serie/ajuda-a-minha-me",
+            "urls": ["https://www.nigged.com/pt/serie/ajuda-a-minha-me"],
             "parent": {
                 "name": "Nigged",
-                "url": "https://www.nigged.com",
+                "urls": ["https://www.nigged.com"],
             },
         },
     },
@@ -2406,28 +2411,28 @@ studio_map = {
         "en": {
             "name": "DILF Club",
             "aliases": "Club Puretas",
-            "url": "https://www.fakings.com/en/serie/dilf-club",
+            "urls": ["https://www.fakings.com/en/serie/dilf-club"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "es": {
             "name": "Club Puretas",
             "aliases": "DILF Club",
-            "url": "https://www.fakings.com/es/serie/club-puretas",
+            "urls": ["https://www.fakings.com/es/serie/club-puretas"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
         "pt": {
             "name": "Club Puretas",
             "aliases": "DILF Club",
-            "url": "https://www.fakings.com/pt/serie/club-puretas",
+            "urls": ["https://www.fakings.com/pt/serie/club-puretas"],
             "parent": {
                 "name": "FAKings",
-                "url": "https://www.fakings.com",
+                "urls": ["https://www.fakings.com"],
             },
         },
     },
@@ -2435,28 +2440,28 @@ studio_map = {
         "en": {
             "name": "My hidden secret",
             "aliases": "Mi gran secreto",
-            "url": "https://www.nigged.com/en/serie/my-hidden-secret",
+            "urls": ["https://www.nigged.com/en/serie/my-hidden-secret"],
             "parent": {
                 "name": "Nigged",
-                "url": "https://www.nigged.com",
+                "urls": ["https://www.nigged.com"],
             },
         },
         "es": {
             "name": "Mi gran secreto",
             "aliases": "My hidden secret",
-            "url": "https://www.nigged.com/es/serie/mi-gran-secreto",
+            "urls": ["https://www.nigged.com/es/serie/mi-gran-secreto"],
             "parent": {
                 "name": "Nigged",
-                "url": "https://www.nigged.com",
+                "urls": ["https://www.nigged.com"],
             },
         },
         "pt": {
             "name": "Mi gran secreto",
             "aliases": "My hidden secret",
-            "url": "https://www.nigged.com/pt/serie/mi-gran-secreto",
+            "urls": ["https://www.nigged.com/pt/serie/mi-gran-secreto"],
             "parent": {
                 "name": "Nigged",
-                "url": "https://www.nigged.com",
+                "urls": ["https://www.nigged.com"],
             },
         },
     },
@@ -2464,28 +2469,28 @@ studio_map = {
         "en": {
             "name": "Nigged party",
             "aliases": "Merienda de Negros",
-            "url": "https://www.nigged.com/en/serie/nigged-party",
+            "urls": ["https://www.nigged.com/en/serie/nigged-party"],
             "parent": {
                 "name": "Nigged",
-                "url": "https://www.nigged.com",
+                "urls": ["https://www.nigged.com"],
             },
         },
         "es": {
             "name": "Merienda de Negros",
             "aliases": "Nigged party",
-            "url": "https://www.nigged.com/es/serie/merienda-de-negros",
+            "urls": ["https://www.nigged.com/es/serie/merienda-de-negros"],
             "parent": {
                 "name": "Nigged",
-                "url": "https://www.nigged.com",
+                "urls": ["https://www.nigged.com"],
             },
         },
         "pt": {
             "name": "Merienda de Negros",
             "aliases": "Nigged party",
-            "url": "https://www.nigged.com/pt/serie/merienda-de-negros",
+            "urls": ["https://www.nigged.com/pt/serie/merienda-de-negros"],
             "parent": {
                 "name": "Nigged",
-                "url": "https://www.nigged.com",
+                "urls": ["https://www.nigged.com"],
             },
         },
     },
@@ -2493,28 +2498,28 @@ studio_map = {
         "en": {
             "name": "Coffee Bonbon",
             "aliases": "Bombón de Café, Bombom de Café",
-            "url": "https://www.nigged.com/en/serie/coffee-bonbon",
+            "urls": ["https://www.nigged.com/en/serie/coffee-bonbon"],
             "parent": {
                 "name": "Nigged",
-                "url": "https://www.nigged.com",
+                "urls": ["https://www.nigged.com"],
             },
         },
         "es": {
             "name": "Bombón de Café",
             "aliases": "Coffee Bonbon, Bombom de Café",
-            "url": "https://www.nigged.com/es/serie/bombon-de-licor",
+            "urls": ["https://www.nigged.com/es/serie/bombon-de-licor"],
             "parent": {
                 "name": "Nigged",
-                "url": "https://www.nigged.com",
+                "urls": ["https://www.nigged.com"],
             },
         },
         "pt": {
             "name": "Bombom de Café",
             "aliases": "Coffee Bonbon, Bombón de Café",
-            "url": "https://www.nigged.com/pt/serie/bombom-de-cafe",
+            "urls": ["https://www.nigged.com/pt/serie/bombom-de-cafe"],
             "parent": {
                 "name": "Nigged",
-                "url": "https://www.nigged.com",
+                "urls": ["https://www.nigged.com"],
             },
         },
     },
@@ -2522,28 +2527,28 @@ studio_map = {
         "en": {
             "name": "Oh my nigged",
             "aliases": "Mira mi negro",
-            "url": "https://www.nigged.com/en/serie/oh-my-nigged",
+            "urls": ["https://www.nigged.com/en/serie/oh-my-nigged"],
             "parent": {
                 "name": "Nigged",
-                "url": "https://www.nigged.com",
+                "urls": ["https://www.nigged.com"],
             },
         },
         "es": {
             "name": "Mira mi negro",
             "aliases": "Oh my nigged",
-            "url": "https://www.nigged.com/es/serie/mira-mi-negro",
+            "urls": ["https://www.nigged.com/es/serie/mira-mi-negro"],
             "parent": {
                 "name": "Nigged",
-                "url": "https://www.nigged.com",
+                "urls": ["https://www.nigged.com"],
             },
         },
         "pt": {
             "name": "Mira mi negro",
             "aliases": "Oh my nigged",
-            "url": "https://www.nigged.com/pt/serie/mira-mi-negro",
+            "urls": ["https://www.nigged.com/pt/serie/mira-mi-negro"],
             "parent": {
                 "name": "Nigged",
-                "url": "https://www.nigged.com",
+                "urls": ["https://www.nigged.com"],
             },
         },
     },
@@ -2551,28 +2556,34 @@ studio_map = {
         "en": {
             "name": "The Diary of Apolonia Lapiedra",
             "aliases": "El Diario de Apolonia Lapiedra",
-            "url": "https://www.pornermates.com/en/serie/el-diario-de-apolonia-lapiedra",
+            "urls": [
+                "https://www.pornermates.com/en/serie/el-diario-de-apolonia-lapiedra"
+            ],
             "parent": {
                 "name": "PornerMates",
-                "url": "https://www.pornermates.com",
+                "urls": ["https://www.pornermates.com"],
             },
         },
         "es": {
             "name": "El Diario de Apolonia Lapiedra",
             "aliases": "",
-            "url": "https://www.pornermates.com/es/serie/el-diario-de-apolonia-lapiedra",
+            "urls": [
+                "https://www.pornermates.com/es/serie/el-diario-de-apolonia-lapiedra"
+            ],
             "parent": {
                 "name": "PornerMates",
-                "url": "https://www.pornermates.com",
+                "urls": ["https://www.pornermates.com"],
             },
         },
         "pt": {
             "name": "El Diario de Apolonia Lapiedra",
             "aliases": "",
-            "url": "https://www.pornermates.com/pt/serie/el-diario-de-apolonia-lapiedra",
+            "urls": [
+                "https://www.pornermates.com/pt/serie/el-diario-de-apolonia-lapiedra"
+            ],
             "parent": {
                 "name": "PornerMates",
-                "url": "https://www.pornermates.com",
+                "urls": ["https://www.pornermates.com"],
             },
         },
     },
@@ -2580,28 +2591,28 @@ studio_map = {
         "en": {
             "name": "Nacho Vidal: Embedder",
             "aliases": "Nacho Vidal: Empotrador",
-            "url": "https://www.pornermates.com/en/serie/nacho-vidal-empotrador",
+            "urls": ["https://www.pornermates.com/en/serie/nacho-vidal-empotrador"],
             "parent": {
                 "name": "PornerMates",
-                "url": "https://www.pornermates.com",
+                "urls": ["https://www.pornermates.com"],
             },
         },
         "es": {
             "name": "Nacho Vidal: Empotrador",
             "aliases": "",
-            "url": "https://www.pornermates.com/es/serie/nacho-vidal-empotrador",
+            "urls": ["https://www.pornermates.com/es/serie/nacho-vidal-empotrador"],
             "parent": {
                 "name": "PornerMates",
-                "url": "https://www.pornermates.com",
+                "urls": ["https://www.pornermates.com"],
             },
         },
         "pt": {
             "name": "Nacho Vidal: Empotrador",
             "aliases": "",
-            "url": "https://www.pornermates.com/pt/serie/nacho-vidal-empotrador",
+            "urls": ["https://www.pornermates.com/pt/serie/nacho-vidal-empotrador"],
             "parent": {
                 "name": "PornerMates",
-                "url": "https://www.pornermates.com",
+                "urls": ["https://www.pornermates.com"],
             },
         },
     },
@@ -2609,28 +2620,28 @@ studio_map = {
         "en": {
             "name": "More than 2 are NOT crowds",
             "aliases": "Mas de 2 NO son multitud",
-            "url": "https://www.pornermates.com/en/serie/mas-de-2-no-son-multitud",
+            "urls": ["https://www.pornermates.com/en/serie/mas-de-2-no-son-multitud"],
             "parent": {
                 "name": "PornerMates",
-                "url": "https://www.pornermates.com",
+                "urls": ["https://www.pornermates.com"],
             },
         },
         "es": {
             "name": "Mas de 2 NO son multitud",
             "aliases": "",
-            "url": "https://www.pornermates.com/es/serie/mas-de-2-no-son-multitud",
+            "urls": ["https://www.pornermates.com/es/serie/mas-de-2-no-son-multitud"],
             "parent": {
                 "name": "PornerMates",
-                "url": "https://www.pornermates.com",
+                "urls": ["https://www.pornermates.com"],
             },
         },
         "pt": {
             "name": "Mas de 2 NO son multitud",
             "aliases": "",
-            "url": "https://www.pornermates.com/pt/serie/mas-de-2-no-son-multitud",
+            "urls": ["https://www.pornermates.com/pt/serie/mas-de-2-no-son-multitud"],
             "parent": {
                 "name": "PornerMates",
-                "url": "https://www.pornermates.com",
+                "urls": ["https://www.pornermates.com"],
             },
         },
     },
@@ -2638,28 +2649,34 @@ studio_map = {
         "en": {
             "name": "They set it up... you just watch",
             "aliases": "Ellas se lo montan... tu solo miras",
-            "url": "https://www.pornermates.com/en/serie/ellas-se-lo-montan-tu-solo-miras",
+            "urls": [
+                "https://www.pornermates.com/en/serie/ellas-se-lo-montan-tu-solo-miras"
+            ],
             "parent": {
                 "name": "PornerMates",
-                "url": "https://www.pornermates.com",
+                "urls": ["https://www.pornermates.com"],
             },
         },
         "es": {
             "name": "Ellas se lo montan... tu solo miras",
             "aliases": "",
-            "url": "https://www.pornermates.com/es/serie/ellas-se-lo-montan-tu-solo-miras",
+            "urls": [
+                "https://www.pornermates.com/es/serie/ellas-se-lo-montan-tu-solo-miras"
+            ],
             "parent": {
                 "name": "PornerMates",
-                "url": "https://www.pornermates.com",
+                "urls": ["https://www.pornermates.com"],
             },
         },
         "pt": {
             "name": "Ellas se lo montan... tu solo miras",
             "aliases": "",
-            "url": "https://www.pornermates.com/pt/serie/ellas-se-lo-montan-tu-solo-miras",
+            "urls": [
+                "https://www.pornermates.com/pt/serie/ellas-se-lo-montan-tu-solo-miras"
+            ],
             "parent": {
                 "name": "PornerMates",
-                "url": "https://www.pornermates.com",
+                "urls": ["https://www.pornermates.com"],
             },
         },
     },
@@ -2667,28 +2684,34 @@ studio_map = {
         "en": {
             "name": "I have a friend who wants to be a Pornstar",
             "aliases": "Tengo una amiga que quiere ser PornStar",
-            "url": "https://www.pornermates.com/en/serie/tengo-una-amiga-que-quiere-ser-pornstar",
+            "urls": [
+                "https://www.pornermates.com/en/serie/tengo-una-amiga-que-quiere-ser-pornstar"
+            ],
             "parent": {
                 "name": "PornerMates",
-                "url": "https://www.pornermates.com",
+                "urls": ["https://www.pornermates.com"],
             },
         },
         "es": {
             "name": "Tengo una amiga que quiere ser PornStar",
             "aliases": "",
-            "url": "https://www.pornermates.com/es/serie/tengo-una-amiga-que-quiere-ser-pornstar",
+            "urls": [
+                "https://www.pornermates.com/es/serie/tengo-una-amiga-que-quiere-ser-pornstar"
+            ],
             "parent": {
                 "name": "PornerMates",
-                "url": "https://www.pornermates.com",
+                "urls": ["https://www.pornermates.com"],
             },
         },
         "pt": {
             "name": "Tengo una amiga que quiere ser PornStar",
             "aliases": "",
-            "url": "https://www.pornermates.com/pt/serie/tengo-una-amiga-que-quiere-ser-pornstar",
+            "urls": [
+                "https://www.pornermates.com/pt/serie/tengo-una-amiga-que-quiere-ser-pornstar"
+            ],
             "parent": {
                 "name": "PornerMates",
-                "url": "https://www.pornermates.com",
+                "urls": ["https://www.pornermates.com"],
             },
         },
     },
@@ -2696,28 +2719,28 @@ studio_map = {
         "en": {
             "name": "Destroyers Made in Spain",
             "aliases": "",
-            "url": "https://www.pornermates.com/en/serie/destroyers-made-in-spain",
+            "urls": ["https://www.pornermates.com/en/serie/destroyers-made-in-spain"],
             "parent": {
                 "name": "PornerMates",
-                "url": "https://www.pornermates.com",
+                "urls": ["https://www.pornermates.com"],
             },
         },
         "es": {
             "name": "Destroyers Made in Spain",
             "aliases": "",
-            "url": "https://www.pornermates.com/es/serie/destroyers-made-in-spain",
+            "urls": ["https://www.pornermates.com/es/serie/destroyers-made-in-spain"],
             "parent": {
                 "name": "PornerMates",
-                "url": "https://www.pornermates.com",
+                "urls": ["https://www.pornermates.com"],
             },
         },
         "pt": {
             "name": "Destroyers Made in Spain",
             "aliases": "",
-            "url": "https://www.pornermates.com/pt/serie/destroyers-made-in-spain",
+            "urls": ["https://www.pornermates.com/pt/serie/destroyers-made-in-spain"],
             "parent": {
                 "name": "PornerMates",
-                "url": "https://www.pornermates.com",
+                "urls": ["https://www.pornermates.com"],
             },
         },
     },
@@ -2725,28 +2748,34 @@ studio_map = {
         "en": {
             "name": "DIVAS... They had to be here",
             "aliases": "DIVAS... Tenían que estar aquí",
-            "url": "https://www.pornermates.com/en/serie/divas-tenian-que-estar-aqui",
+            "urls": [
+                "https://www.pornermates.com/en/serie/divas-tenian-que-estar-aqui"
+            ],
             "parent": {
                 "name": "PornerMates",
-                "url": "https://www.pornermates.com",
+                "urls": ["https://www.pornermates.com"],
             },
         },
         "es": {
             "name": "DIVAS... Tenían que estar aquí",
             "aliases": "",
-            "url": "https://www.pornermates.com/es/serie/divas-tenian-que-estar-aqui",
+            "urls": [
+                "https://www.pornermates.com/es/serie/divas-tenian-que-estar-aqui"
+            ],
             "parent": {
                 "name": "PornerMates",
-                "url": "https://www.pornermates.com",
+                "urls": ["https://www.pornermates.com"],
             },
         },
         "pt": {
             "name": "DIVAS... Tenían que estar aquí",
             "aliases": "",
-            "url": "https://www.pornermates.com/pt/serie/divas-tenian-que-estar-aqui",
+            "urls": [
+                "https://www.pornermates.com/pt/serie/divas-tenian-que-estar-aqui"
+            ],
             "parent": {
                 "name": "PornerMates",
-                "url": "https://www.pornermates.com",
+                "urls": ["https://www.pornermates.com"],
             },
         },
     },
@@ -2754,28 +2783,28 @@ studio_map = {
         "en": {
             "name": "We Are In Love",
             "aliases": "Estamos In Love",
-            "url": "https://www.pornermates.com/en/serie/estamos-in-love",
+            "urls": ["https://www.pornermates.com/en/serie/estamos-in-love"],
             "parent": {
                 "name": "PornerMates",
-                "url": "https://www.pornermates.com",
+                "urls": ["https://www.pornermates.com"],
             },
         },
         "es": {
             "name": "Estamos In Love",
             "aliases": "",
-            "url": "https://www.pornermates.com/es/serie/estamos-in-love",
+            "urls": ["https://www.pornermates.com/es/serie/estamos-in-love"],
             "parent": {
                 "name": "PornerMates",
-                "url": "https://www.pornermates.com",
+                "urls": ["https://www.pornermates.com"],
             },
         },
         "pt": {
             "name": "Estamos In Love",
             "aliases": "",
-            "url": "https://www.pornermates.com/pt/serie/estamos-in-love",
+            "urls": ["https://www.pornermates.com/pt/serie/estamos-in-love"],
             "parent": {
                 "name": "PornerMates",
-                "url": "https://www.pornermates.com",
+                "urls": ["https://www.pornermates.com"],
             },
         },
     },
@@ -2783,28 +2812,28 @@ studio_map = {
         "en": {
             "name": "Solidarity porn",
             "aliases": "Porno solidario",
-            "url": "https://www.nigged.com/en/serie/porno-solidario",
+            "urls": ["https://www.nigged.com/en/serie/porno-solidario"],
             "parent": {
                 "name": "Nigged",
-                "url": "https://www.nigged.com",
+                "urls": ["https://www.nigged.com"],
             },
         },
         "es": {
             "name": "Porno solidario",
             "aliases": "",
-            "url": "https://www.nigged.com/es/serie/porno-solidario",
+            "urls": ["https://www.nigged.com/es/serie/porno-solidario"],
             "parent": {
                 "name": "Nigged",
-                "url": "https://www.nigged.com",
+                "urls": ["https://www.nigged.com"],
             },
         },
         "pt": {
             "name": "Porno solidario",
             "aliases": "",
-            "url": "https://www.nigged.com/pt/serie/porno-solidario",
+            "urls": ["https://www.nigged.com/pt/serie/porno-solidario"],
             "parent": {
                 "name": "Nigged",
-                "url": "https://www.nigged.com",
+                "urls": ["https://www.nigged.com"],
             },
         },
     },
@@ -2812,28 +2841,28 @@ studio_map = {
         "en": {
             "name": "_NiNiSeX_",
             "aliases": "",
-            "url": "https://www.morenolust.com/en/serie/ninisex",
+            "urls": ["https://www.morenolust.com/en/serie/ninisex"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "es": {
             "name": "_NiNiSeX_",
             "aliases": "",
-            "url": "https://www.morenolust.com/es/serie/ninisex",
+            "urls": ["https://www.morenolust.com/es/serie/ninisex"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "pt": {
             "name": "_NiNiSeX_",
             "aliases": "",
-            "url": "https://www.morenolust.com/pt/serie/ninisex",
+            "urls": ["https://www.morenolust.com/pt/serie/ninisex"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
     },
@@ -2841,28 +2870,28 @@ studio_map = {
         "en": {
             "name": "Parodies",
             "aliases": "Parodias, Paródias",
-            "url": "https://www.morenolust.com/en/serie/parodies",
+            "urls": ["https://www.morenolust.com/en/serie/parodies"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "es": {
             "name": "Parodias",
             "aliases": "Parodies, Paródias",
-            "url": "https://www.morenolust.com/es/serie/parodias",
+            "urls": ["https://www.morenolust.com/es/serie/parodias"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "pt": {
             "name": "Paródias",
             "aliases": "Parodies, Parodias",
-            "url": "https://www.morenolust.com/pt/serie/parodias",
+            "urls": ["https://www.morenolust.com/pt/serie/parodias"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
     },
@@ -2870,28 +2899,28 @@ studio_map = {
         "en": {
             "name": "Immature shenanigans",
             "aliases": "Travesuras inmaduras, Convênios imaturos",
-            "url": "https://www.morenolust.com/en/serie/immature-shenanigans",
+            "urls": ["https://www.morenolust.com/en/serie/immature-shenanigans"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "es": {
             "name": "Travesuras inmaduras",
             "aliases": "Immature shenanigans, Convênios imaturos",
-            "url": "https://www.morenolust.com/es/serie/travesuras-inmaduras",
+            "urls": ["https://www.morenolust.com/es/serie/travesuras-inmaduras"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "pt": {
             "name": "Convênios imaturos",
             "aliases": "Immature shenanigans, Travesuras inmaduras",
-            "url": "https://www.morenolust.com/pt/serie/convenios-imaturos",
+            "urls": ["https://www.morenolust.com/pt/serie/convenios-imaturos"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
     },
@@ -2899,28 +2928,28 @@ studio_map = {
         "en": {
             "name": "Back after behind",
             "aliases": "Tras tras por detrás, Volta atrás atrás",
-            "url": "https://www.morenolust.com/en/serie/back-after-behind",
+            "urls": ["https://www.morenolust.com/en/serie/back-after-behind"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "es": {
             "name": "Tras tras por detrás",
             "aliases": "Back after behind, Volta atrás atrás",
-            "url": "https://www.morenolust.com/es/serie/tras-tras-por-detras",
+            "urls": ["https://www.morenolust.com/es/serie/tras-tras-por-detras"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "pt": {
             "name": "Volta atrás atrás",
             "aliases": "Back after behind, Tras tras por detrás",
-            "url": "https://www.morenolust.com/pt/serie/volta-atras-atras",
+            "urls": ["https://www.morenolust.com/pt/serie/volta-atras-atras"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
     },
@@ -2928,28 +2957,28 @@ studio_map = {
         "en": {
             "name": "Dating young girls",
             "aliases": "Citas jovencitas, Namorar raparigas",
-            "url": "https://www.morenolust.com/en/serie/dating-young-girls",
+            "urls": ["https://www.morenolust.com/en/serie/dating-young-girls"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "es": {
             "name": "Citas jovencitas",
             "aliases": "Dating young girls, Namorar raparigas",
-            "url": "https://www.morenolust.com/es/serie/citas-jovencitas",
+            "urls": ["https://www.morenolust.com/es/serie/citas-jovencitas"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "pt": {
             "name": "Namorar raparigas",
             "aliases": "Dating young girls, Citas jovencitas",
-            "url": "https://www.morenolust.com/pt/serie/namorar-raparigas",
+            "urls": ["https://www.morenolust.com/pt/serie/namorar-raparigas"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
     },
@@ -2957,28 +2986,30 @@ studio_map = {
         "en": {
             "name": "The tough ones and the mature ones",
             "aliases": "Las duras y las maduras, Os durões e os maduros",
-            "url": "https://www.morenolust.com/en/serie/the-tough-ones-and-the-mature-ones",
+            "urls": [
+                "https://www.morenolust.com/en/serie/the-tough-ones-and-the-mature-ones"
+            ],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "es": {
             "name": "Las duras y las maduras",
             "aliases": "The tough ones and the mature ones, Os durões e os maduros",
-            "url": "https://www.morenolust.com/es/serie/las-duras-y-las-maduras",
+            "urls": ["https://www.morenolust.com/es/serie/las-duras-y-las-maduras"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "pt": {
             "name": "Os durões e os maduros",
             "aliases": "The tough ones and the mature ones, Las duras y las maduras",
-            "url": "https://www.morenolust.com/pt/serie/os-duroes-e-os-maduros",
+            "urls": ["https://www.morenolust.com/pt/serie/os-duroes-e-os-maduros"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
     },
@@ -2986,28 +3017,28 @@ studio_map = {
         "en": {
             "name": "Mermaids on Earth (trans)",
             "aliases": "Sirenas en tierra (trans), Sereias na Terra (trans)",
-            "url": "https://www.morenolust.com/en/serie/mermaids-on-earth-trans",
+            "urls": ["https://www.morenolust.com/en/serie/mermaids-on-earth-trans"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "es": {
             "name": "Sirenas en tierra (trans)",
             "aliases": "Mermaids on Earth (trans), Sereias na Terra (trans)",
-            "url": "https://www.morenolust.com/es/serie/sirenas-en-tierra-trans",
+            "urls": ["https://www.morenolust.com/es/serie/sirenas-en-tierra-trans"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "pt": {
             "name": "Sereias na Terra (trans)",
             "aliases": "Mermaids on Earth (trans), Sirenas en tierra (trans)",
-            "url": "https://www.morenolust.com/pt/serie/sereias-na-terra-trans",
+            "urls": ["https://www.morenolust.com/pt/serie/sereias-na-terra-trans"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
     },
@@ -3015,28 +3046,34 @@ studio_map = {
         "en": {
             "name": "Brown sugar with cane (interracial)",
             "aliases": "Azúcar moreno con caña (interracial), Açúcar mascavo com cana (interracial)",
-            "url": "https://www.morenolust.com/en/serie/brown-sugar-with-cane-interracial",
+            "urls": [
+                "https://www.morenolust.com/en/serie/brown-sugar-with-cane-interracial"
+            ],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "es": {
             "name": "Azúcar moreno con caña (interracial)",
             "aliases": "Brown sugar with cane (interracial), Açúcar mascavo com cana (interracial)",
-            "url": "https://www.morenolust.com/es/serie/azucar-moreno-con-cana-interracial",
+            "urls": [
+                "https://www.morenolust.com/es/serie/azucar-moreno-con-cana-interracial"
+            ],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "pt": {
             "name": "Açúcar mascavo com cana (interracial)",
             "aliases": "Brown sugar with cane (interracial), Azúcar moreno con caña (interracial)",
-            "url": "https://www.morenolust.com/pt/serie/acucar-mascavo-com-cana-interracial",
+            "urls": [
+                "https://www.morenolust.com/pt/serie/acucar-mascavo-com-cana-interracial"
+            ],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
     },
@@ -3044,28 +3081,28 @@ studio_map = {
         "en": {
             "name": "Hot tourism",
             "aliases": "Turismo hot, Turismo quente",
-            "url": "https://www.morenolust.com/en/serie/hot-tourism",
+            "urls": ["https://www.morenolust.com/en/serie/hot-tourism"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "es": {
             "name": "Turismo hot",
             "aliases": "Hot tourism, Turismo quente",
-            "url": "https://www.morenolust.com/es/serie/turismo-hot",
+            "urls": ["https://www.morenolust.com/es/serie/turismo-hot"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "pt": {
             "name": "Turismo quente",
             "aliases": "Hot tourism, Turismo hot",
-            "url": "https://www.morenolust.com/pt/serie/turismo-quente",
+            "urls": ["https://www.morenolust.com/pt/serie/turismo-quente"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
     },
@@ -3073,28 +3110,28 @@ studio_map = {
         "en": {
             "name": "Group and exchanges",
             "aliases": "Grupal e intercambios, Em grupo e intercâmbios",
-            "url": "https://www.morenolust.com/en/serie/group-and-exchanges",
+            "urls": ["https://www.morenolust.com/en/serie/group-and-exchanges"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "es": {
             "name": "Grupal e intercambios",
             "aliases": "Group and exchanges, Em grupo e intercâmbios",
-            "url": "https://www.morenolust.com/es/serie/grupal-e-intercambios",
+            "urls": ["https://www.morenolust.com/es/serie/grupal-e-intercambios"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "pt": {
             "name": "Em grupo e intercâmbios",
             "aliases": "Group and exchanges, Grupal e intercambios",
-            "url": "https://www.morenolust.com/pt/serie/em-grupo-e-intercambios",
+            "urls": ["https://www.morenolust.com/pt/serie/em-grupo-e-intercambios"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
     },
@@ -3102,28 +3139,28 @@ studio_map = {
         "en": {
             "name": "Country-style skewer",
             "aliases": "Pinchito campestre, Espetinho campestre",
-            "url": "https://www.morenolust.com/en/serie/country-style-skewer",
+            "urls": ["https://www.morenolust.com/en/serie/country-style-skewer"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "es": {
             "name": "Pinchito campestre",
             "aliases": "Country-style skewer, Espetinho campestre",
-            "url": "https://www.morenolust.com/es/serie/pinchito-campestre",
+            "urls": ["https://www.morenolust.com/es/serie/pinchito-campestre"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "pt": {
             "name": "Espetinho campestre",
             "aliases": "Country-style skewer, Pinchito campestre",
-            "url": "https://www.morenolust.com/pt/serie/espetinho-campestre",
+            "urls": ["https://www.morenolust.com/pt/serie/espetinho-campestre"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
     },
@@ -3131,28 +3168,28 @@ studio_map = {
         "en": {
             "name": "Caught and Castings",
             "aliases": "Pilladas y castings, Apanhadas e castings",
-            "url": "https://www.morenolust.com/en/serie/caught-and-castings",
+            "urls": ["https://www.morenolust.com/en/serie/caught-and-castings"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "es": {
             "name": "Pilladas y castings",
             "aliases": "Caught and Castings, Apanhadas e castings",
-            "url": "https://www.morenolust.com/es/serie/pilladas-y-castings",
+            "urls": ["https://www.morenolust.com/es/serie/pilladas-y-castings"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "pt": {
             "name": "Apanhadas e castings",
             "aliases": "Caught and Castings, Pilladas y castings",
-            "url": "https://www.morenolust.com/pt/serie/apanhadas-e-castings",
+            "urls": ["https://www.morenolust.com/pt/serie/apanhadas-e-castings"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
     },
@@ -3160,28 +3197,28 @@ studio_map = {
         "en": {
             "name": "Hotties",
             "aliases": "Pibones",
-            "url": "https://www.morenolust.com/en/serie/hotties",
+            "urls": ["https://www.morenolust.com/en/serie/hotties"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "es": {
             "name": "Pibones",
             "aliases": "Hotties",
-            "url": "https://www.morenolust.com/es/serie/jacas",
+            "urls": ["https://www.morenolust.com/es/serie/jacas"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "pt": {
             "name": "Pibones",
             "aliases": "Hotties",
-            "url": "https://www.morenolust.com/pt/serie/pibones",
+            "urls": ["https://www.morenolust.com/pt/serie/pibones"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
     },
@@ -3189,28 +3226,28 @@ studio_map = {
         "en": {
             "name": "XXL",
             "aliases": "XXG",
-            "url": "https://www.morenolust.com/en/serie/xxl",
+            "urls": ["https://www.morenolust.com/en/serie/xxl"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "es": {
             "name": "XXL",
             "aliases": "XXG",
-            "url": "https://www.morenolust.com/es/serie/xxl",
+            "urls": ["https://www.morenolust.com/es/serie/xxl"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "pt": {
             "name": "XXG",
             "aliases": "XXL",
-            "url": "https://www.morenolust.com/pt/serie/xxg",
+            "urls": ["https://www.morenolust.com/pt/serie/xxg"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
     },
@@ -3218,28 +3255,28 @@ studio_map = {
         "en": {
             "name": "Fetishes",
             "aliases": "Fetiches",
-            "url": "https://www.morenolust.com/en/serie/fetishes",
+            "urls": ["https://www.morenolust.com/en/serie/fetishes"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "es": {
             "name": "Fetiches",
             "aliases": "Fetishes",
-            "url": "https://www.morenolust.com/es/serie/fetiches",
+            "urls": ["https://www.morenolust.com/es/serie/fetiches"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "pt": {
             "name": "Fetiches",
             "aliases": "Fetishes",
-            "url": "https://www.morenolust.com/pt/serie/fetiches",
+            "urls": ["https://www.morenolust.com/pt/serie/fetiches"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
     },
@@ -3247,28 +3284,28 @@ studio_map = {
         "en": {
             "name": "Couples",
             "aliases": "Parejas, Casais",
-            "url": "https://www.morenolust.com/en/serie/couples",
+            "urls": ["https://www.morenolust.com/en/serie/couples"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "es": {
             "name": "Parejas",
             "aliases": "Couples, Casais",
-            "url": "https://www.morenolust.com/es/serie/parejas",
+            "urls": ["https://www.morenolust.com/es/serie/parejas"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
         "pt": {
             "name": "Casais",
             "aliases": "Couples, Parejas",
-            "url": "https://www.morenolust.com/pt/serie/casais",
+            "urls": ["https://www.morenolust.com/pt/serie/casais"],
             "parent": {
                 "name": "MorenoLust",
-                "url": "https://www.morenolust.com",
+                "urls": ["https://www.morenolust.com"],
             },
         },
     },

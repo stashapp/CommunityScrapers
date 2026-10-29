@@ -1,5 +1,4 @@
 import json
-import pathlib
 import re
 import sys
 from html import unescape
@@ -12,7 +11,7 @@ from py_common import log
 from py_common.cache import cache_to_disk
 from py_common.config import get_config
 from py_common.types import ScrapedPerformer, ScrapedScene, ScrapedTag
-from py_common.util import dig, scraper_args
+from py_common.util import dig, is_own_url, scraper_args
 
 config = get_config(
     default="""
@@ -57,15 +56,14 @@ def to_scraped_performer(api_obj: dict) -> ScrapedPerformer:
         "images": [
             f"https://almacen.fakings.com/almacen/actrices/{api_obj['profilePhoto']}"
         ],
-        "urls": [],
     }
+    urls = []
     if site_name := dig(api_obj, "product"):
-        performer["urls"].append(
-            f"https://{site_name}.com/actrices-porno/{api_obj['slug']}"
-        )
-
+        urls.append(f"https://{site_name}.com/actrices-porno/{api_obj['slug']}")
     if loverfans := dig(api_obj, "loverfansUrl"):
-        performer["urls"].append(loverfans)
+        urls.append(loverfans)
+    if urls:
+        performer["urls"] = urls
 
     return performer
 
@@ -129,7 +127,7 @@ def to_scraped_scene(data: dict, lang="en") -> ScrapedScene:
 
 
 def scene_by_url(url: str) -> ScrapedScene | None:
-    url_pattern = r".+?(?:/(?P<lang>\w{2}))?/video/(?P<slug>[-\w]+)"
+    url_pattern = r".*?(?:/(?P<lang>\w{2}))?/video/(?P<slug>[-\w]+)"
     if not (match := re.search(url_pattern, url)):
         log.error(f"Unable to parse URL: {url}")
         return None
@@ -169,10 +167,6 @@ def renamed_slug(url: str, slug: str) -> str | None:
     return new_slug if re.fullmatch(r"[-\w]+", new_slug) and new_slug != slug else None
 
 
-# Placeholder until we can figure out how to map filenames back to scenes
-def scene_by_id(id: str) -> ScrapedScene | None: ...
-
-
 def scene_search(query: str, site, lang="en") -> list[ScrapedScene]:
     api_url = f"https://api.faknetworks.com/v1/search?query={quote(query)}&product={site}&lang={lang}&limit=10"
     log.debug(f"Asking API... {api_url}")
@@ -186,18 +180,11 @@ def scene_search(query: str, site, lang="en") -> list[ScrapedScene]:
 
 
 def scene_by_fragment(fragment: dict) -> ScrapedScene | None:
-    for url in fragment["urls"]:
-        if scene := scene_by_url(url):
+    for url in fragment.get("urls") or []:
+        if is_own_url(url) and (scene := scene_by_url(url)):
             log.debug(f"Successfully scraped from URL: {url}")
             return scene
-    # TODO: figure out if we can map the filename back to the scene: it's in the API but might not be queryable
-    # 7-130-tania -> https://fakings.com/en/video/we-go-into-a-bar-full-of-people-only-the-manager-knows-tania-does-what-she-does-best-and
-    if path := dig(fragment, "files", 0, "path"):
-        filename = pathlib.Path(path).stem
-        if scene := scene_by_id(filename):
-            log.debug(f"Successfully scraped from filename: {filename}")
-            return None
-    # Studio code returned by this scraper is currently the filename, but TPDB use the URL slug so this could work for some
+    # This scraper's codes are filenames, which the API can't look up, but ThePornDB's are URL slugs
     if (code := dig(fragment, "code")) and (scene := scene_by_url(f"/video/{code}")):
         log.debug(f"Successfully scraped from code: {code}")
         return scene
