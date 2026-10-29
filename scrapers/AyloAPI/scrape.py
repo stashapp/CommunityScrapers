@@ -418,7 +418,7 @@ def to_scraped_scene(scene_from_api: dict[str, Any]) -> ScrapedScene:
         scene["studio"] = studio
 
     if config.scrape_markers and (markers := scene_from_api.get("timeTags")):
-        scene["markers"] = [to_marker(m) for m in markers]  # pyright: ignore[reportGeneralTypeIssues]
+        scene["markers"] = [to_marker(m) for m in markers]  # ty: ignore[invalid-key]
 
     return scene
 
@@ -1028,7 +1028,7 @@ def main_scraper():
     match op, args:
         case "gallery-by-url", {"url": url} if url:
             result = gallery_from_url(url)
-        case "gallery-by-fragment":
+        case "gallery-by-fragment", args:
             domains = args.get("extra", None)
             result = gallery_from_fragment(args, search_domains=domains)
         case "scene-by-url", {"url": url} if url:
