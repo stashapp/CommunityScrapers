@@ -15,6 +15,7 @@ from AyloAPI.scrape import (
     scraper_args,
 )
 from py_common import log
+from py_common.types import ScrapedStudio
 from py_common.util import replace_all
 
 studio_map = {
@@ -25,12 +26,16 @@ studio_map = {
 }
 
 
-def rename_studio(name: str) -> str:
-    return studio_map.get(name, name)
+def rename_studio(studio: ScrapedStudio) -> ScrapedStudio:
+    name = studio["name"]
+    renamed: ScrapedStudio = {**studio, "name": studio_map.get(name, name)}
+    if parent := studio.get("parent"):
+        renamed["parent"] = rename_studio(parent)
+    return renamed
 
 
 def digitalplayground(obj: Any, _) -> Any:
-    fixed = replace_all(obj, "name", replacement=rename_studio)
+    fixed = replace_all(obj, "studio", replacement=rename_studio)
     fixed = replace_all(
         fixed,
         "urls",

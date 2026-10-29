@@ -20,15 +20,16 @@ from py_common.util import replace_all, scraper_args
 NETWORK_STUDIOS = {"AllBlackX", "DarkX", "EroticaX", "HardX", "LesbianX"}
 
 
-def with_network(studio: dict[str, Any]) -> dict[str, Any]:
+def xempire_studio(studio: dict[str, Any]) -> dict[str, Any]:
+    if studio.get("name") == "Xempire":
+        studio = {**studio, "name": "XEmpire"}
     if studio.get("name") in NETWORK_STUDIOS:
         return {**studio, "parent": {"name": "XEmpire"}}
     return studio
 
 
 def xempire(obj: Any, api_object: dict[str, Any]) -> Any:
-    obj = replace_all(obj, "name", lambda n: "XEmpire" if n == "Xempire" else n)
-    return replace_all(obj, "studio", with_network)
+    return replace_all(obj, "studio", xempire_studio)
 
 
 if __name__ == "__main__":
