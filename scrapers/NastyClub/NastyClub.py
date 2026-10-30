@@ -10,7 +10,7 @@ from py_common import log
 from py_common.cache import cache_to_disk
 from py_common.deps import ensure_requirements
 from py_common.types import ScrapedPerformer, ScrapedScene, ScrapedStudio, ScrapedTag
-from py_common.util import scraper_args
+from py_common.util import is_own_url, scraper_args
 
 ensure_requirements("requests", "lxml")
 import requests  # noqa: E402
@@ -183,6 +183,7 @@ def scene_from_fragment(fragment: dict[str, object]) -> ScrapedScene | None:
     for url in urls if isinstance(urls, list) else []:
         if (
             isinstance(url, str)
+            and is_own_url(url)
             and slug_from_url(url)
             and (scene := scene_from_url(url))
         ):

@@ -22,7 +22,7 @@ from py_common.types import (
     ScrapedStudio,
     ScrapedTag,
 )
-from py_common.util import dig, guess_nationality, scraper_args
+from py_common.util import dig, guess_nationality, is_own_url, scraper_args
 
 config = get_config(
     default="""
@@ -891,8 +891,8 @@ def performer_search(
 
 def fragment_urls(fragment: dict[str, Any]) -> list[str]:
     """
-    The fragment's URLs, those on domains we already hold a token for first:
-    an unknown domain costs a request to the URL itself to look for one
+    The fragment's URLs on this scraper's own sites, those on domains we already hold
+    a token for first: an unknown domain costs a request to the URL itself to look for one
     """
     known = set(domains.all_domains())
 
@@ -900,7 +900,8 @@ def fragment_urls(fragment: dict[str, Any]) -> list[str]:
         host = urlparse(url).netloc.split(".")
         return len(host) > 1 and host[-2] in known
 
-    return sorted(fragment.get("urls") or [], key=lambda url: not known_domain(url))
+    own = filter(is_own_url, fragment.get("urls") or [])
+    return sorted(own, key=lambda url: not known_domain(url))
 
 
 def scene_from_fragment(
@@ -997,7 +998,7 @@ def performer_from_fragment(
 ) -> ScrapedPerformer | None:
     """
     Scrapes a performer from a fragment, which must contain one of the following:
-    - urls: URLs of the performer page (anywhere in the Aylo network)
+    - urls: URLs of the performer page on this scraper's own sites
     - name: the name of the performer
 
     If domains is provided it will only search those domains,
