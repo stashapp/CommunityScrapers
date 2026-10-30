@@ -73,6 +73,10 @@ def token_from_window_env(url: str) -> tuple[str, str] | None:
     )
 
 
+# One client per key keeps its HTTP session, so queries reuse the connection
+_clients: dict[tuple[str, str, str], SearchClientSync] = {}
+
+
 def get_search_client(
     site: str,
     fetch_token: Callable[[str], tuple[str, str] | None] = token_from_window_env,
@@ -84,9 +88,13 @@ def get_search_client(
         return None
 
     app_id, api_key = pair
+    origin = homepage or f"https://www.{site}.com"
+    if client := _clients.get((app_id, api_key, origin)):
+        return client
     config = SearchConfig(app_id, api_key)
-    config.headers.update(headers_for_homepage(homepage or f"https://www.{site}.com"))
-    return SearchClientSync(config=config)
+    config.headers.update(headers_for_homepage(origin))
+    client = _clients[(app_id, api_key, origin)] = SearchClientSync(config=config)
+    return client
 
 
 def multi_search(
@@ -366,7 +374,9 @@ def first_release_date(api_scene: dict[str, Any], site: str) -> str | None:
     return min(dates, default=None)
 
 
-def to_scraped_scene(api_scene: dict[str, Any], site: str) -> ScrapedScene:
+def to_scraped_scene(
+    api_scene: dict[str, Any], site: str, lookups: bool = True
+) -> ScrapedScene:
     scene: ScrapedScene = {}
     if clip_id := api_scene.get("clip_id"):
         scene["code"] = str(clip_id)
@@ -379,8 +389,10 @@ def to_scraped_scene(api_scene: dict[str, Any], site: str) -> ScrapedScene:
     if release_date := api_scene.get("release_date"):
         scene["date"] = release_date
         if (
-            first_release := first_release_date(api_scene, site)
-        ) and first_release < release_date:
+            lookups
+            and (first_release := first_release_date(api_scene, site))
+            and first_release < release_date
+        ):
             scene["production_date"] = first_release
     if image := largest_scene_image(api_scene):
         scene["image"] = f"{IMAGE_CDN}/movies{image}"
@@ -388,7 +400,11 @@ def to_scraped_scene(api_scene: dict[str, Any], site: str) -> ScrapedScene:
         scene["studio"] = {"name": studio_name}
     if (length := api_scene.get("length")) and length >= 10:
         scene["duration"] = length
-    if (movie_id := api_scene.get("movie_id")) and movie_exists(movie_id, site):
+    if (
+        lookups
+        and (movie_id := api_scene.get("movie_id"))
+        and movie_exists(movie_id, site)
+    ):
         scene["groups"] = [group_from_api_scene(api_scene, site)]
 
     tags = name_values_as_list(api_scene.get("categories", []))
@@ -782,6 +798,7 @@ def scene_search(
     postprocess: Callable[
         [ScrapedScene, dict[str, Any]], ScrapedScene
     ] = default_postprocess,
+    lookups: bool = False,
 ) -> list[ScrapedScene]:
     if not (client := get_search_client(site)):
         return []
@@ -792,8 +809,10 @@ def scene_search(
     if not response.nb_hits:
         return []
     hits = [hit.to_dict() for hit in response.hits]
+    # Stash re-scrapes whichever result is picked, so a result list skips the
+    # per-scene lookups (first release date, movie) unless asked for them
     return [
-        postprocess(to_scraped_scene(api_scene, site), api_scene)
+        postprocess(to_scraped_scene(api_scene, site, lookups), api_scene)
         for api_scene in sort_scenes_by_match(hits, fragment)
     ]
 
@@ -858,7 +877,9 @@ def scene_from_fragment(
     if code := fragment.get("code"):
         return scene_from_id(code, site, fragment, postprocess)
     if (title := fragment.get("title")) and (
-        scenes := scene_search(without_scene_number(title), site, fragment, postprocess)
+        scenes := scene_search(
+            without_scene_number(title), site, fragment, postprocess, lookups=True
+        )
     ):
         # The ranking compares API titles, which lack any scene number the postprocess
         # appended, so every scene of a movie ranks the same: prefer an exact match
