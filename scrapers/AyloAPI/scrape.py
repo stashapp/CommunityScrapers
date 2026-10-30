@@ -146,7 +146,10 @@ def _create_headers_for(domain: str) -> dict[str, str]:
     # If we haven't stored a token we must provide a function to get one
     def get_instance_token(url: str) -> str | None:
         r = __raw_request(url, {"User-Agent": config.user_agent})
-        if r and (token := r.cookies.get("instance_token")):
+        # Sites on the newer frontend only embed the token in the page, not in a cookie
+        if token := r.cookies.get("instance_token") or (
+            (m := re.search(r'"jwt":"(eyJ[^"]+)"', r.text)) and m[1]
+        ):
             return token
         log.error(
             f"Failed to get instance_token from '{url}': "
