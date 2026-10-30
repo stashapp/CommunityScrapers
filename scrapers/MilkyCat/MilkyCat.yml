@@ -4,6 +4,7 @@ name: MilkyCat
 sceneByURL:
   - action: script
     url:
+      - milkycat.com/movie/
       - www.milky-cat.com
     script:
       - python

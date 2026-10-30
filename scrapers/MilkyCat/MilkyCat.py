@@ -7,7 +7,7 @@ from urllib.parse import urljoin, urlparse
 from py_common import log
 from py_common.deps import ensure_requirements
 from py_common.types import SceneSearchResult, ScrapedScene, ScrapedStudio
-from py_common.util import scraper_args
+from py_common.util import is_own_url, scraper_args
 
 ensure_requirements("requests", "lxml")
 import requests  # noqa: E402
@@ -15,6 +15,12 @@ from lxml import html  # noqa: E402
 
 BASE_URL = "https://www.milky-cat.com/movie/indexe.php"
 STUDIO: ScrapedStudio = {"name": "Milky-Cat"}
+
+# Paragraphs that are only store notices: download help, re-encode blurbs, file changelogs
+STORE_LINKS = "contains(@href, '?help') or contains(@href, '?vrfaq') or contains(@href, 'afesta.tv')"
+STORE_NOTICE = re.compile(
+    r"We re-encode|Blu-ray size full movie|Over \d+G\b|\d{4}\.[\d.]+ Updated to|\d+ \w+ \d{4} update"
+)
 
 session = requests.Session()
 
@@ -61,7 +67,8 @@ def cover(tree: html.HtmlElement, movie_id: str) -> str | None:
 
 
 def scene_from_url(url: str) -> ScrapedScene | None:
-    if not (movie_id := urlparse(url).query):
+    # Some of the site's own links are indexe.php?/<id>
+    if not (movie_id := urlparse(url).query.lstrip("/")):
         log.error(f"No movie id in {url}")
         return None
     # Japanese and Chinese pages use translated table labels
@@ -86,11 +93,15 @@ def scene_from_url(url: str) -> ScrapedScene | None:
         scene["date"] = f"{m[1]}-{int(m[2]):02}-{int(m[3]):02}"
     if (length := table.get("total time")) and (m := re.match(r"(\d+)\s*min", length)):
         scene["duration"] = int(m[1]) * 60
+    if category := table.get("category"):
+        scene["tags"] = [{"name": category}]
     paragraphs = tree.xpath(
         "//p[contains(@class, 'main_p')]"
         "[not(contains(@class, 'd_cn') or contains(@class, 'd_fr'))]"
+        f"[not(.//a[{STORE_LINKS}])]"
     )
-    if details := "\n\n".join(filter(None, map(text_with_breaks, paragraphs))):
+    texts = (text for text in map(text_with_breaks, paragraphs) if text)
+    if details := "\n\n".join(t for t in texts if not STORE_NOTICE.match(t)):
         scene["details"] = details
     if image := cover(tree, movie_id):
         scene["image"] = image
@@ -126,7 +137,7 @@ def code_in(text: str) -> str | None:
 
 
 def scene_from_fragment(fragment: dict) -> ScrapedScene | None:
-    if url := next(iter(fragment.get("urls") or []), None) or fragment.get("url"):
+    if url := next(filter(is_own_url, fragment.get("urls") or []), None):
         return scene_from_url(url)
 
     sources = [
