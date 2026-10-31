@@ -16,9 +16,17 @@ xPathScrapers:
         postProcess:
           - javascript: |
               value = value.trim();
+              var ago = value.match(/^(\d+|an?)\s+(second|minute|hour|day|week)s?\s+ago$/i);
+              if (ago) {
+                var ms = { second: 1e3, minute: 6e4, hour: 36e5, day: 864e5, week: 6048e5 };
+                var n = /^\d/.test(ago[1]) ? Number(ago[1]) : 1;
+                var d = new Date(Date.now() - n * ms[ago[2].toLowerCase()]);
+                var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                return months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
+              }
               return /^\w{3}\s+\d{1,2}$/.test(value) ? value + ", " + new Date().getFullYear() : value;
           - parseDate: Jan 2, 2006
-      Image: //div[@class="post__sfw-preview"]/img/@src
+      Image: //div[@class="post__sfw-preview"]/img/@src | //div[@class="post__preview"]/img/@src
       Performers:
         Name: //div[@class="post__featuring-models__list"]/a
       Tags:
