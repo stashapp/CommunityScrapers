@@ -128,6 +128,9 @@ def __raw_request(url, headers) -> requests.Response:
 def __api_request(url: str, headers: dict[str, str]) -> Any:
     result = __raw_request(url, headers)
     api_response = result.json()
+    # Validation errors (like search terms under 3 characters) come wrapped in a dict
+    if isinstance(api_response, dict) and "result" not in api_response:
+        api_response = api_response.get("message") or [api_response]
     if isinstance(api_response, list):
         api_search_errors = "\n- ".join(
             json.dumps(res, indent=None) for res in api_response
