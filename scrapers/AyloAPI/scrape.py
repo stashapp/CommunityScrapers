@@ -35,10 +35,17 @@ scrape_markers = False
 # Minimum similarity ratio to consider a match when searching
 minimum_similarity = 0.75
 
+# Use the largest resized image when the original is over StashDB's 10 MiB upload limit
+limit_image_size = True
+
 # Debug mode will save the latest API response to disk
 debug = False
 """
 )
+
+
+# StashDB rejects image uploads over this
+MAX_IMAGE_BYTES = 10 * 1024 * 1024
 
 
 def default_postprocess(obj: Any, _) -> Any:
@@ -337,6 +344,25 @@ def to_scraped_performer(
     return performer
 
 
+def full_size(image: str) -> str:
+    """
+    The original of a resized image URL, or the resized one if the original
+    is too large for StashDB and limit_image_size is set
+    """
+    original = re.sub(r"/m=[^/]+", "", image)
+    if not config.limit_image_size:
+        return original
+    try:
+        response = requests.head(original, timeout=10, allow_redirects=True)
+        size = int(response.headers.get("content-length", 0))
+    except (requests.RequestException, ValueError):
+        return original
+    if size > MAX_IMAGE_BYTES:
+        log.debug(f"Original image is {size / 2**20:.1f} MiB, using {image}")
+        return image
+    return original
+
+
 def to_scraped_group(group_from_api: dict[str, Any]) -> ScrapedGroup:
     if group_from_api["type"] not in ("movie", "serie"):
         wrong_type = group_from_api["type"]
@@ -355,9 +381,9 @@ def to_scraped_group(group_from_api: dict[str, Any]) -> ScrapedGroup:
         group["synopsis"] = synopsis
 
     if front_image := dig(group_from_api, "images", "cover", "0", "xx", "url"):
-        group["front_image"] = re.sub(r"/m=[^/]+", "", front_image)
+        group["front_image"] = full_size(front_image)
     elif poster := dig(group_from_api, "images", "poster", "0", "xx", "url"):
-        group["front_image"] = re.sub(r"/m=[^/]+", "", poster)
+        group["front_image"] = full_size(poster)
 
     if date := dig(group_from_api, "dateReleased"):
         group["date"] = datetime.strptime(date, "%Y-%m-%dT%H:%M:%S%z").strftime(
@@ -412,7 +438,7 @@ def to_scraped_scene(scene_from_api: dict[str, Any]) -> ScrapedScene:
         ("xx", "xl", "lg", "md", "sm", "xs"),
         "url",
     ):
-        scene["image"] = re.sub(r"/m=[^/]+", "", image)
+        scene["image"] = full_size(image)
 
     if (
         length := dig(scene_from_api, "videos", "mediabook", "length")
