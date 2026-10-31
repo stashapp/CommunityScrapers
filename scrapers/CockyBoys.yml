@@ -18,9 +18,9 @@ xPathScrapers:
         postProcess:
           - parseDate: 01/02/2006
       Tags:
-        Name: //strong[contains(text(),"Categorized Under:")]/following-sibling::a/text()
+        Name: //strong[contains(text(),"Categorized Under:")]/following-sibling::a
       Performers:
-        Name: //div[@id='tags']//a[contains(@href, 'set')]/text()
+        Name: //div[@id='tags']//a[contains(@href, 'set')]
         URLs:
           selector: //div[@id='tags']//a[contains(@href, 'set')]/@href
           postProcess:
@@ -37,17 +37,14 @@ xPathScrapers:
         selector: //meta[@property="og:image"]/@content
         postProcess:
           - replace:
-              - regex: .*(https?:\/\/.*\.jpg).*\".*
-                with: $1
-              - regex: .jpg
+              - regex: \.jpg$
                 with: -full.jpg
       Studio:
         Name: //meta[@property="og:site_name"]/@content
   performerScraper:
     performer:
-      Name: //h1[@class="gothamy sectionTitle"]/text()
+      Name: //h1[@class="gothamy sectionTitle"]
       Gender:
         # CockyBoys only has profile pages for male performers
         fixed: Male
-      Image: //div[@id="modelInfo"]/img/@src
-# Last Updated October 30, 2026
+      Images: //div[@id="modelInfo"]/img/@src
