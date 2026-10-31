@@ -228,6 +228,9 @@ def to_scraped_scene(api_scene: dict[str, Any]) -> ScrapedScene:
         scene["duration"] = duration
     if cover := api_scene.get("cover_url"):
         scene["image"] = cover
+    # Some newer scenes lack cover_url: the poster conversion is a resized copy of the cover
+    elif poster := api_scene.get("poster_conversion_url"):
+        scene["image"] = poster.replace("/conversions/", "/").replace("-video-list", "")
     if site in CONFIG:
         scene["studio"] = {
             "name": CONFIG[site]["studio_name"],
