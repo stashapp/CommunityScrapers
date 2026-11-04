@@ -105,7 +105,7 @@ class FlareSolverrBackend(RequestBackend):
         log.warning("[proxy] HEAD not supported by FlareSolverr, using GET instead")
       try:
         post_data = (kwargs.get("json") or kwargs.get("data")) if method == "post" else None
-        return flaresolverr_req(url, method=method, postData=post_data, proxy=self.proxy)
+        return flaresolverr_req(url, method=method, postData=post_data, proxy=self.proxy, cookies=kwargs.get("cookies"))
       except Exception as e:
         log.warning(f"[proxy] FlareSolverr request failed: {e}")
     else:
@@ -140,7 +140,7 @@ def get_useragent() -> str:
   chrome_ua = requests.get("https://feederbox826.github.io/user-agents/user-agents.json").json()[3]
   return chrome_ua
 
-def flaresolverr_req(url, method="get", postData=None, proxy=None) -> requests.Response:
+def flaresolverr_req(url, method="get", postData=None, proxy=None, cookies=None) -> requests.Response:
   if proxy and "@" in proxy:
     log.warning("[proxy] Ignoring unsupported proxy for FlareSolverr")
     proxy = None
@@ -151,6 +151,9 @@ def flaresolverr_req(url, method="get", postData=None, proxy=None) -> requests.R
   }
   if postData is not None:
     payload["postData"] = postData
+  # Same dict as requests' cookies= keyword, so callers can pass one value to every backend
+  if cookies:
+    payload["cookies"] = [{"name": name, "value": value} for name, value in cookies.items()]
   response = requests.post(FLARESOLVERR_URL, json=payload, timeout=60)
   if response.status_code != 200:
     raise Exception(f"FlareSolverr request failed with status code {response.status_code}: {response.text}")
