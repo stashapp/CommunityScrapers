@@ -48,6 +48,8 @@ xPathScrapers:
   performerScraper:
     performer:
       Name: //h1[@class="model-info-heading"]
+      # Each performer appears to have first name only, so use studio as disambiguation
+      Disambiguation: TGirls House
       Images: //div[contains(@class, "model-info-photo")]/img/@src
       URLs: //meta[@property="og:url"]/@content
       Birthdate:
@@ -63,13 +65,19 @@ xPathScrapers:
         selector: //span[@class="model-info-label" and text()="Height:"]/following-sibling::span/text()
         postProcess:
           - replace:
-              - regex: (\d+)\s*CM.*
+              - regex: (\d+)\s*[cC][mM].*
                 with: $1
       Weight:
         selector: //span[@class="model-info-label" and text()="Weight:"]/following-sibling::span/text()
         postProcess:
           - replace:
-              - regex: (\d+)\s*KG.*
+              - regex: (\d+)\s*[kK][gG].*
+                with: $1
+      PenisLength:
+        selector: //span[@class="model-info-label" and text()="Endowment / Penis Size:"]/following-sibling::span/text()
+        postProcess:
+          - replace:
+              - regex: (\d+)\s*[cC][mM].*
                 with: $1
       Gender:
         fixed: transgender_female
