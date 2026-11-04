@@ -79,8 +79,8 @@ xPathScrapers:
     scene:
       Title: //h1[@class="vd-title"]
       Details:
-        selector: //div[contains(@class, "vid-desc-inner")]//text()
-        concat: "\n"
+        selector: //div[contains(@class, "vid-desc-inner")]/p | //div[contains(@class, "vid-desc-inner")][not(p)]
+        concat: "\n\n"
         postProcess:
           # Stash drops newlines inside a text node, running the sentences on either side together
           - replace:
