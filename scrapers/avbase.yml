@@ -1,0 +1,91 @@
+name: AvBase
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - avbase.net/works/
+    scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.avbase.net/works?q={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneSearch:
+    common:
+      $card: //div[@class="relative"]
+    scene:
+      Title: $card//a[@data-slot="button"][starts-with(@href,"/works/")]
+      URLs:
+        selector: $card//a[@data-slot="button"][starts-with(@href,"/works/")]/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.avbase.net
+      Date:
+        selector: $card//a[starts-with(@href,"/works/date/")]
+        postProcess:
+          - parseDate: 2006/01/02
+      Studio:
+        Name: $card//a[starts-with(@href,"/makers/")]
+      Image: $card//img[@loading="lazy"]/@src
+
+  sceneScraper:
+    common:
+      $data: //script[@id="__NEXT_DATA__"]
+    scene:
+      Title: //h1
+      URLs: //link[@rel="canonical"]/@href
+      Code:
+        selector: $data
+        postProcess:
+          - javascript: return JSON.parse(value).props.pageProps.work.work_id
+      Date:
+        selector: //a[starts-with(@href,"/works/date/")]
+        postProcess:
+          - parseDate: 2006/01/02
+      Studio:
+        Name: //a[starts-with(@href,"/makers/")]
+      Director:
+        selector: $data
+        postProcess:
+          - javascript: |
+              const { products } = JSON.parse(value).props.pageProps.work;
+              return products.map((p) => p.iteminfo?.director).find(Boolean) || "";
+      Details:
+        selector: $data
+        postProcess:
+          - javascript: |
+              const { products } = JSON.parse(value).props.pageProps.work;
+              const description = products.map((p) => p.iteminfo?.description).find(Boolean) || "";
+              return description.replace(/<br\s*\/?>/gi, "\n");
+      Image:
+        selector: $data
+        postProcess:
+          - javascript: |
+              const { products } = JSON.parse(value).props.pageProps.work;
+              return products.map((p) => p.image_url).find(Boolean) || "";
+      Performers:
+        Name:
+          selector: $data
+          postProcess:
+            - javascript: |
+                const { casts } = JSON.parse(value).props.pageProps.work;
+                return casts.map((c) => c.actor.name).join("|");
+          split: "|"
+      Tags:
+        Name: //a[contains(@href,"/tags/")]
+      # TODO: enable when scrape dialog can show durations
+      # Duration:
+      #   selector: $data
+      #   postProcess:
+      #     - javascript: |
+      #         const { products } = JSON.parse(value).props.pageProps.work;
+      #         const minutes = products.map((p) => p.iteminfo?.volume).find(Boolean);
+      #         return minutes ? String(minutes * 60) : "";
+
+driver:
+  useSurf: true

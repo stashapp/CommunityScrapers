@@ -16,6 +16,5 @@ xPathScrapers:
       Aliases: $cover//p[contains(@class,"flex")]
       URLs: $cover//p[contains(@class,"text-center")]/a/@href
 
-# CDP required to bypass TLS fingerprinting
 driver:
-  useCDP: true
+  useSurf: true

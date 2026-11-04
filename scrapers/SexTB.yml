@@ -20,29 +20,32 @@ xPathScrapers:
       $fileinfo: //div[@id="infomation"]/div[@class="col-7"]
     scene:
       Title: $title/text()[1]
-      Code: $title/a[1]/text()
-      Director: $fileinfo/div[1]/a/strong/text()
+      Code: $title/a[1]
+      URLs: //link[@rel="canonical"]/@href
+      Director: $fileinfo/div[contains(.,"Director:")]/a/strong
       Date:
-        selector: $fileinfo/div[7]/strong/text()
+        selector: $fileinfo/div[contains(.,"Release Date:")]/strong
         postProcess:
           - parseDate: Jan. 2, 2006
+          - parseDate: Jan 2, 2006
       Image: //div[@id="infomation"]/div[contains(@class,"covert")]/img/@data-src
       Studio:
-        Name: $fileinfo/div[3]/a/strong/text()
+        Name: $fileinfo/div[contains(.,"Studio:")]/a/strong
       Tags:
-        Name: $fileinfo/div[5]/a/strong/text()
+        Name: $fileinfo/div[contains(.,"Genre(s):")]/a/strong
       Performers:
-        Name: $fileinfo/div[4]/a/strong/text()
+        Name: $fileinfo/div[contains(.,"Cast(s):")]/a/strong
   searchScraper:
     common:
       $description: //div[@class="tray-item-description"]
     scene:
-      Title: $description/div[@class="tray-item-title"]/text()
-      Code: $description/div[@class="tray-item-meta-info"]/div[@class="tray-item-code"]/text()
-      URL:
+      Title: $description/div[@class="tray-item-title"]
+      Code: $description/div[@class="tray-item-meta-info"]/div[@class="tray-item-code"]
+      URLs:
         selector: //div[contains(@class,"tray-item")]/a/@href
         postProcess:
           - replace:
-            - regex: "^"
-              with: "https://sextb.net"
-# Last Updated June 11, 2025
+              - regex: "^"
+                with: "https://sextb.net"
+driver:
+  useSurf: true
