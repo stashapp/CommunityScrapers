@@ -27,7 +27,7 @@ jsonScrapers:
   performerSearchScraper:
     performer:
       Name: models.#.name
-      Image: models.#.image
+      Images: models.#.image
       URLs:
         selector: models.#.slug
         postProcess:
@@ -47,8 +47,8 @@ jsonScrapers:
 xPathScrapers:
   performerScraper:
     performer:
-      Name: //h1[@class="model-hero-name"]
-      Image: //div[contains(@class, "model-info-photo")]/img/@src
+      Name: //h1[@class="model-info-heading"]
+      Images: //div[contains(@class, "model-info-photo")]/img/@src
       URLs: //meta[@property="og:url"]/@content
       Birthdate:
         selector: //span[@class="model-info-label" and text()="Birthday:"]/following-sibling::span/text()
@@ -74,11 +74,18 @@ xPathScrapers:
       Gender:
         fixed: transgender_female
   sceneScraper:
+    common:
+      $modelLink: //div[contains(@class, "vd-meta-models")]//a
     scene:
       Title: //h1[@class="vd-title"]
       Details:
-        selector: //div[@class="vid-desc-collapse"]/div/p
-        concat: "\n\n"
+        selector: //div[contains(@class, "vid-desc-collapse")]/div[contains(@class, "vid-desc-inner")]
+        # replicate div newlines to spaces with a crude regex replacement for affected occurrences
+        # i.e. without this there are often spaces deleted between sentences
+        postProcess:
+          - replace:
+            - regex: (\w[^\w\s’']+)(\w)
+              with: $1 $2
       URLs: //meta[@property="og:url"]/@content
       Date:
         selector: //script[@type="application/ld+json"]/text()
@@ -105,5 +112,17 @@ xPathScrapers:
       Tags:
         Name: //h2[text()="Tags"]/following-sibling::div/a/text()
       Performers:
-        Name: //div[@class="vd-meta-models"]/a/text()
-# Last Updated May 21, 2026
+        Name: $modelLink//text()
+        # Each performer appears to have first name only, so use studio as disambiguation
+        Disambiguation: TGirls House
+        URLs:
+          selector: $modelLink/@href
+          # make relative URL absolute
+          postProcess:
+            - replace:
+              - regex: ^(/.+)$
+                with: "https://tgirlshouse.com$1"
+        # All performers listed are trans-female
+        Gender:
+          fixed: transgender_female
+# Last Updated November 4, 2026
