@@ -1,8 +1,8 @@
-import sys
-import subprocess
 import re
-from pathlib import Path
+import subprocess
+import sys
 from inspect import stack
+from pathlib import Path
 
 from py_common import log
 
@@ -54,7 +54,12 @@ def ensure_requirements(*deps: str):
 
     parsed_deps = {dep: _parse_package(dep) for dep in deps}
 
-    deps_folder = current_path.parent.parent / "automatic_dependencies"
+    # Compiled extensions only load under the interpreter they were built for so each Python version gets its own folder
+    deps_folder = (
+        current_path.parent.parent
+        / "automatic_dependencies"
+        / sys.implementation.cache_tag
+    )
     sys.path.insert(0, str(deps_folder))
 
     try:
@@ -83,7 +88,7 @@ def ensure_requirements(*deps: str):
         "you can avoid this step in the future"
     )
 
-    deps_folder.mkdir(exist_ok=True)
+    deps_folder.mkdir(parents=True, exist_ok=True)
     subprocess.check_call(
         [
             sys.executable,
@@ -91,6 +96,7 @@ def ensure_requirements(*deps: str):
             "pip",
             "install",
             "--no-input",
+            "--upgrade",
             f"--target={deps_folder}",
             *package_names,
         ],
