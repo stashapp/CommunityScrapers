@@ -127,6 +127,61 @@ galleryByURL:
       - nubiles.net/photo/gallery/
       - smashed.xxx/photo/gallery/
 
+performerByURL:
+  # All network sites share the same model profile page
+  - action: scrapeXPath
+    scraper: performerScraper
+    url:
+      - anilos.com/model/profile/
+      - badteenspunished.com/model/profile/
+      - bountyhunterporn.com/model/profile/
+      - brattymilf.com/model/profile/
+      - brattysis.com/model/profile/
+      - caughtmycoach.com/model/profile/
+      - cheatingmommy.com/model/profile/
+      - cheatingsis.com/model/profile/
+      - cumswappingsis.com/model/profile/
+      - daddyslilangel.com/model/profile/
+      - datingmystepson.com/model/profile/
+      - deeplush.com/model/profile/
+      - detentiongirls.com/model/profile/
+      - driverxxx.com/model/profile/
+      - familyswap.xxx/model/profile/
+      - girlsonlyporn.com/model/profile/
+      - glowingdesire.com/model/profile/
+      - hotcrazymess.com/model/profile/
+      - imnotyourmommy.com/model/profile/
+      - lilsis.com/model/profile/
+      - momlover.com/model/profile/
+      - momsboytoy.com/model/profile/
+      - momsfamilysecrets.com/model/profile/
+      - momsteachsex.com/model/profile/
+      - momstight.com/model/profile/
+      - momswapped.com/model/profile/
+      - momwantscreampie.com/model/profile/
+      - momwantstobreed.com/model/profile/
+      - myfamilypies.com/model/profile/
+      - nfbusty.com/model/profile/
+      - nubilefilms.com/model/profile/
+      - nubiles-casting.com/model/profile/
+      - nubiles-porn.com/model/profile/
+      - nubiles.net/model/profile/
+      - nubileset.com/model/profile/
+      - nubilesporn.com/model/profile/
+      - nubilesunscripted.com/model/profile/
+      - petiteballerinasfucked.com/model/profile/
+      - petitehdporn.com/model/profile/
+      - princesscum.com/model/profile/
+      - realitysis.com/model/profile/
+      - shesbreedingmaterial.com/model/profile/
+      - shesinmybed.com/model/profile/
+      - smashed.xxx/model/profile/
+      - stepsiblingscaught.com/model/profile/
+      - teacherfucksteens.com/model/profile/
+      - thatsitcomshow.com/model/profile/
+      - thepovgod.com/model/profile/
+      - youngermommy.com/model/profile/
+
 xPathScrapers:
   # Nubiles Porn sites
   nubilesPornMultiScraper:
@@ -267,6 +322,27 @@ xPathScrapers:
       Performers: *performersAttr
       Tags: *tagsAttr
       Studio: *studioFromTitleAttr
+
+  performerScraper:
+    common:
+      $profile: //div[contains(@class, "model-profile-desc")]
+      $field: //div[contains(@class, "model-profile-desc")]/p[@class="model-profile-subheading"]
+    performer:
+      Name: $profile/h2
+      URLs: //link[@rel="canonical"]/@href
+      Image: //img[contains(@class, "model-profile-pic")]/@src
+      Country: $field[normalize-space()="Location"]/following-sibling::p[1]
+      Height:
+        selector: $field[normalize-space()="Height"]/following-sibling::p[1]
+        postProcess:
+          - feetToCm: true
+      Measurements:
+        selector: $field[normalize-space()="Figure"]/following-sibling::p[1]
+        postProcess:
+          - replace:
+              - regex: \s+
+                with: ""
+      Details: //p[contains(@class, "model-bio")]
 
 driver:
   headers:

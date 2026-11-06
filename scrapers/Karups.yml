@@ -4,11 +4,29 @@ sceneByURL:
     url:
       - karups.com/video/
     scraper: sceneScraper
+    # Members pages redirect to a login form; scrape the public page instead
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: ^https?://members\.karups\.com/
+          with: https://www.karups.com/
 galleryByURL:
   - action: scrapeXPath
     url:
       - karups.com/gallery/
     scraper: galleryScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - karups.com/model/
+      - karups.com/models/
+    scraper: performerScraper
+    # Members model pages hold the same data; scrape the public page instead
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: ^https?://members\.karups\.com/
+          with: https://www.karups.com/
 
 xPathScrapers:
   sceneScraper:
@@ -24,16 +42,16 @@ xPathScrapers:
                 kow: Karups Older Women
                 kha: Karups Hometown Amateurs
                 kpc: Karups Private Collection
-      Title: &title //h1[@class="page-heading"]/span[@class="title"]
+      Title: &title //h1[@class="page-heading"]/span[@class="title"]/text()
       Details: &details
         selector: //div[@class="tour-detail-description-body"]/text()
         concat: "\n\n"
       Date: &date
-        selector: //span[@class="date"]/span[@class="content"]
+        selector: //span[@class="date"]/span[@class="content"]/text()
         postProcess:
           - parseDate: 02 Jan 2006
       Performers: &performers
-        Name: //span[@class="models"]/span[@class="content"]//a
+        Name: //span[@class="models"]/span[@class="content"]//a/text()
       Image:
         selector: //video[@id="player"]/@poster|//div[@class="video-poster"]/img/@src
         postProcess:
@@ -48,6 +66,14 @@ xPathScrapers:
       Details: *details
       Date: *date
       Performers: *performers
+
+  performerScraper:
+    performer:
+      # Model pages only list a name, photo and join date
+      Name: //h1//span[@class="title"]
+      Gender:
+        fixed: Female
+      Image: //div[@class="model-thumb"]/img/@src
 
 driver:
   cookies:
