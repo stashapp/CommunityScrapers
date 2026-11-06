@@ -4,9 +4,8 @@ sceneByURL:
     url:
       - karups.com/video/
     scraper: sceneScraper
-    # Members pages redirect to a login form; scrape the public page instead
     queryURL: "{url}"
-    queryURLReplace:
+    queryURLReplace: &membersToPublic
       url:
         - regex: ^https?://members\.karups\.com/
           with: https://www.karups.com/
@@ -15,18 +14,16 @@ galleryByURL:
     url:
       - karups.com/gallery/
     scraper: galleryScraper
+    queryURL: "{url}"
+    queryURLReplace: *membersToPublic
 performerByURL:
   - action: scrapeXPath
     url:
       - karups.com/model/
       - karups.com/models/
     scraper: performerScraper
-    # Members model pages hold the same data; scrape the public page instead
     queryURL: "{url}"
-    queryURLReplace:
-      url:
-        - regex: ^https?://members\.karups\.com/
-          with: https://www.karups.com/
+    queryURLReplace: *membersToPublic
 
 xPathScrapers:
   sceneScraper:
@@ -42,16 +39,16 @@ xPathScrapers:
                 kow: Karups Older Women
                 kha: Karups Hometown Amateurs
                 kpc: Karups Private Collection
-      Title: &title //h1[@class="page-heading"]/span[@class="title"]/text()
+      Title: &title //h1[@class="page-heading"]/span[@class="title"]
       Details: &details
         selector: //div[@class="tour-detail-description-body"]/text()
         concat: "\n\n"
       Date: &date
-        selector: //span[@class="date"]/span[@class="content"]/text()
+        selector: //span[@class="date"]/span[@class="content"]
         postProcess:
           - parseDate: 02 Jan 2006
       Performers: &performers
-        Name: //span[@class="models"]/span[@class="content"]//a/text()
+        Name: //span[@class="models"]/span[@class="content"]//a
       Image:
         selector: //video[@id="player"]/@poster|//div[@class="video-poster"]/img/@src
         postProcess:
@@ -69,11 +66,10 @@ xPathScrapers:
 
   performerScraper:
     performer:
-      # Model pages only list a name, photo and join date
-      Name: //h1//span[@class="title"]
+      Name: *title
       Gender:
         fixed: Female
-      Image: //div[@class="model-thumb"]/img/@src
+      Images: //div[@class="model-thumb"]/img/@src
 
 driver:
   cookies:

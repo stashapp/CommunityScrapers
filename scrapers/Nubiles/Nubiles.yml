@@ -128,7 +128,6 @@ galleryByURL:
       - smashed.xxx/photo/gallery/
 
 performerByURL:
-  # All network sites share the same model profile page
   - action: scrapeXPath
     scraper: performerScraper
     url:
@@ -189,23 +188,23 @@ xPathScrapers:
       $contentpane: //div[contains(@class, "content-pane-title")]
 
     scene:
-      Title: &titleSelector //h2/text()
+      Title: &titleSelector //h2
       Code: &codeSelector $contentpane//div[contains(@class,"star-rating-wrapper")]/@data-id
       Date: &dateAttr
-        selector: $contentpane//span[@class="date"]/text()
+        selector: $contentpane//span[@class="date"]
         postProcess:
           - parseDate: Jan 2, 2006
       Details: &detailsAttr
         selector: //div[contains(@class, "content-pane-column")]//p/text()|//div[contains(@class, "content-pane-column")]/div/text()|//div[contains(@class, "content-pane-column")]/div/div/text()
         concat: "\n\n"
       Performers: &performersAttr
-        Name: //div[@class="content-pane-performers"]/a/text()
+        Name: //div[@class="content-pane-performers"]/a
       Studio: &studioFromSiteLinkAttr
         Name:
           selector: >-
-            $contentpane//a[@class="site-link"]/text() |
-            $contentpane//span[@class="site-link"]/text() |
-            //title/text()[not($contentpane//*[@class="site-link"])]
+            $contentpane//a[@class="site-link"] |
+            $contentpane//span[@class="site-link"] |
+            //title[not($contentpane//*[@class="site-link"])]
           postProcess:
             - replace:
                 - regex: ^([^-]+?)\s-\s.*$
@@ -230,7 +229,7 @@ xPathScrapers:
                 Shes Breeding Material: She's Breeding Material
                 Shes In My Bed: She's in My Bed
       Tags: &tagsAttr
-        Name: //div[@class="categories"]/a/text()
+        Name: //div[@class="categories"]/a
       Image: &imageAttr
         # Newer scenes have video elements with a poster attribute
         # but older scenes still have an image element
@@ -303,7 +302,7 @@ xPathScrapers:
       Performers: *performersAttr
       Studio: &studioFromTitleAttr
         Name:
-          selector: //title/text()
+          selector: //title
           postProcess:
             - replace:
                 - regex: ^(.+?)\s-.+$
@@ -330,18 +329,21 @@ xPathScrapers:
     performer:
       Name: $profile/h2
       URLs: //link[@rel="canonical"]/@href
-      Image: //img[contains(@class, "model-profile-pic")]/@src
+      Images: //img[contains(@class, "model-profile-pic")]/@src
+      Gender:
+        selector: >-
+          $field[normalize-space()="Figure"] |
+          $profile[not(p[normalize-space()="Figure"])]/p[normalize-space()="Location"]
+        postProcess:
+          - map:
+              Figure: Female
+              Location: Male
       Country: $field[normalize-space()="Location"]/following-sibling::p[1]
       Height:
         selector: $field[normalize-space()="Height"]/following-sibling::p[1]
         postProcess:
           - feetToCm: true
-      Measurements:
-        selector: $field[normalize-space()="Figure"]/following-sibling::p[1]
-        postProcess:
-          - replace:
-              - regex: \s+
-                with: ""
+      Measurements: $field[normalize-space()="Figure"]/following-sibling::p[1]
       Details: //p[contains(@class, "model-bio")]
 
 driver:
