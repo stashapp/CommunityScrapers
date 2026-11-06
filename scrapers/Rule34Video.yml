@@ -63,6 +63,9 @@ xPathScrapers:
         URLs: $article//div[text()="Artist"]/following-sibling::span/a/@href
 # see configuration notes in https://discourse.stashapp.cc/t/ddos-guard-for-scrapers/2369
 driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0
   cookies:
     - CookieURL: "https://rule34video.com/"
       Cookies:
