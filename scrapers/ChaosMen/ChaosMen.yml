@@ -6,42 +6,37 @@ sceneByURL:
       - chaosmen.com/en/video
     script:
       - python
-      - ../Altwolia/scrape.py
+      - ChaosMen.py
       - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
-    - chaosmen
+    - ChaosMen.py
     - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
-    - chaosmen
+    - ChaosMen.py
     - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
-    - chaosmen
+    - ChaosMen.py
     - scene-by-query-fragment
 performerByFragment:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
-    - chaosmen
+    - ChaosMen.py
     - performer-by-fragment
 performerByName:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
-    - chaosmen
+    - ChaosMen.py
     - performer-by-name
 performerByURL:
   - action: script
@@ -49,5 +44,5 @@ performerByURL:
       - chaosmen.com/en/pornstar/
     script:
       - python
-      - ../Altwolia/scrape.py
+      - ChaosMen.py
       - performer-by-url

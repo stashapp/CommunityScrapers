@@ -1,8 +1,10 @@
+# requires: py_common
 name: MilitaryClassified
 sceneByURL:
   - action: script
     script:
       - python
       - MilitaryClassified.py
+      - scene-by-url
     url:
       - militaryclassified.com/dt/classic/Movies/

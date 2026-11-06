@@ -1,4 +1,5 @@
 import json
+import re
 import sys
 from collections.abc import Callable
 from typing import Any
@@ -7,7 +8,9 @@ from Altwolia.domains import site_name
 from Altwolia.scrape import (
     gallery_from_fragment,
     gallery_from_url,
+    hub_performer_url,
     movie_from_url,
+    own_site_url,
     performer_from_fragment,
     performer_from_url,
     performer_search,
@@ -17,8 +20,8 @@ from Altwolia.scrape import (
 )
 from py_common import log
 from py_common.deps import ensure_requirements
-from py_common.types import ScrapedGallery, ScrapedScene
-from py_common.util import replace_all, scraper_args
+from py_common.types import ScrapedGallery, ScrapedPerformer, ScrapedScene
+from py_common.util import is_own_url, replace_all, scraper_args
 
 ensure_requirements("algoliasearch")
 from algoliasearch.http.exceptions import AlgoliaException  # noqa: E402
@@ -26,6 +29,10 @@ from algoliasearch.http.exceptions import AlgoliaException  # noqa: E402
 # The network's search key sees every sub-site except Next Door Hookups; some
 # sub-sites' own keys only work from the network's domain, so it goes first
 SITE = "nextdoorstudios"
+
+# Retired sites whose releases still render under nextdoorstudios.com; the index
+# is shared with the rest of the network, whose retired sites don't
+RETIRED_SITES = {"nextdoororiginals", "tommydxxx"}
 
 # Overrides for sub-brands whose API studio_name doesn't match StashDB's
 # spelling exactly - every other domain in the network already matches as-is
@@ -51,29 +58,56 @@ def nextdoorstudios(obj: Any, api_object: dict[str, Any]) -> Any:
     return obj
 
 
-def from_own_site(scrape: Callable[..., Any], target: Any, url: str | None) -> Any:
+def nextdoorstudios_scene(
+    scene: ScrapedScene, api_scene: dict[str, Any]
+) -> ScrapedScene:
+    scene = nextdoorstudios(scene, api_scene)
+    if (
+        not scene.get("urls")
+        and api_scene.get("sitename") in RETIRED_SITES
+        and (url := own_site_url(api_scene, SITE))
+    ):
+        scene["urls"] = [url]
+    return scene
+
+
+def nextdoorstudios_performer(
+    performer: ScrapedPerformer, api_performer: dict[str, Any]
+) -> ScrapedPerformer:
+    if url := hub_performer_url(api_performer, SITE, "asgmax"):
+        performer["urls"] = [url]
+    return performer
+
+
+def from_own_site(
+    scrape: Callable[..., Any],
+    target: Any,
+    url: str | None,
+    postprocess: Callable[..., Any] = nextdoorstudios,
+) -> Any:
     "Retries with the search key of the site in the URL"
     if not url or (own := site_name(url)) == SITE:
         return None
     try:
-        return scrape(target, own, postprocess=nextdoorstudios)
+        return scrape(target, own, postprocess=postprocess)
     except AlgoliaException as e:
         log.debug(f"Search key for '{own}' was rejected: {e}")
         return None
 
 
 def scene_by_url(url: str) -> ScrapedScene | None:
-    return scene_from_url(url, SITE, postprocess=nextdoorstudios) or from_own_site(
-        scene_from_url, url, url
-    )
+    return scene_from_url(
+        url, SITE, postprocess=nextdoorstudios_scene
+    ) or from_own_site(scene_from_url, url, url, nextdoorstudios_scene)
 
 
+# A title search on the network key always finds something, so a URL only the
+# site's own key can see has to be tried before it
 def scene_by_fragment(fragment: dict[str, Any]) -> ScrapedScene | None:
-    return scene_from_fragment(
-        fragment, SITE, postprocess=nextdoorstudios
-    ) or from_own_site(
-        scene_from_fragment, fragment, next(iter(fragment.get("urls") or []), None)
-    )
+    for url in fragment.get("urls") or []:
+        if is_own_url(url) and "/video/" in url and (scene := scene_by_url(url)):
+            return scene
+    return scene_from_fragment(fragment, SITE, postprocess=nextdoorstudios_scene)
 
 
 def gallery_by_url(url: str) -> ScrapedGallery | None:
@@ -83,9 +117,14 @@ def gallery_by_url(url: str) -> ScrapedGallery | None:
 
 
 def gallery_by_fragment(fragment: dict[str, Any]) -> ScrapedGallery | None:
-    return gallery_from_fragment(
-        fragment, SITE, postprocess=nextdoorstudios
-    ) or from_own_site(gallery_from_fragment, fragment, fragment.get("url"))
+    for url in fragment.get("urls") or []:
+        if (
+            is_own_url(url)
+            and re.search(r"/(?:photo|video)/", url)
+            and (gallery := gallery_by_url(url))
+        ):
+            return gallery
+    return gallery_from_fragment(fragment, SITE, postprocess=nextdoorstudios)
 
 
 if __name__ == "__main__":
@@ -96,7 +135,7 @@ if __name__ == "__main__":
         case "scene-by-url", {"url": url} if url:
             result = scene_by_url(url)
         case "scene-by-name", {"name": name} if name:
-            result = scene_search(name, SITE, postprocess=nextdoorstudios)
+            result = scene_search(name, SITE, postprocess=nextdoorstudios_scene)
         case "scene-by-fragment" | "scene-by-query-fragment", args:
             result = scene_by_fragment(args)
         case "gallery-by-url", {"url": url} if url:
@@ -104,11 +143,15 @@ if __name__ == "__main__":
         case "gallery-by-fragment", args:
             result = gallery_by_fragment(args)
         case "performer-by-url", {"url": url}:
-            result = performer_from_url(url, SITE)
+            result = performer_from_url(
+                url, SITE, postprocess=nextdoorstudios_performer
+            )
         case "performer-by-fragment", args:
-            result = performer_from_fragment(args, SITE)
+            result = performer_from_fragment(
+                args, SITE, postprocess=nextdoorstudios_performer
+            )
         case "performer-by-name", {"name": name} if name:
-            result = performer_search(name, SITE)
+            result = performer_search(name, SITE, postprocess=nextdoorstudios_performer)
         case "movie-by-url", {"url": url} if url:
             result = movie_from_url(url, SITE, postprocess=nextdoorstudios)
         case _:

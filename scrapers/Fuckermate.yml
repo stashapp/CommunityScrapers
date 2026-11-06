@@ -8,8 +8,7 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //section[@id="video-section"]//div[@class="post-header font-alt"]/h1[1]
-      Details:
-        selector: //div[@class="post-entry"]//p[@class="text-justify"]
+      Details: //div[@class="post-entry"]//p[@class="text-justify"]
       Image: //videoplayer/@poster
       Date:
         selector: //div[@id="video-frame"]/following-sibling::div//div[@class="post-meta"]/text()[1]
@@ -22,5 +21,18 @@ xPathScrapers:
         Name:
           selector: //section[@id="video-section"]//div[@class="post-meta"]/a
       Performers:
-        Name: //h1[@class="post-title"]/a()
-# Last Updated January 10, 2021
+        Name:
+          selector: //section[@id="video-section"]//h2[@class="post-title"]
+          postProcess:
+            - javascript: |
+                if (!value) return "";
+                return value
+                  .replace(/^Introducing\s+/i, "")
+                  .replace(/\s+(Solo|II)$/i, "")
+                  .split(/\s*,\s*|\s+(?:and|&)\s+/i)
+                  .map(function (name) {
+                    return name.trim();
+                  })
+                  .filter(Boolean)
+                  .join(",");
+          split: ","

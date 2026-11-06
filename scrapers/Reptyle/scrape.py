@@ -3,16 +3,20 @@ import importlib
 import json
 import re
 import sys
-from datetime import datetime, timedelta, timezone
+import time
+from collections.abc import Callable, Generator
+from datetime import UTC, datetime
 from html import unescape
 from pathlib import Path
-from typing import Generator, Any, Callable
+from types import ModuleType
+from typing import Any
 from urllib.parse import urlsplit, urlunsplit
-import py_common.log as log
-from py_common.util import scraper_args, dig
-from py_common.deps import ensure_requirements
-from py_common.types import ScrapedScene, ScrapedPerformer, ScrapedStudio
+
+from py_common import log
 from py_common.config import get_config
+from py_common.deps import ensure_requirements
+from py_common.types import ScrapedPerformer, ScrapedScene, ScrapedStudio
+from py_common.util import dig, is_own_url, scraper_args
 
 ensure_requirements("cloudscraper")
 import cloudscraper  # noqa: E402
@@ -29,8 +33,6 @@ su_token =
 )
 
 scraper = cloudscraper.create_scraper()
-
-domains_to_networks = {}
 
 # Maps upsell_id from the API's site object to the parent network studio.
 # upsell_id is the site ID of the network membership a sub-site upsells to,
@@ -63,6 +65,7 @@ studio_map = {
     "TeamSkeet X OZ Fellatio Queens": "TeamSkeet X Aussie Fellatio Queens",
     "TeamSkeet X SpankMonster": "TeamSkeet X Spank Monster",
     # Family Strokes
+    "Family Strokes": "Family Strokes: The Series",
     "Not My Grandpa": "Not My Grandpa!",
     # Freeuse
     "FreeUse Milf": "Freeuse MILF",
@@ -124,14 +127,17 @@ tags_map = {
 }
 
 
-def default_postprocess(obj: Any, _) -> Any:
+Postprocess = Callable[[ScrapedScene, dict[str, Any]], ScrapedScene]
+
+
+def default_postprocess(obj: Any, _: Any) -> Any:
     return obj
 
 
-def format_date(raw) -> str:
+def format_date(raw: int | str) -> str:
     # Members APIs have UNIX epoch timestamps
     if isinstance(raw, int):
-        return datetime.fromtimestamp(raw, tz=timezone.utc).date().isoformat()
+        return datetime.fromtimestamp(raw, tz=UTC).date().isoformat()
 
     # Other sites generally have ISO-8601-compliant datetimes
     return datetime.fromisoformat(raw).date().isoformat()
@@ -150,8 +156,8 @@ def upgrade_image(image_url: str) -> str:
             if scraper.head(newurl, timeout=2.5).ok:
                 log.debug(f"Found better image at {newurl}")
                 return newurl
-        except:  # noqa: E722 we do not care which exception this is
-            continue
+        except Exception as e:  # noqa: BLE001 any failure means no better image here
+            log.debug(f"{newurl} failed: {e}")
 
     # try shared/hi on /tour url
     # get the subsite name
@@ -167,15 +173,15 @@ def upgrade_image(image_url: str) -> str:
         if scraper.head(tourHi, timeout=1).ok:
             log.debug(f"Found better image at {tourHi}")
             return tourHi
-    except:  # noqa: E722 we do not care which exception this is
-        pass
+    except Exception as e:  # noqa: BLE001 any failure means no better image here
+        log.debug(f"{tourHi} failed: {e}")
 
     # fallback to original image
     log.debug("Unable to find better image")
     return image_url
 
 
-def _import_zip_module(zip_path: Path, module_name: str):
+def _import_zip_module(zip_path: Path, module_name: str) -> ModuleType | None:
     if not zip_path.exists():
         return None
     zip_path_str = str(zip_path.absolute())
@@ -187,29 +193,33 @@ def _import_zip_module(zip_path: Path, module_name: str):
         return None
 
 
-def _local():
+def _local() -> ModuleType | None:
     return _import_zip_module(Path(__file__).with_name("bin"), "psm_creds")
 
 
-def _remote():
+def _remote() -> ModuleType | None:
     cache_path = Path(__file__).with_name(".cache")
-    stale = not cache_path.exists() or (
-        datetime.now() - datetime.fromtimestamp(cache_path.stat().st_mtime) > timedelta(hours=24)
+    stale = (
+        not cache_path.exists()
+        or time.time() - cache_path.stat().st_mtime > 24 * 60 * 60
     )
     if stale:
         try:
-            response = scraper.get("https://gist.githubusercontent.com/Maista6969/65e8958c565f33bc8b977fc45c17151e/raw/cache", timeout=5)
+            response = scraper.get(
+                "https://gist.githubusercontent.com/Maista6969/65e8958c565f33bc8b977fc45c17151e/raw/cache",
+                timeout=5,
+            )
             response.raise_for_status()
             cache_path.write_bytes(base64.b64decode(response.text))
-        except Exception:
-            pass
+        except Exception as e:  # noqa: BLE001 a stale cache is still usable
+            log.debug(f"Unable to refresh credentials cache: {e}")
     return _import_zip_module(cache_path, "psm_creds")
 
 
-_creds: dict | None = None
+_creds: dict[str, str] | None = None
 
 
-def get_cookies_for(url: str) -> dict:
+def get_cookies_for(url: str) -> dict[str, str]:
     global _creds
     if _creds is None:
         if module := (_local() or _remote()):
@@ -279,7 +289,7 @@ def guess_extra_tags(scene: ScrapedScene) -> Generator[str, None, None]:
     yield guess
 
 
-def to_scraped_performer(performer_from_api: dict) -> ScrapedPerformer:
+def to_scraped_performer(performer_from_api: dict[str, Any]) -> ScrapedPerformer:
     performer: ScrapedPerformer = {
         "name": dig(performer_from_api, ("name", "modelName", "title"))
     }
@@ -295,11 +305,43 @@ def to_scraped_performer(performer_from_api: dict) -> ScrapedPerformer:
     return performer
 
 
-def to_scraped_studio(studio_from_api: dict) -> ScrapedStudio:
-    raw_name = dig(studio_from_api, ("siteName", "name"))
+def network_for(site: dict[str, Any]) -> ScrapedStudio | None:
+    match site.get("upsell_id"):
+        case int(upsell_id):
+            return NETWORK_BY_UPSELL_ID.get(upsell_id)
+        case str(upsell_id) if upsell_id.isdigit():
+            return NETWORK_BY_UPSELL_ID.get(int(upsell_id))
+    return None
+
+
+def with_network_from_url(scene: ScrapedScene, url: str) -> ScrapedScene:
+    "Newer sub-sites have no upsell_id, but their public pages live on the network's domain"
+    host = urlsplit(url).netloc.removeprefix("www.")
+    if (
+        (studio := scene.get("studio"))
+        and "parent" not in studio
+        and host
+        and not host.startswith("app.")
+        and (
+            network := next(
+                (
+                    n
+                    for n in NETWORK_BY_UPSELL_ID.values()
+                    if host in dig(n, "urls", 0, default="")
+                ),
+                None,
+            )
+        )
+    ):
+        return {**scene, "studio": {**studio, "parent": network}}
+    return scene
+
+
+def to_scraped_studio(studio_from_api: dict[str, Any]) -> ScrapedStudio:
+    raw_name: str = dig(studio_from_api, ("siteName", "name"), default="")
     name = studio_map.get(raw_name, raw_name)
     studio: ScrapedStudio = {"name": name}
-    if parent := NETWORK_BY_UPSELL_ID.get(studio_from_api.get("upsell_id")):
+    if parent := network_for(studio_from_api):
         studio["parent"] = parent
     # Reptyle-branded studios can carry upsell_id=1 (TeamSkeet) during the brand
     # transition, so override the parent by name for those cases.
@@ -308,12 +350,15 @@ def to_scraped_studio(studio_from_api: dict) -> ScrapedStudio:
     return studio
 
 
-def get_object_code(result_from_api: dict):
+def get_object_code(result_from_api: dict[str, Any]) -> str | None:
     if (_id := dig(result_from_api, ("itemId", "id"))) and (isinstance(_id, int)):
         return str(_id)
+    return None
 
 
-def to_scraped_scene(scene_from_api: dict, better_image=True) -> ScrapedScene:
+def to_scraped_scene(
+    scene_from_api: dict[str, Any], better_image: bool = True
+) -> ScrapedScene:
     scene: ScrapedScene = {
         "title": scene_from_api["title"],
         "date": format_date(scene_from_api["publishedDate"]),
@@ -338,8 +383,8 @@ def to_scraped_scene(scene_from_api: dict, better_image=True) -> ScrapedScene:
     # Public scrapes have a string id like `name-of-scene` while
     # private scrapes have a numeric id like 12345
     if (slug := dig(scene_from_api, ("slug", "id"))) and (isinstance(slug, str)):
-        if site and (network := NETWORK_BY_UPSELL_ID.get(site.get("upsell_id"))):
-            scene["urls"] = [f"{network['urls'][0]}movies/{slug}"]
+        if site and (network_url := dig(network_for(site) or {}, "urls", 0)):
+            scene["urls"] = [f"{network_url}movies/{slug}"]
         else:
             scene["urls"] = [f"https://www.placeholder.com/movies/{slug}"]
 
@@ -353,11 +398,16 @@ def to_scraped_scene(scene_from_api: dict, better_image=True) -> ScrapedScene:
     return scene
 
 
-# Reptyle have started rolling out new pages built on Astro
-# and this lets us cover all pages regardless
+# Reptyle's Astro pages don't embed their API endpoint and no single bundle index
+# covers a whole network (ts_network lacks most Freeuse/MYLF/Pervz scenes),
+# so we search every per-site index of the network at once
 NETWORK_BUNDLES = (
-    ("sayuncle.com", "https://tours-store.psmcdn.net/sau_network/_search", "SayUncle"),
-    ("", "https://tours-store.psmcdn.net/ts_network/_search", "TeamSkeet"),
+    ("sayuncle.com", "https://tours-store.psmcdn.net/tour_sau_*/_search", "SayUncle"),
+    (
+        "",
+        "https://tours-store.psmcdn.net/tour_*,-tour_sau_*/_search",
+        "TeamSkeet",
+    ),
 )
 
 
@@ -427,7 +477,7 @@ def get_endpoint_for(url: str) -> tuple[str, str, str] | None:
 
 def scene_from_url(
     url: str,
-    postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess,
+    postprocess: Postprocess = default_postprocess,
 ) -> ScrapedScene | None:
     if not (tup := get_endpoint_for(url)):
         return None
@@ -479,20 +529,19 @@ def scene_from_url(
         and (scene := scene_from_url(members_url, postprocess=postprocess))
     ):
         scene["urls"] = [final_url, members_url]
-        return scene
+        return with_network_from_url(scene, final_url)
 
-    # TODO: at this point we know the scene was scraped from a public page,
-    # which means the URLs are already correct in Stash and we don't need to add
-    # new ones: the one we constructed could be wrong
+    # Scraped from a public page, so the URL is already in Stash
+    # and the one we constructed could be wrong
     scene = postprocess(to_scraped_scene(result), result)
-    scene["urls"] = []
-    return scene
+    scene.pop("urls", None)
+    return with_network_from_url(scene, final_url)
 
 
 def scene_search(
     query: str,
     search_url: str = "https://ma-store.reptyle.com/rs/",
-    postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess,
+    postprocess: Postprocess = default_postprocess,
 ) -> list[ScrapedScene]:
     if not query:
         log.error("No query provided")
@@ -523,12 +572,13 @@ def scene_search(
 
 
 def scene_from_fragment(
-    fragment: dict,
+    fragment: dict[str, Any],
     search_url: str = "https://ma-store.reptyle.com/rs/",
-    postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess,
+    postprocess: Postprocess = default_postprocess,
 ) -> ScrapedScene | None:
-    log.debug(f"Fragment scraping scene {fragment['id']}")
-    if url := fragment.get("url"):
+    for url in fragment.get("urls") or []:
+        if not is_own_url(url):
+            continue
         log.debug(f"Using scene URL: '{url}'")
         if scene := scene_from_url(url, postprocess=postprocess):
             return scene

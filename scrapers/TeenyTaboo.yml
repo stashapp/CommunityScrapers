@@ -33,4 +33,5 @@ xPathScrapers:
           selector: //div[@class="model-tags"][1]/a/text()
 
 driver:
-  useCDP: true
+  # TLS impersonation is enough to get past the bot check: pages are server-rendered
+  useSurf: true

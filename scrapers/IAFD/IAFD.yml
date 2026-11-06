@@ -1,38 +1,139 @@
-# yaml-language-server: $schema=../../validator/scraper.schema.json
 name: IAFD
 # requires: py_common
 
 performerByName:
-  action: script
-  script:
-    - python
-    - IAFD.py
-    - performer-by-name
+  action: scrapeXPath
+  queryURL: https://www.iafd.com/results.asp?searchtype=comprehensive&searchstring={}
+  scraper: performerSearch
+
 performerByURL:
-  - url:
+  - action: script
+    url:
       - iafd.com/person.rme/id=
       - iafd.com/person.rme/perfid=
-    action: script
     script:
       - python
       - IAFD.py
       - performer-by-url
+
 sceneByURL:
-  - url:
+  - action: scrapeXPath
+    url:
       - iafd.com/title.rme/id=
       - iafd.com/title.rme/title=
-    action: script
-    script:
-      - python
-      - IAFD.py
-      - scene-by-url
+    scraper: sceneScraper
+
 groupByURL:
-  - url:
+  - action: scrapeXPath
+    url:
       - iafd.com/title.rme/id=
       - iafd.com/title.rme/title=
-    action: script
-    script:
-      - python
-      - IAFD.py
-      - movie-by-url
-# Last Updated September 24, 2026
+    scraper: groupScraper
+
+xPathScrapers:
+  performerSearch:
+    common:
+      $result: //table[@id="tblFem" or @id="tblMal"]//td[a[img]]/following-sibling::td[1]/a
+    performer:
+      Name: $result
+      URLs:
+        selector: $result/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.iafd.com
+
+  sceneScraper:
+    common:
+      $bioheading: //p[@class="bioheading"]
+    scene:
+      Title:
+        selector: //h1
+        postProcess:
+          - replace:
+              - regex: \s*\(\d{4}\)$
+                with: ""
+      Date: &releaseDate
+        selector: >
+          $bioheading[contains(text(), "Release Date")]/following-sibling::p[@class="biodata"][1]
+          | //h1
+        concat: "__SEP__"
+        postProcess:
+          - replace:
+              - regex: \s+
+                with: " "
+              - regex: (?i)no data|unknown
+                with: ""
+              # prefer an explicit release date wherever it appears in the pair,
+              # otherwise fall back to the year in the title: "(1999)" -> "1999-01-01"
+              - regex: ^.*?(\w{3,9} \d{1,2}, \d{4}).*$
+                with: $1
+              - regex: ^.*\((\d{4})\).*$
+                with: $1-01-01
+          - parseDate: January 2, 2006
+          - parseDate: Jan 2, 2006
+      Details: &synopsis
+        selector: //div[@id="synopsis"]/div[@class="padded-panel"]
+        postProcess:
+          - replace: &stripEmpty
+              - regex: (?i)^.*(no data|no director|none|unknown).*$
+                with: ""
+      Director: &director
+        selector: $bioheading[contains(text(),"Director") or contains(text(),"Directors")]/following-sibling::p[@class="biodata"][1]/a
+        postProcess:
+          - replace:
+              - regex: (?i)^.*(no data|no director|unknown).*$
+                with: ""
+      Studio: &studio
+        Name:
+          # falls back to the distributor when no studio is listed
+          selector: >
+            $bioheading[contains(text(),"Studio")]/following-sibling::p[@class="biodata"][1]
+            | $bioheading[contains(text(),"Distributor")]/following-sibling::p[@class="biodata"][1]
+          postProcess:
+            - replace: *stripEmpty
+      Performers:
+        Name: //div[@class="castbox"]/p/a
+        URLs:
+          selector: //div[@class="castbox"]/p/a/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://www.iafd.com
+        Images: //div[@class="castbox"]/p/a/img/@src
+      URLs: &videoURL
+        selector: //div/p[contains(., "should be linked to")][2]
+        postProcess:
+          - replace:
+              - regex: .*?(http.*)
+                with: $1
+
+  groupScraper:
+    common:
+      $bioheading: //p[@class="bioheading"]
+    group:
+      Name:
+        selector: //h1
+        postProcess:
+          - replace:
+              - regex: \s*\(\d+\)$
+                with: ""
+      Date: *releaseDate
+      Synopsis: *synopsis
+      Director: *director
+      Studio: *studio
+      URLs: *videoURL
+      Duration:
+        selector: $bioheading[contains(text(), "Minutes")]/following-sibling::p[@class="biodata"][1]
+        postProcess:
+          - replace:
+              - regex: (?i)^.*(no data|none|unknown).*$
+                with: ""
+              - regex: ^(\d+)$
+                with: $1:00
+      Aliases:
+        selector: //div[@class="col-sm-12"]/dl/dd//text()
+        concat: ", "
+
+driver:
+  useSurf: true

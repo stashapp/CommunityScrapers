@@ -138,13 +138,10 @@ def performer_from_url(url) -> ScrapedPerformer:
         performer['death_date'] = deathdate.isoformat()
     # get career length
     career = biography_xpath_test(tree, "Years active", "")
-    if (career):
-        years = career.split(" ", 1)[0]
-        start, end = years.split("-")
-        if end == "Present":
-            performer["career_length"] = f"{start}-"
-        else:
-            performer["career_length"] = f"{start} - {end}"
+    if career and (m := re.match(r'(\d{4})(?:\s*[-–]\s*(\d{4}))?', career)):
+        performer["career_start"] = m[1]
+        if m[2]:
+            performer["career_end"] = m[2]
     # get country - extract ISO code from flag icon class (first nationality only)
     nationality_flags = tree.xpath('//span[contains(text(), "Nationality")]/following-sibling::span//span[contains(@class, "fi-")]/@class')
     if nationality_flags:

@@ -13,6 +13,7 @@ sceneByFragment:
   script:
     - python
     - ../Altwolia/scrape.py
+    - disruptivefilms
     - scene-by-fragment
 sceneByName:
   action: script
@@ -32,6 +33,7 @@ galleryByURL:
   - action: script
     url:
       - disruptivefilms.com/en/photo/
+      - disruptivefilms.com/en/video/
     script:
       - python
       - ../Altwolia/scrape.py
@@ -41,6 +43,7 @@ galleryByFragment:
   script:
     - python
     - ../Altwolia/scrape.py
+    - disruptivefilms
     - gallery-by-fragment
 groupByURL:
   - action: script
@@ -63,6 +66,7 @@ performerByFragment:
   script:
     - python
     - ../Altwolia/scrape.py
+    - disruptivefilms
     - performer-by-fragment
 performerByName:
   action: script

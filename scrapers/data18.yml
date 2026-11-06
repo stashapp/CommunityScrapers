@@ -70,7 +70,14 @@ xPathScrapers:
             - javascript: return value.replace(/.*referermovie=(\d+).*/, "https://www.data18.com/movies/1$1")
             - subScraper:
                 selector: //h1/a[contains(@href, '/movies/')]/@href
-      Image: //img[@id="playpriimage"]/@src
+      Image:
+        selector: //img[@id="playpriimage"][//div[@id="gallery1401"]]/@src | //div[@id="h1div"][not(//div[@id="gallery1401"])]/h1/a/@href
+        postProcess:
+          - javascript: |
+              const m = value.match(/\/media\/scenes\/(\d+)\/\d+\/(\d+)-/);
+              return m ? `https://www.data18.com/sys/media_photos.php?s=${m[1]}&scene=${m[2]}&pic=1401` : value;
+          - subScraper:
+              selector: //img[@id="photoimg"]/@src | //img[@id="playpriimage"]/@src
   movieScraper:
     common:
       $movieInfo: //div[@id="body2div_b"]
@@ -94,7 +101,7 @@ xPathScrapers:
               - regex: ^[^\d]*(\d+)\s*min.* # handle movies with only xx mins duration
                 with: "$1:00"
       Date:
-        selector: $movieInfo//span[contains(text(), "Release date")]/text()
+        selector: $movieInfo//span[contains(text(), "Release date")]
         postProcess:
           - replace:
               - regex: 'Release date:\s*'

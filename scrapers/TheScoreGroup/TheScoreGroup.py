@@ -8,12 +8,13 @@ from py_common import log
 from py_common.deps import ensure_requirements
 from py_common.types import (
     Ethnicity,
+    Gender,
     HairColor,
     ScrapedGallery,
     ScrapedPerformer,
     ScrapedScene,
 )
-from py_common.util import feet_to_cm, is_valid_url, lb_to_kg, scraper_args
+from py_common.util import imperial_length_to_cm, is_valid_url, lb_to_kg, scraper_args
 
 ensure_requirements("lxml", "curl_cffi")
 
@@ -66,7 +67,7 @@ STUDIO_MAP = {
     "grannylovesyoungcock": "Granny Loves Young Cock",
     "hairycoochies": "Hairy Coochies",
     "homealonemilfs": "Home Alone MILFs",
-    "hornyasianmilfs": "Horny AsisnlM ILFs",
+    "hornyasianmilfs": "Horny Asian MILFs",
     "ibonedyourmom": "I Boned Your Mom",
     "ifuckedtheboss": "I Fucked The Boss",
     "joanabliss": "Joana Bliss",
@@ -135,6 +136,14 @@ client = requests.Session(impersonate="chrome")
 client.cookies.set("tsg_verified", "true", domain=".scoreland.com")
 
 
+def without_query(url: str) -> str:
+    return urlunparse(urlparse(url)._replace(query=""))
+
+
+def performer_gender(profile_url: str) -> Gender:
+    return "MALE" if "/male-performer/" in profile_url else "FEMALE"
+
+
 # Example element:
 # <div class="li-item model h-100 ">
 #   <div class="box pos-rel d-flex flex-column h-100">
@@ -170,10 +179,12 @@ def map_performer(el) -> ScrapedPerformer | None:
         log.debug(f"Performer '{name}' has no profile link, skipping")
         return None
 
+    profile_url = f"https://www.{m[1]}/{m[2]}"
     return {
         "name": name,
-        "urls": [f"https://www.{m[1]}/{m[2]}"],
-        "image": image,
+        "gender": performer_gender(profile_url),
+        "urls": [profile_url],
+        "images": [image],
     }
 
 
@@ -259,8 +270,8 @@ def performer_from_url(url: str) -> ScrapedPerformer | None:
 
     performer: ScrapedPerformer = {
         "name": name,
-        "gender": "FEMALE",
-        "urls": [urlunparse(urlparse(url)._replace(query=""))],
+        "gender": performer_gender(url),
+        "urls": [without_query(url)],
     }
     if ethnicity := stat("Ethnicity"):
         if mapped_ethnicity := ETHNICITY_MAP.get(ethnicity):
@@ -272,7 +283,7 @@ def performer_from_url(url: str) -> ScrapedPerformer | None:
             performer["hair_color"] = mapped_hair
         else:
             log.warning(f"Unmapped hair color '{hair_color}'")
-    if height := feet_to_cm(stat("Height")):
+    if height := imperial_length_to_cm(stat("Height")):
         performer["height"] = height
     if weight := lb_to_kg(stat("Weight")):
         performer["weight"] = weight
@@ -289,9 +300,18 @@ def performer_from_url(url: str) -> ScrapedPerformer | None:
     return performer
 
 
+def to_scene_performer(link) -> ScrapedPerformer:
+    performer: ScrapedPerformer = {"name": link.text}
+    # Models without a profile link to a "no-model" placeholder
+    if (href := link.get("href")) and "/no-model/" not in href:
+        performer["gender"] = performer_gender(href)
+        performer["urls"] = [without_query(href)]
+    return performer
+
+
 def page_metadata(url: str) -> ScrapedScene:
     "Fields shared by the video and photo pages"
-    clean_url = urlunparse(urlparse(url)._replace(query=""))
+    clean_url = without_query(url)
     scene: ScrapedScene = {}
 
     result = client.get(url)
@@ -322,7 +342,7 @@ def page_metadata(url: str) -> ScrapedScene:
         '//span[@class="label" and contains(.,"Date:")]/following-sibling::span'
     ):
         scene["date"] = (
-            datetime.strptime(  # noqa: DTZ007
+            datetime.strptime(
                 re.sub(r"(\d+)[a-z]{2}", r"\1", next(iter(raw_date)).text).replace(
                     "..,", ""
                 ),
@@ -345,9 +365,11 @@ def page_metadata(url: str) -> ScrapedScene:
         )
         scene["studio"] = {"name": STUDIO_MAP.get(studio_ref, studio_ref)}
 
+    # Video pages cut the visible description short behind a join link, but their
+    # VideoObject metadata carries it in full; photo pages show it in full
     if description := page.xpath(
-        '//div[@class="p-desc p-3" or contains(@class, "desc")]/text()'
-    ):
+        '//*[@itemtype="https://schema.org/VideoObject"]/meta[@itemprop="description"]/@content'
+    ) or page.xpath('//div[@class="p-desc p-3" or contains(@class, "desc")]/text()'):
         scene["details"] = "\n\n".join(
             [p.strip() for p in description if len(p.strip())]
         )
@@ -358,7 +380,7 @@ def page_metadata(url: str) -> ScrapedScene:
     if performers := page.xpath(
         '//span[contains(.,"Featuring:")]/following-sibling::span/a'
     ):
-        scene["performers"] = [{"name": p.text} for p in iter(performers)]
+        scene["performers"] = [to_scene_performer(p) for p in performers]
 
     return scene
 

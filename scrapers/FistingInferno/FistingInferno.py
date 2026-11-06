@@ -7,6 +7,7 @@ from Altwolia.scrape import (
     gallery_from_fragment,
     gallery_from_url,
     movie_from_url,
+    own_site_url,
     performer_from_fragment,
     performer_from_url,
     performer_search,
@@ -21,6 +22,9 @@ from py_common.util import dig, replace_all, scraper_args
 
 FALLBACK_STUDIO = "Fisting Inferno"
 SITE = "fistinginferno"
+
+# Retired sites whose releases still render under fistinginferno.com
+RETIRED_SITES = {"clubinfernodungeon", "fistingcentral"}
 
 
 def fistinginferno(obj: Any, api_object: dict[str, Any]) -> Any:
@@ -40,7 +44,14 @@ def fistinginferno(obj: Any, api_object: dict[str, Any]) -> Any:
 def fistinginferno_scene(
     scene: ScrapedScene, api_scene: dict[str, Any]
 ) -> ScrapedScene:
-    return append_scene_number(fistinginferno(scene, api_scene), api_scene)
+    scene = append_scene_number(fistinginferno(scene, api_scene), api_scene)
+    if (
+        not scene.get("urls")
+        and api_scene.get("sitename") in RETIRED_SITES
+        and (url := own_site_url(api_scene, SITE))
+    ):
+        scene["urls"] = [url]
+    return scene
 
 
 def fistinginferno_gallery(

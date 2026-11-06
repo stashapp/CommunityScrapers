@@ -1,0 +1,17 @@
+name: The Full English
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - mybestfriendsdad.com/updates/
+      - thefullenglish.net/updates/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="single-project-header"]/h1
+      Details:
+        selector: //div[@class="update_view_content"]/p
+        concat: "\n\n"
+      Image: //div[@id="update-primary-col"]//img/@src
+      Studio:
+        Name: //img[@class="site-logo"]/@alt

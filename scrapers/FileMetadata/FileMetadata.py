@@ -1,6 +1,6 @@
 import json
-import sys
 import subprocess as sp
+import sys
 from datetime import datetime
 from urllib.parse import urlparse
 
@@ -40,7 +40,7 @@ def scrape_file(path):
         scene["title"] = title
 
     if (comment := metadata_insensitive.get("comment")) and (url := parse_url(comment)):
-        scene["url"] = url
+        scene["urls"] = [url]
 
     if description := metadata_insensitive.get("description"):
         scene["details"] = description

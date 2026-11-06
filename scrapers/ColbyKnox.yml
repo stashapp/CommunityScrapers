@@ -12,7 +12,7 @@ xPathScrapers:
     scene:
       Title: //div[contains(@class, "video")]//h1/text()
       Date:
-        selector: //div[contains(@class, "video-frame")]//video/source/@src
+        selector: //div[contains(@class, "video-frame")]//img[contains(@class, "background-img")]/@src
         postProcess:
           - replace:
               - regex: .*(\d{4})(\d{2})(\d{2})\d{6}.*
@@ -28,4 +28,4 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Colby Knox
-# Last Updated September 17, 2025
+# Last Updated October 15, 2026

@@ -1,24 +1,26 @@
 import json
 import sys
+
 import requests
 
 from py_common import log
+from py_common.types import ScrapedScene
 from py_common.util import scraper_args
 
-def searchSceneByName(name: str) -> list:
-    myUrl = "https://realjamvr.com/search/" 
-    formData = {"search": name}
-    result = requests.post(url=myUrl, data=formData).json()
 
-    returnData = []
-    for hit in result['scenes']:
-        s = {}
-        s['title'] = hit['name']
-        s['url'] = 'https://realjamvr.com/scene/' + hit['static_url']
-        s['image'] = hit['image']
-        returnData.append(s)
+def searchSceneByName(name: str) -> list[ScrapedScene]:
+    result = requests.post(
+        url="https://realjamvr.com/search/", data={"search": name}
+    ).json()
+    return [
+        {
+            "title": hit["name"],
+            "urls": [f"https://realjamvr.com/scene/{hit['static_url']}"],
+            "image": hit["image"],
+        }
+        for hit in result["scenes"]
+    ]
 
-    return returnData
 
 if __name__ == "__main__":
     op, args = scraper_args()

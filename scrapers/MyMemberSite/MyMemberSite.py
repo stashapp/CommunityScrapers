@@ -13,7 +13,7 @@ from py_common.types import (
     ScrapedStudio,
     ScrapedTag,
 )
-from py_common.util import dig, scraper_args
+from py_common.util import dig, is_own_url, scraper_args
 
 ensure_requirements("requests", "bs4:beautifulsoup4")
 
@@ -28,19 +28,19 @@ session.headers.update(
 )
 
 
-def _fetch_page(scrape_url: str) -> str:
+def _fetch_page(scrape_url: str) -> str | None:
     log.debug(f"Fetching '{scrape_url}'")
     try:
         response = session.get(scrape_url, timeout=(3, 6))
     except requests.exceptions.RequestException as req_ex:
         log.error(f"Error fetching '{scrape_url}': {req_ex}")
-        sys.exit(-1)
+        return None
 
     if response.status_code != 200:
         log.error(
             f"Fetching '{scrape_url}' resulted in error status: {response.status_code}"
         )
-        sys.exit(-1)
+        return None
 
     return response.text
 
@@ -58,17 +58,21 @@ def _details(html: str) -> str:
     return re.sub(r"\n{3,}", "\n\n", text).strip()
 
 
-def _page(scrape_url: str) -> tuple[dict[str, Any], dict[str, Any] | None]:
+def _page(
+    scrape_url: str, page_types: tuple[str, ...] = ("video", "photoset")
+) -> tuple[dict[str, Any], dict[str, Any] | None] | None:
     """
     The page's video/photoset data and its site settings
     """
-    flight = Flight.from_html(_fetch_page(scrape_url))
-    page = flight.first(lambda d: d.get("pageType") in ("video", "photoset")) or {}
+    if (html := _fetch_page(scrape_url)) is None:
+        return None
+    flight = Flight.from_html(html)
+    page = flight.first(lambda d: d.get("pageType") in page_types) or {}
     if not isinstance(data := page.get("data"), dict):
         log.error(
-            f"Could not extract content data from Next.js payload at '{scrape_url}'"
+            f"No {' or '.join(page_types)} data in the Next.js payload at '{scrape_url}'"
         )
-        sys.exit(-1)
+        return None
     return data, flight.first(lambda d: "site_long_name" in d)
 
 
@@ -116,29 +120,58 @@ def to_scraped_gallery(
     if tags := data.get("tags"):
         gallery["tags"] = [ScrapedTag(name=t["name"]) for t in tags]
     if performers := data.get("casts"):
-        gallery["performers"] = [ScrapedPerformer(name=p["screen_name"]) for p in performers]
+        gallery["performers"] = [
+            ScrapedPerformer(name=p["screen_name"]) for p in performers
+        ]
     if site:
         gallery["studio"] = to_scraped_studio(site)
 
     return gallery
 
 
-def scene_from_url(scene_url: str) -> ScrapedScene:
-    return to_scraped_scene(*_page(scene_url))
+def scene_from_url(
+    scene_url: str, page_types: tuple[str, ...] = ("video", "photoset")
+) -> ScrapedScene | None:
+    if page := _page(scene_url, page_types):
+        return to_scraped_scene(*page)
+    return None
 
 
-def gallery_from_url(gallery_url: str) -> ScrapedGallery:
-    return to_scraped_gallery(*_page(gallery_url))
+def gallery_from_url(
+    gallery_url: str, page_types: tuple[str, ...] = ("video", "photoset")
+) -> ScrapedGallery | None:
+    if page := _page(gallery_url, page_types):
+        return to_scraped_gallery(*page)
+    return None
 
 
 if __name__ == "__main__":
     op, args = scraper_args()
     result = None
     match op, args:
-        case "gallery-by-url" | "gallery-by-fragment", {"url": url} if url:
+        case "gallery-by-url", {"url": url} if url:
             result = gallery_from_url(url)
+        case "gallery-by-fragment", args:
+            result = next(
+                (
+                    gallery
+                    for url in args.get("urls") or []
+                    if is_own_url(url)
+                    and (gallery := gallery_from_url(url, ("photoset",)))
+                ),
+                None,
+            )
         case "scene-by-url", {"url": url} if url:
             result = scene_from_url(url)
+        case "scene-by-fragment", args:
+            result = next(
+                (
+                    scene
+                    for url in args.get("urls") or []
+                    if is_own_url(url) and (scene := scene_from_url(url, ("video",)))
+                ),
+                None,
+            )
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
             sys.exit(1)

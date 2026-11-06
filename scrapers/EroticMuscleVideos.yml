@@ -1,0 +1,49 @@
+name: Erotic Muscle Videos
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - eroticmusclevideos.com/content/
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: ^https?://(?:www\.)?eroticmusclevideos\.com/content/([^/?#]+).*$
+          with: https://eroticmusclevideos.com/wp-json/wp/v2/product?slug=${1}&_embed
+    scraper: sceneScraper
+
+jsonScrapers:
+  sceneScraper:
+    common:
+      $terms: 0._embedded.wp:term|@flatten
+    scene:
+      Title:
+        selector: 0.title.rendered
+        postProcess:
+          - javascript: &fromHtml |
+              const entities = { amp: "&", lt: "<", gt: ">", quot: '"', nbsp: " " };
+              return value
+                .replace(/\r\n?/g, "\n")
+                .replace(/<\/p>\s*<p[^>]*>/g, "\n\n")
+                .replace(/<br\s*\/?>/g, "\n")
+                .replace(/<[^>]+>/g, "")
+                .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(n))
+                .replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCodePoint(parseInt(n, 16)))
+                .replace(/&(\w+);/g, (m, n) => entities[n] ?? m)
+                .trim();
+      Details:
+        selector: 0.content.rendered
+        postProcess:
+          - javascript: *fromHtml
+      Date:
+        selector: 0.date
+        postProcess:
+          - parseDate: 2006-01-02T15:04:05
+      URLs: 0.link
+      Image: 0._embedded.wp:featuredmedia.0.source_url
+      Studio:
+        Name:
+          fixed: Erotic Muscle Videos
+      Tags:
+        Name: $terms|#(taxonomy!="model")#|#(taxonomy!="product_cat")#.name
+      Performers:
+        Name: $terms|#(taxonomy=="model")#.name
+        URLs: $terms|#(taxonomy=="model")#.link

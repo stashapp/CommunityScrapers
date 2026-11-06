@@ -1,3 +1,4 @@
+# requires: py_common
 name: Pornhub
 performerByURL:
   - action: scrapeXPath
@@ -12,6 +13,16 @@ sceneByURL:
     url:
       - pornhub.com/view_video.php?viewkey=
       - pornhub.org/view_video.php?viewkey=
+    scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      - pornhub.com/shorties/
+      - pornhub.org/shorties/
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: .*/shorties/([a-zA-Z\d]+).*
+          with: https://www.pornhub.com/view_video.php?viewkey=$1
     scraper: sceneScraper
 sceneByFragment:
   action: scrapeXPath
@@ -150,7 +161,7 @@ xPathScrapers:
         selector: //meta[@property="og:url"]/@content
         postProcess:
           - replace:
-              - regex: '.+?(\=)'
+              - regex: .*[=/]
                 with:
       Tags:
         Name: $videoDetails//a[@data-label="category"] | $videoDetails//a[@data-label="tag"]

@@ -16,7 +16,7 @@ from py_common.types import (
     ScrapedStudio,
     ScrapedTag,
 )
-from py_common.util import dig, scraper_args
+from py_common.util import dig, is_own_url, scraper_args
 
 ensure_requirements("requests", "bs4:beautifulsoup4")
 
@@ -338,7 +338,9 @@ def performer_search(
         return [
             {
                 "name": name,
-                "url": f"https://www.clips4sale.com/performers/{dig(p, 'id')}/{quote(name)}",
+                "urls": [
+                    f"https://www.clips4sale.com/performers/{dig(p, 'id')}/{quote(name)}"
+                ],
             }
             for p in performers_data
             if (name := dig(p, "stage_name")) and dig(p, "id")
@@ -404,9 +406,14 @@ def performer_from_url(url: str) -> ScrapedPerformer | None:
 
 
 def own_url(fragment: dict, path: str) -> str | None:
-    "Stash's fragment `url` is just the first of `urls`, which may be another site's"
-    urls = [fragment.get("url"), *(fragment.get("urls") or [])]
-    return next((u for u in urls if u and f"clips4sale.com/{path}/" in u), None)
+    return next(
+        (
+            url
+            for url in fragment.get("urls") or []
+            if is_own_url(url) and f"clips4sale.com/{path}/" in url
+        ),
+        None,
+    )
 
 
 if __name__ == "__main__":

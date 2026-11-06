@@ -17,7 +17,7 @@ def blackmaleme(obj: Any, _) -> Any:
     fixed = replace_at(obj, "studio", replacement=lambda _: {"name": "Black Male Me"})
     # The API brands these scenes as Bromo, but they live on the studio's own domain too
     return replace_all(
-        fixed, "url", lambda url: url.replace("www.bromo.com", "www.blackmaleme.com")
+        fixed, "urls", lambda url: url.replace("www.bromo.com", "www.blackmaleme.com")
     )
 
 

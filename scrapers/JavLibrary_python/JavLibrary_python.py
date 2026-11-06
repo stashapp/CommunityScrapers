@@ -8,7 +8,8 @@ from urllib.parse import quote, urljoin
 from py_common import log
 from py_common.config import get_config
 from py_common.deps import ensure_requirements
-from py_common.types import ScrapedPerformer, ScrapedScene
+from py_common.jav import extract_codes
+from py_common.types import ScrapedPerformer, ScrapedScene, ScrapedTag
 from py_common.util import scraper_args
 
 ensure_requirements("requests", "lxml")
@@ -47,7 +48,6 @@ IGNORE_NAME_REVERSE = {"Lily Heart"}
 
 # Blu-ray editions duplicate the DVD release under the same code
 BLU_RAY = re.compile(r"\(Blu-ray|（ブルーレイ")
-CODE = re.compile(r"(?<![a-z])([a-z]{2,8})-?(\d{2,5})(?!\d)", re.IGNORECASE)
 
 session = requests.Session()
 
@@ -166,11 +166,12 @@ def to_scene(tree: html.HtmlElement, page_url: str) -> ScrapedScene:
         scene["urls"] = [urljoin(page_url, url)]
     if studio := text(tree, '//div[@id="video_maker"]//span[@class="maker"]/a'):
         scene["studio"] = {"name": studio}
-    if tags := [
+    tags: list[ScrapedTag] = [
         {"name": OBFUSCATED_TAGS.get(tag, tag)}
         for tag in texts(tree, '//div[@id="video_genres"]//span[@class="genre"]/a')
         if tag not in IGNORE_TAGS
-    ]:
+    ]
+    if tags:
         scene["tags"] = tags
     if cast := performers(tree, page_url):
         scene["performers"] = cast
@@ -227,17 +228,22 @@ def scene_search(name: str) -> list[ScrapedScene]:
 
 
 def scene_from_code(name: str) -> ScrapedScene | None:
-    if not (match := CODE.search(name)):
+    if not (codes := extract_codes(name)):
         log.error(f"No JAV code found in '{name}'")
         return None
-    code = f"{match[1]}-{match[2]}".upper()
-    results, scene_page = search(code)
-    if scene_page:
-        return to_scene(*scene_page)
-    if not (best := next((r for r in results if r.get("code") == code), None)):
-        log.error(f"No javlibrary result for {code}")
-        return None
-    return scene_from_url(best["urls"][0])
+    for code in codes:
+        results, scene_page = search(code)
+        # javlibrary writes some suffixes in lowercase: OKAD-205f, IBW-699z
+        if (
+            scene_page
+            and (scene := to_scene(*scene_page)).get("code", "").upper() == code
+        ):
+            return scene
+        best = next((r for r in results if r.get("code", "").upper() == code), None)
+        if best and (urls := best.get("urls")):
+            return scene_from_url(urls[0])
+    log.error(f"No javlibrary result for {' or '.join(codes)}")
+    return None
 
 
 def scene_from_fragment(args: dict[str, Any]) -> ScrapedScene | None:
@@ -248,7 +254,7 @@ def scene_from_fragment(args: dict[str, Any]) -> ScrapedScene | None:
         return scene_from_url(url)
     names = [Path(f["path"]).stem for f in args.get("files") or []]
     names += [args.get("code") or "", args.get("title") or ""]
-    if name := next((n for n in names if CODE.search(n)), None):
+    if name := next((n for n in names if extract_codes(n)), None):
         return scene_from_code(name)
     log.error(f"No javlibrary URL or JAV code in {names}")
     return None

@@ -1,141 +1,125 @@
-"""
-Stash scraper made to circumvent Cloudflare DDOS protection
-"""
+import base64
 import json
 import sys
-
-from py_common.deps import ensure_requirements
-ensure_requirements("cloudscraper", "fp:free-proxy", "lxml")
-import cloudscraper  # noqa: E402
-from fp.fp import FreeProxy
-from lxml import html
+from typing import Any
+from urllib.parse import quote_plus
 
 from py_common import log
-from py_common.util import scraper_args
-from py_common.types import ScrapedScene
+from py_common.deps import ensure_requirements
+from py_common.proxy import stash_requests
+from py_common.types import ScrapedScene, ScrapedStudio
+from py_common.util import is_own_url, scraper_args
 
-scraper = cloudscraper.create_scraper()
-
-free_proxies = None
+ensure_requirements("lxml")
+from lxml import html  # noqa: E402
 
 STUDIO_MAPPER = {
     "Miro Affect3D": "Miro",
 }
 
-def get_proxies() -> dict:
-    proxy = FreeProxy(rand=True).get()
-    log.debug("proxy: %s" % proxy)
-    return { 'http': proxy } if proxy.startswith('http:') else { 'https': proxy }
+ATTRIBUTES = '//div[contains(@class, "info-details-xl")]//table[contains(@class, "additional-attributes")]'
 
-def scrape_url(_url: str, max_retries=5):
-    "Scrapes a web page and returns a HTML tree"
-    retries = 0
-    while retries < max_retries:
-        try:
-            log.debug('about to execute scraper.get, attempt %d' % (retries + 1))
-            global free_proxies
-            free_proxies = get_proxies()
-            scraped = scraper.get(_url, proxies=free_proxies)
-            if scraped.status_code == 200:
-                log.debug('HTTP Status: 200')
-                return html.document_fromstring(scraped.text)
-            log.error('HTTP Error: %s' % scraped.status_code)
-        except Exception as e:
-            log.error("scraper.get error: %s" % e)
 
-        retries += 1
-        log.debug('Retrying (%d/%d)...' % (retries, max_retries))
-
-    raise Exception(f'Failed to scrape the URL after {max_retries} retries')
-
-def scene_from_url(_url: str) -> ScrapedScene | None:
-    "Scrapes a scene from a URL, running an optional postprocess function on the result"
-    scene: ScrapedScene = {}
-
+def fetch(url: str) -> Any | None:
+    # Cloudflare blocks plain requests, py_common.proxy falls back to FlareSolverr
     try:
-        tree = scrape_url(_url)
-        # title
-        if title := tree.xpath('//h1/span'):
-            scene['title'] = title[0].text_content()
-        # date
-        if year_released := tree.xpath('//div[contains(@class, "info-details-xl")]//table[contains(@class, "additional-attributes")]//td[@data-th="Year Released"]'):
-            scene['date'] = year_released[0].text_content()
-        # details
-        if description_paragraphs := tree.xpath(
-            '//div[contains(@class, "info-details-xl")]//div[contains(@class, "description")]//p'
-        ):
-            scene['details'] = "\n\n".join([p.text_content() for p in description_paragraphs])
-        # studio
-        if artist_name := tree.xpath(
-            '//div[@class="box-inner1"]//span[@class="artist_name_m"]//a/text()'
-        ):
-            scene['studio'] = {"name": STUDIO_MAPPER.get(artist_name[0]) or artist_name[0]}
-        # tags
-        if tags := tree.xpath(
-            '//div[contains(@class, "info-details-xl")]//table[contains(@class, "additional-attributes")]//td[not(@data-th="Artist/Circle")]/a/text()'
-        ):
-            scene['tags'] = [{"name": t.strip()} for t in tags]
-        # image
-        if main_product_photo := tree.xpath('//img[@alt="main product photo"]/@src'):
-            scene['image'] = main_product_photo[0]
-        # url
-        scene["urls"] = [_url]
-    except Exception as e:
-        log.error("Error scraping scene from URL: %s" % e)
+        response = stash_requests.get(url)
+    # py_common.proxy raises a bare Exception once every backend has failed
+    except Exception as e:  # noqa: BLE001
+        log.error(f"Failed to fetch {url}: {e}")
         return None
+    if response.status_code != 200:
+        log.error(f"HTTP {response.status_code} for {url}")
+        return None
+    return response
 
+
+def fetch_tree(url: str) -> html.HtmlElement | None:
+    if not (response := fetch(url)):
+        return None
+    return html.document_fromstring(response.text)
+
+
+def image_data(url: str) -> str | None:
+    # Stash can't get past Cloudflare to download the image itself, but the
+    # clearance py_common.proxy got for the page works for the image too
+    if not (response := fetch(url)):
+        return None
+    mime = response.headers.get("Content-Type", "").split(";")[0]
+    if not mime.startswith("image/"):
+        log.warning(f"{url} is not an image ({mime})")
+        return None
+    return f"data:{mime};base64,{base64.b64encode(response.content).decode()}"
+
+
+def studio(artist: str) -> ScrapedStudio:
+    return {"name": STUDIO_MAPPER.get(artist, artist)}
+
+
+def scene_from_url(url: str) -> ScrapedScene | None:
+    if (tree := fetch_tree(url)) is None:
+        return None
+    scene: ScrapedScene = {"urls": [url]}
+    if title := tree.xpath("//h1/span"):
+        scene["title"] = title[0].text_content()
+    if year := tree.xpath(f'{ATTRIBUTES}//td[@data-th="Year Released"]'):
+        scene["date"] = year[0].text_content()
+    if description := tree.xpath(
+        '//div[contains(@class, "info-details-xl")]//div[contains(@class, "description")]'
+    ):
+        # Older pages split the description into paragraphs, newer ones don't
+        paragraphs = description[0].xpath(".//p") or description[:1]
+        if details := "\n\n".join(p.text_content().strip() for p in paragraphs).strip():
+            scene["details"] = details
+    if artist := tree.xpath(
+        '//div[@class="box-inner1"]//span[@class="artist_name_m"]//a/text()'
+    ):
+        scene["studio"] = studio(artist[0])
+    if tags := tree.xpath(f'{ATTRIBUTES}//td[not(@data-th="Artist/Circle")]/a/text()'):
+        scene["tags"] = [{"name": t.strip()} for t in tags]
+    if (image := tree.xpath('//img[@alt="main product photo"]/@src')) and (
+        data := image_data(image[0])
+    ):
+        scene["image"] = data
     return scene
 
-def scene_search(_name: str) -> list[ScrapedScene] | None:
-    "Searches for scenes by name"
-    results: list[ScrapedScene] = []
 
-    try:
-        tree = scrape_url(f"https://affect3dstore.com/catalogsearch/result/?q={_name}")
-        # parse search results and populate the results list
-        if product_items := tree.xpath(
-            '//div[contains(@class, "products-grid") and contains(@class, "wrapper")]//li[contains(@class, "product-item")]'
+def scene_search(name: str) -> list[ScrapedScene]:
+    url = f"https://affect3dstore.com/catalogsearch/result/?q={quote_plus(name)}"
+    if (tree := fetch_tree(url)) is None:
+        return []
+    results: list[ScrapedScene] = []
+    for item in tree.xpath(
+        '//div[contains(@class, "products-grid") and contains(@class, "wrapper")]//li[contains(@class, "product-item")]'
+    ):
+        scene: ScrapedScene = {}
+        if link := item.xpath('.//a[contains(@class, "product-item-link")]'):
+            scene["urls"] = [link[0].get("href")]
+            if title := link[0].text_content().strip():
+                scene["title"] = title
+        # Later results' images are lazy-loaded and may not resolve
+        if image := item.xpath(
+            './/a[contains(@class, "product-item-photo")]//img/@src'
         ):
-            for product_item in product_items:
-                scene: ScrapedScene = {}
-                # link
-                if scene_link := product_item.xpath('.//a[contains(@class, "product-item-link")]'):
-                    # get href for URL
-                    scene["urls"] = [scene_link[0].get("href")]
-                    # get link text for title
-                    if scene_title := scene_link[0].text_content():
-                        scene["title"] = scene_title.strip()
-                # photo
-                if scene_photo := product_item.xpath('.//a[contains(@class, "product-item-photo")]//img/@src'):
-                    # sometimes this is lazy-loaded with JS for like image 7 onwards, for example,
-                    # and doesn't resolve the image URL, but it can resolve sometimes if you retry
-                    # the first several result images are not affected and always appear to
-                    # resolve correctly
-                    scene["image"] = scene_photo[0]
-                # artist name
-                if artist_name := product_item.xpath('.//span[contains(@class, "artist_name_m")]/a/text()'):
-                    scene["studio"] = {"name": STUDIO_MAPPER.get(artist_name[0]) or artist_name[0]}
-                results.append(scene)
-    except Exception as e:
-        log.error("Error searching for scenes by name: %s" % e)
-        return None
-    
+            scene["image"] = image[0]
+        if artist := item.xpath('.//span[contains(@class, "artist_name_m")]/a/text()'):
+            scene["studio"] = studio(artist[0])
+        results.append(scene)
     return results
 
+
 def scene_from_fragment(fragment: dict) -> ScrapedScene | None:
-    "Retrieves a scene from a fragment containing either a URL or a title"
-    if 'url' in fragment:
-        return scene_from_url(fragment['url'])
-    if 'title' in fragment:
-        search_results = scene_search(fragment['title'])
-        return search_results[0] if search_results else None
+    for url in fragment.get("urls") or []:
+        if is_own_url(url) and (scene := scene_from_url(url)):
+            return scene
+    if (title := fragment.get("title")) and (results := scene_search(title)):
+        return results[0]
     return None
 
 
 if __name__ == "__main__":
     op, args = scraper_args()
-
-    log.debug(f"args: {args}")
+    result = None
     match op, args:
         case "scene-by-url", {"url": url} if url:
             result = scene_from_url(url)
@@ -146,7 +130,4 @@ if __name__ == "__main__":
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
             sys.exit(1)
-
-    log.debug(f"result: {result}")
-
     print(json.dumps(result))

@@ -44,6 +44,4 @@ xPathScrapers:
         Name: //span[text()="Genre:"]/following-sibling::a
 
 driver:
-  headers:
-    - Key: User-Agent
-      Value: stash-scraper/1.0
+  useSurf: true

@@ -26,6 +26,11 @@ studio_map = {
     "Dad's Love Porn": "Dads Love Porn",
 }
 
+
+def rename_studio(name: str) -> str:
+    return studio_map.get(name, name)
+
+
 studio_domains = {
     "Sex Selector": "www.sexselector.com",
     "Virtual Porn": "virtualporn.com",
@@ -50,21 +55,10 @@ def bangbros(obj: Any, _) -> Any:
 
     # All bangbros URLs omit the standard www. subdomain prefix
     # and all scene URLs use /video/ instead of the standard /scene/
-    fixed = replace_all(
-        obj,
-        "url",
-        urlfixer,
-    )
-    fixed = replace_all(
-        fixed,
-        "urls",
-        urlfixer,
-    )
+    fixed = replace_all(obj, "urls", urlfixer)
 
     # Rename certain studios according to the map
-    fixed = replace_at(
-        fixed, "studio", "name", replacement=lambda x: studio_map.get(x, x)
-    )
+    fixed = replace_at(fixed, "studio", "name", replacement=rename_studio)
 
     return fixed
 
@@ -83,7 +77,7 @@ if __name__ == "__main__":
             url = redirect(url)
             result = gallery_from_url(url, postprocess=bangbros)
         case "gallery-by-fragment", args:
-            fixed = replace_all(args, "url", redirect)
+            fixed = replace_all(args, "urls", redirect)
             result = gallery_from_fragment(
                 fixed, search_domains=domains, postprocess=bangbros
             )
@@ -93,7 +87,7 @@ if __name__ == "__main__":
         case "scene-by-name", {"name": name} if name:
             result = scene_search(name, search_domains=domains, postprocess=bangbros)
         case "scene-by-fragment" | "scene-by-query-fragment", args:
-            args = replace_all(args, "url", redirect)
+            args = replace_all(args, "urls", redirect)
             result = scene_from_fragment(
                 args, search_domains=domains, postprocess=bangbros
             )
@@ -101,7 +95,9 @@ if __name__ == "__main__":
             url = redirect(url)
             result = performer_from_url(url, postprocess=bangbros)
         case "performer-by-fragment", args:
-            result = performer_from_fragment(args)
+            result = performer_from_fragment(
+                args, search_domains=domains, postprocess=bangbros
+            )
         case "performer-by-name", {"name": name} if name:
             result = performer_search(
                 name, search_domains=domains, postprocess=bangbros

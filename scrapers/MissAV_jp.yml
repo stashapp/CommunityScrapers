@@ -44,6 +44,4 @@ xPathScrapers:
         Name: //span[text()="ジャンル:"]/following-sibling::a
 
 driver:
-  headers:
-    - Key: User-Agent
-      Value: stash-scraper/1.0
+  useSurf: true

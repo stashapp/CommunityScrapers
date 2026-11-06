@@ -1,0 +1,115 @@
+name: fc2db
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - fc2db.net/work/
+    scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://fc2db.net/?s={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://fc2db.net/work/{filename}/
+  queryURLReplace:
+    filename:
+      - regex: (?i)^.*fc2\D*(\d{5,}).*$
+        with: ${1}
+      - regex: ^\D*(\d{5,}).*$
+        with: ${1}
+  scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - fc2db.net/actress/
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneSearch:
+    common:
+      $card: //h2[normalize-space()="作品"]/following::a[contains(@href,"/work/")][.//div[contains(@class,"font-serif")]]
+      $work: //h1[starts-with(normalize-space(),"[FC2-PPV-")]
+    scene:
+      Title:
+        selector: $card//div[contains(@class,"font-serif")] | $work
+        postProcess:
+          - replace:
+              - regex: ^\[FC2-PPV-\d+\]\s*
+                with: ""
+      URLs: $card/@href | //link[@rel="canonical"][contains(@href,"/work/")]/@href
+      Code:
+        selector: $card//div[@class="text-xs text-text-sub"] | //dt[contains(.,"商品ID")]/following-sibling::dd[1]
+        postProcess:
+          - replace:
+              - regex: ^
+                with: FC2-PPV-
+      Date: $card//div[contains(@class,"justify-between")]/span[1] | //dt[contains(.,"販売日")]/following-sibling::dd[1]
+      Image: $card//img/@src | $work/following::img[contains(@class,"wp-post-image")]/@src
+
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1
+        postProcess:
+          - replace:
+              - regex: ^\[FC2-PPV-\d+\]\s*
+                with: ""
+      URLs:
+        selector: //link[@rel="canonical"]/@href | //h2/a[contains(@href,"adult.contents.fc2.com/article/")]/@href
+        postProcess:
+          - replace:
+              - regex: \?.*$
+                with: ""
+      Code:
+        selector: //dt[contains(.,"商品ID")]/following-sibling::dd[1]
+        postProcess:
+          - replace:
+              - regex: ^
+                with: FC2-PPV-
+      Date: //dt[contains(.,"販売日")]/following-sibling::dd[1]
+      Director: //dt[contains(.,"作品販売者")]/following-sibling::dd[1]//span
+      Image: //img[contains(@class,"wp-post-image")]/@src
+      Studio:
+        Name:
+          fixed: FC2
+      Performers:
+        Name: //div[span[contains(.,"出演女優")]]/a
+        URLs: //div[span[contains(.,"出演女優")]]/a/@href
+      Tags:
+        Name:
+          selector: //a[contains(@href,"/work-tags/")] | //dt[contains(.,"モザイク")]/following-sibling::dd[1][contains(.,"なし")]
+          postProcess:
+            - map:
+                なし: 無修正
+      # TODO: enable when scrape dialog can show durations
+      # Duration: //dt[contains(.,"収録時間")]/following-sibling::dd[1]
+
+  performerScraper:
+    common:
+      $data: //script[@type="application/ld+json"][contains(.,'"Person"')]
+    performer:
+      Name: //h1[contains(@class,"text-xl")]
+      URLs:
+        selector: $data
+        postProcess:
+          - javascript: |
+              const { url, sameAs = [] } = JSON.parse(value);
+              return [url, ...[].concat(sameAs)].join("|");
+        split: "|"
+      Aliases:
+        selector: $data
+        postProcess:
+          - javascript: |
+              const { alternateName = [] } = JSON.parse(value);
+              return [].concat(alternateName).join(", ");
+      Gender:
+        selector: $data
+        postProcess:
+          - javascript: return JSON.parse(value).jobTitle || "";
+          - map:
+              女優: Female
+      Images: //meta[@property="og:image"]/@content

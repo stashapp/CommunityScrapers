@@ -1,24 +1,39 @@
 import json
 import sys
 from typing import Any
-from py_common import log
-from py_common.util import replace_at
+
 from AyloAPI.scrape import (
+    gallery_from_fragment,
     gallery_from_url,
-    scraper_args,
+    movie_from_url,
+    performer_from_fragment,
+    performer_from_url,
+    performer_search,
+    scene_from_fragment,
     scene_from_url,
     scene_search,
-    scene_from_fragment,
-    performer_from_url,
-    performer_from_fragment,
-    performer_search,
-    movie_from_url,
+    scraper_args,
 )
+from py_common import log
+from py_common.util import replace_all
+
+# StashDB credits the BlackMaleMe collaboration to Bromo itself
+studio_map = {"Bromo BlackMaleMe": "Bromo"}
 
 
 def bromo(obj: Any, _) -> Any:
-    # Bromo have updated their scenes so they have proper studios now
-    return obj
+    obj = replace_all(
+        obj,
+        "studio",
+        lambda studio: {
+            "name": studio_map.get(studio["name"], studio["name"]),
+            "parent": {"name": "Men.com (Network)"},
+        },
+    )
+    # The token also sees some Men.com scenes, which only resolve under /sceneid/
+    return replace_all(
+        obj, "urls", lambda url: url.replace("men.com/scene/", "men.com/sceneid/")
+    )
 
 
 if __name__ == "__main__":
@@ -27,8 +42,12 @@ if __name__ == "__main__":
     result = None
 
     match op, args:
-        case "gallery-by-url" | "gallery-by-fragment", {"url": url} if url:
+        case "gallery-by-url", {"url": url} if url:
             result = gallery_from_url(url, postprocess=bromo)
+        case "gallery-by-fragment", args:
+            result = gallery_from_fragment(
+                args, search_domains=domains, postprocess=bromo
+            )
         case "scene-by-url", {"url": url} if url:
             result = scene_from_url(url, postprocess=bromo)
         case "scene-by-name", {"name": name} if name:
@@ -38,11 +57,11 @@ if __name__ == "__main__":
                 args, search_domains=domains, postprocess=bromo
             )
         case "performer-by-url", {"url": url}:
-            result = performer_from_url(url, postprocess=bromo)
+            result = performer_from_url(url)
         case "performer-by-fragment", args:
-            result = performer_from_fragment(args)
+            result = performer_from_fragment(args, search_domains=domains)
         case "performer-by-name", {"name": name} if name:
-            result = performer_search(name, search_domains=domains, postprocess=bromo)
+            result = performer_search(name, search_domains=domains)
         case "movie-by-url", {"url": url} if url:
             result = movie_from_url(url, postprocess=bromo)
         case _:

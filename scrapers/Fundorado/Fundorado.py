@@ -54,12 +54,66 @@ OWN_SITES: dict[str, tuple[str, str | None]] = {
     "weneednewtalents.com": ("We Need New Talents", "Teen Core Club"),
     "nylonspunkjunkies.com": ("Nylon Spunk Junkies", "XCoreClub"),
     "xcoreclub.com": ("XCoreClub", None),
-    "dreamteenshd.com": ("Dreamteens HD", "Teen Core Club"),
+    "dreamteenshd.com": ("Dreams-HD", "Teen Core Club"),
     "jerk-offpass.com": ("Jerk Off Pass", "Teen Core Club"),
     "teensgoporn.com": ("Teens Go Porn", "Teen Core Club"),
     "teencorezine.com": ("Teencore Zine", "Teen Core Club"),
     "rubber-empire.com": ("Rubber Empire", None),
     "julia-reaves.com": ("Julia Reaves", None),
+}
+
+# A video's labels name the site it was made for, wherever it's cross-listed
+LABEL_STUDIOS: dict[str, tuple[str, str | None]] = {
+    "AnalyzedGirls.com": ("Analyzed Girls", "Teen Core Club"),
+    "AssTeenMouth.com": ("Ass Teen Mouth", "Teen Core Club"),
+    "BangTeenPussy.com": ("Bang Teen Pussy", "Teen Core Club"),
+    "BrutalInvasion.com": ("Brutal Invasion", "Teen Core Club"),
+    "CleanMyAss.com": ("Clean My Ass", "Teen Core Club"),
+    "CumFilledThroat.com": ("Cum Filled Throat", "Teen Core Club"),
+    "CumSumptionCocktail.com": ("Cum Sumption Cocktail", "Teen Core Club"),
+    "CumaholicTeens.com": ("Cumaholic Teens", "Teen Core Club"),
+    "Defiled18.com": ("Defiled 18", "Teen Core Club"),
+    "DirtyBabySitter.com": ("Dirty Babysitter", "Teen Core Club"),
+    "DoubleTeamedTeens.com": ("Double Teamed Teens", "Teen Core Club"),
+    "DreamteensHD.com": ("Dreams-HD", "Teen Core Club"),
+    "GirlsGotCream.com": ("Girls Got Cream", "Teen Core Club"),
+    "HardcoreYouth.com": ("Hardcore Youth", "Teen Core Club"),
+    "LittleHellcat.com": ("Little Hellcat", "Teen Core Club"),
+    "MakeTeenGape.com": ("Make Teen Gape", "Teen Core Club"),
+    "NylonSweeties.com": ("Nylon Sweeties", "Teen Core Club"),
+    "Seductive18.com": ("Seductive 18", "Teen Core Club"),
+    "Spermantino.com": ("Spermantino", "Teen Core Club"),
+    "TeachMyAss.com": ("Teach My Ass", "Teen Core Club"),
+    "TeenAnalCasting.com": ("Teen Anal Casting", "Teen Core Club"),
+    "TeenDrillers.com": ("Teen Drillers", "Teen Core Club"),
+    "TeenGina.com": ("Teen Gina", "Teen Core Club"),
+    "TeensNaturalWay.com": ("Teens Natural Way", "Teen Core Club"),
+    "TeensTryBlacks.com": ("Teens Try Blacks", "Teen Core Club"),
+    "TryTeens.com": ("Try Teens", "Teen Core Club"),
+    "WhiteTeensBlackCocks.com": ("White Teens Black Cocks", "Teen Core Club"),
+    "YoungThroats.com": ("Young Throats", "Teen Core Club"),
+    "TA Worship": ("TA Worship", "United Content"),
+    "Texas Bukkake": ("Texas Bukkake", "United Content"),
+    "Texas Bukkake 2022": ("Texas Bukkake", "United Content"),
+    "RFVIDEOS": ("RF Studio", "United Content"),
+    "Femdorado": ("FemDorado", None),
+    "Sappho Films": ("Sappho Films", None),
+    "Sappho Films New": ("Sappho Films", None),
+    "Rubber Empire": ("Rubber Empire", None),
+    "Rubber Empire New": ("Rubber Empire", None),
+}
+
+BIC_COLLECTION_ID = 2
+LABEL_SITES: dict[str, str] = {
+    "TA Worship": "taworship.com",
+    "Texas Bukkake": "texasbukkake.com",
+    "Texas Bukkake 2022": "texasbukkake.com",
+    "RFVIDEOS": "rfmovies.com",
+    "Femdorado": "femdorado.com",
+    "Sappho Films": "sapphofilms.com",
+    "Sappho Films New": "sapphofilms.com",
+    "Rubber Empire": "rubber-empire.com",
+    "Rubber Empire New": "rubber-empire.com",
 }
 
 SCENE_URL = re.compile(r"https?://(?:www\.)?([\w.-]+)/video/(\d+)")
@@ -117,7 +171,7 @@ def localized(field: dict | None) -> str:
 def release_date(timestamp: str | None) -> str | None:
     if not timestamp:
         return None
-    published = datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
+    published = datetime.fromisoformat(timestamp)
     if published.year < 1970:
         return None
     return (published + AMSTERDAM_MAX_OFFSET).date().isoformat()
@@ -132,13 +186,27 @@ def cover_image(video: dict) -> str | None:
     return None
 
 
+def to_studio(name: str, parent: str | None) -> ScrapedStudio:
+    studio: ScrapedStudio = {"name": name}
+    if parent:
+        studio["parent"] = {"name": parent}
+    return studio
+
+
+def own_studio(hostname: str, video: dict) -> tuple[str, str | None] | None:
+    return next(
+        (
+            LABEL_STUDIOS[name]
+            for label in video.get("labels") or []
+            if (name := label.get("name")) in LABEL_STUDIOS
+        ),
+        None,
+    ) or OWN_SITES.get(hostname)
+
+
 def studio_for(hostname: str, video: dict) -> ScrapedStudio | None:
-    if own := OWN_SITES.get(hostname):
-        name, parent = own
-        studio: ScrapedStudio = {"name": name}
-        if parent:
-            studio["parent"] = {"name": parent}
-        return studio
+    if own := own_studio(hostname, video):
+        return to_studio(*own)
 
     if (studio_id := video.get("studio_id")) and (
         name := studio_name_from_id(studio_id)
@@ -147,12 +215,25 @@ def studio_for(hostname: str, video: dict) -> ScrapedStudio | None:
     return None
 
 
+def canonical_host(hostname: str, video: dict) -> str:
+    if video.get("collection_id") == BIC_COLLECTION_ID:
+        return "teencoreclub.com"
+    return next(
+        (
+            LABEL_SITES[name]
+            for label in video.get("labels") or []
+            if (name := label.get("name")) in LABEL_SITES
+        ),
+        hostname,
+    )
+
+
 def is_bulk_migrated(hostname: str, video: dict) -> bool:
     # These sites have been bought out and have misleading dates from
     # the bulk import process into Fundorado
-    if not (own := OWN_SITES.get(hostname)):
+    if not (own := own_studio(hostname, video)):
         return False
-    return (raw_name := dig(video, "studio", "name")) and (
+    return bool(raw_name := dig(video, "studio", "name")) and (
         raw_name.casefold() != own[0].casefold()
     )
 
@@ -185,7 +266,9 @@ def scene_from_url(url: str) -> ScrapedScene | None:
         "title": localized(video.get("title")),
         "details": localized(video.get("description")),
         "code": str(video["id"]),
-        "urls": [f"https://{hostname}/video/{video['id']}/{video['slug']}"],
+        "urls": [
+            f"https://{canonical_host(hostname, video)}/video/{video['id']}/{video['slug']}"
+        ],
         "performers": [{"name": actor["name"]} for actor in video.get("actors", [])],
         "tags": [
             {"name": localized(genre.get("title"))} for genre in video.get("genres", [])

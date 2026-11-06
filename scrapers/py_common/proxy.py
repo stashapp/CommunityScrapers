@@ -92,6 +92,10 @@ class CloudscraperBackend(RequestBackend):
 class FlareSolverrBackend(RequestBackend):
   name = "flaresolverr"
 
+  def __init__(self, proxies=None):
+    # FlareSolverr takes a single proxy for every scheme
+    self.proxy = next(iter((proxies or {}).values()), None)
+
   def request(self, method, url, **kwargs):
     if check_flaresolverr(FLARESOLVERR_URL):
       log.info(f"[proxy] trying FlareSolverr for {url}")
@@ -101,7 +105,7 @@ class FlareSolverrBackend(RequestBackend):
         log.warning("[proxy] HEAD not supported by FlareSolverr, using GET instead")
       try:
         post_data = (kwargs.get("json") or kwargs.get("data")) if method == "post" else None
-        return flaresolverr_req(url, method=method, postData=post_data, proxy=PROXY_URL)
+        return flaresolverr_req(url, method=method, postData=post_data, proxy=self.proxy, cookies=kwargs.get("cookies"))
       except Exception as e:
         log.warning(f"[proxy] FlareSolverr request failed: {e}")
     else:
@@ -112,16 +116,17 @@ class FlareSolverrBackend(RequestBackend):
 
 FLARESOLVERR_URL = os.environ.get("FLARESOLVERR_URL", "http://localhost:8191/v1")
 
+# Raises when FlareSolverr is unreachable, so only a successful check gets cached:
+# otherwise starting FlareSolverr would go unnoticed until the cache expired
 @cache_to_disk(ttl=86400)
-def check_flaresolverr(url):
+def _flaresolverr_detected(url) -> bool:
+  requests.get(url, timeout=5)
+  log.debug(f"[proxy] FlareSolverr detected at {url}")
+  return True
+
+def check_flaresolverr(url) -> bool:
   try:
-    requests.get(url, timeout=5)
-    log.debug(f"[proxy] FlareSolverr detected at {url}")
-    return True
-  except requests.exceptions.HTTPError as httperr:
-    if httperr.response.status_code == 405:
-      log.debug(f"[proxy] FlareSolverr detected at {url}")
-      return True
+    return _flaresolverr_detected(url)
   except requests.exceptions.RequestException:
     log.info(f"[proxy] FlareSolverr not detected at {url}. Requests will be used without bypassing.")
     return False
@@ -135,7 +140,7 @@ def get_useragent() -> str:
   chrome_ua = requests.get("https://feederbox826.github.io/user-agents/user-agents.json").json()[3]
   return chrome_ua
 
-def flaresolverr_req(url, method="get", postData=None, proxy=None) -> requests.Response:
+def flaresolverr_req(url, method="get", postData=None, proxy=None, cookies=None) -> requests.Response:
   if proxy and "@" in proxy:
     log.warning("[proxy] Ignoring unsupported proxy for FlareSolverr")
     proxy = None
@@ -146,6 +151,9 @@ def flaresolverr_req(url, method="get", postData=None, proxy=None) -> requests.R
   }
   if postData is not None:
     payload["postData"] = postData
+  # Same dict as requests' cookies= keyword, so callers can pass one value to every backend
+  if cookies:
+    payload["cookies"] = [{"name": name, "value": value} for name, value in cookies.items()]
   response = requests.post(FLARESOLVERR_URL, json=payload, timeout=60)
   if response.status_code != 200:
     raise Exception(f"FlareSolverr request failed with status code {response.status_code}: {response.text}")
@@ -194,13 +202,14 @@ cookie_cache = CookieCache()
 class BackendManager:
   def __init__(self, backends=None):
     proxies = { "http": PROXY_URL, "https": PROXY_URL } if PROXY_URL else {}
+    self.backends: list[RequestBackend]
     if not backends:
       self.backends = [
         RequestsBackend(proxies=proxies, useragent="inherit"),
         CloudscraperBackend(proxies=proxies),
       ]
       if check_flaresolverr(FLARESOLVERR_URL):
-        self.backends.append(FlareSolverrBackend())
+        self.backends.append(FlareSolverrBackend(proxies=proxies))
     else:
       # populate backends based on name
       backend_classes = {

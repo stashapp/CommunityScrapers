@@ -1,0 +1,35 @@
+name: Nasty Club
+# requires: py_common
+# scrapes: BangVan, Cuckold XXX, Homemade XXX, Mature Club, Nasty Club, Pickup Club
+sceneByURL:
+  - action: script
+    url:
+      - bangvan.com/video/
+      - cuckold.xxx/video/
+      - homemade.xxx/video/
+      - mature.club/video/
+      - nasty.club/video/
+      - nastyclub.com/video/
+      - pickup.club/video/
+    script:
+      - python
+      - NastyClub.py
+      - scene-by-url
+sceneByName:
+  action: script
+  script:
+    - python
+    - NastyClub.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - NastyClub.py
+    - scene-by-query-fragment
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - NastyClub.py
+    - scene-by-fragment

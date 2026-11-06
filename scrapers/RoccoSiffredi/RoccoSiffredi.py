@@ -6,6 +6,8 @@ from Altwolia.scrape import (
     gallery_from_fragment,
     gallery_from_url,
     movie_from_url,
+    own_site_url,
+    partner_studio,
     performer_from_fragment,
     performer_from_url,
     performer_search,
@@ -13,28 +15,41 @@ from Altwolia.scrape import (
     scene_from_url,
     scene_search,
 )
-
 from Altwolia.utils import append_scene_number
-from py_common.types import ScrapedScene
 from py_common import log
+from py_common.types import ScrapedScene
 from py_common.util import replace_all, scraper_args
 
+SITE = "roccosiffredi"
 
-def roccosiffredi(obj: Any, _) -> Any:
+# Retired sites whose releases still render under roccosiffredi.com
+RETIRED_SITES = {"roccosiffredipartners"}
+
+
+def roccosiffredi(obj: Any, api_object: dict[str, Any]) -> Any:
+    if partner := partner_studio(api_object):
+        obj = replace_all(obj, "studio", lambda _: partner)
     # Movie URLs use /en/dvd/ on the site itself, not /en/movie/
     return replace_all(obj, "urls", lambda x: x.replace("/en/movie/", "/en/dvd/"))
 
 
 def roccosiffredi_scene(scene: ScrapedScene, api_scene: dict[str, Any]) -> ScrapedScene:
-    return append_scene_number(
+    scene = append_scene_number(
         roccosiffredi(scene, api_scene), api_scene, separator=" - "
     )
+    if (
+        not scene.get("urls")
+        and api_scene.get("sitename") in RETIRED_SITES
+        and (url := own_site_url(api_scene, SITE))
+    ):
+        scene["urls"] = [url]
+    return scene
 
 
 if __name__ == "__main__":
     op, args = scraper_args()
 
-    site = "roccosiffredi"
+    site = SITE
     log.debug(f"args: {args}")
     match op, args:
         case "gallery-by-url", {"url": url} if url:

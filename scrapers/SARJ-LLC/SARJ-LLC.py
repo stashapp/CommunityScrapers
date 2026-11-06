@@ -1,352 +1,347 @@
-import base64
-import os
 import json
-import sys
 import re
-from urllib.parse import urlparse, urlencode
-from py_common import types
+import sys
+from typing import Any
+from urllib.parse import urlparse
 
-# to import from a parent directory we need to add that directory to the system path
-csd = os.path.dirname(
-    os.path.realpath(__file__))  # get current script directory
-parent = os.path.dirname(csd)  #  parent directory (should be the scrapers one)
-sys.path.append(
-    parent
-)  # add parent dir to sys path so that we can import py_common from there
+from py_common import log
+from py_common.deps import ensure_requirements
+from py_common.types import (
+    ScrapedGallery,
+    ScrapedPerformer,
+    ScrapedScene,
+    ScrapedStudio,
+    ScrapedTag,
+)
+from py_common.util import dig, is_own_url, is_valid_url, scraper_args
 
-try:
-    from py_common import log
-except ModuleNotFoundError:
-    print("You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
-    sys.exit()
+ensure_requirements("requests")
 
-try:
-    import requests
-except ModuleNotFoundError:
-    print("You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)", file=sys.stderr)
-    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests", file=sys.stderr)
-    sys.exit()
+import requests
 
-# helper functions
-def capitalize_word(match: re.Match[str]) -> str:
-    """Helper function to capitalize words"""
-    return match.group(0).lower().capitalize()
-
-def transform_name_part(part: str) -> str:
-    """Transform a name part by replacing underscores/hyphens and capitalizing"""
-    cleaned = re.sub('[_-]', ' ', part)
-    return re.sub(r'\w\S*', capitalize_word, cleaned)
-
-def scrape_url(url, scrape_type):
-    parsed = urlparse(url)
-
-    *_, date, name = parsed.path.split('/')
-    base_url = f"{parsed.scheme}://{parsed.netloc}"
-    scraped = None
-    if scrape_type == 'scene':
-        scraped = scrape_movie(base_url, date, name)
-    elif scrape_type == 'gallery':
-        scraped = scrape_gallery(base_url, date, name)
-        if scraped and (director := scraped.pop("Director", None)):
-            scraped["Photographer"] = director
-    elif scrape_type == 'performer':
-        scraped = scrape_model(base_url, name)
-
-    return scraped
-
-
-def query(fragment, query_type):
-    res = None
-    if query_type in ('scene', 'gallery'):
-        name = re.sub(r'\W', '_', fragment['title']).upper()
-        if fragment.get('date') is None:
-            log.error("Date is a required field when scraping by fragment")
-            return None
-        date = fragment['date'].replace('-', '')
-
-        scraper = globals()['scrape_' + ('movie' if query_type == 'scene' else query_type)]
-        res = scraper('https://metartnetwork.com', date, name)
-        if res is None:
-               res = scraper('https://www.rylskyart.com', date, name)
-    return res
-
-def search(s_type, name):
-    search_type = {
-        'scene': 'MOVIE',
-        'gallery': 'GALLERY',
-        'performer': 'model'
-    }[s_type]
-    page = 1
-    page_size = 30
-    args = {
-        'searchPhrase': name,
-        'pageSize': page_size,
-        'sortBy': 'relevance'
-    }
-
-    if s_type == 'performer':
-        def map_result(result):
-            item = result['item']
-            return {
-                'name': item['name'].strip(),
-                'url': f"https://www.metartnetwork.com{item['path']}",
-            }
-    elif s_type == 'scene':
-        def map_result(result):
-            item = result['item']
-            studio = get_studio(item['siteUUID'])
-            if studio:
-                image = f"https://www.{studio[1]}{item['thumbnailCoverPath']}"
-            return {
-                'title': item['name'],
-                'url': f"https://www.metartnetwork.com{item['path']}",
-                'date': item['publishedAt'][0:item['publishedAt'].find('T')],
-                'performers': [{'name': m['name'].strip()} for m in item['models']],
-                'image': image,
-            }
-    else:
-        return []
-
-    results = []
-
-    log.info(f"Searching for {s_type} '{name}'")
-    while True:
-        args['page'] = page
-        response = fetch("https://metartnetwork.com", "search-results", args)
-
-        if response is None:
-            break
-
-        results += [
-            map_result(r) for r in response['items']
-            if r['type'] == search_type
-        ]
-
-        if page * page_size > response['total'] or len(response['items']) == 0:
-            break
-
-        page += 1
-
-    return results
-
-
-def fetch(base_url, fetch_type, arguments):
-    url = f"{base_url}/api/{fetch_type}?{urlencode(arguments)}"
-    log.debug(f"Fetching URL {url}")
-    try:
-        response = requests.get(url, headers={
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
-        }, timeout=(3, 6))
-    except requests.exceptions.RequestException as req_ex:
-        log.error(f"Error fetching URL {url}: {req_ex}")
-        return None
-
-    if response.status_code >= 400:
-        log.info(f"Fetching URL {url} resulted in error status: {response.status_code}")
-        return None
-
-    data = response.json()
-    return data
-
-
-def scrape_model(base_url, name):
-    # Transform the name by splitting on hyphens and processing each part
-    name_parts = name.split('-')
-    transformed_parts = [transform_name_part(part) for part in name_parts]
-    transformed_name = ' '.join(transformed_parts)
-
-    log.info(f"Scraping model '{name}' as '{transformed_name}'")
-    data = fetch(base_url, 'model', {'name': transformed_name, 'order': 'DATE', 'direction': 'DESC'})
-    if data is None:
-        return None
-
-    return map_model(base_url, data)
-
-
-def map_media(data, studio, base_url):
-    urls = []
-    studio_code = data["UUID"]
-    studio_name = {'Name': ""}
-    
-    # Sites that never put directors in the "crew" section
-    # this eliminates picking up "still photographer" as an additional director
-    directors_not_in_crew = ("SexArt", "ALS Scan")
-    
-    if studio is not None:
-        studio_url = studio[1]
-        urls = [f"https://www.{studio_url}{data['path']}"]
-        studio_name = {'Name': studio[0]}
-
-    director = None
-    directors = []
-
-    # director seems to be included in `photographers` and `crew` section
-    if data.get("photographers"):
-        for director in data['photographers']:
-            directors.append(director.get('name').strip())
-    if data.get('crew') and studio_name["Name"] not in directors_not_in_crew:
-        # some sites only use the `photograpers`` section for director
-        for crew in data['crew']:
-            if crew.get('role') == "Still Photographer":
-                for crew_name in crew.get('names'):
-                    name = crew_name.strip()
-                    if name not in directors:
-                        directors.append(name)
-    director = ", ".join(directors).strip()
-
-    return {
-        'Title': data['name'].strip(),
-        'Details': data.get('description', "") or data.get("descriptionSfw", "") or None,
-        'URLs': urls,
-        'Date': data['publishedAt'][0:data['publishedAt'].find('T')],
-        'Tags': [{'Name': t.strip()} for t in data['tags']],
-        'Performers': [map_model(base_url, m) for m in data['models']],
-        'Studio': studio_name,
-        'Code': studio_code,
-        "Director": director
-    }
-
-
-def scrape_movie(base_url, date, name):
-    log.info(f"Scraping movie '{name}' released on {date}")
-    data = fetch(base_url, 'movie', {'name': name, 'date': date})
-    if data is None:
-        return None
-
-    studio = get_studio(data['media']['siteUUID'])
-    res = map_media(data, studio, base_url)
-    image_types = ['splashImagePath', 'coverCleanImagePath', 'coverImagePath']
-    for image_type in image_types:
-        if image_type in data:
-            image_part = data[image_type]
-            res['Image'] = f"https://cdn.metartnetwork.com/{data['media']['siteUUID']}/{image_part}"
-            try:
-                response = requests.get(res['Image'], headers={
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
-                }, timeout=(3, 6))
-                if response and response.status_code < 400:
-                    mime = 'image/jpeg'
-                    encoded = base64.b64encode(response.content).decode('utf-8')
-                    res['Image'] = f'data:{mime};base64,{encoded}'
-                    break
-            except requests.exceptions.RequestException as req_ex:
-                log.info(f"Error fetching URL {res['Image']}: {req_ex}")
-            res['Image'] = None
-
-    return res
-
-
-def scrape_gallery(base_url, date, name):
-    log.info(f"Scraping gallery '{name}' released on {date}")
-    data = fetch(base_url, 'gallery', {'name': name, 'date': date})
-    if data is None:
-        # try fetching from movie
-        log.info(f"Gallery '{name}' not found, trying to fetch as movie")
-        data = fetch(base_url, 'movie', {'name': name, 'date': date})
-    if data is None:
-        log.error(f"Gallery '{name}' not found")
-        return None
-
-    studio = get_studio(data['siteUUID'])
-    return map_media(data, studio, base_url)
-
-
-def map_model(base_url, model):
-    # Convert tags list to dictionary format
-    tags: list[dict[str, str]] = [{'Name': t.strip()} for t in model['tags']]
-
-    def add_tag(key, tag_format):
-        nonlocal tags
-        if key in model and model[key] != "":
-            tags.append({
-                'Name': tag_format.format(model[key]).strip()
-            })
-
-    add_tag('hair', '{} hair')
-    add_tag('pubicHair', '{} pussy')
-    add_tag('eyes', '{} eyes')
-    add_tag('breasts', '{} breasts')
-
-    country_name = model.get("country", {}).get("name")
-    # Unknown is not parsable by stash, convert to None
-    if country_name and country_name == "Unknown":
-        country_name = None
-
-    return {
-        'Name': model.get("name", "").strip(),
-        'Gender': model.get("gender" or "").upper(),
-        'URL': f"{base_url}{model.get('path')}",
-        'Ethnicity': model.get("ethnicity") or None,
-        'Country': country_name,
-        'Height': str(model.get("height")) or None,
-        'Weight': str(model.get("weight")) or None,
-        'Measurements': model.get("size") or None,
-        'Details': model.get("biography") or None,
-        'hair_color': model.get("hair" or "").capitalize(),
-        'eye_color': model.get("eyes" or "").capitalize(),
-        'Image': f"https://cdn.metartnetwork.com/{model.get('siteUUID')}{model.get('headshotImagePath')}",
-        'Tags': tags
-    }
-
-
-studios = {
-    '2163551D11D0439686AD9D291C8DFD71': ('ALS Scan', 'alsscan.com'),
-    'D0E7E33329311E3BB6E0800200C93255': ('Domai', 'domai.com'),
-    'FDA021004E3411DF98790800200C9A66': ('Erotic Beauty', 'eroticbeauty.com'),
-    '15A9FFA04E3511DF98790800200C9A66': ('Errotica Archives', 'errotica-archives.com'),
-    '706DF46B88884F7BB226097952427754': ('Eternal Desire', 'eternaldesire.com'),
-    '5592E33324211E3FF640800200C93111': ('Goddess Nudes', 'goddessnudes.com'),
-    '5A68E1D7B6E69E7401226779D559A10A': ('Love Hairy', 'lovehairy.com'),
-    'E6B595104E3411DF98790800200C9A66': ('MetArt', 'metart.com'),
-    '5C38C84F55841824817C19987F5447B0': ('MetArt Intimate', 'metart.com'),
-    'E7DFB70DF31C45B3B5E0BF10D733D349': ('MetArt X', 'metartx.com'),
-    'D99236C04DD011E1B86C0800200C9A66': ('Rylsky Art', 'rylskyart.com'),
-    '94DB3D0036FC11E1B86C0800200C9A66': ('SexArt', 'sexart.com'),
-    '3D345D1E156910B44DB5A80CDD746318': ('Straplez', 'straplez.com'),
-    '18A2E47EAEFD45F29033A5FCAF1F5B91': ('Stunning 18', 'stunning18.com'),
-    'FDAFDF209DC311E0AA820800200C9A66': ('The Life Erotic', 'thelifeerotic.com'),
-    '4F23028982B542FA9C6DAAA747E9B5B3': ('Viv Thomas', 'vivthomas.com'),
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0"
 }
 
+STUDIOS: dict[str, tuple[str, str]] = {
+    "2163551D11D0439686AD9D291C8DFD71": ("ALS Scan", "alsscan.com"),
+    "D0E7E33329311E3BB6E0800200C93255": ("Domai", "domai.com"),
+    "FDA021004E3411DF98790800200C9A66": ("Erotic Beauty", "eroticbeauty.com"),
+    "15A9FFA04E3511DF98790800200C9A66": ("Errotica Archives", "errotica-archives.com"),
+    "706DF46B88884F7BB226097952427754": ("Eternal Desire", "eternaldesire.com"),
+    "5592E33324211E3FF640800200C93111": ("Goddess Nudes", "goddessnudes.com"),
+    "5A68E1D7B6E69E7401226779D559A10A": ("Love Hairy", "lovehairy.com"),
+    "E6B595104E3411DF98790800200C9A66": ("MetArt", "metart.com"),
+    "5C38C84F55841824817C19987F5447B0": ("MetArt Intimate", "metart.com"),
+    "E7DFB70DF31C45B3B5E0BF10D733D349": ("MetArt X", "metartx.com"),
+    "D99236C04DD011E1B86C0800200C9A66": ("Rylsky Art", "rylskyart.com"),
+    "94DB3D0036FC11E1B86C0800200C9A66": ("SexArt", "sexart.com"),
+    "3D345D1E156910B44DB5A80CDD746318": ("Straplez", "straplez.com"),
+    "18A2E47EAEFD45F29033A5FCAF1F5B91": ("Stunning 18", "stunning18.com"),
+    "FDAFDF209DC311E0AA820800200C9A66": ("The Life Erotic", "thelifeerotic.com"),
+    "4F23028982B542FA9C6DAAA747E9B5B3": ("Viv Thomas", "vivthomas.com"),
+}
 
-def validate_url(url):
-    if url is None or not re.match('^https?://', url):
-        return False
+NETWORK: ScrapedStudio = {"name": "MetArt Network"}
 
-    for (_, domain) in studios.values():
-        if domain in url:
-            return True
+# These sites never list directors in the crew, so a "Still Photographer" there isn't one
+DIRECTORS_NOT_IN_CREW = ("SexArt", "ALS Scan")
 
-    if 'metartnetwork.com' in url:
-        return True
-
-    return False
+# Rylsky Art's releases aren't served by the network API
+FRAGMENT_BASE_URLS = ("https://metartnetwork.com", "https://www.rylskyart.com")
 
 
-def get_studio(site_uuid):
-    return studios[site_uuid] if site_uuid in studios else None
+def fetch(base_url: str, endpoint: str, **params: Any) -> Any:
+    url = f"{base_url}/api/{endpoint}"
+    try:
+        response = requests.get(url, params=params, headers=HEADERS, timeout=(3, 6))
+    except requests.RequestException as e:
+        log.error(f"Error fetching {url}: {e}")
+        return None
+    if response.status_code >= 400:
+        log.info(f"Fetching {response.url} resulted in status {response.status_code}")
+        return None
+    return response.json()
 
 
-scraper_input = sys.stdin.read()
-i = json.loads(scraper_input)
-log.debug(f"Started with input: {scraper_input}")
+def site_of(data: dict[str, Any]) -> tuple[str, str] | None:
+    return STUDIOS.get(data.get("siteUUID") or dig(data, "media", "siteUUID") or "")
 
-ret = {}
-if sys.argv[1] == "scrape":
-    ret = scrape_url(i['url'], sys.argv[2])
-elif sys.argv[1] == "query":
-    if 'url' in i and validate_url(i['url']):
-        ret = scrape_url(i['url'], sys.argv[2])
 
-    if ret is None or ret == {}:
-        ret = query(i, sys.argv[2])
-elif sys.argv[1] == 'search':
-    if i.get('title') is not None or i.get('name') is not None:
-        ret = search(sys.argv[2], i['title'] if 'title' in i else i['name'])
+def directors(data: dict[str, Any], studio_name: str) -> str:
+    "Directors are listed as photographers, and on most sites as crew too"
+    names = [p["name"].strip() for p in data.get("photographers") or []]
+    if studio_name not in DIRECTORS_NOT_IN_CREW:
+        names += [
+            name.strip()
+            for crew in data.get("crew") or []
+            if crew.get("role") == "Still Photographer"
+            for name in crew.get("names") or []
+        ]
+    return ", ".join(dict.fromkeys(names))
 
-if ret is not None:
-    output = json.dumps(ret)
-    print(output)
-else:
-    print("{}")
-    # log.debug(f"Send output: {output}")
+
+def model_name_from_slug(slug: str) -> str:
+    "angela-white -> Angela White, as the model endpoint looks models up by name"
+    return " ".join(w.lower().capitalize() for w in re.split(r"[_-]+", slug) if w)
+
+
+def to_scraped_performer(base_url: str, model: dict[str, Any]) -> ScrapedPerformer:
+    performer: ScrapedPerformer = {"name": (model.get("name") or "").strip()}
+    if gender := model.get("gender"):
+        performer["gender"] = gender.upper()
+    if path := model.get("path"):
+        performer["urls"] = [f"{base_url}{path}"]
+    if ethnicity := model.get("ethnicity"):
+        performer["ethnicity"] = ethnicity
+    # Unknown is not parsable by Stash
+    if (country := dig(model, "country", "name")) and country != "Unknown":
+        performer["country"] = country
+    # The API uses 0 for unknown measurements
+    if height := model.get("height"):
+        performer["height"] = str(height)
+    if weight := model.get("weight"):
+        performer["weight"] = str(weight)
+    if (size := model.get("size")) and size != "0":
+        performer["measurements"] = size
+    if biography := model.get("biography"):
+        performer["details"] = biography
+    if hair := model.get("hair"):
+        performer["hair_color"] = hair.capitalize()
+    if eyes := model.get("eyes"):
+        performer["eye_color"] = eyes.capitalize()
+    if headshot := model.get("headshotImagePath"):
+        performer["images"] = [
+            f"https://cdn.metartnetwork.com/{model.get('siteUUID')}{headshot}"
+        ]
+    tags: list[ScrapedTag] = [{"name": t.strip()} for t in model.get("tags") or []]
+    attribute_tags: list[ScrapedTag] = [
+        {"name": template.format(value).strip()}
+        for key, template in (
+            ("hair", "{} hair"),
+            ("pubicHair", "{} pussy"),
+            ("eyes", "{} eyes"),
+            ("breasts", "{} breasts"),
+        )
+        if (value := model.get(key))
+    ]
+    if tags := tags + attribute_tags:
+        performer["tags"] = tags
+    return performer
+
+
+def to_scraped_scene(base_url: str, data: dict[str, Any]) -> ScrapedScene:
+    site = site_of(data)
+    scene: ScrapedScene = {
+        "title": data["name"].strip(),
+        "code": data["UUID"],
+        "date": data["publishedAt"].split("T")[0],
+    }
+    if site:
+        scene["studio"] = {"name": site[0], "parent": NETWORK}
+        scene["urls"] = [f"https://www.{site[1]}{data['path']}"]
+    if details := data.get("description") or data.get("descriptionSfw"):
+        scene["details"] = details
+    if director := directors(data, site[0] if site else ""):
+        scene["director"] = director
+    if runtime := data.get("runtime"):
+        scene["duration"] = runtime
+    if tags := data.get("tags"):
+        scene["tags"] = [{"name": t.strip()} for t in tags]
+    if performers := [to_scraped_performer(base_url, m) for m in data["models"]]:
+        scene["performers"] = performers
+    site_uuid = dig(data, "media", "siteUUID") or data.get("siteUUID")
+    if image := next(
+        (
+            url
+            for key in ("splashImagePath", "coverCleanImagePath", "coverImagePath")
+            if (path := data.get(key))
+            and is_valid_url(url := f"https://cdn.metartnetwork.com/{site_uuid}{path}")
+        ),
+        None,
+    ):
+        scene["image"] = image
+    return scene
+
+
+def to_scraped_gallery(base_url: str, data: dict[str, Any]) -> ScrapedGallery:
+    site = site_of(data)
+    gallery: ScrapedGallery = {
+        "title": data["name"].strip(),
+        "code": data["UUID"],
+        "date": data["publishedAt"].split("T")[0],
+    }
+    if site:
+        gallery["studio"] = {"name": site[0], "parent": NETWORK}
+        gallery["urls"] = [f"https://www.{site[1]}{data['path']}"]
+    if details := data.get("description") or data.get("descriptionSfw"):
+        gallery["details"] = details
+    if photographer := directors(data, site[0] if site else ""):
+        gallery["photographer"] = photographer
+    if tags := data.get("tags"):
+        gallery["tags"] = [{"name": t.strip()} for t in tags]
+    if performers := [to_scraped_performer(base_url, m) for m in data["models"]]:
+        gallery["performers"] = performers
+    return gallery
+
+
+def split_url(url: str) -> tuple[str, list[str]]:
+    "https://www.metart.com/model/x/movie/20250601/NAME -> base URL and path parts"
+    parsed = urlparse(url)
+    return f"{parsed.scheme}://{parsed.netloc}", parsed.path.strip("/").split("/")
+
+
+def scene_from_release(base_url: str, date: str, name: str) -> ScrapedScene | None:
+    log.info(f"Scraping movie '{name}' released on {date}")
+    if not (data := fetch(base_url, "movie", name=name, date=date)):
+        return None
+    return to_scraped_scene(base_url, data)
+
+
+def gallery_from_release(base_url: str, date: str, name: str) -> ScrapedGallery | None:
+    log.info(f"Scraping gallery '{name}' released on {date}")
+    # Movie URLs have a gallery of their own
+    if not (
+        data := fetch(base_url, "gallery", name=name, date=date)
+        or fetch(base_url, "movie", name=name, date=date)
+    ):
+        log.error(f"Gallery '{name}' not found")
+        return None
+    return to_scraped_gallery(base_url, data)
+
+
+def scene_from_url(url: str) -> ScrapedScene | None:
+    base_url, (*_, date, name) = split_url(url)
+    return scene_from_release(base_url, date, name)
+
+
+def gallery_from_url(url: str) -> ScrapedGallery | None:
+    base_url, (*_, date, name) = split_url(url)
+    return gallery_from_release(base_url, date, name)
+
+
+def performer_from_url(url: str) -> ScrapedPerformer | None:
+    base_url, (*_, slug) = split_url(url)
+    name = model_name_from_slug(slug)
+    log.info(f"Scraping model '{slug}' as '{name}'")
+    if not (
+        data := fetch(base_url, "model", name=name, order="DATE", direction="DESC")
+    ):
+        return None
+    return to_scraped_performer(base_url, data)
+
+
+def release_key(fragment: dict[str, Any]) -> tuple[str, str] | None:
+    "The API looks releases up by date and their uppercased, underscored title"
+    if not (title := fragment.get("title")) or not (date := fragment.get("date")):
+        log.error("Title and date are required when scraping without a URL")
+        return None
+    return date.replace("-", ""), re.sub(r"\W", "_", title).upper()
+
+
+def scene_from_fragment(fragment: dict[str, Any]) -> ScrapedScene | None:
+    for url in fragment.get("urls") or []:
+        if is_own_url(url) and (scene := scene_from_url(url)):
+            return scene
+    if not (key := release_key(fragment)):
+        return None
+    return next(
+        (s for b in FRAGMENT_BASE_URLS if (s := scene_from_release(b, *key))), None
+    )
+
+
+def gallery_from_fragment(fragment: dict[str, Any]) -> ScrapedGallery | None:
+    for url in fragment.get("urls") or []:
+        if is_own_url(url) and (gallery := gallery_from_url(url)):
+            return gallery
+    if not (key := release_key(fragment)):
+        return None
+    return next(
+        (g for b in FRAGMENT_BASE_URLS if (g := gallery_from_release(b, *key))), None
+    )
+
+
+def performer_from_fragment(fragment: dict[str, Any]) -> ScrapedPerformer | None:
+    for url in fragment.get("urls") or []:
+        if is_own_url(url) and (performer := performer_from_url(url)):
+            return performer
+    return None
+
+
+def search(query: str, item_type: str) -> list[dict[str, Any]]:
+    "Every result of one type, across all pages"
+    items: dict[str, dict[str, Any]] = {}
+    page, page_size = 1, 30
+    log.info(f"Searching for {item_type} '{query}'")
+    while response := fetch(
+        "https://metartnetwork.com",
+        "search-results",
+        searchPhrase=query,
+        pageSize=page_size,
+        sortBy="relevance",
+        page=page,
+    ):
+        for result in response["items"]:
+            if result["type"] == item_type:
+                # The same release can appear more than once
+                items.setdefault(result["item"]["path"], result["item"])
+        if page * page_size > response["total"] or not response["items"]:
+            break
+        page += 1
+    return list(items.values())
+
+
+def scene_search(query: str) -> list[ScrapedScene]:
+    scenes: list[ScrapedScene] = []
+    for item in search(query, "MOVIE"):
+        scene: ScrapedScene = {
+            "title": item["name"],
+            "urls": [f"https://www.metartnetwork.com{item['path']}"],
+            "date": item["publishedAt"].split("T")[0],
+        }
+        performers: list[ScrapedPerformer] = [
+            {"name": m["name"].strip()} for m in item["models"]
+        ]
+        if performers:
+            scene["performers"] = performers
+        if site := site_of(item):
+            scene["image"] = f"https://www.{site[1]}{item['thumbnailCoverPath']}"
+        scenes.append(scene)
+    return scenes
+
+
+def performer_search(query: str) -> list[ScrapedPerformer]:
+    return [
+        {
+            "name": item["name"].strip(),
+            "urls": [f"https://www.metartnetwork.com{item['path']}"],
+        }
+        for item in search(query, "model")
+    ]
+
+
+if __name__ == "__main__":
+    op, args = scraper_args()
+    result = None
+    match op, args:
+        case "scene-by-url", {"url": url} if url:
+            result = scene_from_url(url)
+        case "scene-by-name", {"name": name} if name:
+            result = scene_search(name)
+        case "scene-by-fragment" | "scene-by-query-fragment", fragment:
+            result = scene_from_fragment(fragment)
+        case "gallery-by-url", {"url": url} if url:
+            result = gallery_from_url(url)
+        case "gallery-by-fragment", fragment:
+            result = gallery_from_fragment(fragment)
+        case "performer-by-url", {"url": url} if url:
+            result = performer_from_url(url)
+        case "performer-by-name", {"name": name} if name:
+            result = performer_search(name)
+        case "performer-by-fragment", fragment:
+            result = performer_from_fragment(fragment)
+        case _:
+            log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
+            sys.exit(1)
+
+    print(json.dumps(result))

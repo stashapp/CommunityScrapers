@@ -1,0 +1,51 @@
+name: AniDB
+# requires: py_common
+
+performerByURL:
+  - action: script
+    url:
+      - anidb.net/character/
+    script:
+      - python
+      - AniDB.py
+      - performer-by-url
+performerByName:
+  action: script
+  script:
+    - python
+    - AniDB.py
+    - performer-by-name
+sceneByURL:
+  - action: script
+    url:
+      - anidb.net/episode/
+    script:
+      - python
+      - AniDB.py
+      - scene-by-url
+sceneByName:
+  action: script
+  script:
+    - python
+    - AniDB.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - AniDB.py
+    - scene-by-query-fragment
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - AniDB.py
+    - scene-by-fragment
+groupByURL:
+  - action: script
+    url:
+      - anidb.net/anime/
+    script:
+      - python
+      - AniDB.py
+      - group-by-url

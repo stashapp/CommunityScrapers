@@ -1,0 +1,61 @@
+name: moebooru
+# based on gelbooru-xpath
+# https://github.com/stashapp/CommunityScrapers/issues/2277
+sceneByURL:
+  - action: scrapeXPath
+    url: &urls
+      - https://konachan.net/post/show
+      - https://konachan.com/post/show
+      - https://yande.re/post/show
+    scraper: postScraper
+
+imageByURL:
+  - action: scrapeXPath
+    url: *urls
+    scraper: postScraper
+
+sceneByFragment: &fragmentScraper
+  action: scrapeXPath
+  queryURL: "{filename}{checksum}"
+  queryURLReplace:
+    filename:
+      - regex: "^yandere_(\\d+)_.*$"
+        with: "https://yande.re/post/show/$1#"
+      - regex: "^konachan_(\\d+)_.*$"
+        with: "https://konachan.com/post/show/$1#"
+      - regex: "^[^#]*$"
+        with: ""
+    checksum:
+      - regex: "^(.+)$"
+        with: "https://yande.re/post/show?md5=$1"
+  scraper: postScraper
+imageByFragment: *fragmentScraper
+
+xPathScrapers:
+  postScraper:
+    image:
+      Date: &date
+        selector: //li[contains(text(),"Posted")]/a/@title
+        postProcess:
+          - replace:
+              - regex: \d{2}:\d{2}:\d{2}
+                with: ""
+          - parseDate: Mon Jan 2 2006
+      Performers: &performers
+        Name: //li[contains(@class,"tag-type-character")]/a[last()]
+      Studio: &artist
+        Name: //li[contains(@class,"tag-type-artist")]/a[last()]
+      Tags: &tag_string
+        Name: //li[contains(@class,"tag-type-general")]/a[last()]
+      URLs: &source //link[@rel="canonical"]/@href | //li[contains(text(),"Source:")]/a/@href
+    scene:
+      Date: *date
+      Performers: *performers
+      Studio: *artist
+      Tags: *tag_string
+      URLs: *source
+
+driver:
+  headers:
+    - Key: "User-Agent"
+      Value: "stashapp/stash scraper"

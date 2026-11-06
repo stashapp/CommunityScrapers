@@ -1,0 +1,56 @@
+name: L.A. New Girl
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - lanewgirl.com/
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $canonical: //link[@rel="canonical"]/@href
+    scene:
+      Title:
+        selector: $canonical
+        postProcess:
+          - javascript: |
+              var slug = value.replace(/\/$/, "").split("/").pop();
+              return slug
+                .split("-")
+                .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+                .join(" ");
+      Details: //article/p[1]
+      # TODO: enable when scrape dialog can show durations
+      # Duration: //article/p[starts-with(normalize-space(), "[")]
+      Tags:
+        Name:
+          selector: //div[@class="checklist"]//li
+          concat: /
+          postProcess:
+            - replace:
+                - regex: '[\s\x{00A0}]*/[\s\x{00A0}]*'
+                  with: /
+                - regex: (^|/)\d+-year-old [^/]*
+                  with: ""
+          split: /
+      Performers:
+        Name:
+          selector: $canonical
+          postProcess:
+            - javascript: |
+                var slug = value.replace(/\/$/, "").split("/").pop();
+                var m = slug.match(/^ep\d+-(.+)-sho+t$/) || slug.match(/^([a-z]+)-modeling-audition$/);
+                if (!m) return "";
+                return m[1]
+                  .split("-")
+                  .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+                  .join(" ");
+      Image:
+        selector: //ul[@class="portfolio-share"]//a[contains(@href, "pinterest.com")]/@href
+        postProcess:
+          - replace:
+              - regex: ^.*[?&]media=([^&]+).*$
+                with: $1
+      Studio:
+        Name:
+          fixed: L.A. New Girl

@@ -1,10 +1,10 @@
-name: CathysCraving
 # requires: py_common
+name: CathysCraving
 
 sceneByURL:
   - action: script
     url:
-      - https://www.cathyscraving.com/members
+      - cathyscraving.com/members
     script:
       - python
       - CathysCraving.py

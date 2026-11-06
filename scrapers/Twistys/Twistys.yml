@@ -1,6 +1,6 @@
 name: Twistys
 # requires: py_common, AyloAPI
-# scrapes: Anette Dawn, Blue Fantasies, Busty Ones, Euro Foxes, Feature Film, Mom Knows Best, Nicole Graves, Turning Twistys, Twistys Hard, Twistys Teasers, When Girls Play
+# scrapes: Busty Ones, Euro Foxes, Feature Film, Mom Knows Best, Nicole Graves, Turning Twistys, Twistys Hard, Twistys Teasers, When Girls Play
 galleryByURL:
   - action: script
     url:
@@ -64,16 +64,3 @@ performerByFragment:
     - python
     - Twistys.py
     - performer-by-fragment
-groupByURL:
-  - action: script
-    url:
-      - twistys.com/movie/
-      - twistysnetwork.com/movie/
-      # Since scenes link to the movie we can scrape movies from scenes
-      - twistys.com/scene/
-      - twistysnetwork.com/scene/
-    script:
-      - python
-      - Twistys.py
-      - movie-by-url
-# Last Updated January 14, 2024

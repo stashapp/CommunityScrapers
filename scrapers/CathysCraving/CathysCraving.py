@@ -1,215 +1,32 @@
-from py_common.config import get_config
-from py_common.util import scraper_args
-from py_common.proxy import StashRequests
-from py_common.types import ScrapedScene, ScrapedTag, ScrapedPerformer
-from lxml import html
-import py_common.log as log
+import base64
 import json
 import re
-import base64
+import sys
 from datetime import datetime
+from typing import Any
 
+from py_common import log
+from py_common.config import get_config
 from py_common.deps import ensure_requirements
-ensure_requirements("lxml")
+from py_common.proxy import StashRequests
+from py_common.types import ScrapedPerformer, ScrapedScene, ScrapedTag
+from py_common.util import is_own_url, scraper_args
 
-# Scene info for this site is paywalled, so you must set cookies in config.ini
+ensure_requirements("lxml")
+from lxml import html  # noqa: E402
 
 config = get_config(
-    # CONFIG_NOTES
-
-    # Cookies should be set as a semicolon-delimited string of name=value pair(s) without any newlines.
-    # You may copy and paste Chrome network tools 'Request' tab "Cookie:" value.
-    # e.g., COOKIES = foo=sUsll2; pcar%5fUmVzdHJpY3RlZA%3d%3d=YY/69aljfoojfg|kljgg/420A==
-    # Only the cookie with key `pcar%5fUmVzdHJpY3RlZA%3d%3d` is used. Others are ignored.
-
     default="""
-    # See CONFIG_NOTES in CathysCraving.py for documentation
-    COOKIES =
+# Scene pages are members-only: paste the "Cookie:" request header from your
+# browser's network tools while logged in, only pcar%5fUmVzdHJpY3RlZA%3d%3d is used
+COOKIES =
 """
 )
 
+COOKIE_NAME = "pcar%5fUmVzdHJpY3RlZA%3d%3d"
 
-requests = StashRequests()
-
-
-def get_cookies_dict() -> dict[str, str]:
-    cookie_name = "pcar%5fUmVzdHJpY3RlZA%3d%3d"
-    cookie_val = None
-    config_val = config.config_dict.get("COOKIES") or ""
-    for part in str(config_val).split(";"):
-        if "=" in part:
-            k, v = part.split("=", 1)
-            k = k.strip()
-            if k == cookie_name:
-                cookie_val = v.strip()
-                break
-
-    if not cookie_val:
-        log.error(f"Missing necessary cookie: {cookie_name}")
-        return {}
-    return {cookie_name: cookie_val}
-
-
-def fetch_html_tree(url: str) -> html.HtmlElement | None:
-    """Fetches HTML content from a URL and returns the parsed
-       lxml HTML tree, with relative links converted to absolute."""
-    cookies = get_cookies_dict()
-
-    if not cookies:
-        log.error("Exiting due to missing cookies")
-        return None
-
-    log.debug(f"Fetching URL: {url}")
-
-    try:
-        response = requests.get(url, cookies=cookies, timeout=10)
-        response.raise_for_status()
-    except Exception as e:
-        log.error(f"Failed to fetch URL '{url}': {e}")
-        return None
-
-    tree = html.fromstring(response.content)
-    tree.make_links_absolute(base_url=url)
-    return tree
-
-
-def get_scene_title(tree: html.HtmlElement) -> str | None:
-    # Title is on its own page that's inside an iframe.
-    iframe_urls = tree.xpath("//iframe/@src")
-    title_page_url = None
-    for iframe_url in iframe_urls:
-        if re.search(r"/iframe-\d+\.html$", iframe_url):
-            title_page_url = iframe_url
-            break
-
-    if not title_page_url:
-        log.warning("No iframe found for title")
-        return None
-    
-    title_page_tree = fetch_html_tree(title_page_url)
-    if title_page_tree is None:
-        log.warning("Could not load title page")
-        return None
-    
-    number_portion = extract_text_whitespace_normalized(title_page_tree.xpath("//span[contains(@class, 'scene')]")[0])
-    title_portion = extract_text_whitespace_normalized(title_page_tree.xpath("//span[contains(@class, 'title')]")[0])
-    if number_portion and title_portion:
-        return f"{number_portion}: {title_portion}"
-    else:
-        return number_portion or title_portion or None
-
-
-def get_scene_index_subtree(index_url: str, scene_url: str) -> html.HtmlElement | None:
-    tree = fetch_html_tree(index_url)
-    if tree is None:
-        log.warning("Could not load scene index")
-        return None
-    # On the index page, there should be a <table> that includes the release date and an <a> that links to the scene_url.
-    # Locate it by finding the <a> with text content 'View Scene' and the expected URL, then going up to the nearest <table> ancestor.
-    tables = tree.xpath(f"(//a[normalize-space()='View Scene' and @href = '{scene_url}']/ancestor::table[1])[1]")
-    if tables:
-        return tables[0]
-    else:
-        log.warning(f"Could not find corresponding <table> on scene index page '{index_url}'")
-        return None
-    
-
-
-def get_release_date(tree: html.HtmlElement, scene_url: str) -> tuple[str | None, bool]:
-    # We need to load the scene index page to get the release date.
-    scene_index_url = tree.xpath("string(//a[contains(text(), 'SCENE INDEX')]/@href)")
-    if not scene_index_url:
-        log.warning("Could not find scene index URL")
-        return None, False
-    
-    scene_index_subtree = get_scene_index_subtree(scene_index_url, scene_url)
-    if scene_index_subtree is None:
-        log.warning("Could not find scene index subtree")
-        return None, False
-    
-    # Important that path part of this expression begins with `.` in order to only search the
-    # subtree. Without `.`, the entire document would be searched.
-    # HTML looks like: <span>Added - <b>01-20-2025</b></span>
-    raw_date_string = scene_index_subtree.xpath("string(.//span[contains(., 'Added -')]/b)").strip()
-    if raw_date_string:
-        # Convert MM-DD-YYYY to YYYY-MM-DD
-        try:
-            parsed_date = datetime.strptime(raw_date_string, "%m-%d-%Y")
-            return parsed_date.strftime("%Y-%m-%d"), False
-        except ValueError:
-            log.warning(f"Could not parse date string: {raw_date_string}")
-
-    # Some versions have "When - <Month> <Year>", e.g. "When - September 2015"
-    raw_when_string = scene_index_subtree.xpath("string(.//span[contains(., 'When -')]/b)").strip()
-    if raw_when_string:
-        try:
-            parsed_date = datetime.strptime(raw_when_string, "%B %Y")
-            # "When" dates are only month-level precision and may be based on production date
-            # rather than release date, so indicate that the date is only an estimate.
-            return parsed_date.strftime("%Y-%m"), True
-        except ValueError:
-            log.warning(f"Could not parse 'When' date string: {raw_when_string}")
-
-    log.warning("Could not find release date string")
-    return None, False
-
-
-def extract_text_with_linebreaks(element: html.HtmlElement) -> str:
-    """Extracts text content from an element, converting <br> tags to newlines and
-    collapsing all non-<br> whitespace into single spaces.
-    """
-    # The plan:
-    # 1) Append a sentinel character to each <br> tag
-    # 2) Get the text content of `element` (which strips tags)
-    # 3) Collapse whitespace chunks
-    # 4) Convert sentinels to newlines
-
-    # Use a Unicode Private Use Area (PUA) character so it never collides with
-    # any real text.
-    sentinel_token = "\uE000"
-
-    for br in element.xpath(".//br"):
-        br.tail = f" {sentinel_token} " + (br.tail or "")
-
-    raw_text = element.text_content()
-    collapsed = " ".join(raw_text.split())
-
-    sentinels_reversed = "\n".join(x.strip() for x in collapsed.split(sentinel_token)).strip()
-    return sentinels_reversed
-
-
-def extract_text_whitespace_normalized(element: html.HtmlElement) -> str:
-    """ Extracts text comment, converting <br> tags to space chars and collapsing
-    all whitespace into single spaces.
-    """
-    for br in element.xpath(".//br"):
-        br.tail = " " + (br.tail or "")
-
-    return " ".join(element.text_content().split())
-
-
-def get_description(tree: html.HtmlElement) -> str | None:
-    description_spans = tree.xpath("//span[contains(@class, 'description')]")
-    if not description_spans:
-        log.warning("Could not find description <span>")
-        return None
-
-    # The page also uses <span>s with class `description` for picture
-    # download links, but only the first one is the actual scene description.
-    description_span = description_spans[0]
-    description = extract_text_with_linebreaks(description_span)
-    
-    if description:
-        log.debug(f"Found description: {description}")
-        return description
-    else:
-        log.warning("Could not find description")
-        return None
-
-
-# Maps a performer's page name (minus .html) to a more specific display name when known.
-# These have been determined visually, often with the help of `cc1234475/visage`.
-PERFORMER_NAME_MAP = {
+# Performer pages are named after first names only, these were identified by face
+PERFORMER_NAMES = {
     # Guys
     "chrism2": "Chris Cock",
     "dick": "Dick James",
@@ -241,147 +58,184 @@ PERFORMER_NAME_MAP = {
     "mia": "Mia Knight",
 }
 
+requests = StashRequests()
 
-def get_performers(tree: html.HtmlElement) -> list[ScrapedPerformer] | None:
-    # Locating the exact location of the performer list in the document is tedious,
-    # but fortunately each performer has a link with a URL that includes `/girls+guys/`
-    # but unfortunately there is also a non-performer link with a URL that includes
-    # `/girls+guys/girls.html` on each page.
-    anchors = tree.xpath("//a[contains(@href, '/girls+guys/') and not(contains(@href, '/girls+guys/girls.html'))]")
-    performers: list[ScrapedPerformer] = []
-    for anchor in anchors:
-        performer_page_name = None
-        performer_page_name_search = re.search(r"/([a-zA-Z0-9]+)\.html", anchor.xpath("string(@href)"))
-        if performer_page_name_search:
-            performer_page_name = performer_page_name_search.group(1)
-        performer_display_name = anchor.text_content().strip()
-        performer_display_name = PERFORMER_NAME_MAP.get(performer_page_name, performer_display_name)
-        if performer_display_name:
-            performers.append({"name": performer_display_name})
 
-    if performers:
-        return performers
-    else:
-        log.warning("Could not find any performers")
+def cookies() -> dict[str, str] | None:
+    for part in str(config.COOKIES or "").split(";"):
+        name, _, value = part.partition("=")
+        if name.strip() == COOKIE_NAME and (value := value.strip()):
+            return {COOKIE_NAME: value}
+    log.error(f"Set the {COOKIE_NAME} cookie in CathysCraving's config.ini")
+    return None
+
+
+def fetch(url: str) -> Any | None:
+    if not (jar := cookies()):
         return None
-
-def get_tags(tree: html.HtmlElement) -> list[str] | None:
-    anchors = tree.xpath("//span[contains(@class, 'keywords')]//a[contains(@href, 'categories')]")
-
-    tags: list[ScrapedTag] = []
-    for anchor in anchors:
-        tag_name = anchor.text_content().strip()
-        if tag_name:
-            tags.append({"name": tag_name})
-
-    return tags
-
-
-def get_image(tree: html.HtmlElement) -> str | None:
-    # Loading image requires cookies, so we'll fetch it now with the cookies we have
-    # and return the full image file as a base64 encoded data URI so that the client
-    # doesn't need cookies to load the image.
-    img_src = tree.xpath("//img//@src")
-    if img_src:
-        image_url = img_src[0]
-        log.debug(f"Found image URL: {image_url}")
-    else:
-        log.warning("No image URL found")
-        return None
-
     try:
-        response = requests.get(
-            image_url, cookies=get_cookies_dict(), timeout=10)
+        response = requests.get(url, cookies=jar, timeout=10)
         response.raise_for_status()
-    except Exception as e:
-        log.error(f"Failed to fetch image URL '{image_url}': {e}")
+    # py_common.proxy raises a bare Exception once every backend has failed
+    except Exception as e:  # noqa: BLE001
+        log.error(f"Failed to fetch {url}: {e}")
         return None
-
-    base64_string = base64.b64encode(response.content).decode("utf-8")
-    content_type = response.headers.get("Content-Type", "image/jpeg")
-    mime_type = content_type.split(";")[0].strip() or "image/jpeg"
-    data_url = f"data:{mime_type};base64,{base64_string}"
-
-    return data_url
+    return response
 
 
-def get_scene_number(title: str) -> str | None:
-    # Most scene titles begin with "Scene XYZ: "
-    match = re.match(r"Scene\s+(\d+):", title)
-    if match:
-        return match.group(1)
-    else:
-        log.warning(f"Could not extract scene number from title: {title}")
+def fetch_tree(url: str) -> html.HtmlElement | None:
+    if not (response := fetch(url)):
         return None
+    tree = html.fromstring(response.content)
+    tree.make_links_absolute(base_url=url)
+    return tree
 
 
-def scrape_scene_data(url: str) -> ScrapedScene:
-    """Scrapes metadata for the scene at the URL.
+def line_text(element: html.HtmlElement) -> str:
+    for br in element.xpath(".//br"):
+        br.tail = " " + (br.tail or "")
+    return " ".join(element.text_content().split())
 
-    Args:
-        url: The scene URL.
 
-    Returns:
-        A dictionary of scraped scene metadata.
-    """
-    log.debug(f"Scraping scene URL: {url}")
+def multiline_text(element: html.HtmlElement) -> str:
+    "Keeps <br> as line breaks, so <br><br> still separates paragraphs"
+    # A private-use character marks each <br>: lxml rejects control characters
+    for br in element.xpath(".//br"):
+        br.tail = "" + (br.tail or "")
+    lines = element.text_content().split("")
+    return "\n".join(" ".join(line.split()) for line in lines).strip()
 
-    tree = fetch_html_tree(url)
-    if tree is None:
-        return {}
 
-    scene: ScrapedScene = {}
+def title(tree: html.HtmlElement) -> str | None:
+    # The title sits on its own page, shown in an iframe
+    frames = (
+        src
+        for src in tree.xpath("//iframe/@src")
+        if re.search(r"/iframe-\d+\.html$", src)
+    )
+    if not (frame := next(frames, None)) or (frame_tree := fetch_tree(frame)) is None:
+        return None
+    parts = [
+        line_text(span)
+        for cls in ("scene", "title")
+        for span in frame_tree.xpath(f"(//span[contains(@class, '{cls}')])[1]")
+    ]
+    return ": ".join(part for part in parts if part) or None
 
-    title_text = get_scene_title(tree)
-    if title_text:
-        scene["title"] = title_text
-    else:
-        log.error("Unable to find title. Exiting")
-        return {}
 
-    date_str, date_is_estimate = get_release_date(tree, url)
-    if date_str:
-        scene["date"] = date_str
+def release_date(tree: html.HtmlElement, url: str) -> str | None:
+    # Dates are only listed next to the scene's "View Scene" link on the scene index
+    if not (
+        index_url := tree.xpath("string(//a[contains(text(), 'SCENE INDEX')]/@href)")
+    ):
+        return None
+    if (index := fetch_tree(index_url)) is None or not (
+        entry := index.xpath(
+            f"(//a[normalize-space()='View Scene' and @href='{url}']/ancestor::table[1])[1]"
+        )
+    ):
+        log.warning(f"{url} not found on the scene index")
+        return None
+    for label, parse, show in (
+        ("Added -", "%m-%d-%Y", "%Y-%m-%d"),
+        # Older scenes only give the month
+        ("When -", "%B %Y", "%Y-%m"),
+    ):
+        if (
+            value := entry[0]
+            .xpath(f"string(.//span[contains(., '{label}')]/b)")
+            .strip()
+        ):
+            try:
+                return datetime.strptime(value, parse).strftime(show)
+            except ValueError:
+                log.warning(f"Unexpected date '{value}'")
+    return None
 
-    description = get_description(tree)
-    if description:
+
+def details(tree: html.HtmlElement) -> str | None:
+    # Picture download links share the class, the description comes first
+    if spans := tree.xpath("//span[contains(@class, 'description')]"):
+        return multiline_text(spans[0]) or None
+    return None
+
+
+def performer_name(link: html.HtmlElement) -> str:
+    name = link.text_content().strip()
+    if page := re.search(r"/([a-zA-Z0-9]+)\.html", link.get("href") or ""):
+        return PERFORMER_NAMES.get(page.group(1), name)
+    return name
+
+
+def performers(tree: html.HtmlElement) -> list[ScrapedPerformer]:
+    links = tree.xpath(
+        "//a[contains(@href, '/girls+guys/') and not(contains(@href, '/girls+guys/girls.html'))]"
+    )
+    return [{"name": name} for link in links if (name := performer_name(link))]
+
+
+def tags(tree: html.HtmlElement) -> list[ScrapedTag]:
+    return [
+        {"name": name}
+        for link in tree.xpath(
+            "//span[contains(@class, 'keywords')]//a[contains(@href, 'categories')]"
+        )
+        if (name := link.text_content().strip())
+    ]
+
+
+def image(tree: html.HtmlElement) -> str | None:
+    # The image needs the member cookie too, so it's passed on as a data URL
+    if not (src := tree.xpath("//img/@src")) or not (response := fetch(src[0])):
+        return None
+    mime = (
+        response.headers.get("Content-Type", "").split(";")[0].strip() or "image/jpeg"
+    )
+    return f"data:{mime};base64,{base64.b64encode(response.content).decode()}"
+
+
+def scene_from_url(url: str) -> ScrapedScene | None:
+    if (tree := fetch_tree(url)) is None:
+        return None
+    if not (name := title(tree)):
+        log.error(f"No title found for {url}")
+        return None
+    scene: ScrapedScene = {
+        "title": name,
+        "urls": [url],
+        "studio": {"name": "Cathy's Craving"},
+    }
+    if code := re.match(r"Scene\s+(\d+):", name):
+        scene["code"] = code.group(1)
+    if date := release_date(tree, url):
+        scene["date"] = date
+    if description := details(tree):
         scene["details"] = description
-
-    performers = get_performers(tree)
-    if performers:
-        scene["performers"] = performers
-
-    scene["tags"] = get_tags(tree)
-    # All scene pages require member login:
-    scene["tags"].append({"name": "Members Only"})
-    if date_is_estimate:
-        scene["tags"].append({"name": "Estimated Date"})
-
-    image_url = get_image(tree)
-    if image_url:
-        scene["image"] = image_url
-
-    scene["studio"] = {"name": "Cathy's Craving"}
-
-    scene_number = get_scene_number(title_text)
-    if scene_number:
-        scene["code"] = scene_number
-
-    scene["urls"] = [url]
-
+    if cast := performers(tree):
+        scene["performers"] = cast
+    if categories := tags(tree):
+        scene["tags"] = categories
+    if cover := image(tree):
+        scene["image"] = cover
     return scene
 
 
 if __name__ == "__main__":
     op, args = scraper_args()
     result = None
-
-    if op in ["scene-by-url", "scene-by-query-fragment"]:
-        url = args.get("url")
-        if url:
-            result = scrape_scene_data(url)
-
-    if result:
-        print(json.dumps(result))
-    else:
-        print(json.dumps({}))
+    match op, args:
+        case "scene-by-url", {"url": url} if url:
+            result = scene_from_url(url)
+        case "scene-by-query-fragment", args:
+            result = next(
+                (
+                    scene
+                    for url in args.get("urls") or []
+                    if is_own_url(url) and (scene := scene_from_url(url))
+                ),
+                None,
+            )
+        case _:
+            log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
+            sys.exit(1)
+    print(json.dumps(result))

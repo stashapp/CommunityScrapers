@@ -1,9 +1,8 @@
-name: File Metadata (ffprobe)
 # requires: py_common
+name: File Metadata (ffprobe)
 
 sceneByFragment:
   action: script
   script:
     - python
     - FileMetadata.py
-# Last Updated Dec 03, 2024

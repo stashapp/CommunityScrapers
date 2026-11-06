@@ -11,6 +11,12 @@ galleryByURL:
       - python
       - TransAngels.py
       - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - TransAngels.py
+    - gallery-by-fragment
 sceneByURL:
   - action: script
     url:
@@ -61,18 +67,3 @@ performerByFragment:
     - python
     - TransAngels.py
     - performer-by-fragment
-groupByURL:
-  - action: script
-    url:
-      - transangels.com/movie/
-      - transangelsnetwork.com/movie/
-      - transharder.com/movie/
-      # Since scenes link to the movie we can scrape movies from scenes
-      - transangels.com/scene/
-      - transangelsnetwork.com/scene/
-      - transharder.com/scene/
-    script:
-      - python
-      - TransAngels.py
-      - movie-by-url
-# Last Updated January 13, 2024

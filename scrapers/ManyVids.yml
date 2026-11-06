@@ -24,13 +24,13 @@ sceneByQueryFragment:
   queryURLReplace:
     url:
       - regex: ^(https:\/\/www\.manyvids\.com\/Video\/)
-        with: https://www.manyvids.com/bff/store/video/
+        with: https://api.manyvids.com/store/video/
       - regex: /[^/]*/*$
         with: ""
 sceneByFragment:
   action: scrapeJson
   scraper: sceneScraper
-  queryURL: "https://www.manyvids.com/bff/store/video/{filename}"
+  queryURL: "https://api.manyvids.com/store/video/{filename}"
   queryURLReplace:
     filename:
       - regex: .*?(\d{6,8}).*
@@ -44,7 +44,7 @@ sceneByURL:
     queryURLReplace:
       url:
         - regex: .*?(\d+).*
-          with: https://www.manyvids.com/bff/store/video/$1
+          with: https://api.manyvids.com/store/video/$1
 jsonScrapers:
   performerSearch:
     performer:
@@ -196,3 +196,7 @@ jsonScrapers:
             - replace:
                 - regex: ^
                   with: https://www.manyvids.com
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0

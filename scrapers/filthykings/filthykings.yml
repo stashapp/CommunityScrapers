@@ -31,10 +31,17 @@ galleryByURL:
   - action: script
     url:
       - filthykings.com/en/photo/
+      - filthykings.com/en/video/
     script:
       - python
       - filthykings.py
       - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - filthykings.py
+    - gallery-by-fragment
 performerByURL:
   - action: script
     url:

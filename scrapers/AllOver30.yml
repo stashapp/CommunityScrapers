@@ -1,0 +1,154 @@
+name: AllOver30
+# Members-area scraper; requires an active AllOver30 membership (see driver below).
+# Scene and gallery pages have no title, date or description: the title is built
+# from the featured models, and release dates are only listed on model pages.
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - allover30.com/Movie/
+      - allover30.com/movie/
+    scraper: sceneScraper
+    # The site only serves the capitalized members-area path
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: ^.*?/[Mm]ovie/([^/?#]+).*$
+          with: https://members.allover30.com/Movie/$1
+
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - allover30.com/PhotoSet/
+      - allover30.com/photoset/
+    scraper: galleryScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: ^.*?/[Pp]hoto[Ss]et/([^/?#]+).*$
+          with: https://members.allover30.com/PhotoSet/$1
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - allover30.com/Model/
+      - allover30.com/model/
+    scraper: performerScraper
+    # Bio pages hold less than the model page, which links to the bio itself
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: ^.*?/[Mm]odel/(\d+).*$
+          with: https://members.allover30.com/Model/$1
+
+xPathScrapers:
+  sceneScraper:
+    common: &common
+      $model: //div[@class="modelGrp"]
+      $report: //a[starts-with(@href, "/Contact?report=")]/@href
+    scene:
+      Title: &title
+        selector: //title/text()
+        postProcess:
+          - replace:
+              - regex: ^\s*AllOver30\.com\S*\s*-\s*(?:Featuring\s+)?
+                with: ""
+              - regex: \s+
+                with: " "
+      Code: &code
+        selector: $report
+        postProcess:
+          - replace:
+              - regex: ^.*/(\d+)$
+                with: $1
+      URLs: &url
+        selector: $report
+        postProcess:
+          - replace:
+              - regex: ^/Contact\?report=
+                with: ""
+      Image: //video[@id="ao30Video"]/@poster
+      Performers:
+        Name: &performerName $model/h2[@class="bio"]
+        URLs:
+          selector: $model/div[@class="bio"]/a[text()="model page"]/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://members.allover30.com
+      Tags: &tags
+        Name: //div[@class="galleryTags"]//a
+      Studio: &studio
+        Name:
+          fixed: AllOver30
+
+  galleryScraper:
+    common: *common
+    gallery:
+      Title: *title
+      Code: *code
+      URLs: *url
+      # Performer URLs are left out: Stash pins every gallery performer URL on the first performer
+      Performers:
+        Name: *performerName
+      Tags: *tags
+      Studio: *studio
+
+  performerScraper:
+    common:
+      $info: //div[@class="modelInfo"]/ul/li
+    performer:
+      Name: //div[@class="modelInfo"]/h3
+      Gender:
+        fixed: Female
+      URLs:
+        selector: //a[text()="Read Her Bio"]/@href
+        postProcess:
+          - replace:
+              - regex: ^(/Model/\d+)/Bio$
+                with: https://members.allover30.com$1
+      Image: //div[@class="modelPic"]/img/@src
+      Measurements:
+        selector: $info[strong[starts-with(., "Bust")] or strong[starts-with(., "Waist")] or strong[starts-with(., "Hips")]]/text()
+        concat: "-"
+        postProcess:
+          - replace:
+              - regex: \s+
+                with: ""
+      Height:
+        selector: $info[strong[starts-with(., "Height")]]/text()
+        postProcess:
+          - feetToCm: true
+      Weight:
+        selector: $info[strong[starts-with(., "Weight")]]/text()
+        postProcess:
+          - lbToKg: true
+      Country:
+        selector: //a[text()="Read Her Bio"]/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://members.allover30.com
+          - subScraper:
+              selector: //td[span[@class="question"][starts-with(., "PLACE OF BIRTH")]]/text()
+          - replace:
+              - regex: ^.*,\s*
+                with: ""
+      Details:
+        selector: //a[text()="Read Her Bio"]/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://members.allover30.com
+          - subScraper:
+              selector: //table//td[span[@class="question"]]
+              concat: "\n"
+
+driver:
+  headers:
+    # Requires an active AllOver30 membership. Copy the psso%5fTWVtYmVycyBPbmx5
+    # cookie from a logged-in members.allover30.com session and set Value to
+    # psso%5fTWVtYmVycyBPbmx5=<cookie value>. Keep %5f percent-encoded; no other
+    # cookies are needed. Re-copy it after logging out or when scrapes return nothing.
+    - Key: Cookie
+      Value: ""

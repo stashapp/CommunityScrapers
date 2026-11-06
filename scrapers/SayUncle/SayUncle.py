@@ -2,8 +2,10 @@ import json
 import re
 import sys
 from typing import Any
+from urllib.parse import urlsplit, urlunsplit
+
 from py_common import log
-from py_common.util import replace_at, replace_all, dig
+from py_common.util import dig, replace_all, replace_at
 from Reptyle.scrape import (
     scene_from_fragment,
     scene_from_url,
@@ -45,6 +47,14 @@ def genuine_scene_code(raw: dict) -> str | None:
     return None
 
 
+def live_url(url: str) -> str:
+    "Boys Do Porn's own scene pages are gone, but the hub still serves them"
+    match urlsplit(url):
+        case (scheme, "boysdoporn.com" | "www.boysdoporn.com", path, query, fragment):
+            return urlunsplit((scheme, "www.sayuncle.com", path, query, fragment))
+    return url
+
+
 def sayuncle(obj: Any, raw: Any) -> Any:
     fixed = replace_at(
         obj,
@@ -53,11 +63,13 @@ def sayuncle(obj: Any, raw: Any) -> Any:
             "name": studio_map.get(s["name"], s["name"]),
             "parent": {
                 "name": "SayUncle",
-                "url": "https://www.sayuncle.com/",
+                "urls": ["https://www.sayuncle.com/"],
             },
         },
     )
-    fixed = replace_all(fixed, "urls", lambda url: url.replace("placeholder", "sayuncle", 1))
+    fixed = replace_all(
+        fixed, "urls", lambda url: url.replace("placeholder", "sayuncle", 1)
+    )
     if code := genuine_scene_code(raw):
         fixed = {**fixed, "code": code}
     return fixed
@@ -69,11 +81,14 @@ if __name__ == "__main__":
 
     match op, args:
         case "scene-by-url", {"url": url} if url:
-            result = scene_from_url(url, postprocess=sayuncle)
+            result = scene_from_url(live_url(url), postprocess=sayuncle)
         case "scene-by-name", {"name": name} if name:
             result = scene_search(name, search_url=SEARCH_URL, postprocess=sayuncle)
         case "scene-by-fragment" | "scene-by-query-fragment", args:
-            result = scene_from_fragment(args, search_url=SEARCH_URL, postprocess=sayuncle)
+            fragment = {**args, "urls": [live_url(u) for u in args.get("urls") or []]}
+            result = scene_from_fragment(
+                fragment, search_url=SEARCH_URL, postprocess=sayuncle
+            )
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
             sys.exit(1)

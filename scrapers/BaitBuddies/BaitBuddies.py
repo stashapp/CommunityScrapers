@@ -1,16 +1,21 @@
 import json
 import re
+import sys
+import urllib.error
 import urllib.parse
 import urllib.request
-from datetime import date as datetype, timedelta
+from datetime import date as datetype
+from datetime import timedelta
 
 from py_common import log
 from py_common.deps import ensure_requirements
-from py_common.util import feet_to_cm, lb_to_kg, scraper_args
+from py_common.util import imperial_length_to_cm, lb_to_kg, scraper_args
 
 ensure_requirements("lxml", "cloudscraper")
-from lxml import html  # noqa: E402
 import cloudscraper  # noqa: E402
+import requests  # noqa: E402
+from cloudscraper.exceptions import CaptchaException, CloudflareException  # noqa: E402
+from lxml import html  # noqa: E402
 
 HAIR_COLORS = {
     "blond": "Blonde",
@@ -128,7 +133,21 @@ WAYBIG_STUDIO_URL = "https://www.waybig.com/studios/73/bait-buddies/"
 WAYBIG_MONTHS = {
     m: i
     for i, m in enumerate(
-        "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec".split(), start=1
+        [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+        ],
+        start=1,
     )
 }
 
@@ -155,7 +174,9 @@ def find_waybig_url(date, performer_names):
     date_max = (target + timedelta(days=1)).isoformat()
 
     for page in range(1, 16):  # the archive currently spans ~13 pages
-        page_url = WAYBIG_STUDIO_URL if page == 1 else f"{WAYBIG_STUDIO_URL}?page={page}"
+        page_url = (
+            WAYBIG_STUDIO_URL if page == 1 else f"{WAYBIG_STUDIO_URL}?page={page}"
+        )
         tree = fetch(page_url)
         if tree is None:
             break
@@ -182,7 +203,9 @@ def find_waybig_url(date, performer_names):
 
             # Not every post is tagged with performer names; only use the
             # cross-check when there's actually something to check against.
-            models_text = " ".join(item.xpath('.//span[@class="item-models"]//text()')).lower()
+            models_text = " ".join(
+                item.xpath('.//span[@class="item-models"]//text()')
+            ).lower()
             if models_text and not any(name in models_text for name in first_names):
                 continue
 
@@ -280,7 +303,7 @@ def find_iafd_url(date, part_match, performer_names):
         _iafd_scraper = cloudscraper.create_scraper()
     try:
         res = _iafd_scraper.get(IAFD_STUDIO_URL, timeout=(5, 20))
-    except Exception as e:
+    except (requests.RequestException, CloudflareException, CaptchaException) as e:
         log.warning(f"IAFD request failed: {e}")
         return None
     if res.status_code != 200:
@@ -350,10 +373,19 @@ def scene_from_url(url):
     # Each role group for performers is split into "Straight:", "Bait:" as
     # its own div. Using that only as a fallback base order (Straight before Bait).
     role_groups = []
-    for group in tree.xpath('//div[@class="new-video-models"]/div[@class="new-video-model"]'):
-        role = next(iter(group.xpath('.//div[@class="sub-label"]/text()')), "").strip().rstrip(":")
+    for group in tree.xpath(
+        '//div[@class="new-video-models"]/div[@class="new-video-model"]'
+    ):
+        role = (
+            next(iter(group.xpath('.//div[@class="sub-label"]/text()')), "")
+            .strip()
+            .rstrip(":")
+        )
         people = [
-            {"name": a.text_content().strip(), "urls": [a.get("href")] if a.get("href") else []}
+            {
+                "name": a.text_content().strip(),
+                "urls": [a.get("href")] if a.get("href") else [],
+            }
             for a in group.xpath('.//a[@class="desc"]')
             if a.text_content().strip()
         ]
@@ -411,11 +443,12 @@ def scene_from_url(url):
     if code and not code.startswith("bb"):
         code = f"bb{code}"
 
+    urls = [url]
     scene = {
         "title": title,
         "code": code,
         "details": details,
-        "urls": [url],
+        "urls": urls,
         "image": find_image(tree, video_id),
         "studio": {"name": "Bait Buddies", "urls": ["https://www.baitbuddies.com/"]},
         "tags": [{"name": t} for t in tags],
@@ -428,13 +461,13 @@ def scene_from_url(url):
             scene["date"] = date
             waybig_url = find_waybig_url(date, [p["name"] for p in performers])
             if waybig_url:
-                scene["urls"].append(waybig_url)
+                urls.append(waybig_url)
             gevi_url = find_gevi_url(date, [p["name"] for p in performers])
             if gevi_url:
-                scene["urls"].append(gevi_url)
+                urls.append(gevi_url)
             iafd_url = find_iafd_url(date, part_match, [p["name"] for p in performers])
             if iafd_url:
-                scene["urls"].append(iafd_url)
+                urls.append(iafd_url)
 
     return {k: v for k, v in scene.items() if v not in (None, "", [])}
 
@@ -444,9 +477,7 @@ def performer_from_url(url):
     if tree is None:
         return None
 
-    name = next(
-        iter(tree.xpath('//div[@class="profile-disc"]/h2/text()')), ""
-    ).strip()
+    name = next(iter(tree.xpath('//div[@class="profile-disc"]/h2/text()')), "").strip()
 
     # The Body stats block is a flat run of "Label: " text nodes each
     # immediately followed by a <b> value, e.g. "Height: <b>5`10``</b>".
@@ -462,10 +493,8 @@ def performer_from_url(url):
         "name": name,
         "gender": "Male",
         "urls": [url],
-        "image": next(
-            iter(tree.xpath('//img[@class="img-thumbnail"]/@src')), None
-        ),
-        "height": feet_to_cm(stats.get("Height", "")),
+        "image": next(iter(tree.xpath('//img[@class="img-thumbnail"]/@src')), None),
+        "height": imperial_length_to_cm(stats.get("Height", "")),
         "weight": lb_to_kg(stats.get("Weight", "")),
         "hair_color": HAIR_COLORS.get(stats.get("Hair", "").lower()),
         "eye_color": EYE_COLORS.get(stats.get("Eyes", "").lower()),
@@ -492,6 +521,6 @@ if __name__ == "__main__":
             result = performer_from_url(args["url"]) if args.get("url") else None
         case _:
             log.error(f"Unsupported operation: {op}")
-            exit(1)
+            sys.exit(1)
 
     print(json.dumps(result))

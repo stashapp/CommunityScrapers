@@ -6,27 +6,25 @@ sceneByURL:
       - lesbianfactor.com/en/video/
     script:
       - python
-      - ../Altwolia/scrape.py
+      - LFactor.py
       - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
+    - LFactor.py
     - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
-    - lesbianfactor
+    - LFactor.py
     - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
-    - lesbianfactor
+    - LFactor.py
     - scene-by-query-fragment
 galleryByURL:
   - action: script
@@ -35,13 +33,13 @@ galleryByURL:
       - lesbianfactor.com/en/video/
     script:
       - python
-      - ../Altwolia/scrape.py
+      - LFactor.py
       - gallery-by-url
 galleryByFragment:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
+    - LFactor.py
     - gallery-by-fragment
 groupByURL:
   - action: script
@@ -49,7 +47,7 @@ groupByURL:
       - lesbianfactor.com/en/movie/
     script:
       - python
-      - ../Altwolia/scrape.py
+      - LFactor.py
       - movie-by-url
 performerByURL:
   - action: script
@@ -57,18 +55,17 @@ performerByURL:
       - lesbianfactor.com/en/pornstar/
     script:
       - python
-      - ../Altwolia/scrape.py
+      - LFactor.py
       - performer-by-url
 performerByName:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
-    - lesbianfactor
+    - LFactor.py
     - performer-by-name
 performerByFragment:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
+    - LFactor.py
     - performer-by-fragment

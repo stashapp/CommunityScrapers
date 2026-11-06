@@ -1,25 +1,24 @@
+# requires: py_common
 name: "WAPdB"
 performerByName:
-    action: script
-    script:
-      - python
-      - WAPdB.py
-      - performerByName
+  action: script
+  script:
+    - python
+    - WAPdB.py
+    - performer-by-name
 performerByFragment:
-    action: script
+  action: script
+  script:
+    - python
+    - WAPdB.py
+    - performer-by-fragment
+performerByURL:
+  - action: script
+    url:
+      - warashi-asian-pornstars.fr/en/
+      - warashi-asian-pornstars.fr/fr/
+      - warashi-asian-pornstars.fr/ja/
     script:
       - python
       - WAPdB.py
-      - performerByFragment
-performerByURL:
-    - action: script
-      url:
-        - http://warashi-asian-pornstars.fr/en/
-        - http://warashi-asian-pornstars.fr/fr/
-        - http://warashi-asian-pornstars.fr/ja/
-      script:
-        - python
-        - WAPdB.py
-        - performerByURL
-
-# Last Updated January 11, 2022
+      - performer-by-url

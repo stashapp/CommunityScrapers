@@ -1,4 +1,3 @@
-# yaml-language-server: $schema=../validator/scraper.schema.json
 # This is a sub-studio of Evil Erotic, but it has a separate search API, so it gets its own scraper.
 name: TGirls House
 performerByName:
@@ -27,7 +26,7 @@ jsonScrapers:
   performerSearchScraper:
     performer:
       Name: models.#.name
-      Image: models.#.image
+      Images: models.#.image
       URLs:
         selector: models.#.slug
         postProcess:
@@ -46,50 +45,49 @@ jsonScrapers:
                 with: "https://tgirlshouse.com/videos/${1}"
 xPathScrapers:
   performerScraper:
+    common:
+      $info: //span[@class="model-info-label"
     performer:
-      Name: //h1[@class="model-hero-name"]
-      Image: //div[contains(@class, "model-info-photo")]/img/@src
+      Name: //h1[@class="model-info-heading"]
+      Images: //div[contains(@class, "model-info-photo")]/img/@src
       URLs: //meta[@property="og:url"]/@content
-      Birthdate:
-        selector: //span[@class="model-info-label" and text()="Birthday:"]/following-sibling::span/text()
-        postProcess:
-          - replace:
-              - regex: (\d+)(st|nd|rd|th)
-                with: $1
-          - parseDate: 2 January
-      Country: //span[@class="model-info-label" and text()="Country:"]/following-sibling::span/text()
-      Ethnicity: //span[@class="model-info-label" and text()="Ethnicity:"]/following-sibling::span/text()
+      Country: $info and text()="Country:"]/following-sibling::span
+      Ethnicity: $info and text()="Ethnicity:"]/following-sibling::span
       Height:
-        selector: //span[@class="model-info-label" and text()="Height:"]/following-sibling::span/text()
+        selector: $info and text()="Height:"]/following-sibling::span
         postProcess:
           - replace:
-              - regex: (\d+)\s*CM.*
+              - regex: (?i)(\d+)\s*cm.*
                 with: $1
       Weight:
-        selector: //span[@class="model-info-label" and text()="Weight:"]/following-sibling::span/text()
+        selector: $info and text()="Weight:"]/following-sibling::span
         postProcess:
           - replace:
-              - regex: (\d+)\s*KG.*
+              - regex: (?i)(\d+)\s*kg.*
+                with: $1
+      PenisLength:
+        selector: $info and text()="Endowment / Penis Size:"]/following-sibling::span
+        postProcess:
+          - replace:
+              - regex: (?i)(\d+)\s*cm.*
                 with: $1
       Gender:
         fixed: transgender_female
   sceneScraper:
+    common:
+      $models: //div[contains(@class, "vd-meta-models")]
     scene:
       Title: //h1[@class="vd-title"]
       Details:
-        selector: //div[@class="vid-desc-collapse"]/div/p
+        selector: //div[contains(@class, "vid-desc-inner")]/p | //div[contains(@class, "vid-desc-inner")][not(p)]
         concat: "\n\n"
-      URLs: //meta[@property="og:url"]/@content
-      Date:
-        selector: //script[@type="application/ld+json"]/text()
         postProcess:
-          - javascript: |
-              if (value?.length) {
-                const json = JSON.parse(value);
-                if (json?.uploadDate) {
-                  return json.uploadDate.substring(0, 10);
-                }
-              }
+          # Stash drops newlines inside a text node, running the sentences on either side together
+          - replace:
+              - regex: ([\p{Ll}\d][.!?…]["”’)]*)(\p{Lu})
+                with: "${1}\n${2}"
+      URLs: //meta[@property="og:url"]/@content
+      Date: $models/time/@datetime
       Image:
         selector: //meta[@property="og:image"]/@content
         postProcess:
@@ -103,7 +101,14 @@ xPathScrapers:
       Studio:
         Name: //meta[@property="og:site_name"]/@content
       Tags:
-        Name: //h2[text()="Tags"]/following-sibling::div/a/text()
+        Name: //h2[text()="Tags"]/following-sibling::div/a
       Performers:
-        Name: //div[@class="vd-meta-models"]/a/text()
-# Last Updated May 21, 2026
+        Name: $models//span[@class="vmeta-name"]
+        URLs:
+          selector: $models//a[contains(@class, "vmeta-model")]/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://tgirlshouse.com
+        Gender:
+          fixed: transgender_female

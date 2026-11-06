@@ -17,6 +17,7 @@ from AyloAPI.scrape import (
     scraper_args,
 )
 from py_common import log
+from py_common.types import ScrapedStudio
 from py_common.util import replace_all
 
 studio_map = {
@@ -24,12 +25,22 @@ studio_map = {
 }
 
 
+def rename_studio(studio: ScrapedStudio) -> ScrapedStudio:
+    name = studio["name"]
+    renamed: ScrapedStudio = {**studio, "name": studio_map.get(name, name)}
+    if parent := studio.get("parent"):
+        renamed["parent"] = rename_studio(parent)
+    return renamed
+
+
 def redirect(url: str) -> str:
     if not url or "doegirls.com" not in url:
         return url
     # DoeGirls' Aylo scene IDs are LetsDoeIt's, but doegirls.com no longer serves them
     if "/scene/" in url:
-        return re.sub(r"^https?://(www\.)?doegirls\.com", "https://www.letsdoeit.com", url)
+        return re.sub(
+            r"^https?://(www\.)?doegirls\.com", "https://www.letsdoeit.com", url
+        )
     res = head(url, allow_redirects=True)
     if redirect := res.url:
         if redirect.rstrip("/").endswith("404"):
@@ -39,10 +50,7 @@ def redirect(url: str) -> str:
 
 
 def letsdoeit(obj: Any, _) -> Any:
-    # Rename certain studios according to the map
-    fixed = replace_all(obj, "name", replacement=lambda x: studio_map.get(x, x))
-
-    return fixed
+    return replace_all(obj, "studio", replacement=rename_studio)
 
 
 if __name__ == "__main__":

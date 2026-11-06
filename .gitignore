@@ -10,6 +10,7 @@ yarn-error.log
 
 # Scraper-generated files
 **/__pycache__/
+*.cache
 *.ini
 *.json
 !/deno.json

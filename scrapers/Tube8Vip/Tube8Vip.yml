@@ -1,6 +1,6 @@
 name: Tube8Vip
 # requires: py_common, AyloAPI
-# scrapes: Tube8Vip
+# scrapes: Premium - Channel
 galleryByURL:
   - action: script
     url:
@@ -61,14 +61,3 @@ performerByFragment:
     - python
     - Tube8Vip.py
     - performer-by-fragment
-groupByURL:
-  - action: script
-    url:
-      - tube8vip.com/scene/
-      # Since scenes link to the movie we can scrape movies from scenes
-      - tube8vip.com/movie/
-    script:
-      - python
-      - Tube8Vip.py
-      - movie-by-url
-# Last Updated January 14, 2024

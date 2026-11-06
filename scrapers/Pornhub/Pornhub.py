@@ -5,7 +5,7 @@ from urllib.parse import urlparse
 
 from py_common import log
 from py_common.deps import ensure_requirements
-from py_common.types import PerformerSearchResult, SceneSearchResult
+from py_common.types import ScrapedPerformer, ScrapedScene
 from py_common.util import scraper_args
 
 ensure_requirements("requests", "lxml")
@@ -19,9 +19,7 @@ session.headers.update(
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like"
             " Gecko) Chrome/120.0.0.0 Safari/537.36"
         ),
-        "Accept": (
-            "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
-        ),
+        "Accept": ("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"),
         "Accept-Language": "en-US,en;q=0.9",
     }
 )
@@ -31,7 +29,7 @@ session.cookies.set("accessAgeDisclaimerPH", "1", domain=".pornhub.com")
 def get_token() -> str | None:
     try:
         result = session.get("https://www.pornhub.com", timeout=15)
-    except Exception as e:
+    except requests.RequestException as e:
         log.error(f"Failed to fetch Pornhub token page: {e}")
         return None
     # regex extract
@@ -39,7 +37,7 @@ def get_token() -> str | None:
     return data_token.group(1) if data_token else None
 
 
-def performer_by_name(name: str) -> list[PerformerSearchResult]:
+def performer_by_name(name: str) -> list[ScrapedPerformer]:
     token = get_token()
     if not token:
         log.warning("Failed to retrieve token for performer search")
@@ -57,23 +55,24 @@ def performer_by_name(name: str) -> list[PerformerSearchResult]:
             timeout=15,
         )
         data = response.json()
-    except Exception as e:
+    # JSON decoding errors are ValueErrors
+    except (requests.RequestException, ValueError) as e:
         log.warning(f"Failed to fetch or parse Pornhub performer autocomplete: {e}")
         return []
 
-    results: list[PerformerSearchResult] = []
+    results: list[ScrapedPerformer] = []
     for model in data.get("models", []):
         results.append(
             {
                 "name": model.get("name"),
-                "url": f"https://www.pornhub.com/model/{model.get('slug')}",
+                "urls": [f"https://www.pornhub.com/model/{model.get('slug')}"],
             }
         )
     for pornstar in data.get("pornstars", []):
         results.append(
             {
                 "name": pornstar.get("name"),
-                "url": f"https://www.pornhub.com/pornstar/{pornstar.get('slug')}",
+                "urls": [f"https://www.pornhub.com/pornstar/{pornstar.get('slug')}"],
             }
         )
     # sort by alphabetical
@@ -86,17 +85,13 @@ def clean_search_query(name: str) -> str:
     return " ".join(cleaned.split())
 
 
-def parse_scene_search_results(html_content: str) -> list[SceneSearchResult]:
+def parse_scene_search_results(html_content: str) -> list[ScrapedScene]:
+    # lxml only fails to parse an empty document
     if not html_content or not html_content.strip():
         return []
 
-    try:
-        tree = lxml.html.fromstring(html_content)
-    except Exception as e:
-        log.error(f"Failed to parse Pornhub HTML: {e}")
-        return []
-
-    results: list[SceneSearchResult] = []
+    tree = lxml.html.fromstring(html_content)
+    results: list[ScrapedScene] = []
 
     # Match search video list items excluding bottom recommendations
     items = tree.xpath(
@@ -153,9 +148,9 @@ def parse_scene_search_results(html_content: str) -> list[SceneSearchResult]:
             if re.search(r"/(channels|model|pornstar)/", studio_href):
                 studio_name = studio_nodes[0].text_content().strip()
 
-        scene_res: SceneSearchResult = {
+        scene_res: ScrapedScene = {
             "title": title,
-            "url": video_url,
+            "urls": [video_url],
         }
         if image_url:
             scene_res["image"] = image_url
@@ -167,7 +162,7 @@ def parse_scene_search_results(html_content: str) -> list[SceneSearchResult]:
     return results
 
 
-def scene_by_name(name: str) -> list[SceneSearchResult]:
+def scene_by_name(name: str) -> list[ScrapedScene]:
     clean_name = clean_search_query(name)
     if not clean_name:
         log.warning(f"No alphanumeric characters found in search query: {name!r}")
@@ -184,7 +179,7 @@ def scene_by_name(name: str) -> list[SceneSearchResult]:
             params={"search": clean_name},
             timeout=15,
         )
-    except Exception as e:
+    except requests.RequestException as e:
         log.error(f"Failed to query Pornhub search: {e}")
         return []
 
@@ -194,9 +189,7 @@ def scene_by_name(name: str) -> list[SceneSearchResult]:
 
     parsed_url = urlparse(response.url)
     if parsed_url.path in ("", "/"):
-        log.warning(
-            f"Pornhub search was redirected to homepage: {response.url}"
-        )
+        log.warning(f"Pornhub search was redirected to homepage: {response.url}")
         return []
 
     return parse_scene_search_results(response.text)

@@ -1,5 +1,5 @@
-name: Bromo
 # requires: py_common, AyloAPI
+name: Bromo
 # scrapes: Bromo
 galleryByURL:
   - action: script
@@ -65,10 +65,8 @@ groupByURL:
   - action: script
     url:
       - bromo.com/scene/
-      # Since scenes link to the movie we can scrape movies from scenes
       - bromo.com/movie/
     script:
       - python
       - Bromo.py
       - movie-by-url
-# Last Updated January 14, 2024

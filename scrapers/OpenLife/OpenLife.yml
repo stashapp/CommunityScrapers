@@ -10,29 +10,25 @@ sceneByURL:
       - openlife.com/en/video/
     script:
       - python
-      - ../Altwolia/scrape.py
-      - openlife
+      - OpenLife.py
       - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
-    - openlife
+    - OpenLife.py
     - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
-    - openlife
+    - OpenLife.py
     - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
-    - openlife
+    - OpenLife.py
     - scene-by-query-fragment
 galleryByURL:
   - action: script
@@ -41,15 +37,13 @@ galleryByURL:
       - openlife.com/en/video/
     script:
       - python
-      - ../Altwolia/scrape.py
-      - openlife
+      - OpenLife.py
       - gallery-by-url
 galleryByFragment:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
-    - openlife
+    - OpenLife.py
     - gallery-by-fragment
 performerByURL:
   - action: script
@@ -57,20 +51,17 @@ performerByURL:
       - openlife.com/en/pornstar/
     script:
       - python
-      - ../Altwolia/scrape.py
-      - openlife
+      - OpenLife.py
       - performer-by-url
 performerByName:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
-    - openlife
+    - OpenLife.py
     - performer-by-name
 performerByFragment:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
-    - openlife
+    - OpenLife.py
     - performer-by-fragment
