@@ -37,12 +37,12 @@ xPathScrapers:
 
   sceneScraper:
     common:
-      $article: //div[@class="video_tools"]
+      $article: //div[@id='tab_video_info']
     scene:
       URLs: //link[@rel='canonical']/@href
       Title: //div[@class="heading"]//h1
       Details:
-        selector: (//div[@id='tab_video_info']/div[@class="row"]/div[@class="label"])[1]//text()
+        selector: ($article/div[contains(@class, "vp-about")]/div[contains(@class, "vp-desc")])[1]//text()
         concat: "\n"
       Date:
         selector: //script[@type="application/ld+json"]
