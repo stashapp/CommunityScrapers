@@ -16,23 +16,23 @@ from py_common.types import (
 )
 from py_common.util import is_own_url, scraper_args
 
-ensure_requirements("cloudscraper", "lxml")
-import cloudscraper
-from cloudscraper.exceptions import CloudflareException
+ensure_requirements("curl_cffi", "lxml")
+from curl_cffi import requests
+from curl_cffi.requests.exceptions import RequestException
 from lxml import html
-from requests import RequestException
 
 BASE_URL = "https://www.ashemaletube.com"
 
 NOT_TAGS = {"suggest", "suggest tag"}
 
-scraper = cloudscraper.create_scraper()
+# Cloudflare's managed challenge keys on the TLS fingerprint
+client = requests.Session(impersonate="chrome")
 
 
 def fetch(url: str) -> html.HtmlElement | None:
     try:
-        res = scraper.get(url, timeout=30)
-    except (RequestException, CloudflareException) as e:
+        res = client.get(url, timeout=30)
+    except RequestException as e:
         log.error(f"Failed to fetch {url}: {e}")
         return None
     if res.status_code != 200:
@@ -107,8 +107,8 @@ def social_urls(tree: html.HtmlElement) -> list[str]:
     urls = []
     for link in tree.xpath('//a[starts-with(@class, " social-")]/@href'):
         try:
-            urls.append(remove_query(scraper.get(urljoin(BASE_URL, link)).url))
-        except (RequestException, CloudflareException) as e:
+            urls.append(remove_query(client.get(urljoin(BASE_URL, link)).url))
+        except RequestException as e:
             log.warning(f"Could not resolve social link {link}: {e}")
     return urls
 
