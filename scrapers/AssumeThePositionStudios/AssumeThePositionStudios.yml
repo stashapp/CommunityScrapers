@@ -68,3 +68,8 @@ xPathScrapers:
                 - regex: .*[a-z].*
                   with: ""
           split: ","
+driver:
+  headers:
+    # Age verification
+    - Key: Cookie
+      Value: entry_cookie=1
