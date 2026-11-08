@@ -4,7 +4,7 @@ Scraper has been tested on 2026-10-04
 | --------------: | :--------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------- |
 | Naughty America | 2 Chicks Same Time     | https://www.naughtyamerica.com/scene/ash-hollywood-fucking-in-the-bedroom-with-her-tattoos-13301                                                |
 | Naughty America | American Daydreams     | https://www.naughtyamerica.com/scene/jessa-rhodes-fucking-in-the-chair-with-her-tattoos-vr-porn-21001                                           |
-| Naughty America | Asian 1 On 1           | https://www.naughtyamerica.com/scene/asian-wife-mika-tan-fucking-in-the-couch-with-her-big-ass-1                                                |
+| Naughty America | Asian 1 On 1           | https://www.naughtyamerica.com/scene/a1on1-evelynlinrem-30997                                                                                   |
 | Naughty America | Housewife 1 on 1       | https://www.naughtyamerica.com/scene/wife-krissy-lynn-fucking-in-the-living-room-with-her-big-ass-7001                                          |
 | Naughty America | Latin Adultery         | https://www.naughtyamerica.com/scene/sexy-claudia-valentine-loves-some-big-black-cock-30801                                                     |
 | Naughty America | Live Naughty Nurse     | https://www.naughtyamerica.com/scene/patient-rachel-love-fucking-in-the-desk-with-her-tits-5601                                                 |
