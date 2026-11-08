@@ -3,7 +3,8 @@ name: private
 sceneByURL:
   - action: scrapeXPath
     url:
-      - private.com
+      - /private.com
+      - .private.com
     scraper: sceneScraper
   - action: scrapeXPath
     url:
@@ -13,7 +14,8 @@ sceneByURL:
 groupByURL:
   - action: scrapeXPath
     url:
-      - private.com
+      - /private.com
+      - .private.com
     scraper: movieScraper
 performerByName:
   action: scrapeXPath
@@ -22,22 +24,23 @@ performerByName:
 performerByURL:
   - action: scrapeXPath
     url:
-      - private.com
+      - /private.com
+      - .private.com
     scraper: performerScraper
 xPathScrapers:
   movieScraper:
     group:
       Name: &movieName //div[@class="dvds-wrapper"]/h1
-      Director: &movieDirector //p[@class="director"]/span[@itemprop="name"]/text()
+      Director: &movieDirector //p[@class="director"]/span[@itemprop="name"]
       Duration:
         selector: &movieDuration //p[em[contains(text(), "Duration:")]]/text()
         postProcess:
           - replace:
               - regex: ^(\d+).+$
                 with: 00:$1:00
-      Date: &movieDate //span[@itemprop="datePublished"]
+      Date: //span[@itemprop="datePublished"]
       Studio:
-        Name: &movieStudioName //div[@class="dvds-wrapper"]/p[@class="line-dvd"]
+        Name: //div[@class="dvds-wrapper"]/p[@class="line-dvd"]
       Synopsis: &movieSynopsis //p[@class="sinopsys"]
       FrontImage: &movieFrontImage //div[@class="dvds-wrapper"]//img[@class="img-responsive"]/@src
   performerSearch:

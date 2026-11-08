@@ -4,7 +4,8 @@ name: Babes
 galleryByURL:
   - action: script
     url:
-      - babes.com/scene/
+      - /babes.com/scene/
+      - .babes.com/scene/
     script:
       - python
       - ../AyloAPI/scrape.py
@@ -12,7 +13,8 @@ galleryByURL:
 sceneByURL:
   - action: script
     url:
-      - babes.com/scene/
+      - /babes.com/scene/
+      - .babes.com/scene/
     script:
       - python
       - ../AyloAPI/scrape.py
@@ -48,7 +50,8 @@ performerByName:
 performerByURL:
   - action: script
     url:
-      - babes.com/model/
+      - /babes.com/model/
+      - .babes.com/model/
     script:
       - python
       - ../AyloAPI/scrape.py
@@ -63,9 +66,11 @@ performerByFragment:
 groupByURL:
   - action: script
     url:
-      - babes.com/movie/
+      - /babes.com/movie/
+      - .babes.com/movie/
       # Since scenes link to the movie we can scrape movies from scenes
-      - babes.com/scene/
+      - /babes.com/scene/
+      - .babes.com/scene/
     script:
       - python
       - ../AyloAPI/scrape.py

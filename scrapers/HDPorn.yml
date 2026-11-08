@@ -2,7 +2,8 @@ name: "HDPorn"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - hdporn.com
+      - /hdporn.com
+      - .hdporn.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:

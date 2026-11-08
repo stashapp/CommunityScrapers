@@ -3,7 +3,8 @@ name: "VRBangers"
 sceneByURL:
   - action: scrapeXPath
     url: &urls
-      - arporn.com
+      - /arporn.com
+      - .arporn.com
       - blowvr.com
       - vrbangers.com
       - vrbgay.com
@@ -68,9 +69,9 @@ xPathScrapers:
         selector: $secondText | $videoDescription | //meta[@name="description"][not($secondText)][not($videoDescription)]/@content
         concat: "\n\n"
       Tags: &tagsAttr
-        Name: //div[@data-testid="video-categories-list"]/a[contains(@href,"category/")]/text()|//div[@class="single-video-categories"]//a[contains(@href,"category/")]//text()
+        Name: //div[@data-testid="video-categories-list"]/a[contains(@href,"category/")]|//div[@class="single-video-categories"]//a[contains(@href,"category/")]
       Performers: &performersAttr
-        Name: //div[starts-with(@class, 'video-item__info-starring')]//a/text()|//div[contains(@class, "single-video-info__starring")]//a//text()
+        Name: //div[starts-with(@class, 'video-item__info-starring')]//a|//div[contains(@class, "single-video-info__starring")]//a
       Studio: &studioAttr
         Name: &studioName
           selector: &studioURLSel //meta[@name="dl8-customization-brand-url"]/@content
@@ -109,7 +110,7 @@ xPathScrapers:
                 with: "VRBangers - "
       Duration:
         # the value sits in a sibling <span>, not a bare text node
-        selector: $info//span[contains(text(),"Duration:")]/following-sibling::span/text()|$info//span[contains(text(),"Duration:")]/following-sibling::text()
+        selector: $info//span[contains(text(),"Duration:")]/following-sibling::span|$info//span[contains(text(),"Duration:")]/following-sibling::text()
         postProcess:
           - replace:
               - regex: \smin
@@ -129,19 +130,19 @@ xPathScrapers:
                 with: ""
       Images: //div[contains(@class, "single-model-profile__image app-image")]/img/@src
       Birthdate:
-        selector: $modelInfoItem/span[text()="Birthday:"]/following-sibling::span/text()
+        selector: $modelInfoItem/span[text()="Birthday:"]/following-sibling::span
         postProcess:
           - parseDate: January 2
-      Measurements: $modelInfoItem/span[text()="Measurements:"]/following-sibling::span/text()
-      Height: $modelInfoItem/span[text()="Height:"]/following-sibling::span/text()
-      Weight: $modelInfoItem/span[text()="Weight:"]/following-sibling::span/text()
-      Tattoos: $modelInfoItem/span[text()="Tatoos:"]/following-sibling::span/text()
-      Piercings: $modelInfoItem/span[text()="Piercings:"]/following-sibling::span/text()
-      Country: $modelInfoItem/span[text()="Country of origin:"]/following-sibling::span/text()
-      Ethnicity: $modelInfoItem/span[text()="Ethnicity:"]/following-sibling::span/text()
-      EyeColor: $modelInfoItem/span[text()="Eye Color:"]/following-sibling::span/text()
-      HairColor: $modelInfoItem/span[text()="Hair Color:"]/following-sibling::span/text()
-      Aliases: $modelInfoItem/span[text()="Aka:"]/following-sibling::span/text()
+      Measurements: $modelInfoItem/span[text()="Measurements:"]/following-sibling::span
+      Height: $modelInfoItem/span[text()="Height:"]/following-sibling::span
+      Weight: $modelInfoItem/span[text()="Weight:"]/following-sibling::span
+      Tattoos: $modelInfoItem/span[text()="Tatoos:"]/following-sibling::span
+      Piercings: $modelInfoItem/span[text()="Piercings:"]/following-sibling::span
+      Country: $modelInfoItem/span[text()="Country of origin:"]/following-sibling::span
+      Ethnicity: $modelInfoItem/span[text()="Ethnicity:"]/following-sibling::span
+      EyeColor: $modelInfoItem/span[text()="Eye Color:"]/following-sibling::span
+      HairColor: $modelInfoItem/span[text()="Hair Color:"]/following-sibling::span
+      Aliases: $modelInfoItem/span[text()="Aka:"]/following-sibling::span
       URLs: >
         //link[@rel="canonical"]/@href
         | $modelLinks/a[contains(@href, "instagram")]/@href
