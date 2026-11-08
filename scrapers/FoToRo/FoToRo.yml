@@ -1,5 +1,5 @@
 name: FoToRo
-# scrapes: Belt Bound, Bound Life, Breasts in Pain, Chastity Babes, Cuffed In Uniform, Cuffed Outdoors, CuffGirl, Girl Asylum, Girls In Cuffs, Hogtie-Bondage, HuCows, Metal Bondage, Natalia Forrest XXX, Shock Challenge, Sybian1, Tieable, TOAXXX
+# scrapes: Belt Bound, Bound Life, Breasts in Pain, Chastity Babes, Cuffed In Uniform, Cuffed Outdoors, CuffGirl, Girl Asylum, Girls In Cuffs, Hogtie-Bondage, HuCows, Metal Bondage, Natalia Forrest XXX, Shock Challenge, Tieable, TOAXXX
 
 sceneByURL:
   - action: scrapeJson
@@ -49,10 +49,6 @@ sceneByURL:
     url:
       - metalbondage.com
     scraper: metalBondageScene
-  - action: scrapeXPath
-    url:
-      - sybian1.com
-    scraper: sybian1Scene
   - action: scrapeXPath
     url:
       - beltbound.com
@@ -348,42 +344,6 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Girls In Cuffs
-
-  sybian1Scene:
-    common:
-      $shot: //img[contains(@src,"/trailer_images/")]
-    scene:
-      Title: //h1
-      URLs: //link[@rel="canonical"]/@href
-      Date:
-        selector: //span[contains(@class,"meta-date")]
-        postProcess:
-          - replace:
-              - regex: '(?s).*?([A-Z][a-z]+ \d{1,2}, \d{4}).*'
-                with: $1
-          - parseDate: January 2, 2006
-      Details:
-        selector: //div[@class="post-contents"]/p
-        concat: "\n\n"
-      Performers:
-        Name: //a[@rel="tag"]
-      Tags:
-        Name:
-          selector: //div[@class="meta-category"]/a
-          postProcess:
-            - *dropUpdates
-      Image: $shot/@src
-      Code:
-        selector: $shot/@src
-        postProcess:
-          - replace:
-              - regex: '^.*/([a-z0-9]+(?:-[a-z0-9]+)*)-\d+\.jpg$'
-                with: $1
-              - regex: "^.*/.*$"
-                with: ""
-      Studio:
-        Name:
-          fixed: Sybian1
 
 driver:
   headers:

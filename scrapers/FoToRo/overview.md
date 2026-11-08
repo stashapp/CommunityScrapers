@@ -16,6 +16,5 @@ Scraper has been tested on 2026-09-23
 | Metal Bondage       | https://www.metalbondage.com/2026/09/carol-and-renny-cant-stop-kissing/                  |
 | Natalia Forrest XXX | https://www.nataliaforrestxxx.com/2026/09/video-hook-up-with-natalia-forrest/            |
 | Shock Challenge     | https://www.shockchallenge.com/2026/04/11/elizabeth-booby-trap/                          |
-| Sybian1             | https://www.sybian1.com/2026/08/kattie-gold-rides-the-sybian/                            |
 | Tieable             | https://www.tieable.com/2026/09/melodie-pink-hogtie/                                     |
 | TOAXXX              | https://www.toaxxx.com/2026/07/slave-susi-with-mistress-maya/                            |
