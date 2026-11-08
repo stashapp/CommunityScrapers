@@ -84,7 +84,8 @@ xPathScrapers:
       Performers:
         Name: >-
           //a[@label="Clip Attribute - Performer"] |
-          //div[@class="video-performer"]/a[not(//a[@label="Clip Attribute - Performer"])]
+          //div[@class="video-performer"]/a[not(//a[@label="Clip Attribute - Performer"])] |
+          //div[contains(@class,"video-performer-container")]/a[@data-label="Performer" and not(//a[@label="Clip Attribute - Performer"]) and not(//div[@class="video-performer"]/a)]
       Studio:
         Name:
           selector: &studioSel >-
