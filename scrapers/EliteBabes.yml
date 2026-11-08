@@ -1,7 +1,7 @@
 name: EliteBabes
 performerByName:
-  action: scrapeXPath
-  queryURL: https://www.elitebabes.com/?s={}
+  action: scrapeJson
+  queryURL: https://www.elitebabes.com/wp-content/themes/masonry/autocomplete_search.php?term={}
   scraper: performerSearch
 performerByURL:
   - action: scrapeXPath
@@ -9,36 +9,44 @@ performerByURL:
       - www.elitebabes.com/model/
     scraper: performerScraper
 
-xPathScrapers:
+jsonScrapers:
   performerSearch:
     performer:
-      Name: //ul//a[contains(@href,"model/")]//text()
-      URLs: //ul//a[contains(@href,"model/")]/@href
-
-  performerScraper:
-    common:
-      $infoPiece: //div/ul[@class='list-aside hidden']/li/span
-    performer:
-      Name: //div/h2[@class='fn']/text()
-      Birthdate: $infoPiece[text() = 'Born:']/../text()
-      Gender:
-        fixed: "Female"
-      Height:
-        selector: $infoPiece[text() = 'Height:']/../text()
+      Name: '#(type=="model")#.label'
+      URLs:
+        selector: '#(type=="model")#.url'
         postProcess:
           - replace:
-              - regex: ^(\d+).*
-                with: $1
-      Image: //div/figure/img/@src
-      Country: $infoPiece[text() = 'Birthplace:']/../text()
-      Tags:
-        Name: //div/div[@class='link-btn']/h2/a
-      Measurements: $infoPiece[text() = 'Measurements:']/../text()
-      CareerLength: $infoPiece[text() = 'First Seen:']/../text()
+              - regex: ^
+                with: https://www.elitebabes.com
+
+xPathScrapers:
+  performerScraper:
+    common:
+      $info: //div[@class="module-more"]/ul[@class="list-aside"]/li
+    performer:
+      Name: //header[@class="header-model"]/h1
       Aliases:
-        selector: //div/p[@class='read-more']/strong
+        selector: //div[@class="module-more"]/p/strong[not(. = //header[@class="header-model"]/h1)]
         concat: ", "
-      HairColor: $infoPiece[text() = 'Hair Color:']/../text()
-      Details: //div/p[@class='read-more-wrap']
-      URLs: //link[@rel='canonical']/@href
-# Last Updated September 17, 2025
+      Details: //div[@class="module-more"]/p[not(strong)]
+      Birthdate: $info[span="Born:"]/text()
+      Country: $info[span="Birthplace:"]/text()
+      HairColor: $info[span="Hair Color:"]/text()
+      Height:
+        selector: $info[span="Height:"]/text()
+        postProcess:
+          - replace:
+              - regex: ^(\d+) cm.*
+                with: $1
+      Measurements: $info[span="Measurements:"]/text()
+      CareerStart: $info[span="First Seen:"]/text()
+      Tags:
+        Name: //a[contains(@href,"/model-tag/")]
+      Images:
+        selector: //header[@class="header-model"]//figure/img/@src
+        postProcess:
+          - replace:
+              - regex: _400\.jpg$
+                with: .jpg
+      URLs: //a[@class="overlay-a"]/@href
