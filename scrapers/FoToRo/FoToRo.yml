@@ -384,3 +384,9 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Sybian1
+
+driver:
+  headers:
+    # Age verification
+    - Key: Cookie
+      Value: age_gate=18
