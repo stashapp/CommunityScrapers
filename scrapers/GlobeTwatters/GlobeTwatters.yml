@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeJson
     url:
       - asiansexdiary.com/
+      - eurosexdiary.com/
       - helloladyboy.com/
       - milftrip.com/
       - trikepatrol.com/
@@ -14,17 +15,6 @@ sceneByURL:
           with: ""
         - regex: '^https?://(?:www\.)?([^/]+)/(?:.*/)?([^/]+)/?$'
           with: https://$1/wp-json/wp/v2/rest-content?_embed&slug=$2
-    scraper: sceneScraper
-  - action: scrapeJson
-    url:
-      - eurosexdiary.com/
-    queryURL: "{url}"
-    queryURLReplace:
-      url:
-        - regex: "[?#].*$"
-          with: ""
-        - regex: '^https?://(?:www\.)?([^/]+)/(?:.*/)?([^/]+)/?$'
-          with: https://$1/wp-json/wp/v2/posts?_embed&slug=$2
     scraper: sceneScraper
   - action: scrapeXPath
     url:
@@ -38,23 +28,13 @@ sceneByURL:
     scraper: legacyScraper
 
 performerByURL:
-  - action: scrapeJson
-    url:
-      - asiansexdiary.com/model/
-      - trikepatrol.com/model/
-      - tuktukpatrol.com/models/
-    queryURL: "{url}"
-    queryURLReplace:
-      url:
-        - regex: "[?#].*$"
-          with: ""
-        - regex: '^https?://(?:www\.)?([^/]+)/(?:.*/)?([^/]+)/?$'
-          with: https://$1/wp-json/wp/v2/model?slug=$2
-    scraper: performerScraper
   - action: scrapeXPath
     url:
+      - asiansexdiary.com/model/
       - eurosexdiary.com/model/
-    scraper: legacyPerformerScraper
+      - trikepatrol.com/model/
+      - tuktukpatrol.com/model/
+    scraper: performerScraper
 
 jsonScrapers:
   sceneScraper:
@@ -108,7 +88,7 @@ jsonScrapers:
           - replace:
               - regex: '-\d+x\d+(\.[A-Za-z]+)$'
                 with: $1
-      URLs: &url 0.link
+      URLs: 0.link
       Studio:
         Name:
           selector: 0.link
@@ -125,45 +105,6 @@ jsonScrapers:
                 trikepatrol.com: Trike Patrol
                 tuktukpatrol.com: TukTuk Patrol
 
-  performerScraper:
-    performer:
-      Name:
-        selector: 0.title.rendered
-        postProcess:
-          - *htmlToText
-      Gender:
-        fixed: Female
-      Country:
-        selector: 0.link
-        postProcess:
-          - javascript: |
-              const country = { "trikepatrol.com": "Philippines", "tuktukpatrol.com": "Thailand" };
-              return country[value.split("/")[2].replace(/^www\./, "")] ?? "";
-      Ethnicity:
-        selector: 0.link
-        postProcess:
-          - javascript: |
-              const asian = ["asiansexdiary.com", "trikepatrol.com", "tuktukpatrol.com"];
-              return asian.includes(value.split("/")[2].replace(/^www\./, "")) ? "Asian" : "";
-      Image: 0.acf.portrait_image.url
-      Birthdate:
-        selector: 0.acf.date_of_birth
-        postProcess:
-          - javascript: |
-              const [day, month, year] = value.split("/").map(Number);
-              if (!year || year > new Date().getFullYear() - 18) return "";
-              return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-      Details:
-        selector: 0.content.rendered
-        postProcess:
-          - *htmlToText
-      URLs: *url
-
-  performerSearch:
-    performer:
-      Name: "#.title.rendered"
-      URLs: "#.link"
-
 xPathScrapers:
   toticosScraper:
     common:
@@ -171,11 +112,11 @@ xPathScrapers:
     scene:
       Title: //h1[@class="post-title"][$scene]
       Date:
-        selector: //meta[@property="article:published_time"][$scene]/@content
+        selector: //script[@type="application/ld+json" and contains(., "datePublished") and $scene]
         postProcess:
           - replace:
-              - regex: T.*$
-                with: ""
+              - regex: '^.*?"datePublished":"(\d{4}-\d{2}-\d{2}).*$'
+                with: $1
       Details: //span[@class="latest_update_description"]
       Performers:
         Name: //div[@class="single-model-head"]/a
@@ -210,26 +151,36 @@ xPathScrapers:
         Name:
           fixed: Screw Me Too
 
-  legacyPerformerScraper:
+  performerScraper:
     performer:
-      Name: //h1[contains(@class, "amp-model-title")]
-      Gender:
-        fixed: Female
-      Image: //div[contains(@class, "model-contr-colone")]//amp-img/@src
-      Details:
-        selector: //div[contains(@class, "model-desc")]//*[self::h2 or self::p]
-        concat: "\n\n"
-      Height:
-        selector: //span[contains(text(), "Height")]/following-sibling::text()
+      Name: //h1[@class="hl-model-profile__name"]
+      Details: //p[@class="hl-model-profile__blurb"]
+      CareerStart:
+        selector: //span[contains(@class, "hl-model-profile__first")]
         postProcess:
-          - feetToCm: true
-      Weight:
-        selector: //span[contains(text(), "Weight")]/following-sibling::text()
+          - javascript: |
+              const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+              const [, month, year] = value.match(/(\w{3}) (\d{4})/) ?? [];
+              const index = months.indexOf(month);
+              return index < 0 ? "" : `${year}-${String(index + 1).padStart(2, "0")}`;
+      Tags:
+        Name: //a[@class="hl-model-profile__tag"]
+      Images:
+        selector: //img[@class="hl-model-profile__portrait-img"]/@src
         postProcess:
           - replace:
-              - regex: '\D'
-                with: ""
-          - lbToKg: true
-      EyeColor: //span[contains(text(), "Eye Color")]/following-sibling::text()
-      HairColor: //span[contains(text(), "Hair Color")]/following-sibling::text()
-      URLs: //link[@rel="canonical"]/@href
+              - regex: '-\d+x\d+(\.[A-Za-z]+)$'
+                with: $1
+      # The canonical link and og:url still point at the old /models/ path on some sites
+      URLs:
+        selector: //link[@type="application/json+oembed"]/@href
+        postProcess:
+          - replace:
+              - regex: ^.*[?&]url=([^&]+).*$
+                with: $1
+              - regex: "%3A"
+                with: ":"
+              - regex: "%2F"
+                with: /
+driver:
+  useSurf: true

@@ -1,9 +1,9 @@
-Scraper has been tested on 2026-09-18
+Scraper has been tested on 2026-11-08
 
 | Studio          | URL                                                                                                          |
 | --------------- | ------------------------------------------------------------------------------------------------------------ |
 | Asian Sex Diary | https://asiansexdiary.com/videos/big-tits-sex-hookup-cambodia/                                               |
-| Euro Sex Diary  | https://eurosexdiary.com/2026/09/04/cock-hungry-slut-3rd-dose/                                               |
+| Euro Sex Diary  | https://eurosexdiary.com/videos/cock-hungry-slut-3rd-dose/                                                   |
 | Hello Ladyboy   | https://helloladyboy.com/content/transexual-porn-hardcore-fantasy/                                           |
 | MILF Trip       | https://milftrip.com/content/bald-pussy-milf-photographer-chick-found-at-the-park/                           |
 | Screw Me Too    | https://web.archive.org/web/20200929014123/https://screwmetoo.com/content/anal-sex-date-blonde-russian-slut/ |
