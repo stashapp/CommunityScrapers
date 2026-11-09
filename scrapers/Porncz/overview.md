@@ -1,4 +1,4 @@
-Scraper has been tested on 2026-09-15
+Scraper has been tested on 2026-11-09
 
 | Studio                | URL                                                                                             |
 | :-------------------- | :---------------------------------------------------------------------------------------------- |
@@ -35,4 +35,4 @@ Scraper has been tested on 2026-09-15
 | Sex With Muslims      | https://www.sexwithmuslims.com/en/czech-babe-ashely-ocean-wants-a-discount-on-rent-for-sex/0894 |
 | Susan ayn             | https://www.susanayn.com/en/an-outdoor-fuck/0639                                                |
 | Teen from bohemia     | https://www.teenfrombohemia.com/en/a-teen-slut-fucked-by-a-muscular-guy/0525                    |
-| VR porn CZ            | https://www.vrporncz.com/en/come-and-fuck-hot-vinna-reed                                        |
+| VR porn CZ            | https://www.vrporncz.com/en/horny-doctor-fucks-you-so-hard                                      |
