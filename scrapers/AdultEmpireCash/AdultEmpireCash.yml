@@ -1,5 +1,5 @@
 name: AdultEmpireCash
-# Scrapes: 18Lust, Black Massive Cocks, Brazilian Trans Girls, Brutha's Inc, Conor Coxxx, Elegant Angel, Evil Angel, Forbidden Fruits Films, Helix Studios, Horny Household, Hot Wives Cheating, Jay's POV, Jodi West, Jonathan Jordan XXX, Kings of Fetish, Latino Guys Porn, Only3X, Reagan Foxx, Rodney Moore, SINematica, Smut Factor, Spankmonster, StepHouseXXX, Taboolu, Third World Media, Transational Fantasies, West Coast Productions
+# Scrapes: 18Lust, Black Massive Cocks, Brazilian Trans Girls, Brutha's Inc, Conor Coxxx, Elegant Angel, Evil Angel, Forbidden Fruits Films, Helix Studios, Horny Household, Jay's POV, Jodi West, Jonathan Jordan XXX, Kings of Fetish, Latino Guys Porn, Only3X, Reagan Foxx, Rodney Moore, SINematica, Smut Factor, Spankmonster, StepHouseXXX, Taboolu, Third World Media, Transational Fantasies, West Coast Productions
 # Sites ("Brands") from https://www.adultempirecash.com
 sceneByURL:
   - action: scrapeXPath
@@ -15,7 +15,6 @@ sceneByURL:
       - forbiddenfruitsfilms.com/
       - helixstudios.com/
       - hornyhousehold.com/
-      - hotwivescheating.com/
       - jayspov.net/
       - jodiwest.com/
       - jonathanjordanxxx.com/
@@ -96,9 +95,15 @@ xPathScrapers:
                 # trim whitespace first so the map below matches exactly
                 - regex: ^\s+|\s+$
                   with:
+                # Evil Angel director lines are their own StashDB studios
+                - regex: ^Evil Angel -\s+
+                  with:
             - map:
-                Evil Angel - Joey Silvera: Joey Silvera
-                Evil Angel - LeWood: LeWood
+                Belladonna: Belladonna Entertainment
+                Christoph Clark: Christoph Clark Online
+                Jay Sin: Jay Sin XXX
+                Jonni Darkko: Jonni Darkko XXX
+                Nacho Vidal: Nacho Vidal Hardcore
                 Jay Rock Clips: Jay's POV
                 LeWood Productions: LeWood
                 LeWood Selects: LeWood
