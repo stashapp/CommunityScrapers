@@ -1,11 +1,3 @@
-# yaml-language-server: $schema=../validator/scraper.schema.json
-# You will probably need to add the following environment variable to your stash config:
-#
-# GODEBUG=tlsrsakex=1
-#
-# This is a workaround for the Go TLS library not supporting RSA key exchange.
-# The sites below are currently using RSA key exchange, which is not supported by the Go TLS library.
-# source: https://github.com/stashapp/CommunityScrapers/issues/2064
 name: TGirl-Network
 galleryByURL:
   - action: scrapeXPath
@@ -82,4 +74,7 @@ xPathScrapers:
       Code:
         selector: *imageSelTsBaileyJay
         postProcess: *codePostProcess
-# Last Updated April 22, 2025
+driver:
+  # both sites only offer RSA key exchange, which Go's TLS stack refuses; surf negotiates like a browser.
+  # Image downloads do not go through surf, so they still need GODEBUG=tlsrsakex=1 in Stash's environment
+  useSurf: true
