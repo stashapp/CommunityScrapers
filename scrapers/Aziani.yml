@@ -3,7 +3,9 @@ sceneByURL:
   - action: scrapeJson
     url:
       - aziani.com/video/
-    queryURL: https://azianistudios.com/tour_api.php/content/sets?cms_set_ids={url}&cms_block_id=138224&data_types=1
+    # cms_block_id changes whenever the tour design is republished; the current one is in the
+    # SPA's own call to tour_api.php/content/sets (capture it with a headless browser netlog)
+    queryURL: https://azianistudios.com/tour_api.php/content/sets?cms_set_ids={url}&cms_block_id=147904&data_types=1
     queryURLReplace:
       url:
         - regex: .+/video/([^/?#]+).*
