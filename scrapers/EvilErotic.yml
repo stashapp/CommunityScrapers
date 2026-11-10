@@ -1,4 +1,3 @@
-# yaml-language-server: $schema=../validator/scraper.schema.json
 name: Evil Erotic
 performerByName:
   action: scrapeJson
@@ -26,7 +25,7 @@ jsonScrapers:
   performerSearchScraper:
     performer:
       Name: models.#.name
-      Image: models.#.image
+      Images: models.#.image
       URLs:
         selector: models.#.slug
         postProcess:
@@ -46,18 +45,12 @@ jsonScrapers:
 xPathScrapers:
   performerScraper:
     performer:
-      Name: //h1[@class="model-hero-name"]
-      Image: //div[contains(@class, "model-info-photo")]/img/@src
+      Name: //h1[@class="model-info-heading"]
+      Images: //div[contains(@class, "model-info-photo")]/img/@src
       URLs: //meta[@property="og:url"]/@content
-      Birthdate:
-        selector: //span[@class="model-info-label" and text()="Birthday:"]/following-sibling::span/text()
-        postProcess:
-          - replace:
-              - regex: (\d+)(st|nd|rd|th)
-                with: $1
-          - parseDate: 2 January
-      Country: //span[@class="model-info-label" and text()="Country:"]/following-sibling::span/text()
-      Ethnicity: //span[@class="model-info-label" and text()="Ethnicity:"]/following-sibling::span/text()
+      # the site shows a day and month but no year, which Stash cannot store as a partial date
+      Country: //span[@class="model-info-label" and text()="Country:"]/following-sibling::span
+      Ethnicity: //span[@class="model-info-label" and text()="Ethnicity:"]/following-sibling::span
       Height:
         selector: //span[@class="model-info-label" and text()="Height:"]/following-sibling::span/text()
         postProcess:
@@ -102,7 +95,12 @@ xPathScrapers:
       Studio:
         Name: //meta[@property="og:site_name"]/@content
       Tags:
-        Name: //h2[text()="Tags"]/following-sibling::div/a/text()
+        Name: //h2[text()="Tags"]/following-sibling::div/a
       Performers:
-        Name: //div[@class="vd-meta-models"]/a/text()
-# Last Updated May 21, 2026
+        Name: //div[contains(@class, "vd-meta-models")]//span[@class="vmeta-name"]
+        URLs:
+          selector: //div[contains(@class, "vd-meta-models")]//a[contains(@class, "vd-model-link")]/@href
+          postProcess:
+            - replace:
+                - regex: ^/
+                  with: https://evilerotic.com/
