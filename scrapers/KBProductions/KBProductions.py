@@ -22,8 +22,10 @@ studio_map = {
     "amazingfilms.com": "Amazing Films",
     "analonly.com": "Anal Only",
     "analjesse.com": "Anal Jesse",
+    "beddableboys.com": "Beddable Boys",
     "bemefi.com": "Bemefi",
     "benefitmonkey.com": "Benefit Monkey",
+    "bestbareback.com": "Best Bareback",
     "biggulpgirls.com": "Big Gulp Girls",
     "bjraw.com": "BJ Raw",
     "blackbullchallenge.com": "Black Bull Challenge",
@@ -47,15 +49,21 @@ studio_map = {
     "downblousejerk.com": "Downblouse Jerk",
     "dripdropprod.net": "DripDrip",
     "edwardjames.com": "Edward James",
+    "emonetwork.com": "EmoNetwork",
+    "emotwinks.com": "Emo Twinks",
+    "exposedemos.com": "Exposed Emos",
     "facialsforever.com": "Facials Forever",
     "fantasypov.com": "FantasyPOV",
     "freakmobhardcore.com": "FreakMob Hardcore",
     "freakmobmedia.com": "FreakMob Media",
+    "gaylifenetwork.com": "GayLifeNetwork",
     "gogobarauditions.com": "Gogo Bar Auditions",
     "gogoworldporn.com": "GoGo World Porn",
     "gotfilled.com": "Got Filled",
     "hardwerk.com": "HardWerk",
     "hobybuchanon.com": "Hoby Buchanon",
+    "homoemo.com": "Homo Emo",
+    "homoscene.com": "Homo Scene",
     "inkedpov.com": "Inked POV",
     "inmelanin.com": "InMelanin",
     "inserted.com": "Inserted",
@@ -70,6 +78,7 @@ studio_map = {
     "legendaryx.com": "Legendary X",
     "lezkey.com": "LezKey",
     "lingerietales.com": "Lingerie Tales",
+    "lollipoptwinks.com": "Lollipop Twinks",
     "lucidflix.com": "LucidFlix",
     "lukecooperx.com": "Luke CooperX",
     "machofactory.com": "Macho Factory",
@@ -104,6 +113,7 @@ studio_map = {
     "sidechick.com": "SIDECHICK",
     "suckthisdick.com": "Suck This Dick",
     "swallowed.com": "Swallowed",
+    "teachtwinks.com": "Teach Twinks",
     "theartemixxx.com": "The ArtemiXXX",
     "topwebmodels.com": "Top Web Models",
     "topwebmodels-interviews.com": "TWM Interviews",
@@ -115,6 +125,8 @@ studio_map = {
     "karlsworld.toughlovex.com": "ToughLoveX",
     "toughlove.toughlovex.com": "ToughLoveX",
     "trueanal.com": "True Anal",
+    "twinklight.tv": "Twinklight",
+    "twinkylicious.com": "Twinkylicious",
     "twmclassics.com": "TWM Classics",
     "upskirtjerk.com": "Upskirt Jerk",
     "vrhush.com": "VRHush",
@@ -133,8 +145,13 @@ NO_SITE_OF_THEIR_OWN = {
     "3rdwheel.toughlovex.com",
     "blakemason-after-hours.com",
     "drkarl.toughlovex.com",
+    "emotwinks.com",
+    "exposedemos.com",
+    "homoemo.com",
+    "homoscene.com",
     "karlskasting.toughlovex.com",
     "karlsworld.toughlovex.com",
+    "lollipoptwinks.com",
     "premium-nickmarxx.com",
     "slutwife.labelladx.com",
     "toughlove.toughlovex.com",
@@ -246,18 +263,20 @@ def get_studio(site: str, page_url: str) -> ScrapedStudio:
 
 
 def get_code(site: str, raw_scene: dict) -> str | None:
+    # A prefix without a number (bbb_lezlie_robert01) is just the brand, not a code
     if (scene_code := dig(raw_scene, "scene_code")) and (
-        match := re.match(r"^([^_]+).*$", scene_code)
+        match := re.match(r"^([^_]*\d[^_]*)", scene_code)
     ):
         return match.group(1)
 
     if (trailer := dig(raw_scene, "trailer_url")) and (
-        match := re.search(r"^(\w{2,3}\d{4})", trailer.split('/')[-1])
+        match := re.search(r"^(\w{2,3}\d{4})", trailer.split("/")[-1])
     ):
         return match.group(1)
 
     if _id := dig(raw_scene, "id"):
         return str(_id)
+
 
 def looks_like_image(url: str) -> bool:
     # Some CDNs serve images from extensionless paths with a generic content-type
@@ -267,7 +286,10 @@ def looks_like_image(url: str) -> bool:
     except requests.RequestException:
         return False
     header = r.content
-    return header.startswith((b"\xff\xd8\xff", b"\x89PNG", b"GIF8")) or header[8:12] == b"WEBP"
+    return (
+        header.startswith((b"\xff\xd8\xff", b"\x89PNG", b"GIF8"))
+        or header[8:12] == b"WEBP"
+    )
 
 
 def torso_variant(url: str) -> str:
@@ -279,9 +301,15 @@ def torso_variant(url: str) -> str:
         return torso_image_url
     return url
 
+
 def to_scraped_performer(raw_performer: dict, page_url: str) -> ScrapedPerformer:
     # Convert dict keys to lower case because, of couse, they can come in differently depending on studio.
     raw_performer = {key.lower(): value for key, value in raw_performer.items()}
+    # The gay network hubs keep the stats as label/value pairs and omit gender and site_domain
+    raw_performer |= {
+        label.lower(): value for label, value in raw_performer.get("fields") or []
+    }
+    site = raw_performer.get("site_domain") or urllib.parse.urlparse(page_url).netloc
 
     # Studios that do not use units for measurements, but are obviously not metric.
     STUDIO_USES_IMPERIAL = [
@@ -293,18 +321,14 @@ def to_scraped_performer(raw_performer: dict, page_url: str) -> ScrapedPerformer
 
     performer: ScrapedPerformer = {
         "name": raw_performer["name"],
-        "gender": raw_performer["gender"],
-        "urls": [
-            make_performer_url(
-                raw_performer["slug"], raw_performer["site_domain"], page_url
-            )
-        ],
+        "urls": [make_performer_url(raw_performer["slug"], site, page_url)],
         "tags": [],
     }
 
-    if image := raw_performer.get("thumb"):
-        performer["images"] = [torso_variant(image)]
-    elif image := raw_performer.get("thumbnail"):
+    if gender := raw_performer.get("gender"):
+        performer["gender"] = gender
+
+    if image := raw_performer.get("thumb") or raw_performer.get("thumbnail"):
         image = re.sub(r"^//", "https://", image)
         performer["images"] = [torso_variant(image)]
 
@@ -353,9 +377,7 @@ def to_scraped_performer(raw_performer: dict, page_url: str) -> ScrapedPerformer
         w := re.match(r"^([\d\.]+)$", weight_nounits)
     ):
         performer["weight"] = (
-            lbs_to_kg(w.group(1))
-            if raw_performer["site_domain"] in STUDIO_USES_IMPERIAL
-            else str(w.group(1))
+            lbs_to_kg(w.group(1)) if site in STUDIO_USES_IMPERIAL else str(w.group(1))
         )
 
     if (penis_nounits := raw_performer.get("dick size")) and (
@@ -363,7 +385,7 @@ def to_scraped_performer(raw_performer: dict, page_url: str) -> ScrapedPerformer
     ):
         performer["penis_length"] = (
             feetinches_to_cm(0, s.group(1))
-            if raw_performer["site_domain"] in STUDIO_USES_IMPERIAL
+            if site in STUDIO_USES_IMPERIAL
             else str(s.group(1))
         )
 
@@ -449,7 +471,9 @@ def to_scraped_scene_from_content(raw_scene: dict, page_url: str) -> ScrapedScen
     # PurgatoryX splits its catalogue into "Heaven" and "Hell" series, tagged
     # as such; StashDB models them as child studios of PurgatoryX
     if site == "purgatoryx.com" and (
-        series := next((t for t in raw_scene.get("tags", []) if t in ("Heaven", "Hell")), None)
+        series := next(
+            (t for t in raw_scene.get("tags", []) if t in ("Heaven", "Hell")), None
+        )
     ):
         scene["studio"] = {"name": series, "parent": get_studio(site, page_url)}
 
@@ -505,7 +529,9 @@ def to_scraped_scene_from_video(raw_scene: dict, page_url: str) -> ScrapedScene:
     if scene_id := dig(raw_scene, ("id", "_id")):
         scene["code"] = str(scene_id)
     if models := raw_scene.get("performers"):
-        scene["performers"] = [ScrapedPerformer(name=x["name"], image=x["avatar"]) for x in models]
+        scene["performers"] = [
+            ScrapedPerformer(name=x["name"], image=x["avatar"]) for x in models
+        ]
     if tags := raw_scene.get("categories"):
         scene["tags"] = [{"name": x["name"]} for x in tags]
 

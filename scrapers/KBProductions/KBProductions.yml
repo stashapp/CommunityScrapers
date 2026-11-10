@@ -1,12 +1,7 @@
 name: KB Productions
 # requires: py_common
-# scrapes: 2 Girls 1 Camera, AD4X, All Anal, Alt Erotic, Amazing Films, Anal Jesse, Anal Only, BJ Raw, Beddable Boys, Bemefi, Benefit Monkey, Best Bareback, Big Gulp Girls, Black Bull Challenge, Blake Mason, Bopping Babes, Cannon Productions, Collective Corruption, Come Inside, CosplayXGirls, Cougar Season, Creampie Thais, Darkshade, Deepthroat Sirens, DickHDDaily, Dire Desires, Dirty Auditions, Divine-DD, DoggVision, Downblouse Jerk, DripDrip, Edward James, Emo Twinks, Exposed Emos, Facials Forever, FantasyPOV, FreakMob Hardcore, FreakMob Media, GoGo World Porn, Gogo Bar Auditions, Got Filled, HardWerk, Hoby Buchanon, Homo Emo, Homo Scene, Inked POV, Inserted, JAV888, JavHub, Jizz Addiction, Joe Schmoe Videos, La BellaDX, Lady Sonia, Legendary X, LezKey, Lil D's Playhouse, Lingerie Tales, Lollipop Twinks, LucidFlix, Luke CooperX, Macho Factory, MadBros, MariskaX, Mean Feet Fetish, Milflicious, NYSeed, Nasty Daddy, Nick Marxx, Nikki Zee, Nylon Perv, Nympho, POV Perv, PassionPOV, Pervect, Pounded Petite, PurgatoryX, QueerCrush, Real Bikini Girls, Red-XXX, Ricky's Room, S3XUS, SIDECHICK, Seska, Severe Sex Films, SexTapes, Sexy Modern Bull, She's Brand New, SheHerGirls, Suck This Dick, Swallowed, TWM Classics, TWM Interviews, TWM Porn Vault, The ArtemiXXX, Top Web Models, ToughLoveX, Trashy Never Classy, True Anal, Twink Light, Upskirt Jerk, VRHush, Wank It Now, XXX Tryout, Xful, Yes Girlz, Yummy Couple, Z-Filmz
+# scrapes: 2 Girls 1 Camera, AD4X, All Anal, Alt Erotic, Amazing Films, Anal Jesse, Anal Only, BJ Raw, Beddable Boys, Bemefi, Benefit Monkey, Best Bareback, Big Gulp Girls, Black Bull Challenge, Blake Mason, Bopping Babes, Cannon Productions, Collective Corruption, Come Inside, CosplayXGirls, Cougar Season, Creampie Thais, Darkshade, Deepthroat Sirens, DickHDDaily, Dire Desires, Dirty Auditions, Divine-DD, DoggVision, Downblouse Jerk, DripDrip, Edward James, Emo Twinks, Exposed Emos, Facials Forever, FantasyPOV, FreakMob Hardcore, FreakMob Media, GayLifeNetwork, GoGo World Porn, Gogo Bar Auditions, Got Filled, HardWerk, Hoby Buchanon, Homo Emo, Homo Scene, Inked POV, Inserted, JAV888, JavHub, Jizz Addiction, Joe Schmoe Videos, La BellaDX, Lady Sonia, Legendary X, LezKey, Lil D's Playhouse, Lingerie Tales, Lollipop Twinks, LucidFlix, Luke CooperX, Macho Factory, MadBros, MariskaX, Mean Feet Fetish, Milflicious, NYSeed, Nasty Daddy, Nick Marxx, Nikki Zee, Nylon Perv, Nympho, POV Perv, PassionPOV, Pervect, Pounded Petite, PurgatoryX, QueerCrush, Real Bikini Girls, Red-XXX, Ricky's Room, S3XUS, SIDECHICK, Seska, Severe Sex Films, SexTapes, Sexy Modern Bull, She's Brand New, SheHerGirls, Suck This Dick, Swallowed, TWM Classics, TWM Interviews, TWM Porn Vault, Teach Twinks, The ArtemiXXX, Top Web Models, ToughLoveX, Trashy Never Classy, True Anal, Twinklight, Twinkylicious, Upskirt Jerk, VRHush, Wank It Now, XXX Tryout, Xful, Yes Girlz, Yummy Couple, Z-Filmz
 sceneByURL:
-  - action: scrapeXPath
-    url:
-      - emonetwork.com
-      - gaylifenetwork.com
-    scraper: sceneScraper
   - url:
       - 2girls1camera.com/scenes
       - ad4x.com/videos
@@ -15,8 +10,10 @@ sceneByURL:
       - amazingfilms.com/videos
       - analjesse.com/trailers
       - analonly.com/scenes
+      - beddableboys.com/videos
       - bemefi.com/videos
       - benefitmonkey.com/scenes
+      - bestbareback.com/videos
       - biggulpgirls.com/scenes
       - bjraw.com/videos
       - blackbullchallenge.com/videos
@@ -39,10 +36,12 @@ sceneByURL:
       - downblousejerk.com/videos
       - dripdropprod.net/scenes
       - edwardjames.com/videos
+      - emonetwork.com/videos
       - facialsforever.com/scenes
       - fantasypov.com/videos
       - freakmobhardcore.com/videos
       - freakmobmedia.com/videos
+      - gaylifenetwork.com/videos
       - gogobarauditions.com/trailers
       - gogoworldporn.com/videos
       - gotfilled.com/videos
@@ -94,6 +93,7 @@ sceneByURL:
       - sexymodernbull.com/videos
       - shehergirls.com/videos
       - sidechick.com/videos
+      - teachtwinks.com/videos
       - theartemixxx.com/videos
       - tour.allanal.com/scenes
       - tour.nympho.com/scenes
@@ -107,6 +107,8 @@ sceneByURL:
       - toughlovex.com/view
       - trashyneverclassy.com/videos
       - trueanal.com/scenes
+      - twinklight.tv/videos
+      - twinkylicious.com/videos
       - upskirtjerk.com/videos
       - vrhush.com/scenes
       - wankitnow.com/videos
@@ -127,7 +129,9 @@ performerByURL:
       - alterotic.com/models
       - amazingfilms.com/models
       - analonly.com/models
+      - beddableboys.com/models
       - benefitmonkey.com/models
+      - bestbareback.com/models
       - biggulpgirls.com/models
       - bjraw.com/models
       - blackbullchallenge.com/models
@@ -142,10 +146,12 @@ performerByURL:
       - divine-dd.com/models
       - downblousejerk.com/models
       - edwardjames.com/models
+      - emonetwork.com/models
       - facialsforever.com/models
       - fantasypov.com/models
       - freakmobhardcore.com/models
       - freakmobmedia.com/models
+      - gaylifenetwork.com/models
       - gogoworldporn.com/models
       - gotfilled.com/models
       # /models redirects to /hobyshotties
@@ -187,11 +193,14 @@ performerByURL:
       - tour.shesbrandnew.com/models
       - sidechick.com/models
       - sexymodernbull.com/models
+      - teachtwinks.com/models
       - tour.swallowed.com/models
       - tour.topwebmodels.com/models
       - tour.toughlovex.com/models
       - trashyneverclassy.com/models
       - trueanal.com/models
+      - twinklight.tv/models
+      - twinkylicious.com/models
       - upskirtjerk.com/models
       - vrhush.com/models
       - wankitnow.com/models
@@ -205,46 +214,3 @@ performerByURL:
       - python
       - KBProductions.py
       - performer-by-url
-
-xPathScrapers:
-  sceneScraper:
-    scene:
-      Title:
-        # the trailer image no longer carries the title; the h1 is "<date> - <title>"
-        selector: //div[@class="trailer"]//img[@alt != ""]/@alt | //h1/text()[1]
-        postProcess:
-          - replace:
-              - regex: ^[A-Z][a-z]+\s+\d{1,2},\s+\d{4}\s+-\s+
-                with: ""
-      Details: //div[@class="videoContainer"]//p[not(contains(@class,'vjs-no-js'))]/text()
-      Performers:
-        Name: //h2[contains(text(),'Models')]/a/text()
-      Image:
-        selector: //div[@class="trailer"]//img/@src | //video/@poster
-        postProcess:
-          - replace:
-              - regex: ^(https:)?
-                with: "https:"
-      Date:
-        selector: //h1/text()[1]
-        postProcess:
-          - replace:
-              - regex: ^([^-]+).+
-                with: $1
-          - parseDate: January 2, 2006
-      Tags:
-        Name:
-          selector: //h4[contains(text(),'Search Tags')]/a/text()
-      Studio:
-        Name:
-          selector: //h3[contains(text(),'Site')]/a/text()
-          postProcess:
-            - map:
-                BeddableBoys: "Beddable Boys"
-                BestBareBack: "Best Bareback"
-                EmoTwinks: "Emo Twinks"
-                ExposedEmos: "Exposed Emos"
-                HomoEmo: "Homo Emo"
-                HomoScene: "Homo Scene"
-                LollipopTwinks: "Lollipop Twinks"
-                Twinklight: "Twink Light"
