@@ -254,3 +254,12 @@ xPathScrapers:
                 with: https://www.breeditraw.net/
               - regex: (:?-[1-4]x)?\.jpg$
                 with: "-full.jpg"
+driver:
+  cookies:
+    - CookieURL: https://hookuphotshot.com/
+      Cookies:
+        # this is the site's own default (no-affiliate) code
+        - Name: nats
+          Domain: .hookuphotshot.com
+          Path: /
+          Value: MC4wLjEzMi4zMTcuMC4wLjAuMC4w

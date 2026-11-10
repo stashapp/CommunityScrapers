@@ -23,7 +23,7 @@ Scraper has been tested on 2026-09-12
 | Dick Drainers        | https://dickdrainers.com/tour/trailers/Laola-Klitz-Gives-Up-That-Perfect-Headzz.html                                          |
 | Brick Yates          | https://www.brickyates.com/tour/trailers/3-Way-Relationships-4-of-4-The-Entre.html                                            |
 | The-Female-Orgasm    | https://the-female-orgasm.com/explore/trailers/Gotta-Have-it.html                                                             |
-| HookUp Hotshot       | https://hookuphotshot.com/trailers/Episode-474-Sami-Soup-2.html                                                               |
+| HookUp Hotshot       | https://hookuphotshot.com/trailers/Episode-476-Sky-Pierce-.html                                                               |
 | Rave Bunnys          | https://ravebunnys.com/trailers/Tongue-Ring-Worked-Overtime-Before-The-Creampie-Encore-Video.html                             |
 | Emily Addison        | https://emilyaddison.com/trailers/Emily-Loves-Spencer.html                                                                    |
 | Brand New Amateurs   | https://brandnewamateurs.com/trailers/A-New-MorganLate-20s-Redhead-REALLY-Wants-that-Job.html                                 |

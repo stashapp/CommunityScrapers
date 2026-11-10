@@ -17,7 +17,7 @@ Scraper has been tested on 2026-09-15
 | James Deen           | https://jamesdeen.com/trailers/adriana-chechik-rough-anal-james-deen-punishment                             |
 | Pork Vendors         | https://porkvendors.com/trailers/bald-bbw-gets-her-pussy-rocked-by-two-fat-dicks                            |
 | Porn Force           | https://pornforce.com/trailers/Carly-Rae-Summers-Reacts-to-PLEASE-CUM-INSIDE-OF-ME                          |
-| Public Sex Date      | https://publicsexdate.com/trailers/Young-petite-blonde-slut-minori-gets-fucked-on-the-first-date            |
+| Public Sex Date      | https://publicsexdate.com/trailers/natalie-holt-redhead-first-date-69-face-sitting/                         |
 | Slut Inspection      | https://slutinspection.com/trailers/behind-the-scenes-blake-blossom-horny-big-tits-blonde-slutty-teen       |
 | Slutty BBWs          | https://sluttybbws.com/trailers/bbw-april-flores-loves-fucking-husbands                                     |
 | Teasing and Pleasing | https://teasingandpleasing.com/trailers/Alix-Avery-Lesbian-Hotel-Hookup                                     |
