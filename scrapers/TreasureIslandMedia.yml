@@ -2,111 +2,157 @@ name: Treasure Island Media
 sceneByURL:
   - action: scrapeXPath
     url:
-      - treasureislandmedia.com/scenes
-    scraper: tim
+      - treasureislandmedia.com/scenes/
+    scraper: sceneScraper
 sceneByName:
   action: scrapeXPath
-  queryURL: https://treasureislandmedia.com/scenes?searchval={}
-  scraper: search
+  queryURL: https://treasureislandmedia.com/search?q={}
+  scraper: searchScraper
 sceneByQueryFragment:
   action: scrapeXPath
-  scraper: tim
   queryURL: "{url}"
+  scraper: sceneScraper
 performerByURL:
   - action: scrapeXPath
     url:
-      - men.treasureislandmedia.com/men/
-    scraper: tim
+      - treasureislandmedia.com/men/
+    scraper: performerScraper
 performerByName:
   action: scrapeXPath
-  queryURL: "https://men.treasureislandmedia.com/men?haircolor=All&eyecolor=All&bodytype=All&cocksize=All&cocktype=All&ismarked=All&isexclusive=All&sexrole=All&modelname={}"
-  scraper: search
+  queryURL: https://treasureislandmedia.com/search?q={}
+  scraper: searchScraper
 groupByURL:
   - action: scrapeXPath
     url:
-      - treasureislandmedia.com/movies
-    scraper: tim
+      - treasureislandmedia.com/movies/
+    scraper: groupScraper
 xPathScrapers:
-  search:
+  searchScraper:
     scene:
-      Title: //div[contains(@class,"tim-views-scenes-page-scene")]/p
-      URLs: //div[contains(@class,"tim-views-scenes-page-scene")]/a/@href
-      Image: //div[contains(@class,"tim-views-scenes-page-scene")]//img/@src
+      # the search page also carries unrelated "latest" strips, so stay inside the results section
+      Title: //section[.//h2[text()="Scenes"]]//article[contains(@class, "to-card--scene")]//h3
+      URLs:
+        selector: //section[.//h2[text()="Scenes"]]//article[contains(@class, "to-card--scene")]/a[@class="to-card__meta"]/@href
+        postProcess:
+          - replace:
+              - regex: ^/
+                with: https://treasureislandmedia.com/
+      Image:
+        selector: //section[.//h2[text()="Scenes"]]//article[contains(@class, "to-card--scene")]//img/@src
+        postProcess:
+          - replace:
+              &nextImage # next/image proxy URL: keep only the url-encoded origin
+              - regex: ^/_next/image\?url=([^&]+).*
+                with: $1
+              - regex: "%3A"
+                with: ":"
+              - regex: "%2F"
+                with: /
     performer:
-      Name: //div[contains(@class,"tim-views-scenes-page-scene")]/p
-      URLs: //div[contains(@class,"tim-views-scenes-page-scene")]/a/@href
-  tim:
+      Name: //section[.//h2[text()="Men"]]//article[contains(@class, "to-card--performer")]//h3
+      URLs:
+        selector: //section[.//h2[text()="Men"]]//article[contains(@class, "to-card--performer")]//a[contains(@class, "to-card__art")]/@href
+        postProcess:
+          - replace:
+              - regex: ^/
+                with: https://treasureislandmedia.com/
+  sceneScraper:
     scene:
-      Title: &title //h2[@class="page-header"]
+      Title: //h1[contains(@class, "to-scene__title")]
       Details:
-        selector: //div[@id="content-description"]//p
+        selector: //section[@id="description"]//div[@class="richtext"]//p
         concat: "\n\n"
       URLs: //link[@rel="canonical"]/@href
-      Date: &date
-        selector: //meta[@property="video:release_date"]/@content
+      Date:
+        # only scenes that predate the movie-centric redesign carry a VideoObject with a date
+        selector: //script[@type="application/ld+json"][contains(., '"VideoObject"')]
         postProcess:
           - replace:
-              - regex: ^([^T]+).+
+              - regex: .*"uploadDate":\s*"([\d-]+)T.*
                 with: $1
-      Groups:
-        Name: //div[contains(@class, "scene-parent-movie-cover-image")]//img/@alt
-        URLs: //div[contains(@class, "scene-parent-movie-cover-image")]//a/@href
-        FrontImage: (//div[contains(@class, "scene-parent-movie-cover-image")])[1]//img/@src
-        BackImage: //div[contains(@class, "scene-parent-movie-cover-image-back")]//img/@src
-        Date:
-          selector: //div[contains(@class, "scene-parent-movie-cover-image")]//a/@href
-          postProcess:
-            - subScraper: //meta[@property="video:release_date"]/@content
-      Performers:
-        Name:
-          selector: //div[@id="scene-models"]//a
-      Image:
-        selector: //style[contains(.,"background-image:url")]
-        postProcess:
-          - replace:
-              - regex: .+background-image:url\(([^)]+).+
-                with: $1
+      Image: //img[contains(@class, "tim-player__ssr-poster")]/@src
+      Studio:
+        Name: //meta[@property="og:site_name"]/@content
       Director:
-        selector: //div[contains(@class,"field-directors")]//a
+        selector: //span[@class="to-meta__label" and text()="Directors:"]/following-sibling::span/a
         concat: ", "
-      Studio: &studio
-        Name: //a[contains(@class,"navbar-brand-currsite")]/span[contains(@class,"top")]
       Tags:
-        Name: //div[contains(@class, "field-name-field-tags")]//a
+        Name: //span[@class="to-meta__label" and text()="Tags:"]/following-sibling::span/a
+      Performers:
+        Name: //div[@class="to-caststrip"]//span[@class="to-caststrip__name"]
+      Groups:
+        Name: //a[@class="to-scene__coverlink"]
+        URLs:
+          selector: //a[@class="to-scene__coverlink"]/@href
+          postProcess:
+            - replace:
+                - regex: ^/
+                  with: https://treasureislandmedia.com/
+        FrontImage:
+          selector: //div[@class="to-scene__coverwrap"]//img[@class="to-scene__coverimg"]/@src
+          postProcess:
+            - replace: *nextImage
+  groupScraper:
     group:
-      Name: *title
-      Date: *date
-      Studio: *studio
-      FrontImage: (//div[@id="timglobalmoviecovers"]//img)[1]/@src
-      BackImage: (//div[@id="timglobalmoviecovers"]//img)[2]/@src
+      Name: //h1[contains(@class, "to-scene__title")]
+      Synopsis:
+        selector: //section[@id="description"]//div[@class="richtext"]//p
+        concat: "\n\n"
+      URLs: //link[@rel="canonical"]/@href
+      Date:
+        selector: //script[@type="application/ld+json"][contains(., '"Movie"')]
+        postProcess:
+          - replace:
+              - regex: .*"datePublished":\s*"([\d-]+)".*
+                with: $1
+      Studio:
+        Name: //meta[@property="og:site_name"]/@content
       Director:
-        selector: //div[contains(@class,"link-director")]//a
+        selector: //span[@class="to-meta__label" and text()="Directors:"]/following-sibling::span/a
         concat: ", "
+      FrontImage:
+        selector: //div[@class="to-scene__coverwrap"]//img[@class="to-scene__coverimg"]/@src
+        postProcess:
+          - replace: *nextImage
+      BackImage:
+        selector: //div[@class="to-scene__coverwrap"]//img[@class="to-scene__coverimg"]/@src
+        postProcess:
+          - replace: *nextImage
+          - replace:
+              # the back cover is only loaded client-side, but follows the front cover's naming
+              - regex: _web_front_
+                with: _web_back_
+  performerScraper:
     performer:
-      Name: //div[contains(@class,'model-profile-top')]//h3/text()
-      URLs: //link[contains(@rel,'canonical')]/@href
-      Country: //span[contains(@style,"777777")]/text()
+      Name: //h1
+      URLs:
+        selector: //link[@rel="canonical"]/@href | //a[@class="to-men__social"]/@href
       Gender:
         fixed: Male
-      Circumcised: //div[contains(@class,'bio-content')]//li[contains(.,'Cock type')]/span
-      HairColor: //div[contains(@class,'bio-content')]//li[contains(.,'Hair color')]/span
-      EyeColor: //div[contains(@class,'bio-content')]//li[contains(.,'Eye color')]/span
-      Ethnicity: //div[contains(@class,'bio-content')]//li[contains(.,'Ethnicity')]/span
-      Details: //div[contains(@class,'summary')]//p/text()
+      Details:
+        selector: //div[contains(@class, "to-men__bio-body")]//p
+        concat: "\n\n"
+      Images:
+        selector: //img[@class="to-men__gallery-img"]/@src
+        postProcess:
+          - replace: *nextImage
       Height:
-        selector: //div[contains(@class,'bio-content')]//li[contains(.,'Height')]/span
+        selector: //dl[@class="to-men__stats"]//dt[text()="Height"]/following-sibling::dd
         postProcess:
           - feetToCm: true
       Weight:
-        selector: //div[contains(@class,'bio-content')]//li[contains(.,'Weight')]/span
+        selector: //dl[@class="to-men__stats"]//dt[text()="Weight"]/following-sibling::dd
         postProcess:
           - lbToKg: true
+      Ethnicity: //dl[@class="to-men__stats"]//dt[text()="Ethnicity"]/following-sibling::dd
+      EyeColor: //dl[@class="to-men__stats"]//dt[text()="Eyes"]/following-sibling::dd
+      HairColor: //dl[@class="to-men__stats"]//dt[text()="Hair"]/following-sibling::dd
+      Circumcised: //dl[@class="to-men__stats"]//dt[text()="Type"]/following-sibling::dd
       PenisLength:
-        selector: //div[contains(@class,'bio-content')]//li[contains(.,'Length')]/span
+        selector: //dl[@class="to-men__stats"]//dt[text()="Length"]/following-sibling::dd
         postProcess:
           - replace:
-              - regex: (^.*$)
+              # inches, expressed as a feet'inches string so feetToCm can convert it
+              - regex: ^(.*)$
                 with: 0'$1
           - feetToCm: true
-      Images:
-        selector: //*[@id="top-content-outer-wrap"]/div/div[1]/div[2]/div/div/a/@href
