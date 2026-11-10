@@ -319,7 +319,7 @@ def page_metadata(url: str) -> ScrapedScene:
 
     if not (
         page := tree.xpath(
-            '//article[@id="videos_page-page" or @id="mixed_page-page" or @id="photos_page-page"]'
+            '//*[@id="videos_page-page" or @id="mixed_page-page" or @id="photos_page-page"]'
         )
     ):
         log.error("Page layout has changed, scraper needs updating")
@@ -357,12 +357,16 @@ def page_metadata(url: str) -> ScrapedScene:
     # Original studio is determinable by looking at the CDN links (<source src="//cdn77.scoreuniverse.com/naughtymag/scenes...)
     # this helps set studio for PornMegaLoad URLs as nothing is released directly by the network
     # Photo pages have no video, but their thumbnails follow the same scheme (.../naughtymag/gallys/...)
-    if cdn_src := page.xpath("//video/source/@src") or page.xpath(
+    # Both regexes also cope with Wayback Machine URLs, which prefix the original one
+    cdn_src = page.xpath("//video/source/@src") or page.xpath(
         '//img[contains(@src, "/gallys/")]/@src'
-    ):
-        studio_ref = re.sub(
-            r".*\.com/(.+?)\/(video|scene|gallys).*", r"\1", next(iter(cdn_src))
-        )
+    )
+    if cdn_src and (m := re.search(r".*\.com/([^/]+)/", cdn_src[0])):
+        studio_ref = m[1]
+    else:
+        # Pages without a trailer or gallery (older solo sites) only leave the hostname
+        studio_ref = m[1] if (m := re.search(r"([^/.]+)\.com/", url)) else ""
+    if studio_ref:
         scene["studio"] = {"name": STUDIO_MAP.get(studio_ref, studio_ref)}
 
     # Video pages cut the visible description short behind a join link, but their
