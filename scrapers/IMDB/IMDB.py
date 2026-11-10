@@ -6,6 +6,7 @@ import urllib.parse
 from html import unescape
 
 from lxml import html
+
 from py_common import log, proxy
 from py_common.types import (
     PerformerSearchResult,
@@ -46,6 +47,10 @@ def get_tree(url: str) -> html.HtmlElement | None:
     if res is None or is_waf_challenged(res):
         log.info(f"AWS WAF challenge on {url}, solving via FlareSolverr")
         res = send(proxy.flaresolverr_req, url, proxy=proxy.PROXY_URL)
+        if res is not None and is_waf_challenged(res):
+            # byparr hands back the interstitial it loaded, but its browser did earn the
+            # aws-waf-token, which py_common replays on the next plain request
+            res = send(scraper.get, url, timeout=15)
     if res is None or is_waf_challenged(res):
         log.error(f"AWS WAF challenge unsolved for {url}")
         return None
