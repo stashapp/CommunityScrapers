@@ -19,32 +19,35 @@ sceneByFragment:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //h1[@class="main_content_title"]
-      Details: //section[@class="details"]//p
+      Title: //h1[@data-testid="video-title"]
+      Details: //div[@data-testid="video-description"]//p
       Image:
-        selector: //div[@class='play_cover']/img/@src
+        selector: //img[@id="player_cover_img"]/@src
         postProcess:
           - replace:
               # Get the highest res image they've got
               - regex: w:\d+
                 with: w:9999
       Studio:
-        Name: //div[@class="ent"]
+        Name: //div[@data-testid="profile"]//a/p
+      Performers:
+        Name: //div[@data-testid="video-tags"]//a[contains(@href, "/pornstar/")]
+        URLs:
+          selector: //div[@data-testid="video-tags"]//a[contains(@href, "/pornstar/")]/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://spankbang.com
       Tags:
-        Name: //li[@class="p"] | //div[contains(@class, "searches")]/a[not(@class="expand")]
-      URL: //link[rel='canonical']/@href | //meta[@property='og:url']/@content
+        Name: //div[@data-testid="video-tags"]//a[starts-with(@href, "/s/")]
+      URLs: //link[@rel="canonical"]/@href
       Date:
-        selector: //script[@type='application/ld+json' and contains(text(),'uploadDate')]
+        selector: //time/@datetime
         postProcess:
           - replace:
-              - regex: .*uploadDate":\s*"(\d{4}-\d{2}-\d{2}).*
-                with: $1
-
-debug:
-  printHTML: true
+              - regex: T.*
+                with: ""
 
 driver:
-  headers:
-    - Key: User-Agent
-      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
-# Last Updated June 28, 2024
+  # Cloudflare challenges every non-browser TLS fingerprint regardless of User-Agent
+  useSurf: true
