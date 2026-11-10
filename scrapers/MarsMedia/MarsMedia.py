@@ -149,13 +149,7 @@ def resolve_studio(domain: str, cms_set: Any) -> ScrapedStudio:
     return studio
 
 
-@cache_to_disk(ttl=86400)
-def get_block_id(domain: str, page_slug: str) -> str | None:
-    """
-    Discovers a usable cms_block_id for a domain by fetching one of its own pages:
-    any block ID a page returns works for querying that content type, so no manual
-    per-domain reverse-engineering is needed (unlike island_dollars.py's CONFIG)
-    """
+def get_page(domain: str, page_slug: str) -> dict[str, Any] | None:
     params = {"cms_area_id": CONFIG[domain]["cms_area_id"], "slug": page_slug}
     headers = headers_for_domain(domain)
     url = f"{NATS_URL}/tour_api.php/content/page"
@@ -165,10 +159,26 @@ def get_block_id(domain: str, page_slug: str) -> str | None:
     except ValueError as e:
         log.error(f"Error parsing JSON response for {domain} page {page_slug}: {e}")
         return None
-    if not (blocks := result.get("blocks")):
+    return result if result.get("cms_page_id") else None
+
+
+@cache_to_disk(ttl=86400)
+def get_block_id(domain: str, page_slug: str) -> str | None:
+    """
+    Discovers a usable cms_block_id for a domain by fetching one of its own pages:
+    any block ID a page returns works for querying that content type, so no manual
+    per-domain reverse-engineering is needed (unlike island_dollars.py's CONFIG)
+    """
+    if not (blocks := (get_page(domain, page_slug) or {}).get("blocks")):
         log.error(f"No blocks found for {domain} page {page_slug}")
         return None
     return blocks[0]["cms_block_id"]
+
+
+@cache_to_disk(ttl=86400)
+def scene_path(domain: str) -> str:
+    # Each tour defines its own scene route; some have moved from /video/ to /scene/
+    return "scene" if get_page(domain, "/scene/:slug") else "video"
 
 
 @cache_to_disk(ttl=600)
@@ -271,7 +281,7 @@ def parse_set_as_scene(
         scene["details"] = description.strip()
 
     if slug := cms_set.get("slug"):
-        scene["urls"] = [f"https://tour.{domain}.com/video/{slug}"]
+        scene["urls"] = [f"https://tour.{domain}.com/{scene_path(domain)}/{slug}"]
 
     if added_nice := cms_set.get("added_nice"):
         scene["date"] = added_nice
@@ -356,7 +366,7 @@ def video_identifier_from_url(url: str, domain: str) -> tuple[str, str] | None:
     if match := re.search(r"[?&]VidID=(\d+)", url):
         return ("id", match.group(1))
 
-    if match := re.search(r"/video/([^/?]+)", url):
+    if match := re.search(r"/(?:video|scene)/([^/?]+)", url):
         value = match.group(1)
         return ("id", value) if value.isdigit() else ("slug", value)
 
