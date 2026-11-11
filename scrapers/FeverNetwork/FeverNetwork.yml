@@ -1,0 +1,71 @@
+name: Fever Network
+# scrapes: Banana Fever, Baddie Fever, Fever Lotus
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - baddiefever.com/
+      - bananafever.com/
+      - feverlotus.com/
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $canonical: //link[@rel="canonical"]/@href
+    scene:
+      Title:
+        selector: //h1[contains(@class, "VideoDetail_title")]
+        postProcess:
+          - replace:
+              - regex: \s[-|]\s(BananaFever|FeverLotus|BaddieFever)$
+                with:
+      Date: //div[contains(@class, "VideoDetail_date")]
+      Details:
+        selector: //script[contains(., "__next_f.push")]
+        concat: "\n"
+        postProcess:
+          - javascript: |
+              var stream = "";
+              value.replace(/__next_f\.push\(\[1,"((?:[^"\\]|\\.)*)"\]\)/g, function (_, lit) {
+                stream += JSON.parse('"' + lit + '"');
+              });
+              var ref = stream.match(/VideoDetail_description__\w+","children":"(\$?)([^"\\]*(?:\\.[^"\\]*)*)"/);
+              if (!ref) return "";
+              if (!ref[1]) return JSON.parse('"' + ref[2] + '"');
+              var row = stream.match(new RegExp("(?:^|\\n)" + ref[2] + ":T([0-9a-f]+),"));
+              if (!row) return "";
+              var bytes = unescape(encodeURIComponent(stream.slice(row.index + row[0].length)));
+              return decodeURIComponent(escape(bytes.slice(0, parseInt(row[1], 16))));
+      Tags:
+        Name:
+          selector: //div[contains(@class, "VideoDetail_pills")]/a
+          postProcess:
+            - replace:
+                - regex: ([a-z])-([a-z])
+                  with: $1 $2
+      Performers:
+        Name:
+          selector: &ldjson //script[@type="application/ld+json"][contains(., '"VideoObject"')]
+          postProcess:
+            - javascript: |
+                return (JSON.parse(value).actor || []).map(function (a) { return a.name; }).join("|");
+          split: "|"
+        URLs:
+          selector: *ldjson
+          postProcess:
+            - javascript: |
+                return (JSON.parse(value).actor || []).map(function (a) { return a.url; }).join("|");
+          split: "|"
+      Studio:
+        Name:
+          selector: $canonical
+          postProcess:
+            - replace:
+                - regex: ^https://(www\.)?([a-z]+)\.com/.*
+                  with: $2
+            - map:
+                baddiefever: Baddie Fever
+                bananafever: Banana Fever
+                feverlotus: Fever Lotus
+      Image: //img[contains(@class, "DetailPlayer_poster")]/@src
+      URLs: $canonical
