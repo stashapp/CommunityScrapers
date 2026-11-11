@@ -36,7 +36,7 @@ xPathScrapers:
       $card: //div[contains(concat(' ',normalize-space(@class),' '),' postTag ')]
     scene:
       Title: $card//h2
-      URL:
+      URLs:
         selector: $card//div[@class='desktop']/a/@href
         postProcess:
           - replace:
@@ -52,11 +52,9 @@ xPathScrapers:
   sceneScraper:
     common:
       $info: &infoSel //div[@class="post"]
-      $url: &urlSel //meta[@name="dl8-customization-brand-url"]/@content
     scene:
-      URL: //link[@rel='canonical']/@href
-      Title: &title
-        # Czech VR Network uses h1, the substudios use h2
+      URLs: //link[@rel='canonical']/@href
+      Title: &title # Czech VR Network uses h1, the substudios use h2
         selector: &titleSel $info//h1|$info//h2
         postProcess:
           - replace:
@@ -82,14 +80,14 @@ xPathScrapers:
           selector: *titleSel
           postProcess:
             - replace:
-              - regex: "\\d* - .+"
-                with:
+                - regex: "\\d* - .+"
+                  with:
       Image: &image
-        selector: $url|//dl8-video/@poster
+        selector: //link[@rel='canonical']/@href|//dl8-video/@poster|//commedia-player/@poster
         concat: " "
         postProcess:
           - replace:
-              - regex: \s\./category
+              - regex: /detail-\S*\s(/cdn-cgi/image/[^/]+/)?\./category
                 with: /category
           - replace:
               - regex: \/\/
@@ -100,7 +98,6 @@ xPathScrapers:
   movieScraper:
     common:
       $info: *infoSel
-      $url: *urlSel
     group:
       Name: *title
       Duration: $info//div[@class="cas"]/text()
