@@ -249,8 +249,9 @@ xPathScrapers:
         # So instead, the entire text of the p tag is captured, and then the newlines are
         # recreated in the post-processing step.
         # Some sites nest the description p tag inside setdesc rather than
-        # as a direct child of trailerpage_info - fall back to that too.
-        selector: //div[@class="trailerpage_info"]/p[not(@class)]|//div[@class="setdesc"]/p[not(@class)]
+        # as a direct child of trailerpage_info, and t.porn puts it in a bare
+        # li of the "About the Video" list so we fall back to those too.
+        selector: //div[@class="trailerpage_info"]/p[not(@class)]|//div[@class="setdesc"]/p[not(@class)]|//div[@class="setdesc_right"]/ul/li[not(@class) and not(b)]
         postProcess:
           - javascript: |
               if (value && value.length > 0) {
@@ -504,7 +505,7 @@ xPathScrapers:
       Name: &name //h3[@class="modelname"]/text()|//div[@class="model_profile_name"]/text()
       Gender: &gender
         fixed: transgender_female
-      Image:
+      Images:
         selector: //link[@rel="canonical"]/@href|//div[@class="model_photo"]/img/@src|//div[@class="model_thumbnail"]/img/@src
         concat: "__SEPARATOR__"
         postProcess:
@@ -529,7 +530,7 @@ xPathScrapers:
     performer:
       Name: *name
       Gender: *gender
-      Image: &image3x
+      Images: &image3x
         selector: //link[@rel="canonical"]/@href|//div[@class="model_photo"]/img/@src0_3x|//div[@class="model_thumbnail"]/img/@src0_3x
         concat: "__SEPARATOR__"
         postProcess:
@@ -545,7 +546,7 @@ xPathScrapers:
     performer:
       Name: *name
       Gender: *gender
-      Image: *image3x
+      Images: *image3x
       Country:
         selector: //li/b[text()="Location:"]/following-sibling::text()
         postProcess:
@@ -563,19 +564,19 @@ xPathScrapers:
     performer:
       Name: *name
       Gender: *gender
-      Image: *image3x
+      Images: *image3x
       Birthdate: *birthdate
   performerScraper4:
     performer:
       Name: *name
       Gender: *gender
-      Image: *image3x
+      Images: *image3x
       Birthdate: *birthdateSel
   performerScraper5:
     performer:
       Name: *name
       Gender: *gender
-      Image:
+      Images:
         selector: //link[@rel="canonical"]/@href|//div[@class="model_photo"]/img/@src0
         concat: "__SEPARATOR__"
         postProcess:
@@ -589,7 +590,7 @@ xPathScrapers:
     performer:
       Name: *name
       Gender: *gender
-      Image: *image3x
+      Images: *image3x
       Birthdate:
         selector: *birthdateSel
         postProcess:
@@ -604,13 +605,13 @@ xPathScrapers:
       Name: *name
       Gender:
         fixed: transgender_male
-      Image: *image3x
+      Images: *image3x
       Birthdate: *birthdate
   performerScraperVR:
     performer:
       Name: *name
       Gender: *gender
-      Image:
+      Images:
         selector: //base/@href | //div[@class="model_photo"]/img/@src
         concat: __SEP__
         postProcess: *imagePostProcessVR
