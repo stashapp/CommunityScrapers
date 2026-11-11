@@ -1,8 +1,8 @@
-Scraper has been tested on 2026-11-10
+Scraper has been tested on 2026-11-11
 
 |        Network | Studio            | URL                                                                                               |
 | -------------: | :---------------- | :------------------------------------------------------------------------------------------------ |
-|                |                   | https://www.metartnetwork.com/model/liv-lauren/movie/20260820/MORNING_CRAVING                     |
+|                | MetArt Network    | https://www.metartnetwork.com/model/liv-lauren/movie/20260820/MORNING_CRAVING                     |
 | MetArt Network | ALS Scan          | https://www.alsscan.com/model/brooke-johnson/movie/20261109/UROPHILIA_BTS                         |
 | MetArt Network | Errotica Archives | https://www.errotica-archives.com/model/gerda-rubia/movie/20180701/JEWELS                         |
 | MetArt Network | Eternal Desire    | https://www.eternaldesire.com/model/tutsi/movie/20261105/DICE_OF_LUST                             |

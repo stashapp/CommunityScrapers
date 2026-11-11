@@ -40,9 +40,16 @@ STUDIOS: dict[str, tuple[str, str]] = {
     "18A2E47EAEFD45F29033A5FCAF1F5B91": ("Stunning 18", "stunning18.com"),
     "FDAFDF209DC311E0AA820800200C9A66": ("The Life Erotic", "thelifeerotic.com"),
     "4F23028982B542FA9C6DAAA747E9B5B3": ("Viv Thomas", "vivthomas.com"),
+    # Network exclusives sit under a domainless "Staff Selection" site
+    "466BA5C62FD1D8C409C5634696D9605C": ("MetArt Network", "metartnetwork.com"),
 }
 
 NETWORK: ScrapedStudio = {"name": "MetArt Network"}
+
+
+def to_scraped_studio(name: str) -> ScrapedStudio:
+    return NETWORK if name == NETWORK["name"] else {"name": name, "parent": NETWORK}
+
 
 # These sites never list directors in the crew, so a "Still Photographer" there isn't one
 DIRECTORS_NOT_IN_CREW = ("SexArt", "ALS Scan")
@@ -138,7 +145,7 @@ def to_scraped_scene(base_url: str, data: dict[str, Any]) -> ScrapedScene:
         "date": data["publishedAt"].split("T")[0],
     }
     if site:
-        scene["studio"] = {"name": site[0], "parent": NETWORK}
+        scene["studio"] = to_scraped_studio(site[0])
         scene["urls"] = [f"https://www.{site[1]}{data['path']}"]
     if details := data.get("description") or data.get("descriptionSfw"):
         scene["details"] = details
@@ -172,7 +179,7 @@ def to_scraped_gallery(base_url: str, data: dict[str, Any]) -> ScrapedGallery:
         "date": data["publishedAt"].split("T")[0],
     }
     if site:
-        gallery["studio"] = {"name": site[0], "parent": NETWORK}
+        gallery["studio"] = to_scraped_studio(site[0])
         gallery["urls"] = [f"https://www.{site[1]}{data['path']}"]
     if details := data.get("description") or data.get("descriptionSfw"):
         gallery["details"] = details
