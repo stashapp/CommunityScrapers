@@ -81,7 +81,7 @@ xPathScrapers:
                 spermswallowers: Sperm Swallowers
       Groups:
         Name: $details//span[@class="update_dvds"]/a/text()|$galinfo//span[@class="update_dvds"]/a/text()
-        URL: $details//span[@class="update_dvds"]/a/@href|$galinfo//span[@class="update_dvds"]/a/@href
+        URLs: $details//span[@class="update_dvds"]/a/@href|$galinfo//span[@class="update_dvds"]/a/@href
       Image:
         selector: //script[contains(text(),'useimage')]/text()
         postProcess:
@@ -104,6 +104,10 @@ xPathScrapers:
       $scene: //div[@class="movie-player"]
     scene:
       Title: &newTitleAttr $scene//div[@class="movie_title"]
+      Date: &newDateAttr
+        selector: $scene//span[contains(., "Date:")]/following-sibling::text()
+        postProcess:
+          - parseDate: 2006-01-02
       Details: &newDetailsAttr $scene//span[contains(., "Description:")]/following-sibling::text()
       Tags: &newTagsAttr
         Name: $scene//a[contains(@href, "categories")]/text()
@@ -113,11 +117,12 @@ xPathScrapers:
       Studio: *studioAttr
       Groups:
         Name: $scene//span[contains(., "Movie:")]/following-sibling::a/text()
-        URL: $scene//span[contains(., "Movie:")]/following-sibling::a/@href
+        URLs: $scene//span[contains(., "Movie:")]/following-sibling::a/@href
       Image: $scene//video/@poster
 
     gallery:
       Title: *newTitleAttr
+      Date: *newDateAttr
       Details: *newDetailsAttr
       Tags: *newTagsAttr
       Performers: *newPerformersAttr
@@ -141,7 +146,7 @@ xPathScrapers:
       Studio: *studioAttr
       Groups:
         Name: //div[contains(text(),"Movie")]/following-sibling::div[@class="val"]/a
-        URL: //div[contains(text(),"Movie")]/following-sibling::div[@class="val"]/a/@href
+        URLs: //div[contains(text(),"Movie")]/following-sibling::div[@class="val"]/a/@href
       Image: //video/@poster
 
     gallery:
@@ -154,31 +159,9 @@ xPathScrapers:
 
   performerScraper:
     performer:
-      Name: //span[@class='title_bar_hilite']/text()
-      Birthdate:
-        selector: //div[@class='model_bio model_bio_info']//text()[contains(.,'Age')]
-        postProcess:
-          - replace:
-              - regex: "Age:"
-                with:
-          - parseDate: January 2, 2006
-      Measurements:
-        selector: //div[@class='model_bio model_bio_info']//text()[contains(.,'Measurements')]
-        postProcess:
-          - replace:
-              - regex: "Measurements:"
-                with:
-              - regex: " "
-                with:
-      Height:
-        selector: //div[@class='model_bio model_bio_info']//text()[contains(.,'Height')]
-        postProcess:
-          - replace:
-              - regex: "Height:"
-                with:
-          - feetToCm: true
-      Image:
-        selector: //img[contains(@class,'model_bio_thumb')]/@src0_3x
+      Name: //h1[@class="mbp-bio-name"]
+      Details: //div[@class="mbp-bio-strip-text"]/text()
+      Images: //img[contains(@class, "model_bio_thumb")]/@src0_1x
 
   movieScraper:
     group:
