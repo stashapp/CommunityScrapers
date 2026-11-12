@@ -1,258 +1,223 @@
+import base64
 import json
 import re
 import sys
-from datetime import datetime # birthday formatting
+from datetime import datetime
+from urllib.parse import urljoin
 
+from py_common import log
+from py_common.deps import ensure_requirements
 from py_common.proxy import StashRequests
+from py_common.types import (
+    Ethnicity,
+    EyeColor,
+    HairColor,
+    PerformerSearchResult,
+    ScrapedPerformer,
+)
+from py_common.util import scraper_args
+
+ensure_requirements("lxml")
 from lxml import html
 
-# for image
-import base64
-
-import py_common.log as log
-from py_common.util import scraper_args
-from py_common.types import ScrapedPerformer, PerformerSearchResult, Ethnicity, EyeColor, HairColor
+BASE_URL = "https://www.babepedia.com"
 
 scraper = StashRequests(cloudflare=True)
 
-def fetch_as_base64(url: str) -> str | None:
-  data = base64.b64encode(scraper.get(url).content).decode('utf-8')
-  return f"data:image/jpg;base64,{data}"
+ETHNICITIES: dict[str, Ethnicity] = {
+    "caucasian": "Caucasian",
+    "white": "Caucasian",
+    "black": "Black",
+    "asian": "Asian",
+    "indian": "Indian",
+    "latin": "Latin",
+    "latina": "Latin",
+    "middle eastern": "Middle Eastern",
+    "middle_eastern": "Middle Eastern",
+    "mixed": "Mixed",
+    "other": "Other",
+}
 
-def biography_xpath_test(tree, html_name: str, selector: str) -> str | None:
-  elem = tree.xpath(f'//span[contains(text(), "{html_name}")]/following-sibling::span{selector}/text()')
-  return elem[0].strip() if elem else None
+EYE_COLORS: dict[str, EyeColor] = {
+    "blue": "Blue",
+    "brown": "Brown",
+    "green": "Green",
+    "grey": "Grey",
+    "gray": "Grey",
+    "hazel": "Hazel",
+    "red": "Red",
+}
 
-def sanitize_ethnicity(value: str) -> Ethnicity | None:
-    """Map ethnicity values to Stash enum (title case, not uppercase)."""
-    if not value:
-        return None
-    mapping = {
-        "caucasian": "Caucasian",
-        "white": "Caucasian",
-        "black": "Black",
-        "asian": "Asian",
-        "indian": "Indian",
-        "latin": "Latin",
-        "latina": "Latin",
-        "middle eastern": "Middle Eastern",
-        "middle_eastern": "Middle Eastern",
-        "mixed": "Mixed",
-        "other": "Other",
-    }
-    normalized = value.lower().strip()
-    if normalized in mapping:
-        return mapping[normalized]
-    # Catch partial matches for mixed race
-    if "mixed" in normalized:
-        return "Mixed"
-    return None  # type: ignore
+HAIR_COLORS: dict[str, HairColor] = {
+    "blond": "Blonde",
+    "blonde": "Blonde",
+    "brown": "Brunette",
+    "brunette": "Brunette",
+    "black": "Black",
+    "red": "Red",
+    "auburn": "Auburn",
+    "grey": "Grey",
+    "gray": "Grey",
+    "white": "White",
+    "bald": "Bald",
+    "various": "Various",
+    "other": "Other",
+}
 
-def sanitize_eye_color(value: str) -> EyeColor | None:
-    """Map eye color values to Stash enum (title case)."""
-    if not value:
-        return None
-    mapping = {
-        "blue": "Blue",
-        "brown": "Brown",
-        "green": "Green",
-        "grey": "Grey",
-        "gray": "Grey",  # American spelling
-        "hazel": "Hazel",
-        "red": "Red",
-    }
-    normalized = value.lower().strip()
-    if normalized in mapping:
-        return mapping[normalized]
-    return None  # type: ignore
+# "Fake"/"Natural" is what Stash itself writes when importing from stash-box
+BREAST_TYPES = {
+    "fake/enhanced": "Fake",
+    "real/natural": "Natural",
+    "fake": "Fake",
+    "enhanced": "Fake",
+    "augmented": "Fake",
+    "natural": "Natural",
+    "real": "Natural",
+}
 
-def sanitize_hair_color(value: str) -> HairColor | None:
-    """Map hair color values to Stash enum (title case)."""
-    if not value:
-        return None
-    mapping = {
-        "blond": "Blonde",
-        "blonde": "Blonde",
-        "brown": "Brunette",
-        "brunette": "Brunette",
-        "black": "Black",
-        "red": "Red",
-        "auburn": "Auburn",
-        "grey": "Grey",
-        "gray": "Grey",  # American spelling
-        "white": "White",
-        "bald": "Bald",
-        "various": "Various",
-        "other": "Other",
-    }
-    normalized = value.lower().strip()
-    if normalized in mapping:
-        return mapping[normalized]
-    return None  # type: ignore
 
-def sanitize_fake_tits(value: str) -> str | None:
-    # "Fake"/"Natural" is what Stash itself writes when importing from stash-box
-    mapping = {
-        "fake/enhanced": "Fake",    # observed on Babepedia
-        "real/natural":  "Natural", # observed on Babepedia
-        "fake":          "Fake",
-        "enhanced":      "Fake",
-        "augmented":     "Fake",
-        "natural":       "Natural",
-        "real":          "Natural",
-    }
-    # Anything unrecognised returns None, which the caller treats as no data.
-    return mapping.get(value.lower().strip())
+def bio_field(tree, label: str, selector: str = "") -> str | None:
+    elem = tree.xpath(
+        f'//span[contains(text(), "{label}")]/following-sibling::span{selector}/text()'
+    )
+    return elem[0].strip() if elem else None
 
-def performer_from_url(url) -> ScrapedPerformer:
-    scraped = scraper.get(url)
-    scraped.raise_for_status()
-    tree = html.fromstring(scraped.text)
+
+def parse_date(text: str) -> str | None:
+    # "9th of July 1991"
+    if m := re.search(r"(\d+)(?:st|nd|rd|th) of (\w+) (\d{4})", text):
+        return datetime.strptime(" ".join(m.groups()), "%d %B %Y").date().isoformat()
+    log.warning(f"Unrecognised date skipped: {text}")
+    return None
+
+
+def to_ethnicity(value: str) -> Ethnicity | None:
+    # Babepedia writes e.g. "Mixed-race (primarily Caucasian)"
+    normalized = value.lower()
+    return ETHNICITIES.get(normalized) or ("Mixed" if "mixed" in normalized else None)
+
+
+def image_data_uri(url: str) -> str | None:
+    # Stash can't get past Babepedia's Cloudflare on its own, so images are fetched here
+    res = scraper.get(url)
+    if res.ok and (mime := res.headers.get("Content-Type", "")).startswith("image/"):
+        return f"data:{mime};base64,{base64.b64encode(res.content).decode()}"
+    log.warning(f"Image did not load, skipped: {url}")
+    return None
+
+
+def performer_from_url(url: str) -> ScrapedPerformer:
+    res = scraper.get(url)
+    res.raise_for_status()
+    tree = html.fromstring(res.text)
 
     performer: ScrapedPerformer = {
         "name": tree.xpath('//h1[@id="babename"]')[0].text.strip(),
         "urls": [url],
-        # fixed gender
-        "gender": 'FEMALE'
+        "gender": "FEMALE",
     }
-    aliases = tree.xpath('//h2[@id="aka"][1]/text()')
-    if aliases:
-        performer['aliases'] = ", ".join(aliases[0].strip().split(" - "))
-    # get birthdate
-    birth_container = tree.xpath('//span[contains(text(), "Born:")]/following-sibling::span/a')
-    if birth_container:
-        if len(birth_container) == 2:
-            birth_text = map(lambda x: x.text_content().strip(), birth_container)
-            birth_date = " ".join(birth_text)
-            clean_birth_date = re.sub(r'(\d+)(st|nd|rd|th)', r'\1', birth_date) # remove suffix
-            birthdate = datetime.strptime(f"{clean_birth_date}", "%d of %B %Y").date()
-            performer['birthdate'] = birthdate.isoformat()
-        elif len(birth_container) == 1:
-            birth_year = birth_container[0].text_content().strip()
-            performer['birthdate'] = birth_year
-    # get death date
-    death_date = biography_xpath_test(tree, "Died", "")
-    if death_date:
-        clean_death_date = re.sub(r'\w+ (\d+)(?:st|nd|rd|th) of (\w+) (\d+) \(.+\)', r'\1 \2 \3', death_date) # remove prefix, date
-        deathdate = datetime.strptime(f"{clean_death_date}", "%d %B %Y").date()
-        performer['death_date'] = deathdate.isoformat()
-    # get career length
-    career = biography_xpath_test(tree, "Years active", "")
-    if career and (m := re.match(r'(\d{4})(?:\s*[-–]\s*(\d{4}))?', career)):
+    if aliases := tree.xpath('//h2[@id="aka"][1]/text()'):
+        performer["aliases"] = ", ".join(aliases[0].strip().split(" - "))
+
+    born = [
+        a.text_content().strip()
+        for a in tree.xpath(
+            '//span[contains(text(), "Born:")]/following-sibling::span/a'
+        )
+    ]
+    match born:
+        case [year]:
+            performer["birthdate"] = year
+        case [day_month, year] if birthdate := parse_date(f"{day_month} {year}"):
+            performer["birthdate"] = birthdate
+    if (died := bio_field(tree, "Died")) and (death_date := parse_date(died)):
+        performer["death_date"] = death_date
+    if (career := bio_field(tree, "Years active")) and (
+        m := re.match(r"(\d{4})(?:\s*[-–]\s*(\d{4}))?", career)
+    ):
         performer["career_start"] = m[1]
         if m[2]:
             performer["career_end"] = m[2]
-    # get country - extract ISO code from flag icon class (first nationality only)
-    nationality_flags = tree.xpath('//span[contains(text(), "Nationality")]/following-sibling::span//span[contains(@class, "fi-")]/@class')
-    if nationality_flags:
-        match = re.search(r'fi fi-([a-z]{2})', nationality_flags[0])
-        if match:
-            performer['country'] = match.group(1).upper()
-    # get ethnicity
-    ethnicity = biography_xpath_test(tree, "Ethnicity", "/a")
-    if ethnicity and (ethnicity_str := sanitize_ethnicity(ethnicity)):
-        performer['ethnicity'] = ethnicity_str
-    # get eye color
-    eye_color = biography_xpath_test(tree, "Eye color", "/a")
-    if eye_color:
-        eye_color_str = sanitize_eye_color(eye_color)
-        if eye_color_str:
-            performer['eye_color'] = eye_color_str
-    # get hair color
-    hair_color = biography_xpath_test(tree, "Hair color", "/a")
-    if hair_color and (hair_color_str := sanitize_hair_color(hair_color)):
-        performer['hair_color'] = hair_color_str
-    # get height
-    height = biography_xpath_test(tree, "Height", "")
-    if height:
-        cm_height = re.search(r'(\d+) cm', height)
-        if cm_height:
-            performer['height'] = cm_height[1]
-    # get weight
-    weight = biography_xpath_test(tree, "Weight", "")
-    if weight:
-        kg_weight = re.search(r'(\d+) kg', weight)
-        if kg_weight:
-            performer['weight'] = kg_weight[1]
-    # get measurements
-    measurements = biography_xpath_test(tree, "Measurements", "")
-    cup_size = biography_xpath_test(tree, "Bra/cup size", "")
-    if measurements:
-        if cup_size and (m := re.search(r'(?P<band>\d+)(?:–|-)(?P<waist>\d+)(?:–|-)(?P<hip>\d+)', measurements)):
-            _, waist_size, hip_size = m.groups()
-            performer['measurements'] = f"{cup_size}-{waist_size}-{hip_size}"
+
+    # Only the first nationality, read from its flag icon's ISO code
+    if (
+        flags := tree.xpath(
+            '//span[contains(text(), "Nationality")]/following-sibling::span//span[contains(@class, "fi-")]/@class'
+        )
+    ) and (m := re.search(r"fi fi-([a-z]{2})", flags[0])):
+        performer["country"] = m[1].upper()
+    if (ethnicity := bio_field(tree, "Ethnicity", "/a")) and (
+        value := to_ethnicity(ethnicity)
+    ):
+        performer["ethnicity"] = value
+    if (eye_color := bio_field(tree, "Eye color", "/a")) and (
+        value := EYE_COLORS.get(eye_color.lower())
+    ):
+        performer["eye_color"] = value
+    if (hair_color := bio_field(tree, "Hair color", "/a")) and (
+        value := HAIR_COLORS.get(hair_color.lower())
+    ):
+        performer["hair_color"] = value
+
+    if (height := bio_field(tree, "Height")) and (m := re.search(r"(\d+) cm", height)):
+        performer["height"] = m[1]
+    if (weight := bio_field(tree, "Weight")) and (m := re.search(r"(\d+) kg", weight)):
+        performer["weight"] = m[1]
+    if measurements := bio_field(tree, "Measurements"):
+        # The bust in "36–23–32 in" is a band-less number, the bra size carries the cup
+        if (cup_size := bio_field(tree, "Bra/cup size")) and (
+            m := re.search(r"\d+[–-](\d+)[–-](\d+)", measurements)
+        ):
+            performer["measurements"] = f"{cup_size}-{m[1]}-{m[2]}"
         else:
-            performer['measurements'] = measurements.removesuffix(" (")
-    # get fake/naturals
-    breast_type = biography_xpath_test(tree, "Boobs", "/a")
-    if breast_type:
-        breast_type_str = sanitize_fake_tits(breast_type)
-        if breast_type_str:
-            performer['fake_tits'] = breast_type_str
-    # get tattoos
-    tattoos = biography_xpath_test(tree, "Tattoos", "")
-    if tattoos and tattoos != "None":
-        performer['tattoos'] = tattoos # not split
-    # get piercings
-    piercings = biography_xpath_test(tree, "Piercings", "")
-    if piercings and piercings != "None":
+            performer["measurements"] = measurements.removesuffix(" (")
+    if (breasts := bio_field(tree, "Boobs", "/a")) and (
+        value := BREAST_TYPES.get(breasts.lower())
+    ):
+        performer["fake_tits"] = value
+    if (tattoos := bio_field(tree, "Tattoos")) and tattoos != "None":
+        performer["tattoos"] = tattoos
+    if (piercings := bio_field(tree, "Piercings")) and piercings != "None":
         performer["piercings"] = piercings
-    # get bio
-    bio = tree.xpath('//p[@id="biotext"]')
-    if bio:
+    if bio := tree.xpath('//p[@id="biotext"]'):
         performer["details"] = bio[0].text_content().strip()
-    # get social/website URLs
-    # Babepedia proxies some links as relative paths (e.g. /onlyfans/username)
-    # rather than linking to the external site directly. Map known patterns;
-    # log any unrecognised relative URLs so they can be added later.
-    # Babepedia proxies some links through their own domain, both as relative
-    # paths (/onlyfans/username) and absolute URLs
-    # (https://www.babepedia.com/onlyfans/username). Map both forms.
-    proxy_url_map = {
-        "https://www.babepedia.com/onlyfans/": "https://onlyfans.com/",
-        "/onlyfans/": "https://onlyfans.com/",
-    }
-    social_urls = tree.xpath('//div[@id="socialicons"]/a/@href')
-    for href in social_urls:
-        matched = False
-        for prefix, replacement in proxy_url_map.items():
-            if href.startswith(prefix):
-                performer["urls"].append(href.replace(prefix, replacement, 1))
-                matched = True
-                break
-        if not matched:
-            if href.startswith("http"):
-                performer["urls"].append(href)
-            else:
-                log.warning(f"Unrecognised relative URL skipped: {href}")
-    # get images - collect all from main gallery, then user uploads
-    # Returns URLs so Stash can present a picker when multiple images exist.
-    base_url = "https://www.babepedia.com"
-    main_imgs = tree.xpath('//div[@id="profbox2"]//a[@class="img"]/@href')
-    user_imgs = tree.xpath('//div[contains(@class,"useruploads2")]//a[@class="img"]/@href')
-    all_imgs = [
-        fetch_as_base64(href if href.startswith("http") else f"{base_url}{href}")
-        for href in main_imgs + user_imgs
-    ]
-    if all_imgs:
-        performer["images"] = all_imgs
+
+    for href in tree.xpath('//div[@id="socialicons"]/a/@href'):
+        # Babepedia proxies some links through its own domain, both relative and absolute
+        href = re.sub(
+            r"^(?:https://www\.babepedia\.com)?/onlyfans/",
+            "https://onlyfans.com/",
+            href,
+        )
+        if href.startswith("http"):
+            performer["urls"].append(href)
+        else:
+            log.warning(f"Unrecognised relative URL skipped: {href}")
+
+    # Main gallery first, then user uploads
+    hrefs = tree.xpath('//div[@id="profbox2"]//a[@class="img"]/@href') + tree.xpath(
+        '//div[contains(@class,"useruploads2")]//a[@class="img"]/@href'
+    )
+    if images := [
+        image for href in hrefs if (image := image_data_uri(urljoin(BASE_URL, href)))
+    ]:
+        performer["images"] = images
     return performer
 
-def map_performer_search(performer) -> PerformerSearchResult:
-    result: PerformerSearchResult = {
-       "name": performer['label'],
-       "url": f"https://www.babepedia.com/babe/{performer['value'].replace(' ', '_')}"
-    }
-    return result
 
-def performer_by_name(name) -> list[PerformerSearchResult]:
+def performer_by_name(name: str) -> list[PerformerSearchResult]:
     # dashes stripped #2671
-    search_name = name.replace("-", " ")
-    scraped = scraper.get("https://www.babepedia.com/ajax-search.php", params={"term": search_name})
-    scraped.raise_for_status()
-    data = scraped.json()
+    res = scraper.get(
+        f"{BASE_URL}/ajax-search.php", params={"term": name.replace("-", " ")}
+    )
+    res.raise_for_status()
     # The trailing "Search for <name>..." entry links to the full results page, not a performer
-    return [map_performer_search(p) for p in data if p.get("type") != "search"]
+    return [
+        {"name": p["label"], "url": f"{BASE_URL}/babe/{p['value'].replace(' ', '_')}"}
+        for p in res.json()
+        if p.get("type") != "search"
+    ]
+
 
 if __name__ == "__main__":
     op, args = scraper_args()
