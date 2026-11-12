@@ -3,6 +3,7 @@ Scraper has been tested on 2026-10-13
 | Studio                 | URL                                                                                                                 |
 | :--------------------- | :------------------------------------------------------------------------------------------------------------------ |
 | Anton Productions      | https://antonproductions.com/updates/a-burglar-in-the-house-ava-sinclaire                                           |
+| Authority Angels       | https://authorityangels.com/updates/stuck-with-me                                                                   |
 | Bound In Bliss         | https://boundinblissfp.com/updates/ultragirls-justice                                                               |
 | Damsel Factory         | https://damselfactory.com/updates/rikara-and-stacey-tied-up-and-cumming-together-movie                              |
 | Dildo Pant Videos      | https://dildopantvideos.info/updates/dpv53-little-caprice-workout-with-added-help                                   |

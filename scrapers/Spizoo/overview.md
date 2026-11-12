@@ -12,6 +12,7 @@ Scraper has been tested on 2026-11-09
 | Mr. LuckyRaw        | https://www.mrluckyraw.com/updates/Bambi-Brooks-Anal-Ends-With-A-Mouthful.html                            |
 | Mr. LuckyVIP        | https://www.mrluckyvip.com/updates/Angel-Youngs-Gets-Hot-Wet-Dirty-and-Creampied.html                     |
 | RawAttack           | https://www.rawattack.com/updates/Alexandra-Quintezz-Teases-A-Horny-Stud-For-A-Satisfying-Fuck.html       |
+| Real Sensual        | https://www.realsensual.com/updates/Sweet-Blonde-with-fantastic-sex-appeal.html                           |
 | Spizoo              | https://www.spizoo.com/updates/Summer-Kline-Enticing-Her-Gym-Instructor-For-A-Good-Fuck.html              |
 | Tag Team POV        | https://www.tagteampov.com/updates/A-Fantastic-DVP-Threesome-For-Stephanie-Silveira.html                  |
 | Vlog XXX            | https://www.vlogxxx.com/updates/Annabelle-Blue-Slurps-On-Coffee-and-Dick.html                             |

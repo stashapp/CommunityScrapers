@@ -9,6 +9,7 @@ so the studio below is what the scraper returns, not the domain's name
 | Mars Media | Bareback That Hole | https://barebackthathole.com/scene/matthieu-angel-and-marcus-isaacs              |
 | Mars Media | Bareback That Hole | https://www.breedmeraw.com/video/tommy-deluca-ray-dalton-alex-mason-and-wolvypup |
 | Mars Media | Bear Films         | https://members.bearfilms.com/video/298                                          |
+| Mars Media | Bear Films         | https://www.bearfilms.com/tour/updates/Riley-Mitchel-and-Alessio-Romero.html     |
 | Mars Media | Daddy on Twink     | https://bringmeaboy.com/video/damien-dark-and-maiky-cooper                       |
 | Mars Media | Hairy and Raw      | https://hairyandraw.com/video/sailor-blue-and-stephen-harte                      |
 | Mars Media | Hard Brit Lads     | https://www.hardbritlads.com/video/Max-Schutler-and-Andreas-Cavalli              |

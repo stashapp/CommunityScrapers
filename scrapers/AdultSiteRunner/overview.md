@@ -14,6 +14,7 @@ Scraper has been tested on 2026-11-10
 | My First Daddy       | https://www.myfirstdaddy.com/scene/1610-learning-english-with-a-native           |
 | My Step Fucker       | https://www.mystepfucker.com/scene/90-interviewing-a-new-stepdad                 |
 | Older4Me             | https://www.older4me.com/scene/10896-daddy-roma-fucks-oleg                       |
+| Play Daddy           | https://playdaddy.com/scene/3512-the-b-b-guest                                   |
 | Raunchy Bastards     | https://www.raunchybastards.com/scene/452-cherry-pop-party                       |
 | Stocky Dudes         | https://www.stockydudes.com/scene/1112-dean-and-trey                             |
 | Top Latin Daddies    | https://www.toplatindaddies.com/scene/774-making-an-exception                    |

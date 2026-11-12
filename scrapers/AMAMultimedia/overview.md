@@ -2,6 +2,7 @@ Scraper has been tested on 2026-09-29 and returns correct studio/network values 
 
 |       Network | Studio                     | URL                                                                                            |
 | ------------: | :------------------------- | ---------------------------------------------------------------------------------------------- |
+|               | Baeb                       | https://baeb.com/video/curvy-instagirl                                                         |
 |         PORN+ | Asians Exploited           | https://pornplus.com/video/asian-massage                                                       |
 |         PORN+ | BBC POVD                   | https://pornplus.com/video/hotel-massage                                                       |
 |         PORN+ | Bikini Smash               | https://pornplus.com/video/summer-babe                                                         |
@@ -37,6 +38,7 @@ Scraper has been tested on 2026-09-29 and returns correct studio/network values 
 |      Gay Room | Gay Violations             | https://gayviolations.com/video/publicly-humiliated                                            |
 |      Gay Room | Man Royale                 | https://manroyale.com/video/it-s-a-twink-christmas                                             |
 |      Gay Room | Massage Bait               | https://massagebait.com/video/glistening-daddy-rub                                             |
+|      Gay Room | Men POV                    | https://gayroom.com/video/daddy-pov-part-1                                                     |
 |      Gay Room | Men POV                    | https://menpov.com/video/4th-of-july-pool-party                                                |
 |      Gay Room | Office Cock                | https://officecock.com/video/office-cock-seduction                                             |
 |      Gay Room | Out Him                    | https://outhim.com/video/hot-sauna-orgy                                                        |

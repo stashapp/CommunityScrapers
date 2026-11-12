@@ -8,6 +8,7 @@ Scraper has been tested on 2026-09-30
 | Dogfart Network | Cuckold Sessions              | https://www.cuckoldsessions.com/en/video/cuckoldsessions/Workplace-Cuckold-Surprise/283441                                                             |
 | Dogfart Network | Cumbang                       | https://www.cumbang.com/en/video/cumbang/Rose-Rushs-Cock-Tour/234489                                                                                   |
 | Dogfart Network | DFXtra                        | https://www.dfxtra.com/en/video/dfxtra/Vanessa-Vega-Compilation/287817                                                                                 |
+| Dogfart Network | DFXtra                        | https://www.dogfartnetwork.com/en/video/dfxtra/Lunas-Media-Campaign-Takes-A-Wild-Turn/288213                                                           |
 | Dogfart Network | Downlow Boys                  | https://www.downlowboys.com/en/video/downlowboys/Anal-Support/287823                                                                                   |
 | Dogfart Network | Gloryhole                     | https://www.gloryhole.com/en/video/gloryhole/Back-At-The-Glory-Hole/291394                                                                             |
 | Dogfart Network | Gloryhole Initiations         | https://www.gloryhole-initiations.com/en/video/gloryhole-initiations/Melonys-Melons-Get-Covered-At-The-Gloryhole/234486                                |
