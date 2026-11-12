@@ -1,5 +1,5 @@
 name: "Grooby"
-# scrapes: Brazil TGirls XXX, FemoutSex, Futa, Grooby Girls, Grooby VR, Jamie Kelly XXX, Joey's Trans Feetgirls, Krissy 4U, Ladyboy, Naughty Natural, Real TGirls, Russian TGirls, T.Porn, TGirl Japan, TGirls, TGirlSex, Trans VR, Transerotica, TransGasm, TS Casting Couch
+# scrapes: Asian American TGirls, Asian TGirl, Black TGirls, Black TGirls Hardcore, Bob's TGirls, Brazil TGirls, Brazilian Transsexuals, Canada TGirl, Euro TGirls, Femout, FemoutSex.XXX, Frank's TGirl World, Futa.XXX, Grooby Girls, Grooby VR, Hazel Tucker, Jamie Kelly XXX, Joey's Trans Feetgirls, Kelly Quell XXX, Krissy4U, Ladyboy Ladyboy, Ladyboy.XXX, Naughty Natural, Real TGirls, Russian TGirls, T.Porn, TGirl 40, TGirl BBW, TGirl Japan, TGirl Japan Hardcore, TGirl Pornstar, Tgirl Post-Op, TGirl Tops, TGirl X, TGirls Fuck, TGirls Hookup, tgirls.porn, TGirls.XXX, TGirlSex.XXX, Trans VR, Transerotica, Transex Domination, Transex POV, TransGasm, Transnificent, TS Casting Couch, UK TGirls
 performerByURL:
   - action: scrapeXPath
     url:
@@ -163,9 +163,17 @@ xPathScrapers:
         selector: //div[@class="trailerpage_info"]/p/text()
         concat: " "
       Performers: &performers
-        Name: //div[@class="setdesc"]//a[contains(@href, "models") and not(contains(@class, "read-more"))]/text()
+        Name: //div[@class="setdesc"]//a[contains(@href, "models") and not(contains(@class, "read-more"))]
       Studio: &studioClub
-        Name: //div[@class="sitename"]/a/text() | //meta[@name="author"]/@content
+        Name:
+          selector: //div[@class="sitename"]/a | //meta[@name="author"]/@content
+          postProcess: &studioNames
+            - map:
+                Brazil TGirls XXX: Brazil TGirls
+                Krissy 4U: Krissy4U
+                Shemales From Hell: Brazil TGirls
+                TGirl PostOp: Tgirl Post-Op
+                Transnificent!: Transnificent
       URLs: &url //link[@rel="canonical"]/@href
       Image: &image
         selector: //meta[@property="og:image"]/@content
@@ -174,7 +182,7 @@ xPathScrapers:
               - regex: ^//
                 with: https://
       Tags:
-        Name: &tagsSel //div[@class="set_tags"]/ul/li//a[not(contains(@href,"/all.html"))]/text()
+        Name: &tagsSel //div[@class="set_tags"]/ul/li//a[not(contains(@href,"/all.html"))]
     gallery:
       Title: *title
       Date: *date
@@ -191,7 +199,9 @@ xPathScrapers:
       Details: *details
       Performers: *performers
       Studio: &studioSub
-        Name: //meta[@name="author"]/@content
+        Name:
+          selector: //meta[@name="author"]/@content
+          postProcess: *studioNames
       URLs: *url
       Image: *image
       # Tags for these subsites only appear on grooby.club as of 2023-08-15
@@ -278,21 +288,11 @@ xPathScrapers:
               - regex: \s*Read More in Members Area\s*$
                 with: ""
       Performers: &performersMain
-        Name: //div[@class="setdesc"]//a[contains(@href, "models") and not(contains(@class, "read-more"))]/text()
+        Name: //div[@class="setdesc"]//a[contains(@href, "models") and not(contains(@class, "read-more"))]
       Studio: &studio
         Name:
-          # A handful of sites echo their own TLD onto the end of an
-          # otherwise-clean author name (e.g. "TGirls.XXX" instead of
-          # "TGirls", unlike sibling sites like femout.xxx's "Femout")
           selector: //meta[@name="author"]/@content
-          postProcess:
-            - replace:
-                - regex: (?i)\.(xxx|com|porn|net)$
-                  with: ""
-            # t.porn's real brand name IS "T.Porn" (matches its domain
-            # exactly) - the generic strip above wrongly reduces it to "T"
-            - map:
-                T: T.Porn
+          postProcess: *studioNames
         URLs:
           selector: //link[@rel="canonical"]/@href
           postProcess:
@@ -339,8 +339,7 @@ xPathScrapers:
                 with: ""
       URLs: *url
       Tags:
-        Name:
-          selector: &tagsSelMain //div[@class="set_tags"]/ul/li//a[not(contains(@href,"/all.html"))]/text()
+        Name: &tagsSelMain //div[@class="set_tags"]/ul/li//a[not(contains(@href,"/all.html"))]
   galleryScraper:
     gallery:
       Title: *titleMain
@@ -353,7 +352,7 @@ xPathScrapers:
 
   sceneScraperBrazilian:
     scene:
-      Title: //div[@class="trailer_videoinfo"]/h3/text()
+      Title: //div[@class="trailer_videoinfo"]/h3
       Date:
         selector: //div[@class="trailer_videoinfo"]//b[contains(.,"Added")]/following-sibling::text()[1]
         postProcess:
@@ -361,15 +360,10 @@ xPathScrapers:
               - regex: ".*- "
                 with: ""
           - parseDate: Jan 2, 2006
-      Details: //div[@class="trailer_videoinfo"]//p[not(./*)]/text()
+      Details: //div[@class="trailer_videoinfo"]//p[not(./*)]
       Performers:
-        Name: //div[@class="trailer_videoinfo"]//a/text()
-      Studio:
-        Name:
-          selector: //meta[@name="author"]/@content
-          postProcess:
-            - map:
-                Shemales From Hell: Brazil TGirls
+        Name: //div[@class="trailer_videoinfo"]//a
+      Studio: *studioSub
       Image:
         selector: //base/@href|//div[@class="videohere"]/img[@class="thumbs stdimage"]/@src|//script[contains(.,'jwplayer("jwbox").setup')]/text()
         concat: "|"
@@ -392,7 +386,7 @@ xPathScrapers:
         selector: //div[contains(@class,"trailerpage_description")]//*/text()
         concat: "\n\n"
       Performers: &performersVR
-        Name: //div[@class="trailer_toptitle_left"]//a/text()
+        Name: //div[@class="trailer_toptitle_left"]//a
       Studio: *studio
       Image:
         selector: >-
@@ -490,9 +484,12 @@ xPathScrapers:
               - regex: (\d)(st|[nr]d|th)
                 with: "$1"
           - parseDate: 2 Jan 2006
-      Performers:
-        Name: //div[@class="modelnamecontainer"]//a/text()
-      Image: $video//img/@src
+      Image:
+        selector: $video//img/@src
+        postProcess:
+          - replace:
+              - regex: ^/
+                with: https://www.groobyvr.com/
       URLs:
         selector: $video/h4/a/@href
         postProcess:
@@ -502,7 +499,7 @@ xPathScrapers:
 
   performerScraper:
     performer:
-      Name: &name //h3[@class="modelname"]/text()|//div[@class="model_profile_name"]/text()
+      Name: &name //h3[@class="modelname"]|//div[@class="model_profile_name"]
       Gender: &gender
         fixed: transgender_female
       Images:
