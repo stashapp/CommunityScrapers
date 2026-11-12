@@ -7,7 +7,9 @@
 # automatic retries with cloudscraper then (flaresolverr/ byparr) if blocked
 # caches flaresolverr cookies, userAgent for subsequent requests to same host
 
+import html
 import os
+import re
 import time
 import json
 import urllib.parse
@@ -105,6 +107,8 @@ class FlareSolverrBackend(RequestBackend):
         log.warning("[proxy] HEAD not supported by FlareSolverr, using GET instead")
       try:
         post_data = (kwargs.get("json") or kwargs.get("data")) if method == "post" else None
+        if params := kwargs.get("params"):
+          url = requests.Request("GET", url, params=params).prepare().url
         return flaresolverr_req(url, method=method, postData=post_data, proxy=self.proxy, cookies=kwargs.get("cookies"))
       except Exception as e:
         log.warning(f"[proxy] FlareSolverr request failed: {e}")
@@ -160,7 +164,11 @@ def flaresolverr_req(url, method="get", postData=None, proxy=None, cookies=None)
   solution = response.json().get("solution")
   req_response = requests.Response()
   req_response.status_code = solution.get("status", 200)
-  req_response._content = solution.get("response", "").encode("utf-8")
+  body = solution.get("response", "")
+  # Chrome renders non-HTML bodies (JSON, plain text) inside its own <pre> viewer
+  if m := re.fullmatch(r'<html><head>(?:<meta [^>]*>)*</head><body><pre[^>]*>(.*)</pre>(?:<div [^>]*>.*</div>)?</body></html>', body, re.DOTALL):
+    body = html.unescape(m[1])
+  req_response._content = body.encode("utf-8")
   req_response.headers = solution.get("headers", {})
   req_response.url = solution.get("url", "")
   req_response.request = requests.Request(method, req_response.url, headers=req_response.headers).prepare()
