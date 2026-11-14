@@ -10,9 +10,15 @@ groupByURL:
     url:
       - jeedoo.com
     scraper: movieScraper
+# Jeedoo's listing and search pages answer Cloudflare's "Just a moment..."
+# challenge (HTTP 403) to non-browser clients, so the site's search results page
+# cannot be scraped and CDP does not clear it (headless fingerprint:
+# navigator.webdriver=true, window.chrome undefined - reproduced 2026-11-13
+# against the chrome-cdp service on LOGOS). The site's own search box uses the
+# AJAX endpoint below, which is NOT challenged, so name search goes through it.
 sceneByName:
-  action: scrapeXPath
-  queryURL: https://www.jeedoo.com/porn-movies/?show_no_offer=1&search={}
+  action: scrapeJson
+  queryURL: https://www.jeedoo.com/ajax/suggest/titles/?q={}
   scraper: sceneSearch
 sceneByQueryFragment:
   action: scrapeXPath
@@ -23,42 +29,62 @@ xPathScrapers:
   movieScraper:
     group:
       Name: &title
-        selector: //title
-        postProcess:
-          - replace:
-              - regex: ((DVD|HD\-DVD|VHS\-Video)\s+\-\s+Porn\s+Movies\s+Streams\s+and\s+Downloads|\s+Stream\s+&\s+Download)
-                with: ""
-      Date: &date
-        selector: //div[contains(text()[2], "Release date:")]/text()[2] | //td[@class="de1"][contains(., "released on")]/following-sibling::td
+        selector: //meta[@property="og:title"]/@content
         postProcess:
           - javascript: |
-              const months = ["January", "February", "March", "April", "May", "June", "July",
+              let v = value.replace(/\s+/g, " ").trim();
+              v = v.replace(/\s+[-–]\s+(DVD|HD-DVD|VHS-Video|Blu-ray)$/i, "");
+              v = v.replace(/\s+[-–]\s+Stream\s*&\s*Download$/i, "");
+              return v.trim();
+      Date: &date
+        selector: >-
+          (//dt[normalize-space()="Release date"] | //dt[normalize-space()="Erscheinungsdatum"])/following-sibling::dd[1]
+        postProcess:
+          - javascript: |
+              const en = ["January", "February", "March", "April", "May", "June", "July",
                 "August", "September", "October", "November", "December"];
-              const v = value.replace(/^\s*Release date:\s*/, "").trim();
+              const de = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli",
+                "August", "September", "Oktober", "November", "Dezember"];
+              const pad = (n) => (n < 10 ? "0" + n : "" + n);
+              const v = value.replace(/\s+/g, " ").trim();
               let m;
-              if ((m = v.match(/^(\d{2})\/(\d{2})\/(\d{4})$/))) return `${m[3]}-${m[1]}-${m[2]}`;
-              if ((m = v.match(/^(\w+) (\d{1,2}), (\d{4})$/)) && months.includes(m[1])) {
-                const month = String(months.indexOf(m[1]) + 1).padStart(2, "0");
-                return `${m[3]}-${month}-${m[2].padStart(2, "0")}`;
+              if ((m = v.match(/^([A-Za-z]+)\s+(\d{1,2}),\s*(\d{4})$/))) {
+                const i = en.indexOf(m[1]);
+                if (i >= 0) return m[3] + "-" + pad(i + 1) + "-" + pad(m[2]);
+              }
+              if ((m = v.match(/^(\d{1,2})\.\s*([A-Za-zÄÖÜäöüß]+)\s+(\d{4})$/))) {
+                const i = de.indexOf(m[2]);
+                if (i >= 0) return m[3] + "-" + pad(i + 1) + "-" + pad(m[1]);
+              }
+              if ((m = v.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/))) {
+                return m[3] + "-" + pad(m[1]) + "-" + pad(m[2]);
               }
               return "";
       Studio: &studio
-        Name: //div[@class="undertitle"]//a[contains(@href, "?label=")]
-      Synopsis: &details //meta[@property="og:description"]/@content
-      FrontImage: //img[contains(@class,"mainimage")][@rel="1"]/@src
-      BackImage: //img[contains(@class,"mainimage")][@rel="2"]/@src
+        Name: (//dt[normalize-space()="Studio"])/following-sibling::dd[1]
+      Synopsis: &details (//div[contains(@class,"pp-description")]/p)[1]
+      FrontImage: &frontimage //meta[@property="og:image"]/@content
+      BackImage: (//div[@data-pp-gallery]//a[contains(@class,"pp-slide")])[2]/@href
       URLs: &url //link[@rel="alternate"][@hreflang="en"]/@href
       Tags: &tags
-        Name: //a[@title="Categorie / Genre"]
-      Director: &director //a[@title="Director"]
+        Name: >-
+          (//dt[normalize-space()="Genre"] | //dt[normalize-space()="Categories"] | //dt[normalize-space()="Kategorien"])/following-sibling::dd[1]//a
+      Director: &director
+        selector: (//dt[normalize-space()="Director"] | //dt[normalize-space()="Regie"])/following-sibling::dd[1]
       Duration:
-        selector: //div[contains(text(),"Length:")]/text()[1] | //td[@class="de1"][contains(., "Length:")]/following-sibling::td
+        selector: >-
+          (//dt[normalize-space()="Runtime"] | //dt[normalize-space()="Laufzeit"])/following-sibling::dd[1]
         postProcess:
-          - replace:
-              - regex: ^\[(.+)\]$
-                with: $1
-              - regex: ^[^\d]*(\d+)\s*min.*
-                with: "$1:00"
+          - javascript: |
+              const v = value.replace(/\s+/g, " ").trim();
+              let m;
+              if ((m = v.match(/(\d+)\s*(?:Std\.?|h|hr)\b/i))) {
+                const h = parseInt(m[1], 10);
+                const mm = v.match(/(\d+)\s*(?:Min\.?|min)\b/i);
+                return (h * 60 + (mm ? parseInt(mm[1], 10) : 0)) + ":00";
+              }
+              if ((m = v.match(/(\d+)/))) return m[1] + ":00";
+              return "";
   sceneScraper:
     scene:
       Title: *title
@@ -66,31 +92,25 @@ xPathScrapers:
       Date: *date
       Studio: *studio
       Details: *details
-      Image: //img[contains(@class,"mainimage")][@rel="1"]/@src
-      Performers:
-        Name: //a[@title="Cast"]
-        URLs:
-          selector: //a[@title="Cast"]/@href
-          postProcess:
-            - replace:
-                - regex: ^
-                  with: "https://www.jeedoo.com"
+      Image: *frontimage
       Tags: *tags
       Director: *director
+
+# sceneSearch maps the AJAX suggest payload. Suggestion rows that point at
+# studio/performer filter pages (?label= / ?actor=) carry no price, so the
+# price filter keeps only real titles (DVD product and stream-download pages).
+jsonScrapers:
   sceneSearch:
     common:
-      $searchItem: //a[contains(@href,"/product/")]/img/..
+      $items: items.#(price!="")#
     scene:
-      Title:
-        selector: $searchItem/img/@alt
-        postProcess:
-          - replace:
-              - regex: ^(DVD|HD-DVD|Blu-ray|VHS-Video)\s+
-                with: ""
+      Title: $items.name
       URLs:
-        selector: $searchItem/@href
+        selector: $items.link
         postProcess:
           - replace:
               - regex: ^
-                with: "https://www.jeedoo.com"
-      Image: $searchItem/img/@data-src
+                with: https://www.jeedoo.com
+      Image: $items.image
+
+# Last Updated 2026-11-13
