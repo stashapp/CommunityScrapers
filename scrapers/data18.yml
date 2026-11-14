@@ -158,6 +158,4 @@ driver:
           Domain: ".data18.com"
           Value: "1"
           Path: "/"
-  headers:
-    - Key: User-Agent
-      Value: stash-scraper/1.0
+  useSurf: true
