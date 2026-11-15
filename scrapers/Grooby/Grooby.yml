@@ -261,7 +261,7 @@ xPathScrapers:
         # Some sites nest the description p tag inside setdesc rather than
         # as a direct child of trailerpage_info, and t.porn puts it in a bare
         # li of the "About the Video" list so we fall back to those too.
-        selector: //div[@class="trailerpage_info"]/p[not(@class)]|//div[@class="setdesc"]/p[not(@class)]|//div[@class="setdesc_right"]/ul/li[not(@class) and not(b)]
+        selector: //div[@class="trailerpage_info"]/p[not(@class)]|//div[@class="setdesc"]/p[not(@class)]|//div[@class="setdesc_right"]/ul/li[not(@class) and not(b)]|//div[@class="trailerpage_meta"]/p[not(@class)]
         postProcess:
           - javascript: |
               if (value && value.length > 0) {
