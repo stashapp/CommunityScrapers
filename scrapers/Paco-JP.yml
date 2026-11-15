@@ -4,7 +4,7 @@ sceneByURL:
   - action: scrapeJson
     url:
       - www.pacopacomama.com
-      - pacopacomama.com
+      - /pacopacomama.com
     scraper: sceneScraper
     queryURL: "{url}"
     queryURLReplace:
