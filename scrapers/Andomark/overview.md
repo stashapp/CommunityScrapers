@@ -8,12 +8,14 @@ Scraper has been tested on 2026-09-14
 | Big Boobies Club         | https://bigboobiesclub.com/updates/RavenswallowsFunGirl.html                                                                 | oldStyle                       |
 | Big Bouncy Babes         | https://bigbouncybabes.com/updates/WillTileXXXRoomie-KAYK920.html                                                            | oldStyle                       |
 | Big Toy XXX              | https://bigtoyxxx.com/updates/SofieMarieXXXTheUltimate6GirlStrapOnOrgy.html                                                  | oldStyle                       |
+| Black Bull Challenge     | https://blackbullchallenge.com/scenes/Fuck-My-Perfect-Round-Juicy-Ass_vids.html                                              | newStyle                       |
 | Bondage Legend           | https://bondagelegend.com/updates/DOILAStrapOnDivas.html                                                                     | oldStyle                       |
 | Brad Sterling            | https://bradsterling.elxcomplete.com/updates/BradSterlingWelcomeToMyRoomfAlixLynx.html                                       | oldStyle                       |
 | Brit Studio              | https://britstudio.xxx/scenes/Rae-Fucks-Herself-With-A-Dildo-Until-She-Cums_vids.html                                        | newStyle                       |
 | Brittany Andrews         | https://brittanyandrews.com/updates/Newly-Single-and-Ready-for-Cock.html                                                     | oldStyle                       |
 | CFNM Games               | https://www.cfnmgames.com/scenes/bj-challenge_vids.html                                                                      | proSceneWithImgFallbackScraper |
 | Calisa Bliss             | https://calisabliss.com/updates/Experimental-Treatment.html                                                                  | oldStyle                       |
+| Cannon Productions       | https://cannonprod.com/scenes/Kylei-Ellish-Kylei-Takes-On-Dani-Big-Dick_vids.html                                            | newStyle                       |
 | Charlie Forde            | https://charlieforde.com/scenes/Bump-In-The-Night_vids.html                                                                  | newStyle                       |
 | Charm Models             | https://charmmodels.net/updates/Selena-I-love-myself.html                                                                    | setpreviewStyle                |
 | ChocolatePOV             | https://chocolatepov.com/updates/WillTileXXXSoles-SHLU1119.html                                                              | oldStyle                       |

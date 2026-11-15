@@ -87,7 +87,9 @@ sceneByURL:
     scraper: setpreviewStyle
   - action: scrapeXPath
     url:
+      - blackbullchallenge.com/scenes/
       - britstudio.xxx/scenes/
+      - cannonprod.com/scenes/
       - charlieforde.com/scenes/
       - evolvedfights.com/scenes/
       - goonmuse.com/scenes/
@@ -218,6 +220,7 @@ xPathScrapers:
                 bigboobiesclub: Big Boobies Club
                 bigbouncybabes: Big Bouncy Babes
                 bigtoyxxx: Big Toy XXX
+                blackbullchallenge: Black Bull Challenge
                 bondagelegend: Bondage Legend
                 bradsterling: Brad Sterling
                 britstudio: Brit Studio
@@ -225,6 +228,7 @@ xPathScrapers:
                 brittanysbubbles: Brittany Andrews
                 brokemodel: Broke Model
                 calisabliss: Calisa Bliss
+                cannonprod: Cannon Productions
                 cfnmgames: CFNM Games
                 charlieforde: Charlie Forde
                 charmmodels: Charm Models

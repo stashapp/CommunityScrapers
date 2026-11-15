@@ -71,6 +71,7 @@ studio_map = {
     "tour.javhub.com": "JavHub",
     "jizzaddiction.com": "Jizz Addiction",
     "joeschmoevideos.com": "Joe Schmoe Videos",
+    "johnnyrapid.com": "Johnny Rapid",
     "labelladx.com": "La BellaDX",
     "lildsplayhouse.com": "Lil D's Playhouse",
     "slutwife.labelladx.com": "La BellaDX",
@@ -105,6 +106,7 @@ studio_map = {
     "members.rickysroom.com": "Ricky's Room",
     "s3xus.com": "S3XUS",
     "seska.com": "Seska",
+    "seska.paysite.com": "Seska",
     "severesexfilms.com": "Severe Sex Films",
     "sextapes.com": "SexTapes",
     "sexymodernbull.com": "Sexy Modern Bull",
@@ -153,6 +155,7 @@ NO_SITE_OF_THEIR_OWN = {
     "karlsworld.toughlovex.com",
     "lollipoptwinks.com",
     "premium-nickmarxx.com",
+    "seska.paysite.com",
     "slutwife.labelladx.com",
     "toughlove.toughlovex.com",
     "topwebmodels-interviews.com",
@@ -174,10 +177,8 @@ def clean_url(url: str) -> str:
     return re.sub(r"\?.*", "", url)
 
 
-# Some sites only work with the `tour.` subdomain
-def fix_url(url: str) -> str:
-    url = url.replace("suckthisdick.com", "hobybuchanon.com")
-    url = url.replace("api.nyseedxxx.com", "nyseedxxx.com")
+# Some sites only work with the `tour.` subdomain: their bare host 404s
+def tour_url(url: str) -> str:
     tour_domain = (
         "nympho",
         "allanal",
@@ -188,13 +189,25 @@ def fix_url(url: str) -> str:
         "facialsforever",
         "mariskax",
         "poundedpetite",
+        "povperv",
+        "purgatoryx",
         "seska",
         "swallowed",
         "shesbrandnew",
         "topwebmodels",
+        "toughlovex",
         "trueanal",
     )
-    return re.sub(rf"//(?<!tour\.)({'|'.join(tour_domain)})", r"//tour.\1", url)
+    # anchored so archived copies (web.archive.org/web/.../https://site/...) stay as given
+    return re.sub(
+        rf"^(https?://)(?:www\.)?({'|'.join(tour_domain)})\.", r"\1tour.\2.", url
+    )
+
+
+def fix_url(url: str) -> str:
+    url = url.replace("suckthisdick.com", "hobybuchanon.com")
+    url = url.replace("api.nyseedxxx.com", "nyseedxxx.com")
+    return tour_url(url)
 
 
 def strip_tags(html: str) -> str:
@@ -214,7 +227,7 @@ def strip_tags(html: str) -> str:
 
     s = ToPlainText()
     s.feed(html)
-    return normalize("NFKD", s.get_data())
+    return normalize("NFKD", s.get_data()).strip()
 
 
 def fetch_page_props(url: str) -> dict | None:
@@ -322,8 +335,8 @@ def to_scraped_performer(raw_performer: dict, page_url: str) -> ScrapedPerformer
     performer: ScrapedPerformer = {
         "name": raw_performer["name"],
         "urls": [make_performer_url(raw_performer["slug"], site, page_url)],
-        "tags": [],
     }
+    tags = []
 
     if gender := raw_performer.get("gender"):
         performer["gender"] = gender
@@ -332,10 +345,10 @@ def to_scraped_performer(raw_performer: dict, page_url: str) -> ScrapedPerformer
         image = re.sub(r"^//", "https://", image)
         performer["images"] = [torso_variant(image)]
 
-    if bio := raw_performer.get("bio"):
-        performer["details"] = strip_tags(bio)
-    elif details := raw_performer.get("details"):
-        performer["details"] = strip_tags(details)
+    if details := strip_tags(
+        raw_performer.get("bio") or raw_performer.get("details") or ""
+    ):
+        performer["details"] = details
 
     if (birthdate := raw_performer.get("birthdate")) and birthdate != "1969-12-31":
         performer["birthdate"] = birthdate
@@ -405,14 +418,16 @@ def to_scraped_performer(raw_performer: dict, page_url: str) -> ScrapedPerformer
         performer["urls"].append(f"https://www.instagram.com/{instagram}")
 
     if "orientation" in raw_performer:
-        performer["tags"].append({"name": raw_performer["orientation"]})
+        tags.append({"name": raw_performer["orientation"]})
     if "sexual positions" in raw_performer:
         for x in raw_performer["sexual positions"].split(" "):
-            performer["tags"].append({"name": x})
+            tags.append({"name": x})
     if "body" in raw_performer:
-        performer["tags"].append({"name": raw_performer["body"]})
+        tags.append({"name": raw_performer["body"]})
     if "pubic" in raw_performer:
-        performer["tags"].append({"name": raw_performer["pubic"] + " Pubes"})
+        tags.append({"name": raw_performer["pubic"] + " Pubes"})
+    if tags:
+        performer["tags"] = tags
 
     return performer
 
@@ -444,12 +459,12 @@ def to_scraped_scene_from_content(raw_scene: dict, page_url: str) -> ScrapedScen
     site = raw_scene["site_domain"]
     scene: ScrapedScene = {}
 
-    if title := raw_scene.get("title"):
-        scene["title"] = title.strip()
+    if title := (raw_scene.get("title") or "").strip():
+        scene["title"] = title
     if date := raw_scene.get("publish_date"):
         scene["date"] = date[:10].replace("/", "-")
-    if details := raw_scene.get("description"):
-        scene["details"] = strip_tags(details)
+    if details := strip_tags(raw_scene.get("description") or ""):
+        scene["details"] = details
     if code := get_code(site, raw_scene):
         scene["code"] = code
     if models := raw_scene.get("models_thumbs"):
@@ -520,12 +535,12 @@ def to_scraped_scene_from_video(raw_scene: dict, page_url: str) -> ScrapedScene:
     site = urllib.parse.urlparse(raw_scene["thumbnail"]["url"]).netloc
     scene: ScrapedScene = {}
 
-    if title := raw_scene.get("title"):
+    if title := (raw_scene.get("title") or "").strip():
         scene["title"] = title
     if date := raw_scene.get("createdAt"):
         scene["date"] = date[:10].replace("/", "-")
-    if details := raw_scene.get("description"):
-        scene["details"] = strip_tags(details)
+    if details := strip_tags(raw_scene.get("description") or ""):
+        scene["details"] = details
     if scene_id := dig(raw_scene, ("id", "_id")):
         scene["code"] = str(scene_id)
     if models := raw_scene.get("performers"):
@@ -578,9 +593,9 @@ if __name__ == "__main__":
     result = None
     match op, args:
         case "scene-by-url", {"url": url} if url:
-            result = scrape_scene(clean_url(url))
+            result = scrape_scene(tour_url(clean_url(url)))
         case "performer-by-url", {"url": url} if url:
-            result = scrape_performer(clean_url(url))
+            result = scrape_performer(tour_url(clean_url(url)))
         case _:
             log.error(f"Invalid operation: {op}")
             sys.exit(1)

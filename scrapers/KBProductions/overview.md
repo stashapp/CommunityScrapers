@@ -107,3 +107,10 @@ Scraper has been tested on 2026-10-02
 | Z-Filmz               | https://z-filmz-originals.com/videos/morea-black-gets-cum-on-her-glasses                                                          |
 | Heaven                | https://tour.purgatoryx.com/episodes/genie-wishes-e1                                                                              |
 | Hell                  | https://tour.purgatoryx.com/episodes/kinky-in-law                                                                                 |
+| Beddable Boys         | https://beddableboys.com/videos/tory-mason-jacks-off-in-a-tent?scene_code=bb188_torymason                                         |
+| Best Bareback         | https://bestbareback.com/videos/hot-young-perfect-couple?scene_code=bbb_george_phil01                                             |
+| InMelanin             | https://inmelanin.com/videos/real-love-naomi-foxxx-and-peter-fitzwell                                                             |
+| Twinklight            | https://twinklight.tv/videos/sexy-defined-eddie?scene_code=vampint028_eddiecruz_vamp033                                           |
+| Twinkylicious         | https://twinkylicious.com/videos/two-hot-brothers-fire-a-load?scene_code=tl016_john_mike                                          |
+| Johnny Rapid          | https://johnnyrapid.com/videos/getting-it-in-at-the-gym                                                                           |
+| Teach Twinks          | https://teachtwinks.com/videos/masturbation-tutorial-video                                                                        |
