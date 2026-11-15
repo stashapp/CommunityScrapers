@@ -18,7 +18,8 @@ sceneByURL:
       - jockbreeders.com/videos/
       - jockpussy.com/videos/
       - staghomme.com/videos/
-      - twinks.com/videos/
+      - /twinks.com/videos/
+      - .twinks.com/videos/
     scraper: sceneScraper
   # These studios organize their scenes into series with chapters
   # You can tell a studio belongs in this category
@@ -106,7 +107,7 @@ xPathScrapers:
                 # https://regex101.com/r/JxFd9a/1
                 - regex: ^(?:https:\/\/[\w\.]*?)([^.]+)\.com.*$
                   with: $1
-            - map:
+            - map: &studioMap
                 # The canonical list of studio names are based on what
                 # they are called on their respective network sites
                 americanmusclehunks: American Muscle Hunks
@@ -178,108 +179,29 @@ xPathScrapers:
         # to scrape from the canonical source as well as submitting both links to StashDB:
         # the network site will list the duration, which is helpful when evaluating
         # the submitted fingerprints for the scene
-        selector: //link[@rel="canonical"]/@href | //div[@class="logoSubsites"]//img/@alt
+        selector: //link[@rel="canonical"]/@href | //div[@class="title-updates-logo"]//a/@href
         concat: __SEPARATOR__
         postProcess:
-          - replace:
-              - regex: .*(?P<path>videos/.*)__SEPARATOR__(?P<domain>.*)
-                with: https://$domain.com/$path
-              - regex: _vids
-                with: ""
-              # This table is should contain the same sites Studio Name in sceneScraper
-              - regex: AmericanMuscleHunks
-                with: americanmusclehunks
-              - regex: BangBangBoys
-                with: bangbangboys
-              - regex: BoundTwinks
-                with: boundtwinks
-              - regex: BoyForSale
-                with: boyforsale
-              - regex: CumDumpSluts
-                with: cumdumpsluts
-              - regex: DirtyBoySociety
-                with: dirtyboysociety
-              - regex: EdwardJames
-                with: edwardjames
-              - regex: FTMmen
-                with: ftmmen
-              - regex: FunsizeBoys
-                with: funsizeboys
-              - regex: Gaycest
-                with: gaycest
-              - regex: HungFuckers
-                with: hungfuckers
-              - regex: JasonSparksLive
-                with: jasonsparkslive
-              - regex: JalifStudio
-                with: jalifstudio
-              - regex: JockBreeders
-                with: jockbreeders
-              - regex: JockPussy
-                with: jockpussy
-              - regex: MasonicBoys
-                with: masonicboys
-              - regex: RawFuckBoys
-                with: rawfuckboys
-              - regex: ScoutBoys
-                with: scoutboys
-              - regex: StagHomme
-                with: staghomme
-              - regex: TeensAndTwinks
-                with: teensandtwinks
-              - regex: Transcest
-                with: transcest
-              - regex: Twinks
-                with: twinks
-              - regex: Twinkloads
-                with: twinkloads
-              - regex: TwinkTop
-                with: twinktop
+          - javascript: |
+              const [canonical, subsite] = value.split("__SEPARATOR__");
+              // jasonsparkslive.com only redirects back to the network site
+              if (!subsite || subsite.startsWith("jasonsparkslive")) return canonical;
+              const path = canonical.replace(/^.*?\/(videos\/.*)$/, "$1").replace("_vids", "");
+              return `https://${subsite.replace(/\/$/, "")}.com/${path},${canonical}`;
+        split: ","
       Tags:
         Name: //div[@class="update_tags"]//a
       Performers:
         Name: $scene//div[@class="update-models"]//a | $scene//span[contains(text(), "Played by")]//a
-      Director:
-        selector: //span[contains(text(), "Director:")]/following-sibling::text()[1]
-      Studio: &netStudio
+      Director: //span[contains(text(), "Director:")]/following-sibling::text()[1]
+      Studio:
         Name:
           selector: //div[@class="title-updates-logo"]//a/@href
           postProcess:
             - replace:
                 - regex: /$
                   with: ""
-            - map:
-                # The canonical list of studio names are based on what
-                # they are called on their respective network sites
-                americanmusclehunks: American Muscle Hunks
-                bangbangboys: Bang Bang Boys
-                baptistboys: Baptist Boys
-                betabetapi: BetaBetaPi
-                boundtwinks: Bound Twinks
-                boyforsale: Boy For Sale
-                carnaloriginals: Carnal+ Originals
-                catholicboys: Catholic Boys
-                cumdumpsluts: Cum Dump Sluts
-                dirtyboysociety: Dirty Boy Society
-                edwardjames: Edward James
-                ftmmen: FTM Men
-                funsizeboys: Funsize Boys
-                gaycest: Gaycest
-                hungfuckers: Hung Fuckers
-                jalifstudio: Jalif Studio
-                jasonsparkslive: JasonSparksLive
-                jockpussy: Jock Pussy
-                jockbreeders: Jock Breeders
-                masonicboys: Masonic Boys
-                rawfuckboys: Raw Fuck Boys
-                scoutboys: Scout Boys
-                staghomme: Stag Homme
-                studloads: StudLoads
-                teensandtwinks: Teens And Twinks
-                transcest: Transcest
-                twinks: Twinks
-                twinkloads: Twink Loads
-                twinktop: Twink Top
+            - map: *studioMap
 
       Groups:
         Name:
@@ -319,38 +241,7 @@ xPathScrapers:
         Name:
           selector: //div[@class="siteName"]
           postProcess:
-            - map:
-                # The canonical list of studio names are based on what
-                # they are called on their respective network sites
-                americanmusclehunks: American Muscle Hunks
-                bangbangboys: Bang Bang Boys
-                baptistboys: Baptist Boys
-                betabetapi: BetaBetaPi
-                boundtwinks: Bound Twinks
-                boyforsale: Boy For Sale
-                carnaloriginals: Carnal+ Originals
-                catholicboys: Catholic Boys
-                cumdumpsluts: Cum Dump Sluts
-                dirtyboysociety: Dirty Boy Society
-                edwardjames: Edward James
-                ftmmen: FTM Men
-                funsizeboys: Funsize Boys
-                gaycest: Gaycest
-                hungfuckers: Hung Fuckers
-                jalifstudio: Jalif Studio
-                jasonsparkslive: JasonSparksLive
-                jockpussy: Jock Pussy
-                jockbreeders: Jock Breeders
-                masonicboys: Masonic Boys
-                rawfuckboys: Raw Fuck Boys
-                scoutboys: Scout Boys
-                staghomme: Stag Homme
-                studloads: StudLoads
-                teensandtwinks: Teens And Twinks
-                transcest: Transcest
-                twinks: Twinks
-                twinkloads: Twink Loads
-                twinktop: Twink Top
+            - map: *studioMap
       FrontImage:
         selector: //div[@class="sidebar__inner"]//div[contains(@class, "item-model")]//picture/@data-iesrc
         postProcess:
