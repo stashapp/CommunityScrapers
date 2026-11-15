@@ -4,11 +4,13 @@ import sys
 from typing import Any
 from urllib.parse import unquote, urlparse
 
-import requests
-
 from py_common import log
+from py_common.deps import ensure_requirements
 from py_common.types import ScrapedPerformer, ScrapedScene
 from py_common.util import dig, scraper_args
+
+ensure_requirements("requests")
+import requests
 
 FIT18 = "https://fit18.com"
 THICC18 = "https://thicc18.com"

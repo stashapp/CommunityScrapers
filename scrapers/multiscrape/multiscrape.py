@@ -2,12 +2,11 @@
 import json
 import sys
 
-try:
-    import requests
-except ModuleNotFoundError:
-    print("You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)", file=sys.stderr)
-    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests", file=sys.stderr)
-    sys.exit()
+from py_common.deps import ensure_requirements
+
+ensure_requirements("requests")
+import requests
+
 
 class multiscrape:
 

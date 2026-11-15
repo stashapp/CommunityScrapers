@@ -4,8 +4,6 @@ import sys
 from typing import Any, cast
 from urllib.parse import unquote, urlparse
 
-import requests
-
 from Altwolia import domains
 from Altwolia.scrape import (
     clean_text,
@@ -18,6 +16,7 @@ from Altwolia.scrape import (
     get_search_client as algolia_search_client,
 )
 from py_common import log
+from py_common.deps import ensure_requirements
 from py_common.types import (
     EyeColor,
     Gender,
@@ -28,6 +27,9 @@ from py_common.types import (
     ScrapedTag,
 )
 from py_common.util import guess_nationality, is_own_url, scraper_args
+
+ensure_requirements("requests")
+import requests
 
 CONFIG = {
     "virtualrealgay": {

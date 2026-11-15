@@ -1,15 +1,18 @@
 import json
-import sys
-import sqlite3
 import os
-import requests
+import sqlite3
+import sys
 
 try:
     import py_common.graphql as graphql
     import py_common.log as log
+    from py_common.deps import ensure_requirements
 except ModuleNotFoundError:
     print("You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
     sys.exit()
+
+ensure_requirements("requests")
+import requests
 
 # Set XBVR_HOST to your xbvr instance, if set to None it will use xbvr.db and query that instead
 XBVR_HOST='http://192.168.0.35:9999'

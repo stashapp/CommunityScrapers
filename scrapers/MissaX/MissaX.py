@@ -9,7 +9,7 @@ from py_common.deps import ensure_requirements
 from py_common.types import ScrapedScene
 from py_common.util import scraper_args
 
-ensure_requirements("cloudscraper", "lxml")
+ensure_requirements("cloudscraper", "lxml", "requests")
 import cloudscraper  # noqa: E402
 import requests  # noqa: E402
 from lxml import html  # noqa: E402

@@ -8,12 +8,11 @@ from html import unescape
 from typing import Any
 from urllib.parse import urlparse
 
-import requests
-
 from AyloAPI import domains
 from AyloAPI.slugger import slugify
 from py_common import log
 from py_common.config import get_config
+from py_common.deps import ensure_requirements
 from py_common.types import (
     ScrapedGallery,
     ScrapedGroup,
@@ -23,6 +22,9 @@ from py_common.types import (
     ScrapedTag,
 )
 from py_common.util import dig, guess_nationality, is_own_url, scraper_args
+
+ensure_requirements("requests")
+import requests
 
 config = get_config(
     default="""

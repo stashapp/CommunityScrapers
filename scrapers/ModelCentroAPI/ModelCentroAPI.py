@@ -4,12 +4,14 @@ import sys
 from datetime import date
 from urllib.parse import urlencode, urlparse
 
-import requests
-
 from py_common import log
 from py_common.cache import cache_to_disk
+from py_common.deps import ensure_requirements
 from py_common.types import ScrapedPerformer, ScrapedScene, ScrapedStudio, ScrapedTag
 from py_common.util import dig, scraper_args
+
+ensure_requirements("requests")
+import requests
 
 USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0"

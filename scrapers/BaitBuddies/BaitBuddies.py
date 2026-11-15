@@ -11,7 +11,7 @@ from py_common import log
 from py_common.deps import ensure_requirements
 from py_common.util import imperial_length_to_cm, lb_to_kg, scraper_args
 
-ensure_requirements("lxml", "cloudscraper")
+ensure_requirements("lxml", "cloudscraper", "requests")
 import cloudscraper  # noqa: E402
 import requests  # noqa: E402
 from cloudscraper.exceptions import CaptchaException, CloudflareException  # noqa: E402

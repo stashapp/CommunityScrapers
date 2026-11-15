@@ -1,9 +1,10 @@
-import requests
-
 import py_common.log as log
 from py_common.config import get_config
+from py_common.deps import ensure_requirements
 from py_common.util import dig
 
+ensure_requirements("requests")
+import requests
 
 config = get_config(
     default="""

@@ -1,11 +1,11 @@
-import os
-import sys
 import json
+import os
 import re
+import sys
 import unicodedata  # For Unicode normalization
+import urllib.error  # For handling URL-related errors
 from urllib.parse import quote  # For URL encoding
 from urllib.request import Request, urlopen  # For HTTP requests
-import urllib.error  # For handling URL-related errors
 
 # to import from a parent directory we need to add that directory to the system path
 csd = os.path.dirname(
@@ -16,28 +16,20 @@ sys.path.append(
 )  # add parent dir to sys path so that we can import py_common from ther
 
 try:
-    import requests
-    from requests.utils import requote_uri
-    from requests.structures import CaseInsensitiveDict
-except ModuleNotFoundError:
-    print(
-        "You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)",
-        file=sys.stderr)
-    print(
-        "If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests",
-        file=sys.stderr)
-    sys.exit()
-
-try:
-    from py_common import log
     import py_common.graphql as graphql
+    from py_common import log
+    from py_common.deps import ensure_requirements
 except ModuleNotFoundError:
     print(
         "You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)",
         file=sys.stderr)
     sys.exit()
-    
+
+ensure_requirements("requests")
 import config
+import requests
+from requests.structures import CaseInsensitiveDict
+from requests.utils import requote_uri
 
 SHOKO_API_KEY = ''  #leave empty it gets your Shoko api key with your shoko server username and password
 SHOKO_URL = config.SHOKO.get("url", "")

@@ -2,8 +2,6 @@ import json
 import sys
 from typing import Any
 
-from requests import head
-
 from AyloAPI.scrape import (
     gallery_from_fragment,
     gallery_from_url,
@@ -17,7 +15,11 @@ from AyloAPI.scrape import (
     scraper_args,
 )
 from py_common import log
+from py_common.deps import ensure_requirements
 from py_common.util import dig, replace_all, replace_at
+
+ensure_requirements("requests")
+from requests import head
 
 studio_map = {
     "AvaSpice": "Ava Spice",

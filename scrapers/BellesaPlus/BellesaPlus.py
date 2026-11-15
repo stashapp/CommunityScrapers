@@ -4,11 +4,13 @@ import sys
 from datetime import UTC, datetime
 from typing import Any
 
-import requests
-
 from py_common import log
+from py_common.deps import ensure_requirements
 from py_common.types import ScrapedScene, ScrapedTag
 from py_common.util import scraper_args
+
+ensure_requirements("requests")
+import requests
 
 # Only Bellesa's own series: the API also carries redistributed studios
 BELLESA_STUDIO_HANDLES = {

@@ -2,8 +2,6 @@ import json
 import sys
 from typing import Any
 
-import requests
-
 from AyloAPI.scrape import (
     gallery_from_fragment,
     gallery_from_url,
@@ -17,8 +15,12 @@ from AyloAPI.scrape import (
 )
 from AyloAPI.slugger import slugify
 from py_common import log
+from py_common.deps import ensure_requirements
 from py_common.types import ScrapedPerformer, ScrapedScene
 from py_common.util import replace_all, replace_at
+
+ensure_requirements("requests")
+import requests
 
 SITE = "https://www.touchmywife.com"
 

@@ -3,8 +3,6 @@ import re
 import sys
 from typing import Any
 
-from requests import head
-
 from AyloAPI.scrape import (
     gallery_from_url,
     movie_from_url,
@@ -17,8 +15,12 @@ from AyloAPI.scrape import (
     scraper_args,
 )
 from py_common import log
+from py_common.deps import ensure_requirements
 from py_common.types import ScrapedStudio
 from py_common.util import replace_all
+
+ensure_requirements("requests")
+from requests import head
 
 studio_map = {
     "Lets Doe It": "LetsDoeIt",

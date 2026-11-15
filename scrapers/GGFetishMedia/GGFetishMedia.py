@@ -6,12 +6,14 @@ import sys
 import time
 from urllib.parse import quote, urljoin, urlparse
 
-import requests
-from bs4 import BeautifulSoup, NavigableString
-
 from Clips4Sale.Clips4Sale import scene_from_url as c4s_scene_from_url
 from py_common import log
+from py_common.deps import ensure_requirements
 from py_common.util import scraper_args
+
+ensure_requirements("requests", "bs4:beautifulsoup4")
+import requests
+from bs4 import BeautifulSoup, NavigableString
 
 
 def resolve_url(url):

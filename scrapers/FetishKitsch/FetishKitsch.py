@@ -4,11 +4,13 @@ import sys
 import time
 from typing import Any
 
-import requests
-
 from py_common import log
+from py_common.deps import ensure_requirements
 from py_common.types import ScrapedScene
 from py_common.util import scraper_args
+
+ensure_requirements("requests")
+import requests
 
 
 def fetch_post(url: str) -> dict[str, Any] | None:

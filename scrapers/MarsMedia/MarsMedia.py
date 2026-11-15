@@ -7,10 +7,9 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Any, TypeVar
 from urllib.parse import unquote
 
-import requests
-
 from py_common import log
 from py_common.cache import cache_to_disk
+from py_common.deps import ensure_requirements
 from py_common.types import (
     ScrapedGallery,
     ScrapedPerformer,
@@ -18,6 +17,9 @@ from py_common.types import (
     ScrapedStudio,
 )
 from py_common.util import dig, is_own_url, scraper_args
+
+ensure_requirements("requests")
+import requests
 
 NATS_URL = "https://nats.mygaycash.com"
 NETWORK = "Mars Media"

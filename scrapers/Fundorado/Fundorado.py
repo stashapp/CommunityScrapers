@@ -5,11 +5,13 @@ import sys
 from datetime import datetime, timedelta
 from pathlib import Path
 
-import requests
-
 from py_common import log
+from py_common.deps import ensure_requirements
 from py_common.types import ScrapedScene, ScrapedStudio
 from py_common.util import dig, scraper_args
+
+ensure_requirements("requests")
+import requests
 
 # studio_id and studio.name in the API are production houses or suppliers
 # and not necessarily what we understand as studios in Stash

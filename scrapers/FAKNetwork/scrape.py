@@ -4,14 +4,16 @@ import sys
 from html import unescape
 from urllib.parse import quote, unquote
 
-import requests
-
 from FAKNetwork.sites import to_scraped_studio
 from py_common import log
 from py_common.cache import cache_to_disk
 from py_common.config import get_config
+from py_common.deps import ensure_requirements
 from py_common.types import ScrapedPerformer, ScrapedScene, ScrapedTag
 from py_common.util import dig, is_own_url, scraper_args
+
+ensure_requirements("requests")
+import requests
 
 config = get_config(
     default="""

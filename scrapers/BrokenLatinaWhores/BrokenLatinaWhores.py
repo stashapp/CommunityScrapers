@@ -1,24 +1,20 @@
+import json
 import re
 import sys
-import requests
-import json
 from urllib.parse import urlparse
 
 try:
     import py_common.log as log
+    from py_common.deps import ensure_requirements
 except ModuleNotFoundError:
     print(
         "You need to download the folder 'py_common' from the community repo (CommunityScrapers/tree/master/scrapers/py_common)",
         file=sys.stderr)
     sys.exit(1)
 
-try:
-    from lxml import html
-except ModuleNotFoundError:
-    print("You need to install the lxml module. (https://lxml.de/installation.html#installation)", file=sys.stderr)
-    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install lxml",
-          file=sys.stderr)
-    sys.exit()
+ensure_requirements("requests", "lxml")
+import requests
+from lxml import html
 
 session = requests.session()
 

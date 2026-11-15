@@ -7,10 +7,9 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date, datetime
 from typing import Any, TypeVar
 
-import requests
-
 from py_common import log
 from py_common.cache import cache_to_disk
+from py_common.deps import ensure_requirements
 from py_common.types import (
     Gender,
     ScrapedGallery,
@@ -19,6 +18,9 @@ from py_common.types import (
     ScrapedStudio,
 )
 from py_common.util import dig, guess_nationality, is_own_url, scraper_args
+
+ensure_requirements("requests")
+import requests
 
 NETWORK = "Ladyboy Gold"
 

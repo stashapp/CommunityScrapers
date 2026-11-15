@@ -6,8 +6,8 @@ import sys
 from datetime import datetime, timezone
 from typing import Any
 
-import requests
 from py_common import log
+from py_common.deps import ensure_requirements
 from py_common.types import (
     Gender,
     ScrapedGallery,
@@ -18,6 +18,9 @@ from py_common.types import (
     ScrapedTag,
 )
 from py_common.util import dig, scraper_args
+
+ensure_requirements("requests")
+import requests
 
 API = "https://cum.st/api/v1"
 SITE = "https://cum.st"

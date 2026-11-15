@@ -16,7 +16,7 @@ from py_common.types import (
 )
 from py_common.util import scraper_args
 
-ensure_requirements("bs4:beautifulsoup4", "cloudscraper")
+ensure_requirements("bs4:beautifulsoup4", "cloudscraper", "requests")
 import cloudscraper  # noqa: E402
 import requests  # noqa: E402
 from bs4 import BeautifulSoup as bs  # noqa: E402

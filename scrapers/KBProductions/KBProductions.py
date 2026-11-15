@@ -6,11 +6,13 @@ import urllib.parse
 from html.parser import HTMLParser
 from unicodedata import normalize
 
-import requests
-
 from py_common import log
+from py_common.deps import ensure_requirements
 from py_common.types import ScrapedGroup, ScrapedPerformer, ScrapedScene, ScrapedStudio
 from py_common.util import dig, guess_nationality, replace_all, scraper_args
+
+ensure_requirements("requests")
+import requests
 
 # Maps the `site_domain` key from the API
 # to studio names currently used on StashDB

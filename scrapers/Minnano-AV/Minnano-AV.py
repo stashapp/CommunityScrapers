@@ -1,14 +1,17 @@
-from base64 import b64encode
 import json
 import re
 import sys
+from base64 import b64encode
 from typing import Any
 
 import py_common.log as log
-from py_common.util import scraper_args
+from py_common.deps import ensure_requirements
 from py_common.types import ScrapedPerformer
-from lxml import etree
+from py_common.util import scraper_args
+
+ensure_requirements("lxml", "cloudscraper")
 import cloudscraper
+from lxml import etree
 
 scraper = cloudscraper.create_scraper()
 

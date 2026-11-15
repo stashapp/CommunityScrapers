@@ -1,3 +1,4 @@
+# requires: py_common
 name: "AnalVids"
 sceneByURL:
   - action: scrapeXPath
@@ -82,4 +83,4 @@ xPathScrapers:
                 with: $1
       Country: //a[contains(@href, "nationality")]
       URLs: //link[@rel="canonical"]/@href
-      Image: //div[contains(@class, 'model__left')]//img/@src
+      Images: //div[contains(@class, 'model__left')]//img/@src

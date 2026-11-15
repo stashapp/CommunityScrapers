@@ -1,12 +1,14 @@
 import base64
-import requests
 import json
-import sys
 import re
+import sys
 
-from py_common import graphql
-from py_common import log
-from py_common.util import scraper_args, dig
+from py_common import graphql, log
+from py_common.deps import ensure_requirements
+from py_common.util import dig, scraper_args
+
+ensure_requirements("requests")
+import requests
 
 stash_url = graphql.config["url"].rstrip("/")
 stash_api_key = graphql.config["api_key"]

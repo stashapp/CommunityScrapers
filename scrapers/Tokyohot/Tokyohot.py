@@ -1,9 +1,8 @@
 import base64
 import json
-import sys
 import os
 import re
-
+import sys
 
 # to import from a parent directory we need to add that directory to the system path
 csd = os.path.dirname(os.path.realpath(__file__))  # get current script directory
@@ -41,6 +40,7 @@ MEDIA_CONFIGURATIONS = [
 
 try:
     from py_common import log
+    from py_common.deps import ensure_requirements
 except ModuleNotFoundError:
     print(
         "You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)",
@@ -48,31 +48,9 @@ except ModuleNotFoundError:
     )
     sys.exit()
 
-try:
-    import requests
-except ModuleNotFoundError:
-    print(
-        "You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)",
-        file=sys.stderr,
-    )
-    print(
-        "If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests",
-        file=sys.stderr,
-    )
-    sys.exit()
-
-try:
-    from bs4 import BeautifulSoup
-except ModuleNotFoundError:
-    print(
-        "You need to install the Beautiful Soup module. (https://pypi.org/project/beautifulsoup4/)",
-        file=sys.stderr,
-    )
-    print(
-        "If you have pip (normally installed with python), run this command in a terminal (cmd): pip install beautifulsoup4",
-        file=sys.stderr,
-    )
-    sys.exit()
+ensure_requirements("requests", "bs4:beautifulsoup4")
+import requests
+from bs4 import BeautifulSoup
 
 
 class ScenePage:

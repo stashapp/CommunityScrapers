@@ -5,9 +5,8 @@ import time
 import urllib.parse
 from html import unescape
 
-from lxml import html
-
 from py_common import log, proxy
+from py_common.deps import ensure_requirements
 from py_common.types import (
     PerformerSearchResult,
     ScrapedGroup,
@@ -15,6 +14,9 @@ from py_common.types import (
     ScrapedScene,
 )
 from py_common.util import dig, scraper_args
+
+ensure_requirements("lxml")
+from lxml import html
 
 scraper = proxy.StashRequests()
 

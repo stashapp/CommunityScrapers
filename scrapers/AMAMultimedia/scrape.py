@@ -4,11 +4,13 @@ from datetime import datetime
 from typing import Literal
 from urllib.parse import urlparse
 
-import requests
-
 from py_common import log
+from py_common.deps import ensure_requirements
 from py_common.types import ScrapedPerformer, ScrapedScene, ScrapedStudio, ScrapedTag
 from py_common.util import dig, scraper_args
+
+ensure_requirements("requests")
+import requests
 
 studio_hierarchy = {
     "Fuck You Cash": {
