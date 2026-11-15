@@ -12,7 +12,7 @@ performerByURL:
     queryURLReplace:
       url:
         - regex: .*/Profile/(\d+)/.*
-          with: https://www.manyvids.com/bff/profile/profiles/$1
+          with: https://api.manyvids.com/profile/profile/$1
 sceneByName:
   action: scrapeJson
   queryURL: https://www.manyvids.com/bff/search/results?keywords={}&contentPref=0
@@ -56,71 +56,6 @@ jsonScrapers:
               - regex: ^
                 with: https://www.manyvids.com
       Images: models.#.avatar.url
-  performerScraper:
-    performer:
-      Name: displayName
-      Gender: identification
-      URLs:
-        selector: '{"id":legacyUserId,"handle":urlHandle,"insta":socLnkInstagram,"tw":socLnkTwitter}'
-        postProcess:
-          - javascript: |
-              const { id, handle, insta, tw } = JSON.parse(value);
-              const norm = (raw, host) => {
-                if (!raw) return "";
-                const s = String(raw)
-                  .trim()
-                  .replace(/^https?:\/\//i, "")
-                  .replace(/^www\./i, "")
-                  .replace(/\/+$/, "");
-                if (!s) return "";
-                const slash = s.indexOf("/");
-                // a dot before the first slash means it really is a host
-                if (slash > 0 && s.slice(0, slash).includes(".")) {
-                  return "https://" + s.slice(0, slash).toLowerCase() + s.slice(slash);
-                }
-                return `https://${host}/${s.replace(/^@/, "")}`;
-              };
-              return [
-                `https://www.manyvids.com/Profile/${id}/${handle}/Store/Videos`,
-                norm(insta, "instagram.com"),
-                norm(tw, "twitter.com"),
-              ]
-                .filter(Boolean)
-                .join("\n");
-        split: "\n"
-      Birthdate:
-        selector: dob
-        postProcess:
-          - parseDate: 2006-01-02T15:04:05.000
-          - parseDate: 2006-01-02T15:04:05.000Z
-      Ethnicity: ethnicity
-      Country: location
-      HairColor: hairColor
-      CareerStart:
-        selector: createdAt
-        postProcess:
-          - replace:
-              - regex: '\-.*'
-                with: ""
-              - regex: "$"
-                with: " - Present"
-          - javascript: |
-              const m = value.match(/\d{4}/);
-              return m ? m[0] : "";
-      CareerEnd:
-        selector: createdAt
-        postProcess:
-          - replace:
-              - regex: '\-.*'
-                with: ""
-              - regex: "$"
-                with: " - Present"
-          - javascript: |
-              // only a real second year counts as an end - "Present"/"-" mean ongoing
-              const years = value.match(/\d{4}/g) || [];
-              return years.length > 1 ? years[years.length - 1] : "";
-      Images: portrait
-      Details: description
   sceneSearch:
     scene:
       Title: vids.#.title
@@ -139,33 +74,14 @@ jsonScrapers:
       Title:
         selector: data.title
         postProcess:
-          - replace:
-              - regex: "&amp;"
-                with: "&"
-          - replace:
-              - regex: "&quot;"
-                with: '"'
-          - replace:
-              - regex: "&lt;"
-                with: "<"
-          - replace:
-              - regex: "&gt;"
-                with: ">"
+          - &decodeEntities
+            javascript: |
+              const entities = { "&amp;": "&", "&quot;": '"', "&lt;": "<", "&gt;": ">" };
+              return value.replace(/&(?:amp|quot|lt|gt);/g, (e) => entities[e]);
       Details:
         selector: data.description
         postProcess:
-          - replace:
-              - regex: "&amp;"
-                with: "&"
-          - replace:
-              - regex: "&quot;"
-                with: '"'
-          - replace:
-              - regex: "&lt;"
-                with: "<"
-          - replace:
-              - regex: "&gt;"
-                with: ">"
+          - *decodeEntities
       Code: data.id
       URLs:
         selector: data.url
@@ -196,6 +112,59 @@ jsonScrapers:
             - replace:
                 - regex: ^
                   with: https://www.manyvids.com
+  performerScraper:
+    performer:
+      Name: displayName
+      URLs:
+        selector: '{"id":legacyUserId,"handle":urlHandle,"insta":socLinkInstagram,"tw":socLinkTwitter}'
+        postProcess:
+          - javascript: |
+              const { id, handle, insta, tw } = JSON.parse(value);
+              const norm = (raw, host) => {
+                if (!raw) return "";
+                const s = String(raw)
+                  .trim()
+                  .replace(/^https?:\/\//i, "")
+                  .replace(/^www\./i, "")
+                  .replace(/\/+$/, "");
+                if (!s) return "";
+                const slash = s.indexOf("/");
+                if (slash > 0 && s.slice(0, slash).includes(".")) {
+                  return "https://" + s.slice(0, slash).toLowerCase() + s.slice(slash);
+                }
+                return `https://${host}/${s.replace(/^@/, "")}`;
+              };
+              return [
+                `https://www.manyvids.com/Profile/${id}/${handle}/Store/Videos`,
+                norm(insta, "instagram.com"),
+                norm(tw, "twitter.com"),
+              ]
+                .filter(Boolean)
+                .join("\n");
+        split: "\n"
+      Country: location
+      HairColor: hairColor
+      CareerStart:
+        selector: createdAt
+        postProcess:
+          - javascript: return value.slice(0, 4);
+      Images: portrait
+      Details:
+        selector: description
+        postProcess:
+          - javascript: |
+              return value
+                .replace(/\r/g, "")
+                .replace(/\\(['"])/g, "$1")
+                .replace(/<\/p>\s*<p>/g, "\n")
+                .replace(/<br\s*\/?>/g, "\n")
+                .replace(/<[^>]+>/g, "")
+                .replace(/&amp;/g, "&")
+                .replace(/&quot;/g, '"')
+                .replace(/&#0?39;/g, "'")
+                .replace(/&lt;/g, "<")
+                .replace(/&gt;/g, ">")
+                .trim();
 driver:
   headers:
     - Key: User-Agent
