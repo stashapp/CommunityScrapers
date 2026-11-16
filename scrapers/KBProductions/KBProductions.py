@@ -175,6 +175,14 @@ def lbs_to_kg(lbs):
     return str(round(float(lbs) / 2.2046))
 
 
+def to_seconds(value) -> int | None:
+    "Seconds from 1810.24, '1810.24', '01:17' or '1:02:03'; None if unparseable or 0"
+    parts = str(value or "").strip().split(":")
+    if len(parts) > 3 or not all(re.fullmatch(r"\d+(\.\d+)?", p) for p in parts):
+        return None
+    return round(sum(float(p) * 60**i for i, p in enumerate(reversed(parts)))) or None
+
+
 def clean_url(url: str) -> str:
     # remove any query parameters
     return re.sub(r"\?.*", "", url)
@@ -444,8 +452,8 @@ def to_scraped_group(raw_movie: dict, page_url: str) -> ScrapedGroup:
     if date := raw_movie.get("publish_date"):
         movie["date"] = date[:10].replace("/", "-")
 
-    if duration := raw_movie.get("videos_duration"):
-        movie["duration"] = duration
+    if duration := to_seconds(raw_movie.get("videos_duration")):
+        movie["duration"] = str(duration)
 
     if cover := raw_movie.get("trailer_screencap"):
         movie["front_image"] = cover
@@ -471,6 +479,10 @@ def to_scraped_scene_from_content(raw_scene: dict, page_url: str) -> ScrapedScen
         scene["details"] = details
     if code := get_code(site, raw_scene):
         scene["code"] = code
+    if duration := to_seconds(raw_scene.get("seconds_duration")) or to_seconds(
+        raw_scene.get("videos_duration")
+    ):
+        scene["duration"] = duration
     if models := raw_scene.get("models_thumbs"):
         scene["performers"] = [
             {
@@ -547,6 +559,8 @@ def to_scraped_scene_from_video(raw_scene: dict, page_url: str) -> ScrapedScene:
         scene["details"] = details
     if scene_id := dig(raw_scene, ("id", "_id")):
         scene["code"] = str(scene_id)
+    if duration := to_seconds(raw_scene.get("duration")):
+        scene["duration"] = duration
     if models := raw_scene.get("performers"):
         scene["performers"] = [
             ScrapedPerformer(name=x["name"], image=x["avatar"]) for x in models
