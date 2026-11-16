@@ -95,6 +95,7 @@ studio_map = {
     "nikkizee.com": "Nikki Zee",
     "nylonperv.com": "Nylon Perv",
     "nympho.com": "Nympho",
+    "pascalssubsluts.com": "Pascals Sub Sluts",
     "passionpov.com": "PassionPOV",
     "pervect.com": "Pervect",
     "poundedpetite.com": "Pounded Petite",
@@ -263,7 +264,8 @@ def site_url(site: str, page_url: str) -> str:
 
 
 def make_performer_url(slug: str, site: str, page_url: str) -> str:
-    return f"{site_url(site, page_url)}/models/{slug}"
+    path = "sluts" if site == "pascalssubsluts.com" else "models"
+    return f"{site_url(site, page_url)}/{path}/{slug}"
 
 
 def get_studio(site: str, page_url: str) -> ScrapedStudio:
@@ -568,6 +570,24 @@ def scrape_scene(url: str) -> ScrapedScene | None:
 
     scene: ScrapedScene = {}
     if content := props.get("content"):
+        # Members-only parts of a shoot are public only in the trailer page's
+        # related_scenes, so they're addressed as <trailer url>#<content id>
+        if (
+            (part := urllib.parse.urlparse(url).fragment)
+            and part != str(content["id"])
+            and not (
+                content := next(
+                    (
+                        x
+                        for x in content.get("related_scenes", [])
+                        if str(x["id"]) == part
+                    ),
+                    None,
+                )
+            )
+        ):
+            log.error(f"No related scene with id {part} on this page")
+            return None
         scene = to_scraped_scene_from_content(content, url)
     if video := props.get("video"):
         scene = to_scraped_scene_from_video(video, url)

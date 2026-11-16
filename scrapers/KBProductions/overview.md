@@ -69,6 +69,7 @@ Scraper has been tested on 2026-10-02
 | Nylon Perv            | https://nylonperv.com/videos/sweet-latina-doll-face-fucked-and-facialed                                                           |
 | Nympho                | https://tour.nympho.com/scenes/all-fucks-given-with-aubry-and-ali                                                                 |
 | NYSeed                | https://www.nyseedxxx.com/video/in-the-heights-hounds--p-3                                                                        |
+| Pascals Sub Sluts     | https://www.pascalssubsluts.com/videos/sandra-flame-returns#5081                                                                  |
 | PassionPOV            | https://passionpov.com/videos/lemonades-freckled-fantasy                                                                          |
 | Pervect               | https://pervect.com/scenes/pervectly-filthy-anal-sluts                                                                            |
 | Pounded Petite        | https://tour.poundedpetite.com/scenes/2-scene-of-2024-tifa-quinn-spreading-joy-and-crumbs-and-well                                |
