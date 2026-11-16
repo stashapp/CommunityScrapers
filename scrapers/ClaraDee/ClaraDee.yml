@@ -1,0 +1,96 @@
+name: ClaraDee
+
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://claradeevids.com/access/search.php?query={}
+  scraper: sceneSearch
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - claradeevids.com/access/scenes
+    scraper: sceneScraper
+
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+
+xPathScrapers:
+  sceneSearch:
+    common:
+      $scenes: //div[@class="update_details"] 
+    scene:
+      Title: $scenes//div/@data-title
+      Date:
+        selector: $scenes//div[@class="cell update_date"]
+        postProcess:
+          - parseDate: 01/02/2006
+      Image: 
+        selector:  $scenes/a//@*[name()="src0_1x" or name()="poster_1x"]
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://claradeevids.com
+      URLs: $scenes/a[1]/@href
+
+  sceneScraper:
+    scene:
+      Title: //meta[@property="og:title"]/@content
+      Image:
+        selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+              - regex: "-2x"
+                with: "-4x"
+      Details: 
+        selector: //span[@class="update_description"]/node()[normalize-space()]
+        concat: "\x01"
+        postProcess:
+          # Because Stash doesn't respect internal whitespace when it converts
+          # nodes to text we need to do our own little hack to reconstruct the details
+          - javascript: |
+              if (!value) return "";
+              var parts = [];
+              value.split("\x01").forEach(function (p) {
+                p = p.trim();
+                if (p) parts.push(p);
+              });
+              // a part wholly inside a longer one is a <br> anchor, not a block
+              var blocks = parts.filter(function (p) {
+                return !parts.some(function (q) {
+                  return q.length > p.length && q.indexOf(p) !== -1;
+                });
+              });
+              var anchors = parts.filter(function (p) {
+                return blocks.indexOf(p) === -1;
+              });
+              var out = [];
+              blocks.forEach(function (full) {
+                var cuts = [0];
+                anchors.forEach(function (a) {
+                  var at = full.indexOf(a);
+                  if (at > 0 && at === full.lastIndexOf(a)) cuts.push(at);
+                });
+                cuts.sort(function (a, b) { return a - b; });
+                for (var i = 0; i < cuts.length; i++) {
+                  var end = i + 1 < cuts.length ? cuts[i + 1] : full.length;
+                  var block = full.slice(cuts[i], end).trim();
+                  if (block) out.push(block);
+                }
+              });
+              return out.join("\n\n");
+      Date:
+        selector: (//div[@class="cell update_date"])[1]
+        postProcess:
+          - parseDate: 01/02/2006
+      Tags: 
+        Name: //span[@class="update_tags"]//a
+      URLs: //div[@class="movie_area"]/div[@class="player_options"]//a[contains(@href,"_vids")]/@href
+      Studio:
+        Name:
+          fixed: "Clara Dee"
+
+debug:
+  printHTML: false
