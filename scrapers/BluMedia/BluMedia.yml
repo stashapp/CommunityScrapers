@@ -129,20 +129,27 @@ xPathScrapers:
                 with: $1
   cbpScraper:
     scene:
-      Title: //div[@class="dettl"]
+      Title:
+        selector: //title
+        postProcess:
+          - replace:
+              - regex: " - College Boy Physicals"
+                with: ""
       Image: (//div[@class="player"]//img)[1]/@src
-      Details: //div[@class="desc"]
+      Details: 
+        selector: //div[@class="bio"]/p
+        concat: "\n\n"
       Studio:
         Name:
           fixed: College Boy Physicals
       Performers:
-        Name: //div[contains(@class, "model-desc")]//a[contains(@href, "modelpage")]/text()
+        Name: //div[contains(@class, "model-name")]//a[contains(@href, "modelpage")]/text()
         URLs:
-          selector: //div[contains(@class, "model-desc")]//a[contains(@href, "modelpage")]/@href
+          selector: //div[contains(@class, "model-name")]//a[contains(@href, "modelpage")]/@href
           postProcess:
             - replace:
                 - regex: ^
-                  with: https://collegeboyphysicals.com
+                  with: https://collegeboyphysicals.com/
     performer:
       Name: //div[@class="dettl"]
       Image: //div[@class="modeltn"]//img[1]/@src
