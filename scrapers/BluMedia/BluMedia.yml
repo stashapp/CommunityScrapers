@@ -136,13 +136,13 @@ xPathScrapers:
         Name:
           fixed: College Boy Physicals
       Performers:
-        Name: //div[contains(@class, "model-desc")]//a[contains(@href, "modelpage")]/text()
+        Name: //div[contains(@class, "model-name")]//a[contains(@href, "modelpage")]/text()
         URLs:
-          selector: //div[contains(@class, "model-desc")]//a[contains(@href, "modelpage")]/@href
+          selector: //div[contains(@class, "model-name")]//a[contains(@href, "modelpage")]/@href
           postProcess:
             - replace:
                 - regex: ^
-                  with: https://collegeboyphysicals.com
+                  with: https://collegeboyphysicals.com/
     performer:
       Name: //div[@class="dettl"]
       Image: //div[@class="modeltn"]//img[1]/@src
