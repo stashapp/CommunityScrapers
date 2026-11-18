@@ -129,9 +129,16 @@ xPathScrapers:
                 with: $1
   cbpScraper:
     scene:
-      Title: //div[@class="dettl"]
+      Title:
+        selector: //title
+        postProcess:
+          - replace:
+              - regex: " - College Boy Physicals"
+                with: ""
       Image: (//div[@class="player"]//img)[1]/@src
-      Details: //div[@class="desc"]
+      Details: 
+        selector: //div[@class="bio"]/p
+        concat: "\n\n"
       Studio:
         Name:
           fixed: College Boy Physicals
