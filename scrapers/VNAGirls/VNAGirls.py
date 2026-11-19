@@ -37,6 +37,7 @@ STUDIOS = {
     "kimberleelive.com": "Kimber Lee Live",
     "kink305.com": "Kink305",
     "maggiegreenlive.com": "Maggie Green Live",
+    "majorhotwife.com": "Major Hotwife",
     "maxinex.com": "MaxineX",
     "nikkibenz.com": "Nikki Benz",
     "ninakayy.com": "Nina Kayy",
@@ -83,11 +84,31 @@ def comma_list(element) -> list[str]:
     return [v for part in element.text_content().split(",") if (v := clean(part))]
 
 
+def heading_list(element) -> list[str]:
+    "Like comma_list but drops nested headings first (MajorHotwife nests h4 tags inside h3 performers)"
+    if element is None:
+        return []
+    el = html.fromstring(html.tostring(element, encoding="unicode"))
+    for bad in el.xpath(".//h3 | .//h4"):
+        parent = bad.getparent()
+        if parent is not None:
+            parent.remove(bad)
+    return [v for part in el.text_content().split(",") if (v := clean(part))]
+
+
 def details_from(element) -> str | None:
     "The description is one block with <br> line breaks, which text_content() drops"
     if element is None:
         return None
-    markup = html.tostring(element, encoding="unicode")
+    # MajorHotwife nests its h3 performers and h4 tags inside the h2 description
+    # through malformed heading tags (<h2>...</h3><h3>...</h1>), so strip those
+    # descendants first — otherwise their text leaks into Details.
+    el = html.fromstring(html.tostring(element, encoding="unicode"))
+    for bad in el.xpath(".//h3 | .//h4"):
+        parent = bad.getparent()
+        if parent is not None:
+            parent.remove(bad)
+    markup = html.tostring(el, encoding="unicode")
     text = html.fromstring(re.sub(r"<br\s*/?>", "\n", markup)).text_content()
     lines = "\n".join(clean(line) for line in text.split("\n"))
     return re.sub(r"\n{3,}", "\n\n", lines).strip() or None
@@ -161,9 +182,11 @@ def scene_from_url(url: str) -> ScrapedScene | None:
         )
     ):
         scene["date"] = date
-    if performers := comma_list(first(content.xpath("./h3"))):
+    # h3/h4 are direct children on well-formed sites but nested inside the h2
+    # description on MajorHotwife through malformed heading tags, so search descendants.
+    if performers := heading_list(first(content.xpath(".//h3"))):
         scene["performers"] = [{"name": name} for name in performers]
-    if tags := comma_list(first(content.xpath("./h4"))):
+    if tags := heading_list(first(content.xpath(".//h4"))):
         scene["tags"] = [{"name": tag} for tag in tags]
     # The page never names its own host, so the request URL is the only source
     if image := image_from(tree, url):
