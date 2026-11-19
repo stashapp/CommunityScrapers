@@ -32,4 +32,3 @@ xPathScrapers:
                   with: ""
       Details: //meta[@name="description"]/@content
       Image: //meta[@property="og:image"]/@content
-# Last Updated February XX, 2026
