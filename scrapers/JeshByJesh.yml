@@ -1,0 +1,41 @@
+# Jesh by Jesh — scene scraper
+#
+# Covers jeshbyjesh.com tour trailer pages (jeshbyjesh.com/tour/trailers/*.html).
+# No community or installed scraper claims this host.
+name: Jesh by Jesh
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - jeshbyjesh.com/tour/trailers/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      # The scene heading is the first section-header h2 (the second one heads
+      # the "Similar Scenes" rail); //title covers the same text as fallback.
+      Title: (//div[contains(@class,"section-header")]//h2)[1] | //title
+      Details: //meta[@name="description"]/@content
+      Date:
+        # "RELEASE DATE:\n\t\t\t\tAugust 4, 2026" inside an update-info-block.
+        selector: //span[contains(., "RELEASE DATE")]/following-sibling::span[1]
+        postProcess:
+          - parseDate: January 2, 2006
+      Performers:
+        Name: //a[contains(@href, "/models/") and not(contains(@href, "models.html"))]
+      Tags:
+        Name:
+          selector: //div[contains(@class, "update-info-block") and contains(., "TAGS:")]/span[contains(@class, "update-info-value")]
+          postProcess:
+            - replace:
+                - regex: /
+                  with: " "
+                - regex: \s+
+                  with: " "
+          split: " "
+      Image: //meta[@property="og:image"]/@content
+      URLs:
+        fixed: "{inputURL}"
+      Studio:
+        Name:
+          fixed: Jesh by Jesh
+# Last Updated November 19, 2026
