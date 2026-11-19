@@ -1,0 +1,39 @@
+# Jamie Young — scene scraper
+#
+# Covers jamie-young.com in both URL shapes the site serves:
+#   jamie-young.com/title/<slug>/   (legacy shape)
+#   jamie-young.com/videos/<slug>    (canonical shape, see <link rel="canonical">)
+# Both shapes serve the same Next.js page; the /en/ and /de/ locale prefixes
+# are covered by Stash's substring URL match.
+name: Jamie Young
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - jamie-young.com/videos/
+      - jamie-young.com/title/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[contains(@class,"content-title")]//h2[@class="title"]
+      Details: //p[@class="description"]
+      Date:
+        # The info list holds duration (29:24) in span[1] and the date
+        # (Mar 29, 2023) in span[2]; anchor on the comma-year so the
+        # duration is never taken.
+        selector: //ul[contains(@class,"info-wrapper")]//li/span[contains(text(),", 20")]
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Performers:
+        # Scoped to the Starring block: the Similar-Videos rail reuses
+        # model-name links and would otherwise duplicate the cast.
+        Name: //div[contains(@class,"content-models")]//a[contains(@class,"model-name")]
+      Tags:
+        Name: //div[contains(@class,"content-tags")]//a[contains(@class,"tag-name")]
+      Image: //meta[@property="og:image"]/@content
+      URLs:
+        fixed: "{inputURL}"
+      Studio:
+        Name:
+          fixed: Jamie Young
+# Last Updated November 18, 2026
