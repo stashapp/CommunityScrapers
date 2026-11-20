@@ -8,18 +8,7 @@ sceneByURL:
 sceneByFragment:
   action: scrapeXPath
   scraper: sceneScraper
-  queryURL: https://xhamster.com/videos/{filename}
-  queryURLReplace:
-    filename:
-      # expects an id in square brackets before extension, as saved by yt-dlp by default
-      - regex: '.*\[([0-9a-zA-Z]{4,})\]\.[^\.]+'
-        with: $1
-      # or expects an id starting with xh somewhere in the filename
-      - regex: '(?i)^(?:.+[-\._])?(xh[^-\._]+)[-\._].+$'
-        with: $1
-      # if no id is found in the filename
-      - regex: .*\.[^\.]+$
-        with: # clear the filename so that it doesn't leak
+  queryURL: "{url}"
 
 sceneByName:
   action: scrapeXPath
@@ -29,6 +18,17 @@ sceneByQueryFragment:
   action: scrapeXPath
   queryURL: "{url}"
   scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - xhamster.com/pornstars/
+      - xhamster.com/creators/
+    scraper: performerScraper
+performerByName:
+  action: scrapeXPath
+  queryURL: https://xhamster.com/search/{}?type=pornstars
+  scraper: performerSearch
 
 xPathScrapers:
   sceneSearch:
@@ -40,12 +40,37 @@ xPathScrapers:
       URLs: $videoThumbInfo/@href
       Image: $videoThumbImage/@src
 
+  performerSearch:
+    common:
+      $performerCard: //div[@data-role="search-suggestions"]//a[starts-with(@href,"https://xhamster.com/pornstars/") and not(contains(@href,"/pornstars/all/"))]
+    performer:
+      Name: $performerCard
+      URLs: $performerCard/@href
+      Images: $performerCard//img/@src
+
+  performerScraper:
+    common:
+      $profile: //article[contains(@class,"pornstar-container") or contains(@class,"creator-container")]
+    performer:
+      Name: $profile//p[contains(@class,"userTitle")]
+      URLs:
+        fixed: "{inputURL}"
+      Images:
+        selector: $profile//div[contains(@class,"landing-info__logo-image")]/@style
+        postProcess:
+          - replace:
+              - regex: ^.*url\(['"]?(.*?)['"]?\).*$
+                with: $1
+      Aliases: $profile//div[contains(@class,"landing-info__metric") and contains(@class,"aliases")]/@data-tooltip
+      Country: $profile//a[contains(@class,"flagLink")]/@data-tooltip
+
   sceneScraper:
     common:
       $player: //div[@class="width-wrap with-player-container"]
       $channel: //div[@class="width-wrap with-player-container"]/nav//a[contains(@href,"/channels/") and not(contains(@href,"/channels/faphouse")) and not(contains(@href,"/channels/many-vids"))]//div[contains(@class,"content")]/span
       $creator: //div[@class="width-wrap with-player-container"]/nav//a[contains(@href,"/creators/")]//div[contains(@class,"content")]/span
       $user: //div[@class="width-wrap with-player-container"]/nav//a[contains(@href,"/users/")]//div[contains(@class,"content")]/span
+      $cast: //div[@class="width-wrap with-player-container"]/nav//a[contains(@href,"/pornstars/") or contains(@href,"/creators/") or contains(@href,"/users/")]
     scene:
       Title: $player//h1
       Details: //div[@class="ab-info controls-info__item xh-helper-hidden"]/p
@@ -57,10 +82,13 @@ xPathScrapers:
               - regex: (\d{4}-\d{2}-\d{2})\s.+
                 with: $1
           - parseDate: 2006-01-02
-      Image: //link[@as="image"]/@href
+      Image: //meta[@property='og:image']/@content
       Studio:
         Name: $channel | $creator | $user
       Tags:
-        Name: $player/nav//a[contains(@href,"/categories/") or contains(@href,"/tags/")]
+        Name: $player/nav//a[(contains(@href,"/categories/") or contains(@href,"/tags/")) and not(@href="https://xhamster.com/categories/en") and not(@href="https://xhamster.com/categories/top") and not(@href="https://xhamster.com/categories/porn-for-women")]
       Performers:
-        Name: $player/nav//a[contains(@href,"/pornstars/")] | $creator | $user
+        Name: $cast//span[contains(@class,"label")]
+        URLs: $cast/@href
+        Images: $cast/descendant::img[1]/@src
+# Last Updated 2026-11-03
