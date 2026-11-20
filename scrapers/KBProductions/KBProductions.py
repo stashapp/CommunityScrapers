@@ -69,6 +69,7 @@ studio_map = {
     "inkedpov.com": "Inked POV",
     "inmelanin.com": "InMelanin",
     "inserted.com": "Inserted",
+    "jamie-young.com": "Jamie Young",
     "jav888.com": "JAV888",
     "tour.javhub.com": "JavHub",
     "jizzaddiction.com": "Jizz Addiction",
@@ -272,7 +273,8 @@ def site_url(site: str, page_url: str) -> str:
 
 
 def make_performer_url(slug: str, site: str, page_url: str) -> str:
-    path = "sluts" if site == "pascalssubsluts.com" else "models"
+    paths = {"jamie-young.com": "girls", "pascalssubsluts.com": "sluts"}
+    path = paths.get(site, "models")
     return f"{site_url(site, page_url)}/{path}/{slug}"
 
 
@@ -378,7 +380,9 @@ def to_scraped_performer(raw_performer: dict, page_url: str) -> ScrapedPerformer
 
     # Some sites entity-encode the feet/inch marks: 5&#039;8&quot;
     height = html.unescape(raw_performer.get("height") or "")
-    if h := re.match(r"(\d+)\D+(\d+).+", height):
+    if h := re.match(r"(\d+)\s*cm", height):
+        performer["height"] = h.group(1)
+    elif h := re.match(r"(\d+)\D+(\d+).+", height):
         height_cm = feetinches_to_cm(h.group(1), h.group(2))
         performer["height"] = str(height_cm)
     elif h := re.match(r"^(\d+)'$", height):
@@ -620,7 +624,9 @@ def scrape_performer(url: str) -> ScrapedPerformer | None:
     if not (props := fetch_page_props(url)):
         return None
 
-    return to_scraped_performer(props["model"], url)
+    # jamie-young.com calls it "girl", and wraps the owner's own page in a result list
+    raw_performer = props.get("model") or dig(props, "girl", "data", 0) or props["girl"]
+    return to_scraped_performer(raw_performer, url)
 
 
 if __name__ == "__main__":

@@ -45,6 +45,7 @@ Scraper has been tested on 2026-10-02
 | Homo Scene            | https://www.emonetwork.com/videos/preston-loves-to-show-off-his-wanking-technique?scene_code=hs0006_prestonandrews                |
 | Inked POV             | https://inkedpov.com/scenes/pool-side-hook-up-with-brenna                                                                         |
 | Inserted              | https://inserted.com/videos/lunas-backdoor-bash                                                                                   |
+| Jamie Young           | https://jamie-young.com/videos/delicious-pov-facial-and-swallow                                                                   |
 | JAV888                | https://jav888.com/videos/megumi-iwabuchi                                                                                         |
 | JavHub                | https://tour.javhub.com/videos/shizuku-iori-1                                                                                     |
 | Jizz Addiction        | https://www.jizzaddiction.com/scenes/potters-got-a-magic-cock                                                                     |
