@@ -1,0 +1,27 @@
+name: Nerd Pervert
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - nerdpervert.com/tour/trailers/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //section[contains(@class, "trailer")]//h1
+      Details: //section[contains(@class, "trailer")]//div[@class="story"]/p
+      Image:
+        selector: //script[contains(., "video_content")]
+        postProcess:
+          - replace:
+              - regex: (?s).*<video[^>]+poster="([^"]+)-1x\.jpg".*
+                with: https://nerdpervert.com$1-4x.jpg
+      Studio:
+        Name:
+          fixed: Nerd Pervert
+      Performers:
+        Name:
+          selector: //section[contains(@class, "trailer")]//h1[contains(., " - ")]
+          postProcess:
+            - replace:
+                - regex: ^(.+?) - .*
+                  with: $1
