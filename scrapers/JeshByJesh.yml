@@ -1,0 +1,33 @@
+name: Jesh by Jesh
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - jeshbyjesh.com/tour/trailers/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //main/div[@class="section-header"]/h2
+      Details:
+        selector: //div[@class="blog-content"]/p
+        concat: "\n\n"
+      Date:
+        selector: //span[@class="update-info-title"][contains(., "RELEASE DATE")]/following-sibling::span
+        postProcess:
+          - parseDate: January 2, 2006
+      Image:
+        selector: //div[@class="player-thumb"]/img/@src
+        postProcess:
+          - replace:
+              - regex: -1x\.jpg$
+                with: -3x.jpg
+              - regex: ^/
+                with: https://jeshbyjesh.com/
+      Studio:
+        Name:
+          fixed: Jesh by Jesh
+      Tags:
+        Name: //span[@class="update-info-title"][contains(., "TAGS")]/following-sibling::span//a
+      Performers:
+        Name: //ul[contains(@class, "model-list")]//span[@class="model-list-name"]
+        URLs: //ul[contains(@class, "model-list")]/li/a/@href
