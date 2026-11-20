@@ -17,6 +17,7 @@ Scraper has been tested on 2026-09-17
 | VNA Girls | Kimber Lee Live     | https://www.kimberleelive.com/videos/38165/pov-blowjob-oral-creampie-and-swallow                   |
 | VNA Girls | Kink305             | https://www.kink305.com/videos/37093/amaya-blue-shows-off-her-extra-tight-virgin-asshole           |
 | VNA Girls | Maggie Green Live   | https://www.maggiegreenlive.com/videos/35990/wet-and-wild-with-karen-fisher                        |
+| VNA Girls | Major Hotwife       | https://majorhotwife.com/videos/39397/balls-deep-in-della-dane                                     |
 |           | MaxineX             | https://www.maxinex.com/videos/39242/extreme-bondage-training-behind-the-scenes                    |
 | VNA Girls | Nina Kayy           | https://www.ninakayy.com/videos/35772/pussy-party-in-cabo                                          |
 | VNA Girls | Penny Pax Live      | https://www.pennypaxlive.com/videos/39216/sloppy-pov-blow                                          |

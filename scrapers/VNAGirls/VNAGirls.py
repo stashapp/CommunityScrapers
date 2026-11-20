@@ -1,5 +1,6 @@
 import json
 import re
+from copy import deepcopy
 from datetime import datetime
 from urllib.parse import urljoin, urlparse
 
@@ -37,6 +38,7 @@ STUDIOS = {
     "kimberleelive.com": "Kimber Lee Live",
     "kink305.com": "Kink305",
     "maggiegreenlive.com": "Maggie Green Live",
+    "majorhotwife.com": "Major Hotwife",
     "maxinex.com": "MaxineX",
     "nikkibenz.com": "Nikki Benz",
     "ninakayy.com": "Nina Kayy",
@@ -75,6 +77,16 @@ def studio_for(domain: str) -> ScrapedStudio | None:
 def clean(text: str) -> str:
     "Collapse whitespace, including the NBSP this CMS separates names with"
     return re.sub(r"\s+", " ", text.replace("\xa0", " ")).strip()
+
+
+def without_headings(element):
+    "Mismatched closing tags on some sites nest the performer and tag headings inside the preceding one"
+    if element is None:
+        return None
+    element = deepcopy(element)
+    for nested in element.xpath(".//h3 | .//h4"):
+        nested.drop_tree()
+    return element
 
 
 def comma_list(element) -> list[str]:
@@ -148,7 +160,9 @@ def scene_from_url(url: str) -> ScrapedScene | None:
         scene["title"] = title
     # The description element is a <div> on most sites and an <h2> on others
     if details := details_from(
-        first(content.xpath('.//*[contains(@class, "customhcolor2")]'))
+        without_headings(
+            first(content.xpath('.//*[contains(@class, "customhcolor2")]'))
+        )
     ):
         scene["details"] = details
     # The date is a <div> on most sites and a <span> on others, inside a wrapper whose own class also contains "date"
@@ -161,9 +175,9 @@ def scene_from_url(url: str) -> ScrapedScene | None:
         )
     ):
         scene["date"] = date
-    if performers := comma_list(first(content.xpath("./h3"))):
+    if performers := comma_list(without_headings(first(content.xpath(".//h3")))):
         scene["performers"] = [{"name": name} for name in performers]
-    if tags := comma_list(first(content.xpath("./h4"))):
+    if tags := comma_list(first(content.xpath(".//h4"))):
         scene["tags"] = [{"name": tag} for tag in tags]
     # The page never names its own host, so the request URL is the only source
     if image := image_from(tree, url):
