@@ -11,8 +11,8 @@ groupByURL:
       - jeedoo.com
     scraper: movieScraper
 sceneByName:
-  action: scrapeXPath
-  queryURL: https://www.jeedoo.com/porn-movies/?show_no_offer=1&search={}
+  action: scrapeJson
+  queryURL: https://www.jeedoo.com/ajax/suggest/titles/?q={}
   scraper: sceneSearch
 sceneByQueryFragment:
   action: scrapeXPath
@@ -23,42 +23,42 @@ xPathScrapers:
   movieScraper:
     group:
       Name: &title
-        selector: //title
+        selector: //meta[@property="og:title"]/@content
         postProcess:
           - replace:
-              - regex: ((DVD|HD\-DVD|VHS\-Video)\s+\-\s+Porn\s+Movies\s+Streams\s+and\s+Downloads|\s+Stream\s+&\s+Download)
+              - regex: \s+[-–]\s+(DVD|HD-DVD|VHS-Video|Blu-ray|Stream\s*&\s*Download)$
                 with: ""
       Date: &date
-        selector: //div[contains(text()[2], "Release date:")]/text()[2] | //td[@class="de1"][contains(., "released on")]/following-sibling::td
+        selector: //dt[normalize-space()="Release date" or normalize-space()="Erscheinungsdatum"]/following-sibling::dd[1]
         postProcess:
           - javascript: |
-              const months = ["January", "February", "March", "April", "May", "June", "July",
-                "August", "September", "October", "November", "December"];
-              const v = value.replace(/^\s*Release date:\s*/, "").trim();
+              const german = { "mär": "mar", mai: "may", okt: "oct", dez: "dec" };
+              const month = (name) => {
+                const abbr = name.toLowerCase().slice(0, 3);
+                const i = "janfebmaraprmayjunjulaugsepoctnovdec".indexOf(german[abbr] || abbr);
+                return String(i / 3 + 1).padStart(2, "0");
+              };
               let m;
-              if ((m = v.match(/^(\d{2})\/(\d{2})\/(\d{4})$/))) return `${m[3]}-${m[1]}-${m[2]}`;
-              if ((m = v.match(/^(\w+) (\d{1,2}), (\d{4})$/)) && months.includes(m[1])) {
-                const month = String(months.indexOf(m[1]) + 1).padStart(2, "0");
-                return `${m[3]}-${month}-${m[2].padStart(2, "0")}`;
-              }
+              if ((m = value.match(/^([A-Za-z]+)\s+(\d{1,2}),\s*(\d{4})$/)))
+                return `${m[3]}-${month(m[1])}-${m[2].padStart(2, "0")}`;
+              if ((m = value.match(/^(\d{1,2})\.\s*(\S+)\s+(\d{4})$/)))
+                return `${m[3]}-${month(m[2])}-${m[1].padStart(2, "0")}`;
               return "";
       Studio: &studio
-        Name: //div[@class="undertitle"]//a[contains(@href, "?label=")]
-      Synopsis: &details //meta[@property="og:description"]/@content
-      FrontImage: //img[contains(@class,"mainimage")][@rel="1"]/@src
-      BackImage: //img[contains(@class,"mainimage")][@rel="2"]/@src
+        Name: //dd/a[contains(@href, "?label=")]
+      Synopsis: &details (//div[contains(@class,"pp-description")]/p)[1]
+      FrontImage: &frontimage //meta[@property="og:image"]/@content
+      BackImage: (//div[@data-pp-gallery]//a[contains(@class,"pp-slide")])[2]/@href
       URLs: &url //link[@rel="alternate"][@hreflang="en"]/@href
       Tags: &tags
-        Name: //a[@title="Categorie / Genre"]
-      Director: &director //a[@title="Director"]
+        Name: //dd/a[contains(@href, "/browse") and contains(@href, "C=")]
+      Director: &director //dd/a[contains(@href, "?autor=")]
       Duration:
-        selector: //div[contains(text(),"Length:")]/text()[1] | //td[@class="de1"][contains(., "Length:")]/following-sibling::td
+        selector: //dt[normalize-space()="Runtime" or normalize-space()="Laufzeit"]/following-sibling::dd[1]
         postProcess:
           - replace:
-              - regex: ^\[(.+)\]$
-                with: $1
-              - regex: ^[^\d]*(\d+)\s*min.*
-                with: "$1:00"
+              - regex: (?i)^(\d+)\s*min.*
+                with: $1:00
   sceneScraper:
     scene:
       Title: *title
@@ -66,31 +66,22 @@ xPathScrapers:
       Date: *date
       Studio: *studio
       Details: *details
-      Image: //img[contains(@class,"mainimage")][@rel="1"]/@src
+      Image: *frontimage
       Performers:
-        Name: //a[@title="Cast"]
-        URLs:
-          selector: //a[@title="Cast"]/@href
-          postProcess:
-            - replace:
-                - regex: ^
-                  with: "https://www.jeedoo.com"
+        Name: //dd/a[contains(@href, "?actor=")]
       Tags: *tags
       Director: *director
+
+jsonScrapers:
   sceneSearch:
     common:
-      $searchItem: //a[contains(@href,"/product/")]/img/..
+      $items: items.#(price!="")#
     scene:
-      Title:
-        selector: $searchItem/img/@alt
-        postProcess:
-          - replace:
-              - regex: ^(DVD|HD-DVD|Blu-ray|VHS-Video)\s+
-                with: ""
+      Title: $items.name
       URLs:
-        selector: $searchItem/@href
+        selector: $items.link
         postProcess:
           - replace:
               - regex: ^
-                with: "https://www.jeedoo.com"
-      Image: $searchItem/img/@data-src
+                with: https://www.jeedoo.com
+      Image: $items.image
