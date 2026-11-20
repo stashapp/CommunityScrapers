@@ -1,0 +1,32 @@
+# Nebraska Coeds - scene scraper for tour.nebraskacoeds.com/trailers/
+#
+# The trailer page carries NO per-scene date: the first updatesBlock holds title +
+# player only (no date, model links or description - verified 2026-11-18 on three
+# live pages). An unscoped //span[@class='availdate'] would pick the "More Updates"
+# rail's NEWEST date (e.g. 11/18/2026 on a scene from 09/18/26) and overwrite the
+# good date at submit time, so Date is deliberately omitted. Same for
+# Performers/Details/Tags: absent from the page, omitted here.
+#
+# Verify with scrapeSceneURL on
+#   https://tour.nebraskacoeds.com/trailers/Lily-Mays-And-Rebeka-Ruby-Masturbating-On-A-Nude-Beach-While-On-Vacation.html
+# Expect the scene title, the content/*.jpg cover, Studio "Nebraska Coeds", and NO date.
+name: Nebraska Coeds
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - tour.nebraskacoeds.com/trailers/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      # Scoped to the FIRST updatesBlock (the scene itself): the second one is the
+      # "More Updates" rail and an unscoped //h2 would still work today only because
+      # the rail uses a different heading level - scope it before that changes.
+      Title: (//div[@class='updatesBlock'])[1]//h2
+      Image: //meta[@property='og:image']/@content
+      URLs:
+        fixed: "{inputURL}"
+      Studio:
+        Name:
+          fixed: Nebraska Coeds
+# Last Updated November 20, 2026
