@@ -7,27 +7,32 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $image: //div[@class='player-thumb']/img
+      $details: //section[contains(@class, "wlgr-video-details")]
     scene:
-      Title: //div[@class='updatesBlock']/h2[@class='title']/text()
-      Details: //meta[@name='description']/@content
-      Image: $image/@src0_4x|$image/@src0_3x|$image/@src0_2x|$image/@src0_1x
+      Title: $details/h1
+      URLs: //link[@rel="canonical"]/@href
+      Date:
+        selector: $details/time/@datetime
+        postProcess:
+          - replace:
+              - regex: T.*
+                with: ""
+      Details:
+        selector: $details/div[contains(@class, "wlgr-description")]/p
+        concat: "\n\n"
+      Image: //video[@id="bs-video"]/@poster
       Studio:
         Name:
           fixed: Girls Rimming
+      Performers:
+        Name: $details//div[contains(@class, "wlgr-models")]/a
+        URLs: $details//div[contains(@class, "wlgr-models")]/a/@href
       Groups:
         Name:
-          selector: //div[@class='updatesBlock']/h2[@class='title']/text()
+          selector: $details/h1[contains(., " Ep")]
           postProcess:
             - replace:
                 - regex: (.+)(?:\sEp\d).*
                   with: $1
       Tags:
-        Name:
-          selector: //meta[@name='keywords']/@content
-          postProcess:
-            - replace:
-                - regex: "[^,]*Id\\s(\\d+)[^,]*"
-                  with:
-          split: ","
-# Last Updated August 20, 2023
+        Name: $details/div[contains(@class, "wlgr-tags")]/a
