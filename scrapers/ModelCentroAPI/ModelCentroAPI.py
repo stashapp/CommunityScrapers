@@ -1,7 +1,7 @@
 import json
 import re
 import sys
-from datetime import date
+from datetime import UTC, date, datetime
 from urllib.parse import urlencode, urlparse
 
 from py_common import log
@@ -420,6 +420,23 @@ def load_store_product(
     return content, content_id
 
 
+def store_listing_date(domain: str, keys: list[str], product_id: str) -> str | None:
+    "The day a product went on sale: the API only returns it when no fields are requested"
+    response = api_call(
+        domain,
+        keys,
+        "Store.getProductList",
+        {
+            "limit": "1",
+            "filter[id][fields][0]": "id",
+            "filter[id][values][0]": product_id,
+        },
+    )
+    if listed_at := dig(response or {}, "collection", 0, "listedAt"):
+        return datetime.fromtimestamp(int(listed_at), UTC).date().isoformat()
+    return None
+
+
 def scraped_performers(
     domain: str, keys: list[str], content_id: str, site: str
 ) -> list[ScrapedPerformer]:
@@ -495,7 +512,8 @@ def scene_from_url(url: str) -> ScrapedScene | None:
         return None
 
     object_id = match.group(1)
-    if "/product/" in url:
+    is_product = "/product/" in url
+    if is_product:
         if not (resolved := load_store_product(domain, keys, object_id)):
             return None
         content, content_id = resolved
@@ -505,6 +523,13 @@ def scene_from_url(url: str) -> ScrapedScene | None:
         return None
 
     scene = to_scene(content, content_id, site)
+    # Store-only content has no publishDate: the store listing date is the closest thing
+    if (
+        is_product
+        and "date" not in scene
+        and (listed := store_listing_date(domain, keys, object_id))
+    ):
+        scene["date"] = listed
     if performers := scraped_performers(domain, keys, content_id, site):
         scene["performers"] = performers
     return scene
