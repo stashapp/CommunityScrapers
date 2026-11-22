@@ -23,7 +23,7 @@ xPathScrapers:
       $videos: //a[@class="video-thumb-prev"]
     scene:
       Title: $videos/@title
-      URL: $videos/@href
+      URLs: $videos/@href
       Image: $videos/img[@class="pure-img padding"]/@src
       Details:
         selector: $videos/img[@class="pure-img padding"]/@src
@@ -44,10 +44,13 @@ xPathScrapers:
               - regex: .*/content/videos/(.+)/(.*)/.*
                 with: ${1}_${2}
       Details: //div[contains(@class, "video-description")]
-      # Date no longer appears on public pages but is visible to members
+      # The "Added" line is only shown to members
       Date:
-        selector: //p[contains(strong,"Added")]/text()
+        selector: //p[contains(strong,"Added")]/text() | //script[@type="application/ld+json"][contains(., '"uploadDate"')]
         postProcess:
+          - replace:
+              - regex: .+"uploadDate":"([^T"]+).+
+                with: $1
           - parseDate: January 2, 2006
       Performers:
         Name: $movieinfo/p[starts-with(strong,"Actress")]/a
@@ -55,7 +58,7 @@ xPathScrapers:
       Tags:
         Name: $movieinfo/p[starts-with(strong,"Categories")]/a
       Image:
-        selector: //video[@id="videohtml5tour"]/@poster
+        selector: //video/@poster
         postProcess: &imagePostProcess
           - replace:
               - regex: ^//
@@ -69,31 +72,31 @@ xPathScrapers:
   performerScraper:
     performer:
       Name: //div[@class="video-info"]//h2
-      Aliases: //div[contains(strong,"Japanese Name")]/following-sibling::div[1]/text()
+      Aliases: //div[contains(strong,"Japanese Name")]/following-sibling::div[1]
       Birthdate:
-        selector: //div[contains(strong,"Birth date")]/following-sibling::div[1]/text()
+        selector: //div[contains(strong,"Birth date")]/following-sibling::div[1]
         postProcess:
           - parseDate: January 2, 2006
       Ethnicity:
-        selector: //div[contains(strong,"Ethnicity")]/following-sibling::div[1]/text()
+        selector: //div[contains(strong,"Ethnicity")]/following-sibling::div[1]
         postProcess:
           - map:
               Japanese: Asian
       Country:
-        selector: //div[contains(strong,"Ethnicity")]/following-sibling::div[1]/text()
+        selector: //div[contains(strong,"Ethnicity")]/following-sibling::div[1]
         postProcess:
           - map:
               Japanese: Japan
       Height:
-        selector: //div[contains(strong,"Height")]/following-sibling::div[1]/text()
+        selector: //div[contains(strong,"Height")]/following-sibling::div[1]
         postProcess:
           - replace:
               - regex: (\d+)cm.+
                 with: $1
-              - regex: ^cm.+ # no values
+              - regex: ^cm.* # no values
                 with:
       Measurements:
-        selector: //div[contains(strong,"Body") or contains(strong,"Breasts Cup")]/following-sibling::div[1]/text()
+        selector: //div[contains(strong,"Body") or contains(strong,"Breasts Cup")]/following-sibling::div[1]
         concat: "-"
         postProcess:
           - replace:
@@ -103,14 +106,14 @@ xPathScrapers:
                 with:
               - regex: '^\D.+'
                 with:
-      Image:
+      Images:
         selector: //div[@class="thumb"]/img/@src
         postProcess: *imagePostProcess
       Gender:
         fixed: "Female"
       Details: //div[@id="model"]//p
       HairColor:
-        selector: //div[contains(strong,"Hair color")]/following-sibling::div[1]/text()
+        selector: //div[contains(strong,"Hair color")]/following-sibling::div[1]
         postProcess:
           - map:
               N/A: ""
@@ -124,4 +127,3 @@ driver:
           Domain: ".japanhdv.com"
           Path: /
           Value: "_"
-# Last Updated September 17, 2025
