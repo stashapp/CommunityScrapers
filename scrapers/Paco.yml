@@ -36,6 +36,7 @@ jsonScrapers:
       Tags:
         Name: UCNAMEEn
       Details: DescEn
+      Code: MovieID
       URLs:
         selector: MovieID
         postProcess:
