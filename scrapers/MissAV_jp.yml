@@ -24,6 +24,8 @@ xPathScrapers:
       URLs: $tile//a[not(*)]/@href
       Image: $tile//img/@data-src
   sceneScraper:
+    common:
+      $row: //div[@class="text-secondary"]
     scene:
       Title:
         selector: //meta[@property="og:title"]/@content
@@ -31,17 +33,17 @@ xPathScrapers:
           - replace:
               - regex: ^.*?\s
                 with: ""
-      Code: //span[text()="品番:"]/following-sibling::span
-      Date: //span[text()="配信開始日:"]/following-sibling::time
+      Code: $row/span[@class="font-medium"]
+      Date: $row/time
       Details: //meta[@property="og:description"]/@content
       Image: //meta[@property="og:image"]/@content
       Director: //meta[@property="og:video:director"]/@content
       Performers:
         Name: //meta[@property="og:video:actor"]/@content
       Studio:
-        Name: //span[text()="メーカー:"]/following-sibling::a
+        Name: $row/a[contains(@href, "/makers/")]
       Tags:
-        Name: //span[text()="ジャンル:"]/following-sibling::a
+        Name: $row/a[contains(@href, "/genres/")]
 
 driver:
   useSurf: true
