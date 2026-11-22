@@ -22,7 +22,7 @@ sceneByURL:
 xPathScrapers:
   mainSite:
     common:
-      $ldjson: //script[@type="application/ld+json"][contains(text(), '"@type":"VideoObject"')]/text()
+      $ldjson: //script[@type="application/ld+json"][contains(text(), '"@type":"VideoObject"')]
       $poster: //meta[@property="og:image"][contains(@content, "/poster_image/")]/@content
     scene:
       Title: //h1
@@ -38,7 +38,7 @@ xPathScrapers:
                 with: PF
               - regex: Kelly Madison
                 with: KM
-      Details: //div[contains(text(), "Episode Summary")]/../p
+      Details: //*[contains(text(), "Episode Summary")]/../p
       Date:
         selector: $ldjson
         postProcess:
@@ -72,7 +72,7 @@ xPathScrapers:
   8ksite:
     common:
       $url: //link[@rel="canonical"]/@href
-      $ldjson: //script[@type="application/ld+json"][contains(text(), '"@type":"VideoObject"')]/text()
+      $ldjson: //script[@type="application/ld+json"][contains(text(), '"@type":"VideoObject"')]
     scene:
       Title: //strong[text()="Title:"]/following-sibling::a
       Code:
