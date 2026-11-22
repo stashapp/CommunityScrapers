@@ -2,7 +2,7 @@ name: "Colby Knox"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - colbyknox.com/video/
+      - colbyknox.com/video
     scraper: sceneScraper
 
 xPathScrapers:
@@ -10,7 +10,7 @@ xPathScrapers:
     common:
       $performer: //a[contains(@class, "video-model")]
     scene:
-      Title: //div[contains(@class, "video")]//h1/text()
+      Title: //div[contains(@class, "video")]//h1
       Date:
         selector: //script[@type="application/ld+json"][contains(.,"uploadDate")]
         postProcess:
@@ -19,14 +19,18 @@ xPathScrapers:
                 with: "$1"
           - parseDate: "2006-01-02"
       Performers:
-        Name: $performer//h3/text()
-        URLs: $performer/@href
+        Name: $performer//h3
+        URLs:
+          selector: $performer/@href
+          postProcess:
+            - replace:
+                - regex: ^/
+                  with: https://www.colbyknox.com/
       Details:
-        selector: //div[contains(@class, "video")]//p[contains(@class, "mb-5")]/text()
+        selector: //div[contains(@class, "video")]//p[contains(@class, "mb-5")]
         concat: "\n\n"
-      Image:
-        selector: //meta[@property="og:image"]/@content
+      Image: //meta[@property="og:image"]/@content
+      URLs: //meta[@property="og:url"]/@content
       Studio:
         Name:
           fixed: Colby Knox
-# Last Updated November 22, 2026
