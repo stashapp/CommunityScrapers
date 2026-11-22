@@ -10,8 +10,8 @@ sceneByURL:
     queryURL: "{url}"
     queryURLReplace:
       url:
-        - regex: '(https:\/\/.+\/posts\/)(\d+)(?:(\?.+)|(\#.+)|(\/.+))?'
-          with: "$1$2.json"
+        - regex: .+/posts/(\d+).*
+          with: https://e621.net/posts/$1.json?mode=extended
 
 imageByURL:
   - action: scrapeJson
@@ -20,31 +20,27 @@ imageByURL:
     queryURL: "{url}"
     queryURLReplace:
       url:
-        - regex: '(https:\/\/.+\/posts\/)(\d+)(?:(\?.+)|(\#.+)|(\/.+))?'
-          with: "$1$2.json"
+        - regex: .+/posts/(\d+).*
+          with: https://e621.net/posts/$1.json?mode=extended
 
 jsonScrapers:
   postScraper:
     image:
       Date: &date
-        selector: post.created_at
+        selector: created_at
         postProcess:
           - replace:
               - regex: "T.+"
                 with: ""
           - parseDate: 2006-01-02
       Performers: &character
-        Name:
-          selector: post.tags.character
+        Name: tags.character
       Studio: &artist
-        Name: post.tags.artist
+        Name: tags.artist
       Tags: &tags_general
-        Name:
-          selector: post.tags.general
-      URLs: &source
-        selector: post.sources
-      Details: &description
-        selector: post.description
+        Name: tags.general
+      URLs: &source sources
+      Details: &description description
     scene:
       Date: *date
       Performers: *character
