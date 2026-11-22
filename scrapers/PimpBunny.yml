@@ -42,4 +42,7 @@ xPathScrapers:
       Images: //div[contains(@class, "blocks-model-view-thumbnail")]//img/@data-original
       Tags:
         Name: //div[contains(@class,"model-view-top-lists")]/a
-      URLs: //div[contains(@class,"model-view-social-bar")]//a/@href
+      URLs: //link[@rel="canonical"]/@href | //div[contains(@class,"model-view-social-bar")]//a/@href
+
+driver:
+  useSurf: true
