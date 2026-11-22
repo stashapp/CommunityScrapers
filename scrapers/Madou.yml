@@ -14,14 +14,19 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $header: //article/header[@class="entry-header"]
     scene:
       Studio:
-        Name: //div[@class="breadcrumbs"][//h1[@class="entry-title"]]/a[last()]
+        Name: $header//a[@class="category-label"]
       Performers:
-        Name: //div[contains(@class, "entry-tags")]//*[(self::a or self::p)]/text()
-      Title: //h1[@class="entry-title"]
-      Image: //meta[@property="og:image"][//h1[@class="entry-title"]]/@content
+        Name: $header//a[@class="post-tag-label"]
+      Title: $header/h1
+      Image: //article//img[contains(@class, "mdqn-article-lead")]/@src
+      URLs: //link[@rel="canonical"][//article/header[@class="entry-header"]]/@href
   sceneSearch:
+    common:
+      $result: //article[contains(@class, "resource-card")]//h2/a
     scene:
-      Title: //article//h2[@class="entry-title"]/a/@title
-      URLs: //article//h2[@class="entry-title"]/a/@href
+      Title: $result
+      URLs: $result/@href
