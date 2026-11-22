@@ -40,7 +40,7 @@ xPathScrapers:
     scene:
       Title: //h1
       Date:
-        selector: //p/time[@datetime][not(@data-hk)]/@datetime
+        selector: //time[not(@data-hk) and contains(@datetime, "T")]/@datetime
         postProcess: &datePostProcess
           - replace:
               - regex: "T.+"
