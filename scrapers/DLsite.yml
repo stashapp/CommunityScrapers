@@ -43,7 +43,7 @@ galleryByURL:
 xPathScrapers:
   sceneQueryScraper:
     scene:
-      Title: //dd[@class='work_name']/div[@class='multiline_truncate']/a/text()
+      Title: //dd[@class='work_name']/div[@class='multiline_truncate']/a
       URLs: //dd[@class='work_name']/div[@class='multiline_truncate']/a/@href
       Image:
         selector: //thumb-with-ng-filter-block/@*[contains(name(), 'thumb-candidates')]
@@ -55,52 +55,28 @@ xPathScrapers:
               return "https:" + m[1].replace("/resize/", "/modpub/") + ".jpg";
   sceneScraper:
     scene:
-      Title: &titleSel //h1[@id='work_name']/text()
+      Title: &titleSel //h1[@id='work_name']
       Date: &dateSel
-        selector: "//th[text() = '販売日']/following-sibling::td//text()|//th[text() = 'Release date']/following-sibling::td//text()"
+        selector: //dt[text()='販売日' or text()='Release date']/following-sibling::dd
         postProcess:
           - replace:
-              - regex: "Jan"
-                with: "01"
-              - regex: "Feb"
-                with: "02"
-              - regex: "Mar"
-                with: "03"
-              - regex: "Apr"
-                with: "04"
-              - regex: "May"
-                with: "05"
-              - regex: "Jun"
-                with: "06"
-              - regex: "Jul"
-                with: "07"
-              - regex: "Aug"
-                with: "08"
-              - regex: "Sep"
-                with: "09"
-              - regex: "Oct"
-                with: "10"
-              - regex: "Nov"
-                with: "11"
-              - regex: "Dec"
-                with: "12"
               - regex: \s.+$
                 with: ""
-              - regex: (\d{2})/(\d{2})/(\d{4})
-                with: "${3}年${1}月${2}日"
-          - parseDate: 2006年01月02日
+              - regex: ^(\d{4})/(\d+)/(\d+)$
+                with: "${1}年${2}月${3}日"
+          - parseDate: 2006年1月2日
       Details: &detailsSel
-        selector: //div[contains(@class,"work_parts_area")]
+        selector: //section[contains(@class,"c-productContent")]/*
         concat: "\n\n"
       Tags: &tagsSel
-        Name: //div[@class='main_genre']/a/text()
+        Name: //dt[text()='ジャンル' or text()='Genre']/following-sibling::dd//a
       Performers:
         # only illustrators and voice actors, writers and musicians are not included
-        Name: "//th[text() = '声優']/following-sibling::td/a/text()|//th[text() = 'Voice Actor']/following-sibling::td/a/text()|//th[text() = 'イラスト']/following-sibling::td/a/text()|//th[text() = 'Illustration']/following-sibling::td/a/text()"
+        Name: //dt[text()='声優' or text()='Voice Actor' or text()='イラスト' or text()='Illustration']/following-sibling::dd//a
       Studio: &studioSel
-        Name: //span[@class='maker_name']/a/text()
+        Name: //*[contains(@class,"c-productInfo__makerName")]
       Image: //meta[@property='og:image']/@content
-      URLs: &urlSel //meta[@property='og:url']/@content
+      URLs: &urlSel //link[@rel='canonical']/@href
   galleryManiaxScraper:
     gallery:
       Title: *titleSel
@@ -109,7 +85,7 @@ xPathScrapers:
       Tags: *tagsSel
       # only illustrators
       Performers:
-        Name: "//th[text() = 'イラスト']/following-sibling::td/a/text()|//th[text() = 'Illustration']/following-sibling::td/a/text()"
+        Name: //dt[text()='イラスト' or text()='Illustration']/following-sibling::dd//a
       Studio: *studioSel
       URLs: *urlSel
   galleryBookScraper:
@@ -120,6 +96,6 @@ xPathScrapers:
       Tags: *tagsSel
       Performers:
         # for maniax author is the writer, for books this is illustrators
-        Name: "//th[text() = '著者']/following-sibling::td/a/text()|//th[text() = 'Author']/following-sibling::td/a/text()"
+        Name: //dt[text()='著者' or text()='Author']/following-sibling::dd//a
       Studio: *studioSel
       URLs: *urlSel
