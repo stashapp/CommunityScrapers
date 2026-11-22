@@ -95,7 +95,7 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //h1
-      Details: //h2
+      Details: //p[contains(@class, "my-text")]
       URLs: &url //link[@rel="alternate" and @hreflang="en"]/@href
       Date: &date
         selector: //script[@type="application/ld+json"]/text()
