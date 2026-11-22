@@ -2,11 +2,12 @@ name: BadPuppy
 sceneByURL:
   - action: scrapeJson
     url:
+      - badpuppy.com/scene/
       - badpuppy.com/video/
-    queryURL: https://nats.puppycash.com/tour_api.php/content/sets?slug={url}&cms_block_id=100354&data_types=1
+    queryURL: https://nats.puppycash.com/tour_api.php/content/sets?slug={url}&cms_block_id=100718&data_types=1
     queryURLReplace:
       url:
-        - regex: .+/video/([^/?#]+).*
+        - regex: .+/(?:scene|video)/([^/?#]+).*
           with: $1
     scraper: sceneScraper
 jsonScrapers:
@@ -20,6 +21,12 @@ jsonScrapers:
                 with: " "
       Details: sets.0.description
       Date: sets.0.added_nice
+      URLs:
+        selector: sets.0.slug
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.badpuppy.com/scene/
       Image:
         selector: sets.0.preview_formatted.thumb.@values|@reverse.0.0.[fileuri,signature].@tostr
         postProcess:
