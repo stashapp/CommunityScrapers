@@ -125,7 +125,6 @@ studio_map = {
     "tahliaparis": "Tahlia Paris",
     "tanyatate.xxx": "Tanya Tate",
     "theamofficial": "Ass Monkey",
-    "theaudreyhollander": "Audrey Hollander Anal Queen",
     "thiccvision": "ThiccVision",
     "ticklehotness": "Tickle Hotness",
     "trinetyguess": "Trinety Guess",
@@ -133,7 +132,6 @@ studio_map = {
     "womenwhosmoke": "Women Who Smoke",
     "xtcpov": "XTC POV",
     "xxxotikangelzent": "xXxOTIK ANGELZ",
-    "yourgoonspace": "Your Goon Space",
 }
 
 # Map of studios that don't list performers, but have a fixed set of performers for all scenes.
@@ -187,7 +185,6 @@ fixed_performers = {
     "shootingstar4u.me": ["Orgasmic Shooting Star"],
     "tahliaparis": ["Tahlia Paris"],
     "tanyatate.xxx": ["Tanya Tate"],
-    "theaudreyhollander": ["Audrey Hollander"],
     "trinetyguess": ["Trinety Guess"],
     "vinaskyxxx": ["Vina Sky"],
 }
@@ -324,7 +321,6 @@ default_tags = {
     ],
     "tahliaparis": ["White Woman", "Fake Tits", "Blonde Hair (Female)"],
     "tanyatate.xxx": ["White Woman", "Fake Tits", "Blonde Hair (Female)"],
-    "theaudreyhollander": ["White Woman", "Natural Tits", "Red Hair"],
     "ticklehotness": ["Tickling"],
     "trinetyguess": ["BBW", "Solo Female", "White Woman"],
     "vinaskyxxx": ["Asian Woman", "Natural Tits", "Black Hair (Female)", "Long Hair"],
