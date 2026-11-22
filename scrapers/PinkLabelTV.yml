@@ -53,10 +53,8 @@ xPathScrapers:
     common:
       $post: //li[@class="list-group-item media plEpisode search-result shameless_film"]
     scene:
-      Title:
-        selector: $post/a/@title
-      URLs:
-        selector: $post/a/@href
+      Title: $post/a/@title
+      URLs: $post/a/@href
   sceneScraper:
     common:
       $filmDetails: //ul[@id="film_details"]
@@ -74,6 +72,4 @@ xPathScrapers:
         Name: $filmDetails/li[strong[contains(text(),"Performers")]]/a
 
 driver:
-  headers:
-    - Key: User-Agent
-      Value: stash-scraper/1.0
+  useSurf: true

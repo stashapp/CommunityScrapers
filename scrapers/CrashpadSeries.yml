@@ -22,13 +22,11 @@ xPathScrapers:
       Details:
         selector: //span[@class="ep-description"]/p
         concat: "\n\n"
-      Image:
-        selector: //meta[@property="og:image"]/@content
+      Image: //meta[@property="og:image"]/@content
+      URLs: //link[@rel="canonical"]/@href
       Studio:
         Name:
           fixed: CrashPad Series
 
 driver:
-  headers:
-    - Key: User-Agent
-      Value: stash-scraper/1.0
+  useSurf: true
