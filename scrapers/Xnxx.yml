@@ -67,8 +67,8 @@ xPathScrapers:
       # premium pages have no description and no JSON-LD upload date
       Details: //p[@class="metadata-row video-description"]
       Image:
-        selector: //script[contains(text(), "setThumbUrl169")]/text()|//div[@id="html5video"][span[@class="premium-log-overlay"]]/div[@class="embed-responsive-item"]/@style
+        selector: //script[contains(text(), "setThumbUrl169")]|//div[@id="html5video"][span[@class="premium-log-overlay"]]/div[@class="embed-responsive-item"]/@style
         postProcess:
           - replace:
-              - regex: ^.+(?:setThumbUrl169|url)\('(.+?\.jpg).+$
+              - regex: ^.+(?:setThumbUrl169|url)\('([^']+)'.+$
                 with: $1
