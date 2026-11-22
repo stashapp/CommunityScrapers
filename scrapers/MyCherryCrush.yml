@@ -19,12 +19,12 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //h1[@class='entry-title']
-      URL: //link[@rel="canonical"]/@href
+      URLs: //link[@rel="canonical"]/@href
       Date:
         selector: //span[@class='entry-date']
         postProcess:
           - parseDate: January 2, 2006
-      Tags: 
+      Tags:
         Name: //span[@class='entry-category']/a
       Performers:
         Name:
@@ -36,12 +36,12 @@ xPathScrapers:
   sceneSearch:
     scene:
       Title: //h2[@class='entry-title']/a
-      URL: //a[contains(@rel, 'bookmark')]/@href
+      URLs: //a[contains(@rel, 'bookmark')]/@href
       Date:
         selector: //li[@class='entry-date']
         postProcess:
           - parseDate: January 2, 2006
-      Tags: 
+      Tags:
         Name: //div[@class='entry-category']/a
       Performers:
         Name:
@@ -49,6 +49,7 @@ xPathScrapers:
       Studio:
         Name:
           fixed: MyCherryCrush.com
+# TODO: take these credentials from scraper settings once Stash supports them, see https://github.com/stashapp/stash/issues/4433
 driver:
   useCDP: true
   headers:
@@ -56,4 +57,3 @@ driver:
       Value: stash/1.0.0
 #   - Key: Authorization
 #     Value: Basic Key
-# Last Updated February 24, 2022

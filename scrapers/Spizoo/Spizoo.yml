@@ -89,6 +89,7 @@ xPathScrapers:
               # Remove any resizing parameters for the image, we want the original
               - regex: "[?&]img(?:q|w|h)=[^&]+"
                 with:
+# TODO: take these cookies from scraper settings once Stash supports them, see https://github.com/stashapp/stash/issues/4433
 driver:
   cookies:
     - CookieURL: "https://www.mrluckylife.com/"

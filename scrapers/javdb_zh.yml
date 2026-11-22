@@ -32,7 +32,7 @@ xPathScrapers:
       $videoItem: //div[starts-with(@class, 'movie-list')]/div[@class="item"]
     scene:
       Title: $videoItem/a/div[@class="video-title"]
-      URL:
+      URLs:
         selector: $videoItem/a[@class="box"]/@href
         postProcess:
           - replace:
@@ -51,7 +51,7 @@ xPathScrapers:
       $videoItem: //div[starts-with(@class, 'movie-list')]/div[@class="item"]
     scene:
       Title: $videoItem/a/div[@class="video-title"]/text()
-      URL:
+      URLs:
         selector: $videoItem/a[@class="box"]/@href
         postProcess:
           - replace:
@@ -86,7 +86,7 @@ xPathScrapers:
         Name:
           selector: //strong[text()='片商:']/../span/a/text()|//strong[text()='發行:']/../span/a/text()
       Image: //img[@class="video-cover"]/@src
-      URL: //link[@rel="canonical"]/@href
+      URLs: //link[@rel="canonical"]/@href
   movieScraper:
     group:
       Name:
@@ -115,8 +115,9 @@ xPathScrapers:
           selector: //strong[text()='片商:']/../span/a/text()|//strong[text()='發行:']/../span/a/text()
       FrontImage:
         selector: //img[@class="video-cover"]/@src
-      URL: //link[@rel="canonical"]/@href
+      URLs: //link[@rel="canonical"]/@href
 
+# TODO: take these cookies from scraper settings once Stash supports them, see https://github.com/stashapp/stash/issues/4433
 driver:
   cookies:
     - CookieURL: "https://javdb.com"

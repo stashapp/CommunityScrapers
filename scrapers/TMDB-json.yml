@@ -43,11 +43,10 @@ jsonScrapers:
               - regex: ^
                 with: https://image.tmdb.org/t/p/original
 
+# TODO: take these credentials from scraper settings once Stash supports them, see https://github.com/stashapp/stash/issues/4433
 driver:
   headers:
     - Key: User-Agent
       Value: stash-scraper/1.0.0
     - Key: Authorization
       Value: Bearer YOUR-BEARER-HERE
-
-# Last Updated May 15, 2025

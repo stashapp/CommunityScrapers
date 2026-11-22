@@ -62,6 +62,7 @@ xPathScrapers:
         Name: $article//div[text()="Artist"]/following-sibling::span/a/span
         URLs: $article//div[text()="Artist"]/following-sibling::span/a/@href
 # see configuration notes in https://discourse.stashapp.cc/t/ddos-guard-for-scrapers/2369
+# TODO: take these cookies from scraper settings once Stash supports them, see https://github.com/stashapp/stash/issues/4433
 driver:
   headers:
     - Key: User-Agent

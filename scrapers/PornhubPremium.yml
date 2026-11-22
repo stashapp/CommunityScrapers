@@ -126,6 +126,7 @@ xPathScrapers:
       Studio:
         Name: $studio
         URLs: $studio/@href
+# TODO: take these cookies from scraper settings once Stash supports them, see https://github.com/stashapp/stash/issues/4433
 driver:
   cookies:
     - CookieURL: "https://pornhubpremium.com"

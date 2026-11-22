@@ -41,6 +41,7 @@ xPathScrapers:
                 with: $1
       Tags:
         Name: //div[@class="tool_list"]//div[@class="item"]/span/text()
+# TODO: take these cookies from scraper settings once Stash supports them, see https://github.com/stashapp/stash/issues/4433
 driver:
   useCDP: true
   headers:

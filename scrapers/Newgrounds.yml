@@ -30,6 +30,7 @@ xPathScrapers:
         Name: //dd[@class="tags"]//a[contains(@href, "match=tags")]
       Studio:
         Name: //div[@class="item-details-main"]//a
+# TODO: take these cookies from scraper settings once Stash supports them, see https://github.com/stashapp/stash/issues/4433
 driver:
   useCDP: true
   cookies:

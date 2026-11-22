@@ -133,6 +133,7 @@ xPathScrapers:
       Details: //div[contains(@class,'contentWrapper')]//div[@class='panel']
 
 # curl -s -c - -X POST -d "valid_age=1" https://www.<site>/ageCheck.php | grep PHPSESSID
+# TODO: take these cookies from scraper settings once Stash supports them, see https://github.com/stashapp/stash/issues/4433
 driver:
   cookies:
     - CookieURL: "https://bringmeyoursister.com"

@@ -81,6 +81,7 @@ jsonScrapers:
       Tags: *tag_string
       URLs: *source
 
+# TODO: take these credentials from scraper settings once Stash supports them, see https://github.com/stashapp/stash/issues/4433
 driver:
   headers:
     # see https://danbooru.donmai.us/wiki_pages/help:api

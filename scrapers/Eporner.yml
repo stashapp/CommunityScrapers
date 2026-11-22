@@ -60,6 +60,7 @@ xPathScrapers:
               - regex: '^[\s\S]*(https://imggen\.eporner\.com/\d+/\d+/\d+/\d+\.jpg)[\s\S]*$'
                 with: $1
 
+# TODO: take these cookies from scraper settings once Stash supports them, see https://github.com/stashapp/stash/issues/4433
 driver:
   cookies:
     - CookieURL: "https://www.eporner.com"

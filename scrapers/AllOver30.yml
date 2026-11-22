@@ -107,7 +107,7 @@ xPathScrapers:
           - replace:
               - regex: ^(/Model/\d+)/Bio$
                 with: https://members.allover30.com$1
-      Image: //div[@class="modelPic"]/img/@src
+      Images: //div[@class="modelPic"]/img/@src
       Measurements:
         selector: $info[strong[starts-with(., "Bust")] or strong[starts-with(., "Waist")] or strong[starts-with(., "Hips")]]/text()
         concat: "-"
@@ -144,6 +144,7 @@ xPathScrapers:
               selector: //table//td[span[@class="question"]]
               concat: "\n"
 
+# TODO: take these cookies from scraper settings once Stash supports them, see https://github.com/stashapp/stash/issues/4433
 driver:
   headers:
     # Requires an active AllOver30 membership. Copy the psso%5fTWVtYmVycyBPbmx5

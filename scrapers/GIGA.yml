@@ -63,7 +63,7 @@ xPathScrapers:
           - replace:
               - regex: "， "
                 with: ", "
-      URL:
+      URLs:
         selector: $videoItem/ul/li/a/@href
         postProcess:
           - replace:
@@ -101,7 +101,7 @@ xPathScrapers:
         Name:
           fixed: "Giga"
       Title: //div[@id="works_pic"]//h5
-      URL:
+      URLs:
         selector: //form[@name="form1"]/@action
         postProcess:
           - replace:
@@ -110,6 +110,7 @@ xPathScrapers:
 
 debug:
   printHTML: true
+# TODO: take these cookies from scraper settings once Stash supports them, see https://github.com/stashapp/stash/issues/4433
 driver:
   headers:
     - Key: Referer

@@ -208,7 +208,7 @@ xPathScrapers:
           - replace:
               - regex: 'Eyes:\s+(.*?)\s+Eyes'
                 with: $1
-      Image: //a[@label="Headshot"]/@href
+      Images: //a[@label="Headshot"]/@href
       Country:
         selector: $modal//li[contains(text(), 'From:')]
         postProcess:
@@ -238,6 +238,7 @@ xPathScrapers:
                 with: ""
       URLs: //link[@rel='canonical']/@href
 
+# TODO: take these cookies from scraper settings once Stash supports them, see https://github.com/stashapp/stash/issues/4433
 driver:
   cookies:
     - CookieURL: "https://www.adultempire.com"

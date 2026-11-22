@@ -52,11 +52,11 @@ xPathScrapers:
                 with: $1
       Tags:
         Name: $details//a[starts-with(@href,"/en/browse/category/")]/text()
+# TODO: take these cookies from scraper settings once Stash supports them, see https://github.com/stashapp/stash/issues/4433
 driver:
   useCDP: true
   headers:
     - Key: User-Agent
-      Value: ''
+      Value: ""
     - Key: Cookie
-      Value: ''
-# Last Updated October 21, 2023
+      Value: ""

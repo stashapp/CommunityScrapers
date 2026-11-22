@@ -3,6 +3,7 @@ name: gelbooru-json
 # loosely based on danbooru
 # specifically for rule34.xxx, see gelbooru-xpath
 # the API needs a rule34.xxx key: fill in api_key and user_id, then uncomment sceneByURL and imageByURL
+# TODO: take these credentials from scraper settings once Stash supports them, see https://github.com/stashapp/stash/issues/4433
 # sceneByURL:
 #   - action: scrapeJson
 #     url: &urls

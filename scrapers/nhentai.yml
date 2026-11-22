@@ -29,14 +29,14 @@ jsonScrapers:
       Details:
         selector: "{title.english,title.japanese}.@values"
         concat: "\n\n"
-      Code: 
+      Code:
         selector: id
-      URL: 
+      URLs:
         selector: id
         postProcess:
           - replace:
-            - regex: (\d+)
-              with: "https://nhentai.net/g/$1/"
+              - regex: (\d+)
+                with: "https://nhentai.net/g/$1/"
       Date:
         selector: upload_date
         postProcess:
@@ -53,12 +53,11 @@ jsonScrapers:
 # apikey must be popualated manually
 # shared apikey would bypass their ratelimit (as per site admin)
 # see https://nhentai.net/api/v2/docs for details
+# TODO: take these credentials from scraper settings once Stash supports them, see https://github.com/stashapp/stash/issues/4433
 driver:
   headers:
-     # API key seems to be optional
-     #- Key: Authorization
-     #  Value: Key YOUR_APIKEY_HERE
+    # API key seems to be optional
+    #- Key: Authorization
+    #  Value: Key YOUR_APIKEY_HERE
     - Key: User-Agent
       Value: stashapp/stash scraper
-
-# Last Updated May 2, 2026

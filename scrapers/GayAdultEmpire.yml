@@ -153,6 +153,7 @@ xPathScrapers:
           - replace:
               - regex: (\d+).*/(\d+)[^/]*$
                 with: https://imgs1cdn.adultempire.com/backdrop/6000/$2%5f$1/scene-1.jpg
+# TODO: take these cookies from scraper settings once Stash supports them, see https://github.com/stashapp/stash/issues/4433
 driver:
   cookies:
     - CookieURL: "https://www.gaydvdempire.com"

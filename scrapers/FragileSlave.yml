@@ -20,6 +20,7 @@ xPathScrapers:
         Name: $details/a
       Performers:
         Name: //span[@class="tour_update_models"]/a
+# TODO: take these cookies from scraper settings once Stash supports them, see https://github.com/stashapp/stash/issues/4433
 driver:
   headers:
     - Key: User-Agent

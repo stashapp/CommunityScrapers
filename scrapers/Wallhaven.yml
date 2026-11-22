@@ -16,7 +16,7 @@ imageByFragment:
 
 imageByURL:
   - action: scrapeJson
-    url: 
+    url:
       - wallhaven.cc/w/
       - whvn.cc/
     scraper: imageScraper
@@ -37,15 +37,15 @@ jsonScrapers:
         selector: data.created_at
         postProcess:
           - replace:
-            - regex: '^(\d{4}-\d{2}-\d{2}).*'
-              with: $1
+              - regex: '^(\d{4}-\d{2}-\d{2}).*'
+                with: $1
       Details:
-        selector: '[data.category,data.purity,data.uploader.username]'
+        selector: "[data.category,data.purity,data.uploader.username]"
         concat: " "
       Photographer:
         selector: '[data.tags.#(category=="Photographers")#,data.tags.#(category=="Artists")#]|@flatten.0.name'
       URLs:
-        selector: '[data.url,data.short_url]'
+        selector: "[data.url,data.short_url]"
       Studio:
         Name:
           selector: '[data.tags.#(category=="Companies & Logos")#,data.tags.#(category=="Photographers")#,data.tags.#(category=="Artists")#]|@flatten.0.name'
@@ -57,6 +57,7 @@ jsonScrapers:
           selector: '[[data.tags.#(category=="Models")#]|@flatten.#(name!="model")#,data.tags.#(category=="Pornstars")#,[data.tags.#(category%"*Characters")#]|@flatten.#(name!="anime girls")#]|@flatten.#.name'
 
 # NSFW needs account and API key
+# TODO: take these credentials from scraper settings once Stash supports them, see https://github.com/stashapp/stash/issues/4433
 #driver:
 #  headers:
 #    - Key: X-API-Key

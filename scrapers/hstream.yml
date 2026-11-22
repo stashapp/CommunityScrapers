@@ -13,12 +13,12 @@ name: HStream
 # Removing Unwanted Tags
 # If there are any tags you do NOT want to be scraped, search for and uncomment the "@RemoveTags" block(s) below...
 
-
 # ==================== HStream Login Cookies ====================
 
 # To scrape scenes that are hidden behind a login page, you must login to HStream and then provide your browser cookies. Update these cookies whenever they expire.
 # Login to HStream, inspect the page, navigate to the "Storage" tab, and search for these cookie items by name...
 
+# TODO: take these cookies from scraper settings once Stash supports them, see https://github.com/stashapp/stash/issues/4433
 driver:
   cookies:
     - CookieURL: "https://hstream.moe/"
@@ -58,9 +58,7 @@ sceneByFragment: # The "Scrape by Fragment" button
   scraper: sceneScraper
   queryURL: https://hstream.moe/hentai/{filename}
   queryURLReplace:
-
     filename:
-
       # --- @FilenameFormats ---
       # Sorted from most to least strict
       # Once a filename format is matched, dropping the file extension will prevent other formats down the list from also being matched
@@ -121,7 +119,6 @@ sceneByQueryFragment: # After using the "Query Search" box, scrape the selected 
   queryURL: "{url}"
   scraper: sceneScraper
 
-
 # ==================== Stash: Scene Details Page ====================
 
 sceneByURL: # The "Scrape URL" button
@@ -129,7 +126,6 @@ sceneByURL: # The "Scrape URL" button
     url:
       - hstream.moe/hentai/
     scraper: sceneScraper
-
 
 # ==================== Stash: Group New\Edit Page ====================
 
@@ -139,11 +135,9 @@ groupByURL: # The "Scrape URL" button
       - hstream.moe/hentai/
     scraper: groupScraper
 
-
 # ==================== HStream Scrapers ====================
 
 xPathScrapers:
-
   # -------------------------------- Episode Page --------------------------------
   sceneScraper:
     scene:
@@ -172,7 +166,7 @@ xPathScrapers:
         #       - regex: (-ep-\d+)-\d+\.webp$
         #         with: $1.webp
 
-      URL: //meta[@property="og:url"]/@content # HStream URL is not allowed in StashDB submissions
+      URLs: //meta[@property="og:url"]/@content # HStream URL is not allowed in StashDB submissions
       Details: //h2[contains(text(), "Description")]/following-sibling::p
       Tags:
         Name:
@@ -262,7 +256,7 @@ xPathScrapers:
   # Note: HStream does NOT support episode numbers when searching, only a series title
   sceneSearch:
     scene:
-      URL: //div[contains(@class,'p-1')]/a[contains(@href, "hentai")]/@href
+      URLs: //div[contains(@class,'p-1')]/a[contains(@href, "hentai")]/@href
       Title:
         selector: //div[contains(@class,'relative')]/img/@alt
       Image:
@@ -284,6 +278,3 @@ xPathScrapers:
               # # 4) Remove the extra frame index after the episode number
               # - regex: '(-ep-\d+)-\d+\.webp$'
               #   with: $1.webp
-
-
-# Last Updated August 01, 2026
