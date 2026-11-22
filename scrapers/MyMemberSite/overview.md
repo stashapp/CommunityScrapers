@@ -83,7 +83,7 @@ Scraper has been tested on 2026-11-12
 | Bindastimesuk             | https://bindastimesuk.com/152-school-girl-threesome                                                                                      |
 | Bitchy Goddess Evelyn     | https://mymember.site/bitchy-goddess-evelyn/23-humiliation-for-ugly-porn-addicted-losers                                                 |
 | Black Label XXX           | https://blacklabelxxx.com/98-house-of-decadence                                                                                          |
-| Black Rope Media          | https://mymember.site/black-rope-media/159-miriams-golden-shower-punishment                                                              |
+| Black Rope Media          | https://mymember.site/black-rope-media/157-miriam-blindfolded-and-sucking                                                                |
 | BlackCat - Fantasies      | https://blackcatfantasies.com/78-014-tropical-luxury                                                                                     |
 | Blaqtrunk                 | https://mymember.site/blaqtrunk/25-dbl-blaq-swirl                                                                                        |
 | Blow Up BendyBrooke       | https://blowupbrooke.com/407-inflatable-hips-and-ass-unboxing-and-testing                                                                |
@@ -169,7 +169,6 @@ Scraper has been tested on 2026-11-12
 | DropDeadSunny             | https://mymember.site/dropdeadsunny/33-thanks-babe                                                                                       |
 | Druffbandit               | https://mymember.site/druffbandit/28-brownie-druffbandit                                                                                 |
 | Dry Ice Productions       | https://mymember.site/dry-ice-productions/37-best-friends-stretching-out                                                                 |
-| Eastcoastpov              | https://eastcoastpov.com/28-raven                                                                                                        |
 | Ebony VR Solos AR Porn    | https://ebonyvrsolos.com/168-ebony-latina-pee-compilation                                                                                |
 | Ebonybooty49              | https://mymember.site/ebonybooty49/1708-dressing-room-fart-smelling-dick-farting                                                         |
 | Eckobelle                 | https://eckobelle.com/591-make-out-session                                                                                               |
@@ -257,7 +256,6 @@ Scraper has been tested on 2026-11-12
 | Harley Taboo              | https://mymember.site/harley-taboo/73-the-stepmommy-collection                                                                           |
 | HautCouture               | https://hautcouture.studio/26-victoria-benz-morning-sex                                                                                  |
 | Haven Moss                | https://havenmoss.com/152-condom-broke-so-i-let-him-creampie-me                                                                          |
-| Heather Austin            | https://heatheraustin.live/39-free-for-fans-jiggyjaguar-interview-with-heather-austin                                                    |
 | HeavyBound                | https://heavybound.com/293-ironman-bondage                                                                                               |
 | HeavyRubberAndBondage     | https://heavyrubberandbondage.com/354-the-adventures-of-bondagefan70-part8                                                               |
 | Heidi Haze                | https://hotwifeheidihaze.com/248-two-heidis-one-hardon                                                                                   |
@@ -419,7 +417,7 @@ Scraper has been tested on 2026-11-12
 | MissNekotied              | https://mymember.site/missnekotied-steelgoddess/34-the-creature-is-back                                                                  |
 | Missninastorm             | https://mymember.site/missninastorm/146-getting-my-slave-boy-ready-for-a-long-session                                                    |
 | Missy and George          | https://mymember.site/missy-and-george/360-20160422-missy-and-george-bj                                                                  |
-| Mistress Alexandra        | https://alexandrabalance.com/320-sissy-latex-maid-whipped-by-four-dominant-women-at-omega-compound                                       |
+| Mistress Alexandra        | https://mymember.site/mistress-alexandra/39-slut-training                                                                                |
 | Mistress Annaliease       | https://mymember.site/mistressannaliease/16-forbidden-views-hotel-peeping-pleasures                                                      |
 | Mistress Dolly            | https://mistressdolly.vip/180-head-maid-punishes-new-maid-for-not-doing-a-good-enough-job                                                |
 | Mistress K Noire VIP CLUB | https://mymember.site/mistresskittyslavecave/16-sexy-is                                                                                  |
@@ -429,7 +427,6 @@ Scraper has been tested on 2026-11-12
 | MistressJennaRae          | https://mymember.site/mistressjennarae/42-asmr-joi-cum-countdown-oiled-stroking-tied-balls-teasing-mistress-commands-your-release        |
 | Mistressmandy             | https://mymember.site/mistressmandy/14-money-on-the-table-song                                                                           |
 | Mixed Wrestling Heaven    | https://mixedwrestlingheaven.com/258-mwh0206-unleashed-tamsin-riley-dominates-him1                                                       |
-| MonaJade                  | https://monajade.com/168-would-you-spend-a-night-with-a-milf                                                                             |
 | Monica Dursey             | https://mymember.site/monicadursey/16-interactive-vibrator-play                                                                          |
 | Monica Raye               | https://mymember.site/monica-raye/13-asmr-for-the-good-boys-latex-fishnets-a-bbc-strap                                                   |
 | Monika FoXXX Studio       | https://monikafoxxx.com/66-monika-fox-real-homemade-anal-sex-creampie-with-favorite-man                                                  |
@@ -474,7 +471,7 @@ Scraper has been tested on 2026-11-12
 | Olivia Castro             | https://myoliviacastro.com/25-olivia-hotel                                                                                               |
 | One Lucky Guy             | https://oneluckyguy.net/177-one-lucky-guy-with-phoenix-angel                                                                             |
 | OnlyChelseaBuns           | https://mymember.site/onlychelseabuns/17-a-leprechauns-lust-the-capture                                                                  |
-| OuiLoveToes               | https://ouilovetoes.com/68-mellem-my-friends-m0m-foot-smelling-hj-footjob                                                                |
+| OuiLoveToes               | https://mymember.site/ouilovetoes/45-sabrina-cash-the-indebted-woman-foot-worship-footjob                                                |
 | Our Erotic Life           | https://oureroticlife.com/211-ooey-gooey-massage-for-rami                                                                                |
 | Partywithme               | https://mymember.site/partywithme/205-non-pop-clown                                                                                      |
 | Paula Marie               | https://paulamarie.co/209-good-morning-you                                                                                               |
@@ -600,7 +597,7 @@ Scraper has been tested on 2026-11-12
 | Smoke From Her Lips       | https://smokefromherlips.com/60-smoking-fetish-petite-small-tits-slim-cutie                                                              |
 | SmokeWithMe               | https://mymember.site/smokewithme/18-isnt-she-pretty                                                                                     |
 | Sneakergirly              | https://mymember.site/sneakergirly/761-amanda-anna-big-toy-crush-challenge                                                               |
-| Soleandsize               | https://mymember.site/soleandsize/1458-ivy-joi-girlfriend-distraction                                                                    |
+| Soleandsize               | https://mymember.site/soleandsize/1451-ivy-tiny-airbnb                                                                                   |
 | SophieSummers             | https://mymember.site/sophiesummers/129-gloved-closeup-handjob-xxl-condom-fleshlight-quickshot                                           |
 | Sorenzaa                  | https://mymember.site/sorenzaa/49-vido-solo-novembre-2025-explosive                                                                      |
 | SpanishxBarbiie           | https://mymember.site/spanishxbarbiie/483-spanish-barbiie-vs-big-tre                                                                     |
@@ -610,7 +607,7 @@ Scraper has been tested on 2026-11-12
 | Str8 Guy Solos            | https://str8guysolos.com/83-straight-manly-biker-dirt                                                                                    |
 | Str8GrownMen              | https://str8grownmen.com/125-harley-the-welder                                                                                           |
 | StrictExaminer            | https://strictexaminer.com/107-physical-exam-35-shy-20y-is-handcuffed                                                                    |
-| Strong Girls Rule         | https://sgr-wrestling.com/583-sgr0445-mistress-amrita-destroys-him-and-his-manhood                                                       |
+| Strong Girls Rule         | https://sgr-wrestling.com/524-sgr0425-pussy-punisher-ivy-rain-breaks-juliana                                                             |
 | Strong-Men                | https://strong-men.com/289-two-cumshots-in-one-day                                                                                       |
 | StudioDeManne             | https://mymember.site/studiodemanne/135-breathtaking-in-every-way                                                                        |
 | Sucktastycock             | https://sucktastycock.com/163-180                                                                                                        |
