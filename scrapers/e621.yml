@@ -36,7 +36,7 @@ jsonScrapers:
       Performers: &character
         Name: tags.character
       Studio: &artist
-        Name: tags.artist
+        Name: tags.artist.#(!="avoid_posting")#|#(!="conditional_dnp")#|#(!%"*_warning")#|#(!="unknown_artist")#|#(!="unknown_artist_signature")#|#(!="anonymous_artist")#|#(!="third-party_edit")#|0
       Tags: &tags_general
         Name: tags.general
       URLs: &source sources
