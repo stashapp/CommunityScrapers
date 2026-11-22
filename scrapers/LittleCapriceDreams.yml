@@ -14,8 +14,8 @@ xPathScrapers:
       Image:
         selector: $project//iframe[contains(@class, "bunny-cdn-content-iframe")]/@src
         postProcess:
-          - subScraper:
-              selector: //meta[@property="og:image"]/@content
+          - subScraper: //meta[@property="og:image"]/@content
+      URLs: //meta[@property="og:url"]/@content
       Studio:
         Name:
           selector: $project/@class
@@ -35,7 +35,7 @@ xPathScrapers:
                 wecumtoyou: Wecumtoyou
                 xpervo: Xpervo
       Date:
-        selector: //meta[@name="og:published_time"]/@content
+        selector: //meta[@property="og:published_time" or @name="og:published_time"]/@content
         postProcess:
           - parseDate: "2006-01-02T15:04:05-07:00"
       Performers:
