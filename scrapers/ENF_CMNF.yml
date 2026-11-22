@@ -93,6 +93,4 @@ jsonScrapers:
       Tags:
         Name: "0._embedded.wp:term.0.#.name"
 driver:
-  headers:
-    - Key: User-Agent
-      Value: stash-scraper/1.0
+  useSurf: true
