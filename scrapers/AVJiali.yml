@@ -20,10 +20,9 @@ sceneByQueryFragment:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title:
-        selector: //h5/a
+      Title: //h1
       Date:
-        selector: //div[@class="video-date"]/text()
+        selector: //div[@class="video-date"]
         postProcess:
           - replace:
               - regex: (\d+)(st|nd|rd|th)
@@ -34,19 +33,19 @@ xPathScrapers:
         URLs: //div[@class="cat"][1]/a/@href
       Tags:
         Name: //div[@class="cat"][2]/a
-      Details: 
+      Details:
         selector: //p[span[@class="readmore"]]
         postProcess:
           - replace:
               - regex: ... Read More
                 with:
       Image:
-        selector: //video[@id="videohtml5tour"]/@poster
+        selector: //video/@poster
         postProcess:
           - replace:
               - regex: ^//
                 with: "https://"
-      URL: //link[@rel="canonical"]/@href
+      URLs: //link[@rel="canonical"]/@href
       Studio:
         Name:
           fixed: AV Jiali
@@ -141,7 +140,7 @@ xPathScrapers:
               - regex: None
                 with:
       URLs: //link[@rel="canonical"][1]/@href
-      Image:
+      Images:
         selector: //div[@class="model-photo"]/img[@class="rounded"]/@src
         postProcess:
           - replace:
@@ -159,10 +158,9 @@ xPathScrapers:
     common:
       $videos: //div[@class="thumb"]/a
     scene:
-      Title: $videos/@title 
-      URL: $videos/@href
+      Title: $videos/@title
+      URLs: $videos/@href
       Image: $videos/img/@src
       Studio:
         Name:
           fixed: AVJiali
-# Last Updated September 17, 2025

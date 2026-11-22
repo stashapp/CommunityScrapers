@@ -19,13 +19,12 @@ sceneByQueryFragment:
   scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
-    common: 
+    common:
       $model: //div[@class="model-thumb"]
     scene:
-      Title:
-        selector: //span[@class="mroundedthumbs"]//@alt
+      Title: //span[@class="mroundedthumbs"]//@alt
       Date:
-        selector: //div[@class="video-date"]/text()
+        selector: //div[@class="video-date"]
         postProcess:
           - replace:
               - regex: (\d+)(st|nd|rd|th)
@@ -42,9 +41,9 @@ xPathScrapers:
           - replace:
               - regex: ... Read More
                 with:
-      URL: //link[@rel="canonical"]/@href
+      URLs: //link[@rel="canonical"]/@href
       Image:
-        selector: //video[@id="videohtml5tour"]/@poster
+        selector: //video/@poster
         postProcess:
           - replace:
               - regex: ^//
@@ -112,7 +111,7 @@ xPathScrapers:
                 with: $1
               - regex: None
                 with:
-      Details: 
+      Details:
         selector: //p[span[@class="readmore"]] | //div[@class="intro"]/p
         postProcess:
           - replace:
@@ -149,7 +148,7 @@ xPathScrapers:
       Gender:
         fixed: Female
       URLs: //link[@rel="canonical"][1]/@href
-      Image:
+      Images:
         selector: //img[@class="smallroundedthumbs"]/@src
         postProcess:
           - replace:
@@ -161,10 +160,9 @@ xPathScrapers:
     common:
       $videos: //div[@class="thumb"]/a
     scene:
-      Title: $videos/@title 
-      URL: $videos/@href
+      Title: $videos/@title
+      URLs: $videos/@href
       Image: $videos/img/@src
       Studio:
         Name:
           fixed: Tenshigao
-# Last Updated September 17, 2025
