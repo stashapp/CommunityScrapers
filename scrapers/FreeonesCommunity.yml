@@ -182,8 +182,7 @@ xPathScrapers:
         postProcess:
           - map:
               Unknown: ""
-      Images:
-        selector: //div[contains(@class,'image-container')]//a/img/@src
+      Images: //div[contains(@class,'image-container')]//a/img/@src
       Gender:
         selector: //h1/*[1]/*[1]/text()
         postProcess:
@@ -205,3 +204,8 @@ xPathScrapers:
           - replace:
               - regex: \skg
                 with: ""
+
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0
