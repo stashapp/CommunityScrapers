@@ -8,8 +8,8 @@ All sites below are part of the D2PASS pass operated by DTI. One install of this
 | Caribbeancom (EN)         | https://en.caribbeancom.com/eng/moviepages/092426-001/index.html      |
 | Caribbeancom Premium (JP) | https://www.caribbeancompr.com/moviepages/092426_001/index.html       |
 | Caribbeancom Premium (EN) | https://en.caribbeancompr.com/eng/moviepages/092426_001/index.html    |
-| Heyzo (JP)                | https://www.heyzo.com/moviepages/3942/index.html                      |
-| Heyzo (EN)                | https://en.heyzo.com/moviepages/3942/index.html                       |
+| Heyzo (JP)                | https://www.heyzo.com/movie/3942                                      |
+| Heyzo (EN)                | https://en.heyzo.com/movie/3942                                       |
 | H0930 (JP)                | https://www.h0930.com/moviepages/ki260924/index.html                  |
 | H0930 (EN)                | https://en.h0930.com/moviepages/ki260924/index.html                   |
 | C0930 (JP)                | https://www.c0930.com/moviepages/ki260924/index.html                  |

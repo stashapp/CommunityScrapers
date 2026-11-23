@@ -2,62 +2,52 @@ name: Heyzo-JP
 sceneByURL:
   - action: scrapeXPath
     url:
-      - www.heyzo.com/moviepages
+      - www.heyzo.com/movie
     scraper: sceneScraper
 sceneByFragment:
   action: scrapeXPath
-  queryURL: https://www.heyzo.com/moviepages/{filename}
-  # constructs the movie URL from the filename, provided that the filename includes the movie id
+  queryURL: https://www.heyzo.com/movie/{filename}
   queryURLReplace:
     filename:
-      # heyzo uses a 4 digit number for ids, preferred next to the brand token
-      # so a resolution or year elsewhere in the name cannot win
       - regex: (?i).*heyzo\D*(\d{4}).*
-        with: $1/index.html
+        with: $1
       - regex: (.*[^a-zA-Z\d])*(\d{4})[^a-zA-Z\d].*
-        with: $2/index.html
+        with: $2
   scraper: sceneScraper
-
 xPathScrapers:
   sceneScraper:
     common:
-      $table: //div[@class="info-bg"]/table/tbody/tr
+      $info: //div[contains(@class, "Movie_movieInfo")]
+      $canonical: //link[@rel="canonical"]/@href
     scene:
-      Title:
-        # the heading is "<title> - <performer>"
-        selector: //div[@id="movie"]/h1
+      Title: $info//h1
+      Code:
+        selector: $canonical
         postProcess:
           - replace:
-              - regex: ^(.*?)\s+-\s+[^-]*$
+              - regex: .*/movie/(\d+).*
                 with: $1
       URLs:
-        selector: //script[contains(.,"movieId =")]
+        selector: $canonical
         postProcess:
           - replace:
-              - regex: .*movieId\s=\s\'(\d+)\'.*
-                with: https://www.heyzo.com/moviepages/$1/index.html|https://en.heyzo.com/moviepages/$1/index.html
+              - regex: .*/movie/(\d+).*
+                with: https://www.heyzo.com/movie/$1|https://en.heyzo.com/movie/$1
         split: "|"
-      Details: //p[@class="memo"]
+      Details: $info/p[contains(@class, "Movie_memo")]
       Date:
-        selector: $table/td[contains(.,"Released") or contains(., "公開日")]/following-sibling::td
+        selector: $info/div[span="配信日"]/text()
         postProcess:
-          - parseDate: 2006-01-02
+          - parseDate: 2006年1月2日
       Performers:
-        Name: $table/td[contains(.,"Actress") or contains(.,"出演")]/following-sibling::td/a/span
-      Code:
-        selector: //script[contains(.,"movieId =")]
-        postProcess:
-          - replace:
-              - regex: .*movieId\s=\s\'(\d+)\'.*
-                with: $1
+        Name: $info//a[contains(@href, "/listpages/actor_")]
       Tags:
-        Name: //tr[@class="table-tag-keyword-small"]//ul[@class="tag-keyword-list"]/li
-      Image:
-        selector: //meta[@property="og:image"]/@content
-        postProcess:
-          - replace:
-              - regex: .*(www.*jpg).*
-                with: https://$1
+        Name: $info//div[contains(@class, "Movie_tags")]/a
+      Image: //meta[@property="og:image"]/@content
       Studio:
         Name:
           fixed: Heyzo
+driver:
+  headers:
+    - Key: Accept
+      Value: text/html

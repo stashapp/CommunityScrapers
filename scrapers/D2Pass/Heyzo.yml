@@ -1,118 +1,90 @@
 name: Heyzo
-
 sceneByName:
   action: scrapeXPath
-  queryURL: https://en.heyzo.com/search/{}/1.html?sort=pop
+  queryURL: https://en.heyzo.com/list/search/1?q={}
   scraper: sceneSearch
-
 sceneByQueryFragment:
   action: scrapeXPath
   queryURL: "{url}"
   scraper: sceneScraper
-
 sceneByURL:
   - action: scrapeXPath
     url:
-      - en.heyzo.com/moviepages
+      - en.heyzo.com/movie
     scraper: sceneScraper
-
 sceneByFragment:
   action: scrapeXPath
-  queryURL: https://en.heyzo.com/moviepages/{filename}
-  # Constructs the movie URL from the filename, provided that the filename includes the movie ID.
+  queryURL: https://en.heyzo.com/movie/{filename}
   queryURLReplace:
     filename:
-      # Heyzo uses a 4 digit number for movie IDs, preferred next to the brand
-      # token so a resolution or year elsewhere in the name cannot win
       - regex: (?i).*heyzo\D*(\d{4}).*
-        with: $1/index.html
+        with: $1
       - regex: (.*[^a-zA-Z\d])*(\d{4})[^a-zA-Z\d].*
-        with: $2/index.html
+        with: $2
   scraper: sceneScraper
-
 xPathScrapers:
   sceneScraper:
     common:
-      $table: //div[@class="info-bg"]//table[contains(@class,"movieInfo")]//tr
-      $movieObject: //script[contains(.,"movie_obj")]/text()
+      $info: //div[contains(@class, "Movie_movieInfo")]
+      $canonical: //link[@rel="canonical"]/@href
     scene:
-      Date:
-        selector: $table/td[contains(.,"Released")]/following-sibling::td/text()
-        postProcess:
-          - parseDate: 2006-01-02
-
-      Performers:
-        Name: $table/td[contains(.,"Actress")]/following-sibling::td/a/text()
-
-      Image:
-        selector: $movieObject
-        postProcess:
-          - replace:
-              - regex: .*"image"\s*:\s*"([^"]+).*
-                with: https:$1
-
-      Title:
-        selector: $movieObject
-        postProcess:
-          - replace:
-              - regex: .*"@type"\s*:\s*"Movie"\s*,\s*"name"\s*:\s*"([^"]+).*
-                with: $1
-
+      Title: $info//h1
       Code:
-        selector: //script[contains(.,"movieId")]/text()
+        selector: $canonical
         postProcess:
           - replace:
-              - regex: .*movieId\s*=\s*"([^"]+).*
+              - regex: .*/movie/(\d+).*
                 with: $1
-
       URLs:
-        selector: //script[contains(.,"movieId")]/text()
+        selector: $canonical
         postProcess:
           - replace:
-              - regex: .*movieId\s*=\s*"([^"]+).*
-                with: https://www.heyzo.com/moviepages/$1/index.html|https://en.heyzo.com/moviepages/$1/index.html
+              - regex: .*/movie/(\d+).*
+                with: https://www.heyzo.com/movie/$1|https://en.heyzo.com/movie/$1
         split: "|"
-
+      Date:
+        selector: $info/div[span="Release Date"]/text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Performers:
+        Name: $info//a[contains(@href, "/listpages/actor_")]
       Tags:
-        Name: $table/td[contains(.,"Type") or contains(.,"Sex Styles") or contains(.,"Theme")]/following-sibling::td/a/text()
-
+        Name: $info//div[contains(@class, "Movie_tags")]/a
+      Image: //meta[@property="og:image"]/@content
       Studio:
         Name:
           fixed: Heyzo
-
   sceneSearch:
     common:
-      $card: //div[@id="movies"]/div[contains(@class,"movie")]
+      $title: //div[contains(@class, "List_movies")]//a[@class="title"]
     scene:
+      Title: $title
       Code:
-        selector: $card/a[1]/@href
+        selector: $title/@href
         postProcess:
           - replace:
-              - regex: '.*/moviepages/(\d{4})/index\.html.*'
+              - regex: .*/movie/(\d+).*
                 with: $1
-
       URLs:
-        selector: $card/a[1]/@href
+        selector: $title/@href
         postProcess:
           - replace:
-              - regex: "^/"
+              - regex: ^/
                 with: https://en.heyzo.com/
-
       Image:
-        selector: $card/a[1]/img/@data-original
+        selector: //div[contains(@class, "List_movies")]//img[@alt="Thumbnail"]/@src
         postProcess:
           - replace:
-              - regex: "^/"
+              - regex: ^/
                 with: https://en.heyzo.com/
-
       Date:
-        selector: $card//p[contains(@class,"release")]/text()
+        selector: $title/following-sibling::p
         postProcess:
-          - replace:
-              - regex: '^\s*Release:\s*'
-                with: ""
-          - parseDate: 2006-01-02
-
+          - parseDate: January 2, 2006
       Studio:
         Name:
           fixed: Heyzo
+driver:
+  headers:
+    - Key: Accept
+      Value: text/html
