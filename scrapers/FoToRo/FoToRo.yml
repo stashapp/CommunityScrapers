@@ -6,7 +6,6 @@ sceneByURL:
     url:
       - breastsinpain.com/20
       - cuffedinuniform.com/20
-      - cuffedoutdoors.com/20
       - hogtie-bondage.com/20
       - hucows.com/20
       - shockchallenge.com/20
@@ -57,6 +56,10 @@ sceneByURL:
     url:
       - boundlife.com
     scraper: boundLifeScene
+  - action: scrapeXPath
+    url:
+      - cuffedoutdoors.com/20
+    scraper: cuffedOutdoorsScene
 
 jsonScrapers:
   apiScene:
@@ -135,8 +138,6 @@ jsonScrapers:
                 with: CB${1}
               - regex: '(?i)^ciu(\d+)$'
                 with: CIU${1}
-              - regex: '(?i)^cod(\d+)$'
-                with: COD${1}
               - regex: '(?i)^sc(\d+)$'
                 with: SC${1}
               - regex: '(?i)^tx(\d+)$'
@@ -152,7 +153,6 @@ jsonScrapers:
                 breastsinpain.com: Breasts in Pain
                 chastitybabes.com: Chastity Babes
                 cuffedinuniform.com: Cuffed In Uniform
-                cuffedoutdoors.com: Cuffed Outdoors
                 hogtie-bondage.com: Hogtie-Bondage
                 hucows.com: HuCows
                 shockchallenge.com: Shock Challenge
@@ -291,6 +291,35 @@ xPathScrapers:
         Name:
           fixed: Bound Life
       Image: //meta[@property="og:image"]/@content[not(contains(.,"blank.jpg"))]|(//a/img[@border="1"])[1]/@src
+
+  cuffedOutdoorsScene:
+    common:
+      $post: //article[contains(@class, "type-post")]
+    scene:
+      Title: $post//h1[@class="card_title"]
+      URLs: //link[@rel="canonical"]/@href
+      Date:
+        selector: $post//div[@class="entry-meta"]
+        postProcess:
+          - replace:
+              - regex: (?s).*?(\d{1,2} [A-Z][a-z]+ \d{4}).*
+                with: $1
+          - parseDate: 2 January 2006
+      Details:
+        selector: $post//div[@class="entry-content"]/p
+        concat: "\n\n"
+      Performers:
+        Name: $post//a[@rel="tag"]
+      Tags:
+        Name:
+          selector: $post//a[@rel="category tag"]
+          postProcess:
+            - *dropUpdates
+      Image: $post//img[contains(@class, "wp-post-image")]/@src
+      Code: $post//a[contains(@href, "?add-to-cart")]/@data-product_sku
+      Studio:
+        Name:
+          fixed: Cuffed Outdoors
 
   girlAsylumScene:
     common:
