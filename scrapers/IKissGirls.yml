@@ -1,4 +1,4 @@
-name: "IKissGirls"
+name: IKissGirls
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -14,16 +14,17 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: :\sVideo
-                with:
+                with: ""
       Date:
         selector: //div[strong/text()='Released:']/text()[2]
         postProcess:
           - parseDate: January 2, 2006
       Details: //div[h3/text()='Description:']/text()[2]
+      URLs: //link[@rel="canonical"]/@href
       Tags:
-        Name: //ul[@class='tags']//a/text()
+        Name: //ul[@class='tags']//a
       Performers:
-        Name: //div[@class="update-info-block models-list-thumbs"]//span/text()
+        Name: //div[@class="update-info-block models-list-thumbs"]//span
       Studio:
         Name: //meta[@name="author"]/@content
       Image:

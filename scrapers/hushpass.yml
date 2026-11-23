@@ -7,13 +7,13 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title:
-        selector: //meta[@property="og:title"]/@content
+      Title: //meta[@property="og:title"]/@content
       Date:
         selector: //div[@class="update-info-row"]//strong[contains(.,"Released:")]/following-sibling::text()
         postProcess:
           - parseDate: January 2, 2006
       Details: //div[@class="update-info-block"]//h3[contains(.,"Description:")]/following-sibling::text()
+      URLs: //link[@rel="canonical"]/@href
       Tags:
         Name: //ul[@class="tags"]//a
       Performers:
@@ -26,5 +26,4 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: ^
-                with: "https://hushpass.com"
-# Last Updated March 11, 2021
+                with: https://hushpass.com

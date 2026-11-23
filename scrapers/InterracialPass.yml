@@ -1,4 +1,4 @@
-name: "InterracialPass"
+name: InterracialPass
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -14,6 +14,7 @@ xPathScrapers:
         postProcess:
           - parseDate: January 2, 2006
       Details: //h3[contains(.,"Description:")]/following-sibling::text()
+      URLs: //link[@rel="canonical"]/@href
       Tags:
         Name: //ul[@class="tags"]//a
       Performers:
@@ -23,7 +24,9 @@ xPathScrapers:
         concat: "|"
         postProcess:
           - replace:
-              - regex: '/(tour|t1)/\|'
+              - regex: ^[^|]+$
+                with: ""
+              - regex: /(tour|t1)/\|
                 with: ""
       Studio:
         Name: //a[@class="navbar-brand"]
