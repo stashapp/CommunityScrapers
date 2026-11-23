@@ -1,0 +1,53 @@
+name: Jonno Media
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - uknakedmen.com/tour/refstat.php
+      - uknakedmen.com/tour/showgal.php
+    scraper: ukNakedMenScene
+  - action: scrapeXPath
+    url:
+      - butchdixon.com/tour/refstat.php
+      - butchdixon.com/tour/showgal.php
+    scraper: butchDixonScene
+xPathScrapers:
+  ukNakedMenScene:
+    scene:
+      Title: &title //div[@id="videonew"]//h2
+      Details: &details
+        selector: //div[@id="videonew"]//p
+        concat: "\n\n"
+      Image:
+        selector: &player //script[contains(., 'jwplayer("videoPlayer").setup')]
+        postProcess:
+          - replace:
+              - regex: (?s).*image:\s*'([^']+)'.*
+                with: https://www.uknakedmen.com/tour/$1
+      Studio:
+        Name:
+          selector: *title
+          postProcess:
+            - replace:
+                - regex: ^.+$
+                  with: UK Naked Men
+  butchDixonScene:
+    scene:
+      Title: *title
+      Details: *details
+      Image:
+        selector: *player
+        postProcess:
+          - replace:
+              - regex: (?s).*image:\s*'([^']+)'.*
+                with: https://www.butchdixon.com/tour/$1
+      Studio:
+        Name:
+          selector: *title
+          postProcess:
+            - replace:
+                - regex: ^.+$
+                  with: Butch Dixon
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0
