@@ -1,76 +1,61 @@
 name: AdultDvdMarketPlace
-
 groupByURL:
   - action: scrapeXPath
     url:
       - adultdvdmarketplace.com/xcart/adult_dvd/dvd_view.php?adult_dvd_id=
       - adultdvdmarketplace.com/dvd_view
     scraper: movieScraper
-
 sceneByName:
   action: scrapeXPath
-  queryURL: https://www.adultdvdmarketplace.com/xcart/adult_dvd/dvd_search.php?type=title&search={}
+  queryURL: https://www.adultdvdmarketplace.com/search?type=title&search={}
   scraper: sceneSearch
-
 sceneByURL:
   - action: scrapeXPath
     url:
       - adultdvdmarketplace.com/dvd_view
     scraper: sceneScraper
-
 sceneByQueryFragment:
   action: scrapeXPath
   queryURL: "{url}"
   scraper: sceneScraper
-
 xPathScrapers:
   movieScraper:
     group:
       Name: &title //meta[@property="og:title"]/@content
       URLs: &urls //meta[@property="og:url"]/@content
-      Director: &director //span[contains(text(),"Director")]/following-sibling::a/text()
+      Director: &director //dt[text()="Director"]/following-sibling::dd[1]/a
       Date: &date
-        selector: //span[contains(text(),"Released")]/following-sibling::text()
-        postProcess:
-          - parseDate: 01/2006
-      Synopsis: &details //h3[contains(text(), "Description")]/following-sibling::p
-      Studio: &studio
-        Name: //span[@itemprop="brand"]/text()
-      FrontImage: &frontImage //a[contains(@href,"large_front_image")]/@href
-      BackImage:
-        selector: *frontImage
+        selector: //dt[text()="Released"]/following-sibling::dd[1]
         postProcess:
           - replace:
-              - regex: large_front_image
-                with: large_back_image
-
+              - regex: ^(\d{2})/(\d{4})$
+                with: $2-$1
+      Synopsis: &details //div[@x-ref="descBody"]/text()
+      Studio: &studio
+        Name: //dt[text()="Studio"]/following-sibling::dd[1]/a
+      FrontImage: &image //meta[@property="og:image"]/@content
   sceneSearch:
     common:
-      $selection: //div[contains(concat(' ',normalize-space(@class),' '),' product-col ')]
+      $result: //div[@x-show="view === 'list'"]/div
     scene:
-      Title: $selection//h4/a
+      Title: $result//h3/a
       URLs:
-        selector: $selection//h4/a/@href
+        selector: $result//h3/a/@href
         postProcess:
           - replace:
               - regex: ^
                 with: https://www.adultdvdmarketplace.com
-      Image: $selection//a/img/@src
-
+      Image: $result//img/@src
   sceneScraper:
     scene:
       Title: *title
+      URLs: *urls
       Details: *details
       Date: *date
       Director: *director
-      Image: *frontImage
+      Image: *image
       Studio: *studio
       Performers:
-        Name: //h3[text()="Cast"]/following-sibling::a
+        Name: //div[text()="Cast"]/following-sibling::p[1]/a
       Tags:
-        Name: //span[text()="Category:"]/following-sibling::a
-
-driver:
-  useCDP: true
-  clicks:
-    - xpath: //a[contains(text(), "ENTER")]
+        Name: //dt[text()="Category"]/following-sibling::dd[1]/a
