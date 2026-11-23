@@ -30,17 +30,10 @@ xPathScrapers:
         Name: //dd[@class="tags"]//a[contains(@href, "match=tags")]
       Studio:
         Name: //div[@class="item-details-main"]//a
-# TODO: take these cookies from scraper settings once Stash supports them, see https://github.com/stashapp/stash/issues/4433
+# TODO: take this cookie from scraper settings once Stash supports them, see https://github.com/stashapp/stash/issues/4433
 driver:
-  useCDP: true
-  cookies:
-    - Cookies:
-        # You will need to provide the values for the following cookies. View storage under the inspect menu in your browser while logged in.
-        - Name: "NG_GG_username"
-          Domain: ".newgrounds.com"
-          Value: "[insert value here]"
-          Path: "/"
-        - Name: "vmk1du5I8m"
-          Domain: ".newgrounds.com"
-          Value: "[insert value here]"
-          Path: "/"
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0
+    - Key: Cookie
+      Value: ng_remember=[insert value here]
