@@ -1,55 +1,49 @@
 name: derpibooru
-# based on gelbooru-xpath
-# https://github.com/stashapp/CommunityScrapers/issues/2277
 sceneByURL:
-  - action: scrapeXPath
+  - action: scrapeJson
     url: &urls
       - https://derpibooru.org/images/
       - https://furbooru.org/images/
+    queryURL: "{url}"
+    queryURLReplace: &apiURL
+      url:
+        - regex: ^(https://[^/]+)/images/(\d+).*$
+          with: $1/api/v1/json/images/$2
     scraper: postScraper
-
 imageByURL:
-  - action: scrapeXPath
+  - action: scrapeJson
     url: *urls
+    queryURL: "{url}"
+    queryURLReplace: *apiURL
     scraper: postScraper
-
-xPathScrapers:
+jsonScrapers:
   postScraper:
     image:
       Date: &date
-        selector: //div[contains(@class,"image-metabar")]/div/time/@datetime
+        selector: image.created_at
         postProcess:
           - replace:
               - regex: T.+
                 with: ""
           - parseDate: 2006-01-02
-      Performers: &performers
-        Name:
-          selector: //div[@data-tag-category="character"]/span/a[@class="tag__name"]
       Studio: &artist
         Name:
-          selector: //div[@data-tag-category="origin"]/@data-tag-name
+          selector: image.tags.#(%"artist:*")
           postProcess:
             - replace:
-                - regex: "artist:"
+                - regex: "^artist:"
                   with: ""
-      Tags: &tag_string
-        Name:
-          selector: //div[@data-tag-category=""]/@data-tag-name
-      URLs: &source
-        selector: //div[@class="image_sources"]//a/@href
-      Details: &details
-        selector: //div[@class="paragraph"]
+      Tags: &tags
+        Name: image.tags.#(!%"*:*")#
+      URLs: &source image.source_urls
+      Details: &details image.description
     scene:
       Date: *date
-      Performers: *performers
       Studio: *artist
-      Tags: *tag_string
+      Tags: *tags
       URLs: *source
       Details: *details
-
 driver:
-  useCDP: true
   headers:
-    - Key: "User-Agent"
-      Value: "stashapp/stash scraper"
+    - Key: User-Agent
+      Value: stash-scraper/1.0
