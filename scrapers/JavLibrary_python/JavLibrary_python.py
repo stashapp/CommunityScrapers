@@ -9,19 +9,16 @@ from py_common import log
 from py_common.config import get_config
 from py_common.deps import ensure_requirements
 from py_common.jav import extract_codes
+from py_common.proxy import stash_requests
 from py_common.types import ScrapedPerformer, ScrapedScene, ScrapedTag
 from py_common.util import scraper_args
 
-ensure_requirements("requests", "lxml")
+ensure_requirements("lxml")
 
-import requests  # noqa: E402
 from lxml import html  # noqa: E402
 
 config = get_config(
     default="""
-# javlibrary sits behind a Cloudflare challenge that only a real browser can solve:
-# run FlareSolverr (https://github.com/FlareSolverr/FlareSolverr) and point this at it
-flaresolverr_url = http://localhost:8191/v1
 # Site language: en, ja, tw or cn
 language = ja
 """
@@ -29,8 +26,6 @@ language = ja
 
 BASE = "https://www.javlibrary.com"
 LANGUAGE = config.language
-# Cloudflare's clearance cookie only works together with the user agent that earned it
-CLEARANCE_FILE = Path(__file__).with_name("clearance.json")
 
 IGNORE_TAGS = {
     "Features Actress",
@@ -49,60 +44,25 @@ IGNORE_NAME_REVERSE = {"Lily Heart"}
 # Blu-ray editions duplicate the DVD release under the same code
 BLU_RAY = re.compile(r"\(Blu-ray|（ブルーレイ")
 
-session = requests.Session()
-
-
-def use_clearance(clearance: dict[str, Any]) -> None:
-    session.headers["User-Agent"] = clearance["userAgent"]
-    session.cookies.update(clearance["cookies"])
-
-
-def solve_challenge(url: str) -> None:
-    log.info(
-        f"Solving Cloudflare's challenge with FlareSolverr ({config.flaresolverr_url})"
-    )
-    try:
-        res = requests.post(
-            config.flaresolverr_url,
-            json={"cmd": "request.get", "url": url, "maxTimeout": 60000},
-            timeout=90,
-        ).json()
-    except requests.RequestException as e:
-        log.error(
-            f"FlareSolverr is unreachable at {config.flaresolverr_url}: javlibrary"
-            " can't be scraped without it, see JavLibrary_python/config.ini"
-        )
-        log.debug(str(e))
-        sys.exit(1)
-    if res.get("status") != "ok":
-        log.error(f"FlareSolverr failed to solve the challenge: {res.get('message')}")
-        sys.exit(1)
-
-    solution = res["solution"]
-    clearance = {
-        "userAgent": solution["userAgent"],
-        "cookies": {c["name"]: c["value"] for c in solution["cookies"]},
-    }
-    CLEARANCE_FILE.write_text(json.dumps(clearance), encoding="utf-8")
-    use_clearance(clearance)
-
 
 def fetch(url: str) -> tuple[html.HtmlElement, str] | None:
     url = re.sub(r"^https?://(www\.)?javlib(rary)?\.com", BASE, url)
-    for attempt in range(2):
-        res = session.get(url, timeout=20)
-        if res.status_code == 403 and "Just a moment" in res.text and not attempt:
-            solve_challenge(url)
-            continue
-        if "maintenance" in res.url:
-            log.error("javlibrary is down for maintenance")
-            return None
-        if not res.ok:
-            log.error(f"Failed to fetch {url}: {res.status_code} {res.reason}")
-            return None
-        return html.fromstring(res.content), res.url
-    log.error(f"Still challenged by Cloudflare after solving it for {url}")
-    return None
+    # Cloudflare challenges plain requests, py_common.proxy falls back to FlareSolverr
+    try:
+        res = stash_requests.get(url, timeout=20)
+    # py_common.proxy raises a bare Exception once every backend has failed
+    except Exception as e:  # noqa: BLE001
+        log.error(
+            f"Failed to fetch {url}: {e}. javlibrary needs FlareSolverr, see FLARESOLVERR_URL"
+        )
+        return None
+    if "maintenance" in res.url:
+        log.error("javlibrary is down for maintenance")
+        return None
+    if not res.ok:
+        log.error(f"Failed to fetch {url}: {res.status_code} {res.reason}")
+        return None
+    return html.fromstring(res.content), res.url
 
 
 def localized(url: str, language: str = LANGUAGE) -> str:
@@ -262,8 +222,6 @@ def scene_from_fragment(args: dict[str, Any]) -> ScrapedScene | None:
 
 if __name__ == "__main__":
     op, args = scraper_args()
-    if CLEARANCE_FILE.exists():
-        use_clearance(json.loads(CLEARANCE_FILE.read_text(encoding="utf-8")))
 
     match op, args:
         case "scene-by-url", {"url": url} if url:

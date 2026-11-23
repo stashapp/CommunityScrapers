@@ -158,7 +158,8 @@ def flaresolverr_req(url, method="get", postData=None, proxy=None, cookies=None)
   # Same dict as requests' cookies= keyword, so callers can pass one value to every backend
   if cookies:
     payload["cookies"] = [{"name": name, "value": value} for name, value in cookies.items()]
-  response = requests.post(FLARESOLVERR_URL, json=payload, timeout=60)
+  # Solvers give up after 60 seconds by default, a shorter wait here would beat them to it
+  response = requests.post(FLARESOLVERR_URL, json=payload, timeout=90)
   if response.status_code != 200:
     raise Exception(f"FlareSolverr request failed with status code {response.status_code}: {response.text}")
   solution = response.json().get("solution")
@@ -199,7 +200,8 @@ class CookieCache:
     self.cache[host] = {
       "cookies": cookies,
       "useragent": useragent,
-      "expiry": clearance['expiry'] if clearance else None
+      # FlareSolverr names it expiry, byparr expires
+      "expiry": (clearance.get('expiry') or clearance.get('expires')) if clearance else None
     }
     self.update()
   def update(self):
