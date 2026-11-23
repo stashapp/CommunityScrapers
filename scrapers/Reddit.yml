@@ -1,54 +1,44 @@
-name: "Reddit"
+name: Reddit
 sceneByURL:
   - action: scrapeJson
-    url:
+    url: &urls
       - reddit.com
-    queryURL: https://api.reddit.com/api/info?id=t3_{url}
-    queryURLReplace:
+    queryURL: &queryURL https://www.reddit.com/comments/{url}.json
+    queryURLReplace: &postID
       url:
-        - regex: '.+\/comments\/([a-z0-9]{6,7})\/.+'
-          with: "${1}"
-    scraper: t3Scraper
+        - regex: .+/comments/([a-z0-9]{6,7})/.+
+          with: $1
+    scraper: postScraper
 galleryByURL:
   - action: scrapeJson
-    url:
-      - reddit.com
-    queryURL: https://api.reddit.com/api/info?id=t3_{url}
-    queryURLReplace:
-      url:
-        - regex: '.+\/comments\/([a-z0-9]{6,7})\/.+'
-          with: "${1}"
-    scraper: t3Scraper
+    url: *urls
+    queryURL: *queryURL
+    queryURLReplace: *postID
+    scraper: postScraper
 imageByURL:
-- action: scrapeJson
-  url:
-  - reddit.com
-  queryURL: https://api.reddit.com/api/info?id=t3_{url}
-  queryURLReplace:
-    url:
-    - regex: '.+\/comments\/([a-z0-9]{6,7})\/.+'
-      with: "${1}"
-  scraper: t3Scraper
-
+  - action: scrapeJson
+    url: *urls
+    queryURL: *queryURL
+    queryURLReplace: *postID
+    scraper: postScraper
 jsonScrapers:
-  # t3 is the internal data type for posts
-  # https://www.reddit.com/dev/api/
-  t3Scraper:
+  postScraper:
     scene: &redditPost
-      Title: data.children.0.data.title
+      Title: 0.data.children.0.data.title
       Date:
-        selector: data.children.0.data.created_utc
+        selector: 0.data.children.0.data.created_utc
         postProcess:
           - parseDate: unix
       Performers:
-        Name: data.children.0.data.author
+        Name: 0.data.children.0.data.author
       Studio:
-        Name: data.children.0.data.subreddit_name_prefixed
+        Name: 0.data.children.0.data.subreddit_name_prefixed
     gallery: *redditPost
     image: *redditPost
-
-# driver:
-#   headers:
-#     - Key: User-Agent
-#       Value: stashapp/stash:v1 (by /u/feederbox826)
-# Last Updated April 5, 2026
+# TODO: take this cookie from scraper settings once Stash supports them, see https://github.com/stashapp/stash/issues/4433
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0
+    - Key: Cookie
+      Value: reddit_session=[insert value here]
