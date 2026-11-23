@@ -8,6 +8,13 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - tgirl-network.com/tour/show_video.php
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: "&tview=[^&]*"
+          with: ""
+        - regex: $
+          with: "&tview=new"
     scraper: tgirlNetworkScraper
   - action: scrapeXPath
     url:
