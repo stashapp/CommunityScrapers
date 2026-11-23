@@ -1,11 +1,4 @@
 name: MissAV (jp)
-sceneByURL:
-  - action: scrapeXPath
-    url:
-      - missav.ai
-      - missav.ws
-      - missav.live
-    scraper: sceneScraper
 sceneByName:
   action: scrapeXPath
   queryURL: https://missav.live/ja/search/{}
