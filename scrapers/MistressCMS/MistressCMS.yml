@@ -73,6 +73,4 @@ xPathScrapers:
       Tags:
         Name: //div[contains(@class, "videotags")]/a[contains(@href, "/t/")]
 driver:
-  headers:
-    - Key: "User-Agent"
-      Value: "stash-scraper/1.0"
+  useSurf: true
