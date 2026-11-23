@@ -138,13 +138,13 @@ def to_scraped_scene(service: str, creator_id: str, kind: str, post_id: str, tar
     profile = api(f"{service}/user/{creator_id}/profile") or {}
     username = profile.get("name") or post.get("creatorName") or creator_id
 
-    caption = post.get("caption", "")
+    caption = post.get("caption") or ""
     date = (
         datetime.fromtimestamp(ts, tz=timezone.utc).strftime("%Y-%m-%d")
         if (ts := dig(post, ("published", "added")))
         else None
     )
-    title = (post.get("title", "")).strip() or title_from_caption(caption) or f"{username} - {date or post_id}"
+    title = (post.get("title") or "").strip() or title_from_caption(caption) or f"{username} - {date or post_id}"
 
     unlocked = [a for a in post.get("attachments") or [] if not a.get("locked")]
     target = next((a for a in unlocked if a.get("sha256") == target_sha), None) if target_sha else None
