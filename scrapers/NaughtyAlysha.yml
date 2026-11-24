@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - naughtyalysha.com/tour/trailers
+      - naughtyalysha.com:80/tour/trailers
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -17,19 +18,23 @@ xPathScrapers:
           - parseDate: January 2, 2006
       Details: //div[@class="videoDetails clear"]/p
       Tags:
-        Name: //li[contains(text(), "Tags:")]/following-sibling::li/a/text()
+        Name: //li[contains(text(), "Tags:")]/following-sibling::li/a
       Performers:
         Name: $performer
         URLs: $performer/@href
       Image:
-        selector: $image/@src0_4x | $image/@src0_3x | $image/@src0_2x | $image/@src0_1x | //script[contains(text(),"src0_3x")]/text()
+        selector: //base/@href | $image/@src0_4x | $image/@src0_3x | $image/@src0_2x | $image/@src0_1x | //script[contains(text(),"src0_3x")]/text()
+        concat: __SEP__
         postProcess:
-          - replace:
-              - regex: .*src0_3x="([^"]+).*
-                with: $1
-              - regex: ^
-                with: https://naughtyalysha.com
+          - javascript: |
+              var parts = value.split("__SEP__");
+              if (parts.length < 2) return "";
+              var archived = parts[0].match(/^(https?:\/\/web\.archive\.org\/web\/\d+)\/(https?:\/\/[^\/]+)/);
+              var found = parts.slice(1).join(" ").match(archived ? /\/[^"\s]*-1x\.jpg/ : /\/[^"\s]*-3x\.jpg/);
+              if (!found) return "";
+              var path = found[0];
+              if (archived) return archived[1] + "im_/" + archived[2] + path;
+              return parts[0].replace(/^(https?:\/\/[^\/]+).*$/, "$1") + path;
       Studio:
         Name:
           fixed: Naughty Alysha
-# Last Updated September 17, 2025
