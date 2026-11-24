@@ -8,6 +8,7 @@ Scraper has been tested on 2026-10-02
 | Alt Erotic            | https://alterotic.com/videos/nicole-rae-give-taylor-steele-a-sloppy-bj-then-squirts-all-over-him                                  |
 | Amazing Films         | https://amazingfilms.com/videos/lilas-wild-ride                                                                                   |
 | Anal Only             | https://tour.analonly.com/scenes/lola-and-isabel-throw-some-ass                                                                   |
+| BareTwinks            | https://tour.baretwinks.com/videos/horny-studs-end-night-with-creampie                                                            |
 | Beddable Boys         | https://www.gaylifenetwork.com/videos/hunter-wylde-fucks-tyler-bradley?scene_code=bb174_hunterwylde_tylerbradley                  |
 | Bemefi                | https://bemefi.com/videos/my-little-sweet-pussy-9-scene-3                                                                         |
 | Benefit Monkey        | https://www.benefitmonkey.com/scenes/anna-de-ville-dirty-maid-gives-me-a-messy-saliva-filled-blowjob                              |
@@ -16,6 +17,7 @@ Scraper has been tested on 2026-10-02
 | BJ Raw                | https://bjraw.com/videos/face-painting-isabella                                                                                   |
 | Blake Mason           | https://blakemason.com/videos/BM1650_Max_Duran_And_Roni_Yarz                                                                      |
 | Bopping Babes         | https://boppingbabes.com/videos/red-or-dead                                                                                       |
+| BoyCrush              | https://tour.baretwinks.com/videos/patrick-penetrates-tyson                                                                       |
 | Collective Corruption | https://collectivecorruption.com/videos/connective-tissues                                                                        |
 | Come Inside           | https://www.comeinside.com/videos/a-two-cock-massage-for-victoria                                                                 |
 | CosplayXGirls         | https://cosplayxgirls.com/videos/team-aqua-gangbang                                                                               |

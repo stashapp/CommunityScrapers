@@ -8,7 +8,13 @@ from unicodedata import normalize
 
 from py_common import log
 from py_common.deps import ensure_requirements
-from py_common.types import ScrapedGroup, ScrapedPerformer, ScrapedScene, ScrapedStudio
+from py_common.types import (
+    ScrapedGroup,
+    ScrapedPerformer,
+    ScrapedScene,
+    ScrapedStudio,
+    ScrapedTag,
+)
 from py_common.util import dig, guess_nationality, replace_all, scraper_args
 
 ensure_requirements("requests")
@@ -25,6 +31,7 @@ studio_map = {
     "analonly.com": "Anal Only",
     "analjesse.com": "Anal Jesse",
     "beddableboys.com": "Beddable Boys",
+    "baretwinks.com": "BareTwinks",
     "bemefi.com": "Bemefi",
     "benefitmonkey.com": "Benefit Monkey",
     "bestbareback.com": "Best Bareback",
@@ -34,6 +41,7 @@ studio_map = {
     "blakemason.com": "Blake Mason",
     "blakemason-after-hours.com": "Blake Mason",
     "boppingbabes.com": "Bopping Babes",
+    "boycrush.com": "BoyCrush",
     "cannonprod.com": "Cannon Productions",
     "collectivecorruption.com": "Collective Corruption",
     "comeinside.com": "Come Inside",
@@ -150,6 +158,7 @@ studio_map = {
 NO_SITE_OF_THEIR_OWN = {
     "3rdwheel.toughlovex.com",
     "blakemason-after-hours.com",
+    "boycrush.com",
     "drkarl.toughlovex.com",
     "emotwinks.com",
     "exposedemos.com",
@@ -216,6 +225,13 @@ def tour_url(url: str) -> str:
     )
 
 
+# BareTwinks' old tour URLs redirect to the scene's page on the current site
+def follow_legacy_redirect(url: str) -> str:
+    if re.match(r"https?://[^/]*baretwinks\.com/bare-twinks-watch/", url):
+        return requests.head(url, allow_redirects=True).url
+    return url
+
+
 def fix_url(url: str) -> str:
     url = url.replace("suckthisdick.com", "hobybuchanon.com")
     url = url.replace("api.nyseedxxx.com", "nyseedxxx.com")
@@ -231,8 +247,8 @@ def strip_tags(html: str) -> str:
             self.convert_charrefs = True
             self.text = []
 
-        def handle_data(self, d):
-            self.text.append(d)
+        def handle_data(self, data):
+            self.text.append(data)
 
         def get_data(self):
             return "".join(self.text)
@@ -350,7 +366,7 @@ def to_scraped_performer(raw_performer: dict, page_url: str) -> ScrapedPerformer
         "name": raw_performer["name"],
         "urls": [make_performer_url(raw_performer["slug"], site, page_url)],
     }
-    tags = []
+    tags: list[ScrapedTag] = []
 
     if gender := raw_performer.get("gender"):
         performer["gender"] = gender
@@ -590,22 +606,14 @@ def scrape_scene(url: str) -> ScrapedScene | None:
     if content := props.get("content"):
         # Members-only parts of a shoot are public only in the trailer page's
         # related_scenes, so they're addressed as <trailer url>#<content id>
-        if (
-            (part := urllib.parse.urlparse(url).fragment)
-            and part != str(content["id"])
-            and not (
-                content := next(
-                    (
-                        x
-                        for x in content.get("related_scenes", [])
-                        if str(x["id"]) == part
-                    ),
-                    None,
-                )
+        if (part := urllib.parse.urlparse(url).fragment) and part != str(content["id"]):
+            content = next(
+                (x for x in content.get("related_scenes", []) if str(x["id"]) == part),
+                None,
             )
-        ):
-            log.error(f"No related scene with id {part} on this page")
-            return None
+            if not content:
+                log.error(f"No related scene with id {part} on this page")
+                return None
         scene = to_scraped_scene_from_content(content, url)
     if video := props.get("video"):
         scene = to_scraped_scene_from_video(video, url)
@@ -635,7 +643,7 @@ if __name__ == "__main__":
     result = None
     match op, args:
         case "scene-by-url", {"url": url} if url:
-            result = scrape_scene(tour_url(clean_url(url)))
+            result = scrape_scene(tour_url(clean_url(follow_legacy_redirect(url))))
         case "performer-by-url", {"url": url} if url:
             result = scrape_performer(tour_url(clean_url(url)))
         case _:
