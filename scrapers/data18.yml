@@ -118,6 +118,8 @@ xPathScrapers:
           - replace:
               - regex: '^Description\s*-\s*'
                 with:
+      Tags:
+        Name: //b[text()='Categories:']/following-sibling::a
       FrontImage: //a[@id='enlargecover']/@data-featherlight
       BackImage: //a[text()='+Back']/@href
     scene:
@@ -138,6 +140,8 @@ xPathScrapers:
         Name: $studio
         URLs: $studio/@href
       Director: //p[b[contains(text(),'Director')]]//a[@class='bold']
+      Tags:
+        Name: //b[text()='Categories:']/following-sibling::a
       Performers:
         Name: $performer
         URLs: $performer/@href
