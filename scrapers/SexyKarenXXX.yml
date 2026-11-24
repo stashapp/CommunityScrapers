@@ -1,0 +1,51 @@
+name: Sexy Karen XXX
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - tour.sexykarenxxx.com/video/
+    queryURL: https://nats.iocash.com/tour_api.php/content/sets?cms_block_id=101341&data_types=1&slug={url}
+    queryURLReplace:
+      url:
+        - regex: .+/video/([^/?#]+).*
+          with: $1
+    scraper: sceneScraper
+jsonScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: sets.0.name
+        postProcess:
+          - replace:
+              - regex: \s+
+                with: " "
+      Details: sets.0.description
+      Date: sets.0.added_nice
+      URLs:
+        selector: sets.0.slug
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://tour.sexykarenxxx.com/video/
+      Image:
+        selector: sets.0.preview_formatted.thumb.@values|@reverse.0.0.[fileuri,signature].@tostr
+        postProcess:
+          - replace:
+              - regex: ^\["(.*)","(.*)"\]$
+                with: $1?$2
+              - regex: \\/
+                with: /
+              - regex: ^
+                with: https://c81cc3abe2.mjedge.net
+      Tags:
+        Name: sets.0.[data_types.#(shortname=="category").data_values.#.name,data_types.#(shortname=="tags").data_values.#.name].@flatten
+      Performers:
+        Name: sets.0.data_types.#(shortname=="models").data_values.#.name
+      Studio:
+        Name:
+          fixed: Sexy Karen XXX
+driver:
+  headers:
+    - Key: X-NATS-cms-area-id
+      Value: 9bc7d190-f6c4-4c7a-a220-e4a3de0e11de
+    - Key: X-nats-entity-decode
+      Value: "1"

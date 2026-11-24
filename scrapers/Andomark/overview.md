@@ -62,7 +62,6 @@ Scraper has been tested on 2026-09-14
 | Rion King                | https://rionkingxxx.com/updates/RionKingSolo2.html                                                                           | oldStyle                       |
 | Sean Michaels            | https://seanmichaelsxxx.com/updates/Athena-and-Sean.html                                                                     | oldStyle                       |
 | Secret Susan             | https://secretsusan.com/updates/YummygirlzSecretsusan32.html                                                                 | oldStyle                       |
-| Sexy Karen XXX           | https://sexykarenxxx.com/tour2/updates/Karen-Licks-Her-Lawyers-Pussy.html                                                    | oldStyle                       |
 | She Seduced Me           | https://sheseducedme.com/updates/Seduced-By-The-Best-Friend.html                                                             | oldStyle                       |
 | Sofie Marie XXX          | https://sofiemariexxx.com/scenes/SofieMarieXXXSMWhiteSheerBandeau457_highres.html                                            | newStyle                       |
 | Spik Irons' YummySexClub | https://yummysexclub.com/updates/SofieMarieXXXFrenchCuisineOlivaSpike.html                                                   | oldStyle                       |
@@ -77,7 +76,6 @@ Scraper has been tested on 2026-09-14
 | VanillaPOV               | https://vanillapov.com/updates/Hotwife-Sofie-Marie-Hooks-Up-With-MySecretLifePOV.html                                        | oldStyle                       |
 | WhoreBaitHals            | https://www.whorebaithals.com/tour/updates/Paris-buys-a-NEW-Custom-TRUCK.html                                                | oldStyle                       |
 | Will Tile XXX            | https://willtilexxx.com/updates/Neighbor-CICO717.html                                                                        | oldStyle                       |
-| X Rated Wife             | https://xratedwife.com/tour/updates/FUCKMEBAREBACKANDCUMONMYWEDDINGRING.html                                                 | oldStyle                       |
 | XBratz                   | https://xbrats.com/scenes/Teaching-the-Teacher-a-Foot-Lesson_vids.html                                                       | newStyle                       |
 | XXXcellentAdventures     | https://xxxcellentadventures.com/updates/Tropicgals-Shower-Scene-Special-Edition.html                                        | oldStyle                       |
 | Xev Unleashed            | https://xevunleashed.com/updates/Homecumming.html                                                                            | oldStyle                       |

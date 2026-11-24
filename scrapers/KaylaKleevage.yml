@@ -1,14 +1,56 @@
 name: Kayla Kleevage
 sceneByURL:
+  - action: scrapeJson
+    url:
+      - tour.kaylakleevage.com/video/
+    queryURL: https://nats.iocash.com/tour_api.php/content/sets?cms_block_id=101248&data_types=1&slug={url}
+    queryURLReplace:
+      url:
+        - regex: .+/video/([^/?#]+).*
+          with: $1
+    scraper: sceneScraper
   - action: scrapeXPath
     url:
       - kaylakleevage.com/tour/
-    scraper: sceneScraper
-xPathScrapers:
+    scraper: archivedScraper
+jsonScrapers:
   sceneScraper:
     scene:
       Title:
-        selector: //h1
+        selector: sets.0.name
+        postProcess:
+          - replace:
+              - regex: \s+
+                with: " "
+      Details: sets.0.description
+      Date: sets.0.added_nice
+      URLs:
+        selector: sets.0.slug
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://tour.kaylakleevage.com/video/
+      Image:
+        selector: sets.0.preview_formatted.thumb.@values|@reverse.0.0.[fileuri,signature].@tostr
+        postProcess:
+          - replace:
+              - regex: ^\["(.*)","(.*)"\]$
+                with: $1?$2
+              - regex: \\/
+                with: /
+              - regex: ^
+                with: https://c81cc3abe2.mjedge.net
+      Tags:
+        Name: sets.0.[data_types.#(shortname=="category").data_values.#.name,data_types.#(shortname=="tags").data_values.#.name].@flatten
+      Performers:
+        Name: sets.0.data_types.#(shortname=="models").data_values.#.name
+      Studio:
+        Name:
+          fixed: Kayla Kleevage
+xPathScrapers:
+  archivedScraper:
+    scene:
+      Title: //h1
       Details: //div[@class="videocontent"]/p
       Image:
         selector: >-
@@ -31,17 +73,15 @@ xPathScrapers:
           - parseDate: 01/02/2006
       Tags:
         Name: //div[@class="videodetails"]//a[contains(@href,"categories")]
-      # Site doesn't credit any performers as of January 2025
       Performers:
         Name:
           fixed: Kayla Kleevage
       Studio:
         Name:
-          selector: //base/@href
-          postProcess:
-            - replace:
-                - regex: ^.*https://(www\.)?([^\.]+).+
-                  with: $2
-            - map:
-                kaylakleevage: Kayla Kleevage
-# Last Updated January 28, 2025
+          fixed: Kayla Kleevage
+driver:
+  headers:
+    - Key: X-NATS-cms-area-id
+      Value: fa35cdfe-ce13-48c2-b79e-9b3115706729
+    - Key: X-nats-entity-decode
+      Value: "1"
