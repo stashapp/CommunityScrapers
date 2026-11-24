@@ -1,4 +1,4 @@
-name: "SpankBang"
+name: SpankBang
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -31,9 +31,9 @@ xPathScrapers:
       Studio:
         Name: //div[@data-testid="profile"]//a/p
       Performers:
-        Name: //div[@data-testid="video-tags"]//a[contains(@href, "/pornstar/")]
+        Name: //div[@data-testid="video-tags"]//a[contains(@href, "/pornstar/") and not(starts-with(@href, "/s/"))]
         URLs:
-          selector: //div[@data-testid="video-tags"]//a[contains(@href, "/pornstar/")]/@href
+          selector: //div[@data-testid="video-tags"]//a[contains(@href, "/pornstar/") and not(starts-with(@href, "/s/"))]/@href
           postProcess:
             - replace:
                 - regex: ^
