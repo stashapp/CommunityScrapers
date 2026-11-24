@@ -22,12 +22,11 @@ xPathScrapers:
         Name: //ul[@class='tags']/li/a
       Studio:
         Name:
-          fixed: ArchAngel
+          fixed: ArchAngel Video
       Image:
         selector: $videoContent//img/@src
         postProcess:
           - replace:
-              # Site appears to be dead so we're aiming for archived URLs
               - regex: ^/web/
                 with: "https://web.archive.org/web/"
               - regex: ^/

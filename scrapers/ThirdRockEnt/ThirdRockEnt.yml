@@ -1,5 +1,5 @@
 name: ThirdRockEnt
-# scrapes: Abbie Maley, Anal Amateur, AnalBBC, Analized, Bad Daddy POV, Bad Family POV, Bad Mommy POV, Broken Sluts, Cum Dumpster Teens, DTF Sluts, Full Porn Network, Girlfaction, James Deen, Pork Vendors, Porn Force, Public Sex Date, Slut Inspection, Slutty BBWs, Teasing and Pleasing, Teenage Anal Sluts, Teenage Tryouts, Twisted Visual, Your Mom Does Porn
+# scrapes: Abbie Maley, Anal Amateur, AnalBBC, Analized, ArchAngel Video, Bad Daddy POV, Bad Family POV, Bad Mommy POV, Broken Sluts, Cum Dumpster Teens, DTF Sluts, Full Porn Network, Girlfaction, James Deen, Pork Vendors, Porn Force, Public Sex Date, Slut Inspection, Slutty BBWs, Teasing and Pleasing, Teenage Anal Sluts, Teenage Tryouts, Twisted Visual, Your Mom Does Porn
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -27,6 +27,7 @@ sceneByURL:
 
       # There is currently no known way to scrape the correct
       # substudio when scraping from these network sites
+      - archangelvideo.com/trailers/
       - badfamilypov.com/trailers/
       - fullpornnetwork.com/trailers/
 
@@ -72,6 +73,7 @@ xPathScrapers:
                 analamateur: Anal Amateur
                 analbbc: AnalBBC
                 analized: Analized
+                archangelvideo: ArchAngel Video
                 baddaddypov: Bad Daddy POV
                 badfamilypov: Bad Family POV
                 badmommypov: Bad Mommy POV
