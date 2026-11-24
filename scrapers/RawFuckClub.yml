@@ -1,4 +1,4 @@
-name: Raw Fuck Club # (Network)
+name: Raw Fuck Club
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -12,7 +12,7 @@ performerByURL:
 performerByName:
   action: scrapeXPath
   scraper: globalSearch
-  queryURL: "https://www.rawfuckclub.com/search?search={}&page=1"
+  queryURL: https://www.rawfuckclub.com/search?search={}&page=1
 sceneByFragment:
   action: scrapeXPath
   scraper: globalSearch
@@ -30,92 +30,80 @@ sceneByFragment:
     filename:
       - regex: \.\w+$
         with:
-      - regex: '[^a-zA-Z\d\-._~\s]' # clean filename so that it can construct a valid url
+      - regex: '[^a-zA-Z\d\-._~\s]'
         with:
       - regex: " "
         with: "%20"
 xPathScrapers:
   sceneScraper:
+    common:
+      $badges: //div[@class="tag-badges"]/a
     scene:
-      Title: //div[@class="col-12 pr-0"]/h2[not(contains(@class, 'section-title'))]
+      Title: //div[contains(@class, "watch-movie-title-row")]//h2
       Performers:
-        Name: //span[@class="badge badge-primary"]
-        URLs: //span[@class="badge badge-primary"]/../@href
+        Name: $badges/span[contains(@class, "text-bg-primary")]
+        URLs: $badges[span[contains(@class, "text-bg-primary")]]/@href
       Tags:
-        Name: //span[@class="badge badge-secondary"]
+        Name: $badges/span[contains(@class, "text-bg-secondary")]
       Details: //p[@class="watch-description"]
       Image: //meta[@property="og:image"]/@content
       URLs: //link[@rel="canonical"]/@href
       Date:
-        selector: //p[@class='watch-published-date']/text()
+        selector: //p[@class="watch-published-date"]
         postProcess:
           - replace:
-              - regex: "Reposted on (.+)([.])"
-                with: $1
-              - regex: "Posted on (.+)"
+              - regex: ^(?:Rep|P)osted (?:on )?(.+?)\.?$
                 with: $1
           - parseDate: January 2, 2006
-      # Updated 2024-06-03 to support the broader Raw Fuck Club (Network) as well as the normal content
-      # Per community consensus what this does is add the freelancers as a studio, which will then be linkable to the
-      # parent studio ("Raw Fuck Club (Network)")
       Studio:
         Name: //div[@class="watch-channel-name"]/a[1]
         URLs:
           selector: //div[@class="watch-channel-name"]/a[1]/@href
           postProcess:
             - replace:
-                - regex: ^\/ #if the url is relative (starts with slash), we append the domain
-                  with: "https://www.rawfuckclub.com/"
-        # Image: //img[@class="channel-image-small"]/@src
-        # Parent: Ticket opened: #4919, would love to add a parent, but not possible
-        #  Name:
-        #   fixed: 'Raw Fuck Club (Network)'
-        #  URL:
-        #    fixed: 'https://www.rawfuckclub.com/'
+                - regex: ^/
+                  with: https://www.rawfuckclub.com/
   performerScraper:
     performer:
-      Name: //h1[@class="model-header model-header-name"]/text()
+      Name: //h1[@class="model-header model-header-name"]
       URLs: >
         //link[@rel="canonical"]/@href
         | //a[contains(@href,'instagram.com/')]/@href
         | //a[contains(@href,'twitter.com/') or contains(@href,'x.com/')]/@href
-      Details: //div[@class="model-description"]/text()
+      Details:
+        selector: //div[@class="model-description"]/text()
+        concat: "\n"
       Images: //div[@class="model-image-placeholder"]/img/@src
       Country:
-        selector: //span/img[contains(@src,'map_pin')]/../text()
+        selector: //img[contains(@src, "map_pin")]/following-sibling::span[contains(@class, "d-sm-inline-block")]
         postProcess:
-          - replace: # Remove whitespace at the start and end
-              - regex: ^\s+|\s+$
+          - replace:
+              - regex: ^.*,\s*
                 with: ""
-      # Sometimes the site uses //a[@class='model-external-twitter-url']/@href, other times, it's freeform, so we use this method
       Gender:
         fixed: male
   globalSearch:
-    # The global search returns channels (sub-studios) which are also the performers in the independent section of the site
-    # It also returns the scenes.
-    # Note: Some channels may have multiple performers, so this is imperfect, but it's the best we can get our of the site.
     performer:
       Name: //div[@class='channel-info-block']/h2/a[1]
       URLs:
         selector: //div[@class='channel-info-block']/h2/a[1]/@href
         postProcess:
           - replace:
-              - regex: ^\/ #if the url is relative (starts with slash), we append the domain
-                with: "https://www.rawfuckclub.com/"
+              - regex: ^/
+                with: https://www.rawfuckclub.com/
     scene:
       Title: //div[@class='last-update-title']/a/@title
       URLs:
         selector: //div[@class='last-update-title']/a/@href
         postProcess:
           - replace:
-              - regex: ^\/ #if the url is relative (starts with slash), we append the domain
-                with: "https://www.rawfuckclub.com/"
+              - regex: ^/
+                with: https://www.rawfuckclub.com/
 driver:
-  useCDP: false
   cookies:
-    - CookieURL: "https://www.rawfuckclub.com"
+    - CookieURL: https://www.rawfuckclub.com
       Cookies:
-        - Name: "CONSENT"
-          Domain: ".rawfuckclub.com"
+        - Name: CONSENT
+          Domain: .rawfuckclub.com
           Value: "Y"
-          Path: "/"
+          Path: /
