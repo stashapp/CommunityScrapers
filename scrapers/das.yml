@@ -7,45 +7,50 @@ sceneByURL:
 sceneByFragment:
   action: scrapeXPath
   queryURL: https://dasdas.jp/works/detail/{filename}
-  # constructs the movie URL from the filename, provided that the filename includes the movie id
   queryURLReplace:
     filename:
-      - regex: .*(\d{3,4}).*
-        with: DASS$1
+      - regex: (?:.*[^A-Za-z])?([A-Za-z]{2,6})-?(\d{3,4}).*
+        with: $1$2
   scraper: sceneScraper
 
 xPathScrapers:
   sceneScraper:
+    common:
+      $row: //div[@class="p-workPage__table"]/div[@class="item"]
+      $code: //div[@class="p-workPage__table"]/div[@class="item"]/div[contains(.,"品番")]/following-sibling::div/div//span[contains(.,"DVD")]/../text()
     scene:
       Title: //h2[@class="p-workPage__title"]
       Details: //p[@class="p-workPage__text"]
-      URL: 
-        selector: //div[@class="p-workPage__table"]/div[@class="item"]/div[contains(.,"品番")]/following-sibling::div/div//span[contains(.,"DVD")]/../text()
+      URLs:
+        selector: $code
         postProcess:
           - replace:
-            - regex: ^
-              with: "https://dasdas.jp/works/detail/"
+              - regex: ^
+                with: https://dasdas.jp/works/detail/
       Date:
-        selector: //div[@class="p-workPage__table"]/div[@class="item"]/div[contains(.,"発売日")]/following-sibling::div/div/a
+        selector: $row/div[contains(.,"発売日")]/following-sibling::div/div/a
         postProcess:
           - replace:
               - regex: (\d{4})年(\d{1,2})月(\d{1,2})日
                 with: $1-$2-$3
           - parseDate: 2006-1-2
-      Director: //div[@class="p-workPage__table"]/div[@class="item"]/div[contains(.,"監督")]/following-sibling::div/div/p
+      Director:
+        selector: $row/div[contains(.,"監督")]/following-sibling::div/div/p
+        postProcess:
+          - replace:
+              - regex: ^-+$
+                with: ""
       Performers:
-        Name:
-          selector: //div[@class="p-workPage__table"]/div[@class="item"]/div[contains(.,"女優")]/following-sibling::div/div/a
+        Name: $row/div[contains(.,"女優")]/following-sibling::div/div/a
       Tags:
-        Name: //div[@class="p-workPage__table"]/div[@class="item"]/div[contains(.,"ジャンル")]/following-sibling::div/div/a
-      Image:
-        selector: //img[@class="swiper-lazy"][1]/@data-src
+        Name: $row/div[contains(.,"ジャンル")]/following-sibling::div/div/a
+      Image: //img[@class="swiper-lazy"][1]/@data-src
       Studio:
         Name:
           fixed: ダスッ！
       Code:
-        selector: //div[@class="p-workPage__table"]/div[@class="item"]/div[contains(.,"品番")]/following-sibling::div/div//span[contains(.,"DVD")]/../text()
+        selector: $code
         postProcess:
           - replace:
-              - regex: .*(\d{3,4}).*
-                with: DASS-$1
+              - regex: ^([A-Za-z]+)(\d+)$
+                with: $1-$2

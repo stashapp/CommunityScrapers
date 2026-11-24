@@ -16,61 +16,55 @@ sceneByQueryFragment:
 xPathScrapers:
   sceneScraper:
     common:
-      $title: //h2[@class='p-workPage__title']/text()
-      $text: //p[@class='p-workPage__text']/text()
       $infoTable: //div[@class='p-workPage__table']
+      $code: //div[@class='p-workPage__table']//div[text() = '品番']/../div[@class='td']//p/text()
     scene:
-      URL:
-        selector: $infoTable//div[text() = '品番']/../div[@class='td']//p/text()
+      URLs:
+        selector: $code
         postProcess:
-          - javascript: |
-              if (value && value.length) {
-                return "https://bibian-av.com/works/detail/" + value
-              }
+          - replace:
+              - regex: ^
+                with: https://bibian-av.com/works/detail/
       Code:
-        selector: $infoTable//div[text() = '品番']/../div[@class='td']//p/text()
+        selector: $code
         postProcess:
           - replace:
-            - regex: (\D+)(\d+)
-              with: $1-$2
-      Title:
-        selector: $infoTable//div[text() = '品番']/../div[@class='td']//p/text() | //h2[@class='p-workPage__title']/text()
-        concat: " "
-        postProcess:
-          - javascript: |
-              if (value && value.length) {
-                var vals = value.split(" ");
-                vals[0] = vals[0].replace(/(\D+)(\d+)/, "$1-$2")
-                return "["+vals[0]+"] "+vals.slice(1).join(" ");
-              }
+              - regex: ^([A-Za-z]+)(\d+)$
+                with: $1-$2
+      Title: //h2[@class='p-workPage__title']
       Date:
-        selector: $infoTable//div[text() = '発売日']/../div[@class='td']//a/text()
+        selector: $infoTable//div[text() = '発売日']/../div[@class='td']//a
         postProcess:
           - replace:
-            - regex: (\d+)年(\d+)月(\d+)日
-              with: $1-$2-$3
+              - regex: (\d+)年(\d+)月(\d+)日
+                with: $1-$2-$3
           - parseDate: 2006-1-2
       Director:
-        selector: $infoTable//div[text() = '監督']/../div[@class='td']//p/text()
+        selector: $infoTable//div[text() = '監督']/../div[@class='td']//p
+        postProcess:
+          - replace:
+              - regex: ^-+$
+                with: ""
       Studio:
-        Name:
-          selector: $infoTable//div[text() = 'レーベル']/../div[@class='item']//a/text()
-        URL:
+        Name: $infoTable//div[text() = 'レーベル']/../div[@class='item']//a
+        URLs:
           fixed: https://bibian-av.com
       Performers:
-        Name: $infoTable//div[text() = '女優']/../div[@class='td']//a/text()
+        Name: $infoTable//div[text() = '女優']/../div[@class='td']//a
       Tags:
-        Name:
-          selector: $infoTable//div[text() = 'ジャンル']/..//div[@class='item']//a/text()
-      Details: $text
+        Name: $infoTable//div[text() = 'ジャンル']/..//div[@class='item']//a
+      Details: //p[@class='p-workPage__text']
       Image: //div[@class='swiper-wrapper']/div[1]/img/@data-src | //section[@class='l-slider']//img/@src
   sceneSearchScraper:
     common:
-      $scene: //div[@class='swiper-wrapper']//div[@class='item']
+      $scene: //div[@class='swiper-wrapper']//div[@class='item']/div[1]/a[contains(@href, "/works/detail/")]
     scene:
-      Title:
-        selector: $scene/div[1]/a/@href | $scene/div[1]/a/div[@class='hover__child']/p[@class='text']/text()
-        concat: " | "
-      Image: $scene/div[1]/a/img/@data-src
-      URL: $scene/div[1]/a/@href
-# Last Updated Mai 29, 2024
+      Title: $scene/div[@class='hover__child']/p[@class='text']
+      Code:
+        selector: $scene/@href
+        postProcess:
+          - replace:
+              - regex: .*/([A-Za-z]+)(\d+)$
+                with: $1-$2
+      Image: $scene/img/@data-src
+      URLs: $scene/@href
