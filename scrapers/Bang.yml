@@ -67,7 +67,13 @@ xPathScrapers:
     scene:
       Title: $title
       Details: //meta[@name="description"]/@content
-      Image: //meta[@property="og:image"]/@content
+      Image:
+        selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+              # the c_ prefix is the censored copy of the same screenshot
+              - regex: /c_([^/]+)$
+                with: /$1
       Date: //meta[@property="video:release_date"]/@content
       # TODO: enable when scrape dialog can show durations
       # Duration: //p[contains(text(), "Playtime:")]/span
