@@ -7,7 +7,7 @@ galleryByURL:
     scraper: sceneScraper
 sceneByName:
   action: scrapeXPath
-  queryURL: "https://www.pinkoclub.com/new-video.php?q={}"
+  queryURL: https://www.pinkoclub.com/new-video.php?q={}
   scraper: searchResultsScraper
 sceneByQueryFragment:
   action: scrapeXPath
@@ -24,19 +24,21 @@ xPathScrapers:
     scene:
       Title: &title //div[@class="titolo-video"]/h2 | //h1[@class="video-title"]
       Director:
-        selector: //div[@class="caption captionvideo"]/strong | $detailList/li[span[@class="k" and contains(text(),"Director")]]/span[@class="v"]
+        selector: //div[@class="caption captionvideo"]/strong | $detailList/li[span[@class="k"][starts-with(., "Regi") or starts-with(., "Dire") or starts-with(., "Réal")]]/span[@class="v"]
         postProcess:
           - replace:
-              - regex: "Directed by (.*)"
-                with: "$1"
+              - regex: Directed by (.*)
+                with: $1
       Performers: &performers
-        Name: //h4/a | //div[contains(@class,"side-card--performer")]/div[@class="performer"]/div/strong
+        Name: //h4/a | //a[@class="performer-chip"]/span
       Details: &details
-        selector: //div[@class="caption captionvideo"] | //span[@class="video-desc__full"]
+        selector: //div[@class="caption captionvideo"] | //p[@id="video-desc"]
         postProcess:
           - replace:
-              - regex: "Directed by (.*)$"
+              - regex: Directed by (.*)$
                 with: ""
+      Tags: &tags
+        Name: //div[@class="tag-cloud"]/a
       Date:
         selector: //div[@class="video-meta"]
         postProcess:
@@ -44,14 +46,13 @@ xPathScrapers:
               - regex: '(?s).*(\d{2})/(\d{2})/(\d{4}).*'
                 with: $3-$2-$1
           - parseDate: 2006-01-02
-      Image:
-        selector: &imageSel //meta[@property="og:image"]/@content
+      Image: &imageSel //meta[@property="og:image"]/@content
       Studio: &studio
         Name:
-          selector: $detailList/li[span[@class="k" and contains(text(),"Line")]]/span[@class="v" and (text()="XTime" or text()="Pinko Comics" or text()="Vintage" or text()="Pinko Classic" or text()="Frameleaks" or text()="Pinko Casting" or text()="Opera")] | //link[@rel="canonical"]/@href
+          selector: $detailList/li/span[@class="v" and (text()="XTime" or text()="Pinko Comics" or text()="Vintage" or text()="Pinko Classic" or text()="Frameleaks" or text()="Pinko Casting" or text()="Opera")] | //link[@rel="canonical"]/@href
           postProcess:
             - replace:
-                - regex: "https://.*/(.*)/.*"
+                - regex: https://.*/(.*)/.*
                   with: $1
             - map:
                 frameleaks: Frameleaks
@@ -73,12 +74,13 @@ xPathScrapers:
         selector: *imageSel
         postProcess:
           - replace:
-              - regex: "https://.*/.*/(.*)/.*"
+              - regex: https://.*/.*/(.*)/.*
                 with: $1
     gallery:
       Title: *title
       Performers: *performers
       Details: *details
+      Tags: *tags
       Studio: *studio
       Code: *code
   searchResultsScraper:
@@ -92,4 +94,4 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: ^
-                with: "https://www.pinkoclub.com"
+                with: https://www.pinkoclub.com
