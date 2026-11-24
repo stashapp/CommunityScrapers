@@ -16,7 +16,7 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: &title
-        selector: //meta[@property="og:title"]/@content
+        selector: //meta[@property="og:title"][//link[@rel="canonical"][contains(@href, "/video/") or contains(@href, "/album/")]]/@content
         postProcess:
           - replace:
               - regex: \s*\|\s*Fitting-Room\.com$
@@ -43,7 +43,11 @@ xPathScrapers:
         Name: //meta[@property="video:tag"]/@content
       Studio: &studio
         Name:
-          fixed: Fitting-Room
+          selector: //link[@rel="canonical"][contains(@href, "/video/") or contains(@href, "/album/")]/@href
+          postProcess:
+            - replace:
+                - regex: ^.*$
+                  with: Fitting-Room
       Image:
         selector: //script[@type="application/ld+json"][contains(., "thumbnailUrl")]
         postProcess:
