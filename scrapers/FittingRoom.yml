@@ -1,38 +1,59 @@
-name: "FittingRoom"
+name: FittingRoom
 sceneByURL:
   - action: scrapeXPath
     url:
+      - fitting-room.com/video/
       - fitting-room.com/videos/
     scraper: sceneScraper
 galleryByURL:
   - action: scrapeXPath
     url:
+      - fitting-room.com/album/
       - fitting-room.com/albums/
     scraper: galleryScraper
 
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //head/title
-      Details: //meta[@name="twitter:description"]/@content
-      Performers:
+      Title: &title
+        selector: //meta[@property="og:title"]/@content
+        postProcess:
+          - replace:
+              - regex: \s*\|\s*Fitting-Room\.com$
+                with: ""
+      Code:
+        selector: //link[@rel="canonical"]/@href
+        postProcess:
+          - replace:
+              - regex: .*/video/(\d+)/.*
+                with: $1
+      Details:
+        selector: //div[@class="item"][contains(., "Description:")]/em/text()
+        concat: "\n\n"
+      Date:
+        selector: //meta[@property="video:release_date"]/@content
+        postProcess:
+          - replace:
+              - regex: T.*
+                with: ""
+          - parseDate: 2006-01-02
+      Performers: &performers
         Name: //div[@class="item"][contains(., "Models:")]/a
       Tags:
         Name: //meta[@property="video:tag"]/@content
-      Studio:
+      Studio: &studio
         Name:
           fixed: Fitting-Room
-      Image: //meta[@name="twitter:image"]/@content
-      URL: //meta[@property="og:url"]/@content
+      Image:
+        selector: //script[@type="application/ld+json"][contains(., "thumbnailUrl")]
+        postProcess:
+          - replace:
+              - regex: (?s).*"thumbnailUrl":\s*"([^"]+)".*
+                with: $1
+      URLs: &urls //link[@rel="canonical"]/@href
   galleryScraper:
     gallery:
-      Title: //head/title
-      Details: //meta[@name="twitter:description"]/@content
-      Performers:
-        Name: //div[@class="item"][contains(., "Models:")]/a
-      Tags:
-        Name: //meta[@property="video:tag"]/@content
-      Studio:
-        Name:
-          fixed: Fitting-Room
-      URL: //meta[@property="og:url"]/@content
+      Title: *title
+      Performers: *performers
+      Studio: *studio
+      URLs: *urls
