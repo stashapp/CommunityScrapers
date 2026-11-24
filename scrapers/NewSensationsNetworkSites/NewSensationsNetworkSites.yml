@@ -1,4 +1,4 @@
-name: "NewSensationsNetworkSites"
+name: NewSensationsNetworkSites
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -28,6 +28,7 @@ xPathScrapers:
     scene:
       # Many different versions of the same tour pages
       # selectors must work across all of them
+      URLs: //link[@rel="canonical"][contains(@href, "/updates/")]/@href
       Title: >-
         //div[@class="update_title"]
         | //div[@class="indScene"]/h1
@@ -52,7 +53,7 @@ xPathScrapers:
         | //div[@class="description"]/h2
         | //div[@class="videoDetails"]/p
       Tags:
-        Name: //span[@class="update_tags"]/a/text()
+        Name: //span[@class="update_tags"]/a
       Performers:
         Name: >-
           //span[@class="update_models"]/a
