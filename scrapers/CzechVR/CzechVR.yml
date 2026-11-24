@@ -1,4 +1,4 @@
-name: "CzechVR"
+name: CzechVR
 sceneByName:
   action: scrapeXPath
   scraper: sceneByName
@@ -54,34 +54,43 @@ xPathScrapers:
       $info: &infoSel //div[@class="post"]
     scene:
       URLs: //link[@rel='canonical']/@href
-      Title: &title # Czech VR Network uses h1, the substudios use h2
+      Title: &title
         selector: &titleSel $info//h1|$info//h2
         postProcess:
           - replace:
-              - regex: ".+ - "
-                with:
+              - regex: ^.*?\d+ - (.*)$
+                with: $1
       Code:
-        selector: //title
+        selector: *titleSel
         postProcess:
           - replace:
-              - regex: ^Czech\sVR\s(\d+).+
+              - regex: ^.*?(\d+) - .*$
                 with: $1
       Date: &date
-        selector: $info//div[@class="datum"]/text()
+        selector: $info//div[@class="datum"]
         postProcess:
           - parseDate: Jan 2, 2006
       Details: &detailsSel //div[@class="text"]/text()
       Tags:
-        Name: //div[@class="tag new"]/a/text()
+        Name: //div[@class="tag new"]/a
       Performers:
-        Name: $info//div[@class="modelky"]//a//span/text()
+        Name: $info//div[@class="modelky"]//a//span
       Studio: &studio
         Name:
-          selector: *titleSel
+          selector: //title | $info//h1
+          concat: __SEP__
           postProcess:
             - replace:
-                - regex: "\\d* - .+"
-                  with:
+                - regex: ^.* - Czech VR Network__SEP__(\w+) \d+ - .*$
+                  with: $1
+                - regex: "^.* - (.+?)(?: Porn Videos)?__SEP__.*$"
+                  with: $1
+            - map:
+                CAR: Czech AR
+                CVC: Czech VR Casting
+                CVF: Czech VR Fetish
+                CVR: Czech VR
+                VRI: VR Intimacy
       Image: &image
         selector: //link[@rel='canonical']/@href|//dl8-video/@poster|//commedia-player/@poster
         concat: " "
@@ -89,12 +98,10 @@ xPathScrapers:
           - replace:
               - regex: /detail-\S*\s(/cdn-cgi/image/[^/]+/)?\./category
                 with: /category
-          - replace:
-              - regex: \/\/
-                with: "/"
-          - replace:
-              - regex: :\/
-                with: "://"
+              - regex: //
+                with: /
+              - regex: :/
+                with: ://
   movieScraper:
     common:
       $info: *infoSel
@@ -108,14 +115,10 @@ xPathScrapers:
 
 driver:
   cookies:
-    - CookieURL: "https://www.czechvr.com"
+    - CookieURL: https://www.czechvr.com
       Cookies:
-        - Name: "iagree"
-          Domain: ".czechvr.com"
-          Value: "ano"
-          Path: "/"
-  headers:
-    - Key: User-Agent
-      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0
-
-# Last Updated Sept 30, 2025
+        - Name: iagree
+          Domain: .czechvr.com
+          Value: ano
+          Path: /
+  useSurf: true
