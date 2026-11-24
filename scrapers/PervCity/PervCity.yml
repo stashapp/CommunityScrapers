@@ -9,7 +9,7 @@ sceneByURL:
       - pervcity.com/trailers/
       - upherasshole.com/trailers/
     scraper: sceneScraper
-    queryURL: '{url}'
+    queryURL: "{url}"
     queryURLReplace:
       url:
         - regex: (?:^.+\.com)(/.+)
@@ -22,11 +22,10 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $sceneinfo: //div[@class="videoInfo"]
-      $base: //head/base/@href
+      $sceneinfo: //div[@class="scene-info"]
       $image: //img[contains(@class,'posterimg')]
     scene:
-      Title: &title $sceneinfo/div[@class="infoHeader"]
+      Title: //h1[@class="scene-title"]
       Code: &code
         selector: //meta[@property="og:image"]/@content
         postProcess:
@@ -42,7 +41,6 @@ xPathScrapers:
                   with: $1
                 - regex: (?:-.+)
                   with:
-            # Convert studiocode uppercase to be able to map to studio
             - javascript: |
                 if (value && value.length) {
                   return value.toUpperCase()
@@ -58,40 +56,39 @@ xPathScrapers:
                 OO: Oral Overdose
                 SOLO: PervCity
                 UHA: Up Her Asshole
-      Performers: &performers
-        Name: $sceneinfo//span[@class="tour_update_models"]/a
-      Tags: &tags
-        Name: $sceneinfo//div[@class="tagcats"]/a/text()
-      Details: &details $sceneinfo//h3[@class="description"]/text()|$sceneinfo//p/text()
-      Image: &sceneimage $image/@src0_3x|$image/@src0_2x|$image/@src0_1x
-      Date:
-        selector: $sceneinfo/div[@class="infoHeader"]
+      Performers:
+        Name: //div[@class="scene-featuring"]//span[@class="tour_update_models"]/a
+      Tags:
+        Name: $sceneinfo//div[@class="tagcats"]/a
+      Details: $sceneinfo//div[@class="scene-desc"]
+      Image: &sceneimage
+        selector: //head/base/@href | $image/@src0_1x
+        concat: __SEP__
         postProcess:
           - replace:
-              - regex: \s|-|\'|’|,
-                with: "_"
-              - regex: "&"
-                with: "%26"
-              - regex: ^
-                with: "https://pervcity.com/search.php?query="
-          - subScraper:
-              selector: &scenedate //div[@class="category_listing_block"]//div[@class="date"]/text()
-              postProcess:
-                - parseDate: 01-02-2006
+              - regex: ^(https://[^/]+/)__SEP__https://[^/]+/(.+?)-1x\.jpg.*$
+                with: $1$2-full.jpg
+      Date:
+        selector: $sceneinfo//div[contains(@class, "scene-meta")]/span[1]
+        postProcess:
+          - parseDate: 01-02-2006
+      URLs: //link[@rel="canonical"]/@href
 
   dpdivaScraper:
     common:
       $sceneinfo: //div[@class="videoInfo"]
-      $base: //head/base/@href
       $image: //img[contains(@class,'posterimg')]
     scene:
-      Title: *title
+      Title: $sceneinfo/div[@class="infoHeader"]
       Image: *sceneimage
-      Tags: *tags
+      Tags:
+        Name: $sceneinfo//div[@class="tagcats"]/a
       Studio: *studio
-      Details: *details
-      Performers: *performers
+      Details: $sceneinfo//h3[@class="description"]/text()|$sceneinfo//p/text()
+      Performers:
+        Name: $sceneinfo//span[@class="tour_update_models"]/a
       Code: *code
+      URLs: //link[@rel="canonical"]/@href
       Date:
         selector: $sceneinfo/div[@class="infoHeader"]
         postProcess:
@@ -101,9 +98,8 @@ xPathScrapers:
               - regex: "&"
                 with: "%26"
               - regex: ^
-                with: "https://dpdiva.com/search.php?query="
+                with: https://dpdiva.com/search.php?query=
           - subScraper:
-              selector: *scenedate
+              selector: //div[@class="category_listing_block"]//div[@class="date"]
               postProcess:
                 - parseDate: 01-02-2006
-# Last Updated September 12, 2024
