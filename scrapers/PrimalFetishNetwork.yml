@@ -2,28 +2,79 @@ name: PrimalFetishNetwork
 sceneByURL:
   - action: scrapeXPath
     url:
+      - /https://www.primalfetishnetwork.com/video/
+      - /http://www.primalfetishnetwork.com/video/
+      - /https://primalfetishnetwork.com/video/
+      - /http://primalfetishnetwork.com/video/
+    scraper: archivedScraper
+  - action: scrapeXPath
+    url:
       - primalfetishnetwork.com/video/
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: .*/video/(.+)-\d+\.html.*
+          with: https://www.primalfetishnetwork.com/videos/$1/
+    scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      - primalfetishnetwork.com/videos/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $api: //link[@rel="alternate"][@type="application/json"][contains(@href, "/wp/v2/video/")]/@href
     scene:
-      Title: //h1[@class='video__movieTitle']
-      Date:
+      Title: &title //h1[@class='video__movieTitle']
+      Date: &date
         selector: //div[contains(@class, 'video__data') and contains(text(), 'Date')]
         postProcess:
           - replace:
-            - regex: '^Date '
-              with: ''
-            - regex: 'st|nd|rd|th'
-              with: ''
+              - regex: ^Date\s+
+                with: ""
+              - regex: (\d)(st|nd|rd|th)
+                with: $1
           - parseDate: 02 Jan 2006
-      Performers:
-        Name: //div[@class="video__listLinks"]/a/span/text()
-      Tags:
-        Name: //div[contains(@class, 'video__listLinks--tags')]/a/text()
-      Details:
+      Performers: &performers
+        Name: //div[@class="video__listLinks"]/a/span
+      Tags: &tags
+        Name: //div[contains(@class, 'video__listLinks--tags')]/a
+      Details: &details
         selector: //div[contains(@class, 'video-desc')][1]/p
         concat: "\n\n"
+      URLs: //link[@rel="canonical"]/@href
+      Image:
+        selector: $api
+        postProcess:
+          - replace:
+              - regex: $
+                with: ?_fields=_links,_embedded&_embed=wp:featuredmedia
+          - subScraper: //body
+          - replace:
+              - regex: (?s).*"source_url":"([^"]+)".*
+                with: $1
+              - regex: \\/
+                with: /
+              - regex: -scaled(\.\w+)$
+                with: $1
+      Studio:
+        Name:
+          selector: $api
+          postProcess:
+            - replace:
+                - regex: $
+                  with: ?_fields=_links,_embedded&_embed=wp:term
+            - subScraper: //body
+            - replace:
+                - regex: (?s).*"name":"([^"]+)","slug":"[^"]+","taxonomy":"video-paysite".*
+                  with: $1
+  archivedScraper:
+    scene:
+      Title: *title
+      Date: *date
+      Performers: *performers
+      Tags: *tags
+      Details: *details
       Image: //meta[@property="og:image"]/@content
       Studio:
-        Name: //a[@class="video__listModel"][contains(@href,"/paysites/")]/text()
+        Name: //a[@class="video__listModel"][contains(@href,"/paysites/")]
