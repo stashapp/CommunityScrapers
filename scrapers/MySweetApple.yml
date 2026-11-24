@@ -2,30 +2,57 @@ name: MySweetApple
 sceneByURL:
   - action: scrapeXPath
     url:
+      - /http://mysweetapple.com/updates/
+      - /http://www.mysweetapple.com/updates/
+      - /https://mysweetapple.com/updates/
+      - /https://www.mysweetapple.com/updates/
+    scraper: archivedScraper
+  - action: scrapeXPath
+    url:
       - mysweetapple.com
+      - mysweetapple.elxcomplete.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $info: //div[contains(@class, "latestUpdateBinfo")]
     scene:
-      Title:
-        selector: //span[@class="update_title"]
+      Title: //div[@class="vidImgTitle"]/h1
+      Performers:
+        Name: $info//a[contains(@href, "/models/")]
+        URLs: $info//a[contains(@href, "/models/")]/@href
+      Details:
+        selector: $info//div[contains(@class, "vidImgContent")]/p
+        concat: "\n\n"
+      Tags:
+        Name: $info//div[@class="blogTags"]//a
+      Image:
+        selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+              - regex: -\dx\.jpg$
+                with: -full.jpg
+      Studio:
+        Name:
+          fixed: MySweetApple
+  archivedScraper:
+    scene:
+      Title: //span[@class="update_title"]
       Date:
         selector: //span[@class="availdate"]/text()[1]
         postProcess:
           - parseDate: 01/02/2006
       Performers:
         Name: //span[@class="tour_update_models"]/a
-      Details:
-        selector: //span[@class="latest_update_description"]
+      Details: //span[@class="latest_update_description"]
       Tags:
         Name: //span[@class="update_tags"]/a
       Image:
         selector: //img[@class='stdimage large_update_thumb left thumbs']/@src
         postProcess:
           - replace:
-              - regex: ^
-                with: https://mysweetapple.com/
+              - regex: ^/web/
+                with: https://web.archive.org/web/
       Studio:
         Name:
           fixed: MySweetApple
-# Last Updated September 05, 2022
