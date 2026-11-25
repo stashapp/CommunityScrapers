@@ -11,6 +11,7 @@ from html import unescape
 from itertools import chain
 from pathlib import Path, PureWindowsPath
 from typing import Any, cast
+from urllib.parse import urlsplit
 
 from py_common import log
 from py_common.deps import ensure_requirements
@@ -720,6 +721,12 @@ def parse_gallery_dl(info: dict[str, Any]) -> ScrapedScene:
         scraped["details"] = details.strip()
     if date := gallery_dl_date(keys.get("date")):
         scraped["date"] = date
+    # `url` is the page for some extractors and the media file itself for others
+    if isinstance(url := keys.get("url"), str) and is_remote(url):
+        suffix = posixpath.splitext(urlsplit(url).path)[1].casefold()
+        own_suffix = f".{keys.get('extension')}".casefold()
+        if suffix not in (*REENCODED_SUFFIXES, *ARCHIVE_SUFFIXES, own_suffix):
+            scraped["urls"] = [url]
     # The artist made the work; a group or circle only published it
     if studio := next(iter(artists + groups), None):
         scraped["studio"] = ScrapedStudio(name=studio)
