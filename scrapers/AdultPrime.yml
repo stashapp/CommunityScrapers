@@ -116,3 +116,11 @@ xPathScrapers:
                 selector: //div[@class="update-info-container"]//b[contains(.,"Niches")]/following-sibling::a
                 concat: "|"
           split: "|"
+driver:
+  cookies:
+    - CookieURL: https://adult-prime.com
+      Cookies:
+        - Name: ap_lang
+          Domain: adult-prime.com
+          Value: en
+          Path: /
