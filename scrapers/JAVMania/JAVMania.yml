@@ -34,6 +34,7 @@ performerByURL:
   - action: script
     url:
       - jav-mania.net/
+      - avhinban.com/performers/
     script:
       - python
       - JAVMania.py

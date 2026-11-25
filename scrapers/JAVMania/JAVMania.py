@@ -96,7 +96,9 @@ BARE = [
 ]
 # Censored codes: "SSIS-001", "ssis 001", "ssis.001" or zero-padded "ssis00001".
 CENSORED = re.compile(
-    r"(?<![a-z0-9])([a-z]{2,6})(?:" + SEP + r"(\d{2,5})|(0\d{2,4}))(?!\d)"
+    r"(?:(?<![a-z0-9])|(?<=(?<![a-z0-9])\d{3}))([a-z]{2,6})(?:"
+    + SEP
+    + r"(\d{2,5})|(0\d{2,4}))(?!\d)"
 )
 NOT_CODES = {
     "hd",
@@ -208,6 +210,18 @@ def iso_date(raw):
         return datetime.date(y, mo, d).isoformat()
     except ValueError:  # e.g. 1999-02-29
         return None
+
+
+def seconds(raw):
+    """Duration in seconds from '111分', '479 min' or '01:00:40'."""
+    raw = raw or ""
+    hms = re.search(r"\b(\d{1,2}):(\d{2}):(\d{2})\b", raw)
+    if hms:
+        h, m, sec = (int(x) for x in hms.groups())
+        return h * 3600 + m * 60 + sec or None
+    mins = re.search(r"(\d{1,4})\s*(?:分|min)(?:\s*(\d{1,2})\s*秒)?", raw)
+    total = int(mins.group(1)) * 60 + int(mins.group(2) or 0) if mins else 0
+    return total or None
 
 
 def meta(page, prop):
@@ -399,6 +413,7 @@ def scrape_javmania(url, expect=None):
         "studio": {"name": studio} if studio else None,
         "groups": [{"name": series}] if series else None,
         "director": value(strip_ja(rows.get("Director"))),
+        "duration": seconds(text(rows.get("Runtime"))),
     }
     return clean(scene)
 
@@ -428,7 +443,20 @@ def scrape_avhinban(url, expect=None):
         re.DOTALL,
     )
     maker = value(info.get("メーカー"))
+    label = value(info.get("レーベル"))
     series = value(info.get("シリーズ"))
+    if label and maker and label != maker:  # label is a brand of the maker
+        studio = {"name": label, "parent": {"name": maker}}
+    else:
+        studio = {"name": maker or label} if (maker or label) else None
+    cast = [
+        (value(a), h)
+        for h, a in re.findall(
+            r'<a\b[^>]*href="(/performers/\d+/)"[^>]*>(.*?)</a>',
+            info.get("出演者", ""),
+            re.DOTALL,
+        )
+    ]
 
     def names(key):
         return [
@@ -443,11 +471,12 @@ def scrape_avhinban(url, expect=None):
         "date": iso_date(text(info.get("発売日"))),
         "urls": [final or url, *store_urls(page)],
         "image": urllib.parse.urljoin(final or url, image) if image else None,
-        "performers": [{"name": n} for n in names("出演者") if n],
+        "performers": [{"name": n, "urls": [AV + h]} for n, h in cast if n],
         "tags": [{"name": n} for n in names("ジャンル") if n],
         "director": value(info.get("監督")),
-        "studio": {"name": maker} if maker else None,
+        "studio": studio,
         "groups": [{"name": series}] if series else None,
+        "duration": seconds(text(info.get("収録時間"))),
     }
     return clean(scene)
 
@@ -534,7 +563,7 @@ def enrich_from_avhinban(scene, code):
     av = scrape_avhinban(av_url, expect=code) if av_url else None
     if not av:
         return scene
-    for key in ("date", "image", "details", "director", "studio", "groups"):
+    for key in ("date", "image", "details", "director", "studio", "groups", "duration"):
         if key in av and not scene.get(key):
             scene[key] = av[key]
     for u in av["urls"]:  # avhinban page + plain store pages
@@ -680,9 +709,9 @@ ACTRESS_PAGE = re.compile(
 
 
 def scrape_actress(url):
-    """Performer from a jav-mania actress page. The profile (height,
-    measurements, birthday) is printed on her uncensored work pages, so up to
-    two of them are read."""
+    """Performer from a jav-mania actress page, including the profile line
+    (height, measurements, birthday). Performers without that line on their
+    page fall back to the profile printed on up to two uncensored work pages."""
     m = ACTRESS_PAGE.match(url.strip() if isinstance(url, str) else "")
     if not m:
         return None
@@ -700,14 +729,21 @@ def scrape_actress(url):
         "name": name,
         "aliases": text(ja.group(1)) if ja else None,
         "gender": "Female",
-        "career_length": f"{years.group(1)}-{years.group(2)}" if years else None,
+        "career_start": years.group(1) if years else None,
+        "career_end": years.group(2) if years else None,
         "urls": [page_url],
     }
+    # The actress page prints her profile; older cached copies may not yet.
+    own = re.search(r'<p class="actress-profile">(.*?)</p>', page, re.DOTALL)
+    if own:
+        performer.update(
+            parse_profile(text(re.sub(r"<strong>.*?</strong>", "", own.group(1))))
+        )
     works = []
     for href in re.findall(r'href="(/movies/[^"/]+/[^"/]+/)"', page):
         if href not in works:
             works.append(href)
-    for href in works[:2]:
+    for href in [] if own else works[:2]:
         _, work = fetch(JM + href)
         if not work:
             continue
@@ -739,6 +775,94 @@ def actress_candidates(name):
     if not page or not found or not same_page(url, final, ACTRESS_PAGE):
         return []
     return [{"name": found, "urls": [url]}]
+
+
+AV_PERFORMER = re.compile(
+    r"^https?://(?:www\.)?avhinban\.com/performers/(\d+)/?(?:[?#].*)?$", re.IGNORECASE
+)
+PROFILE_KEYS = ("height", "measurements", "birthdate")
+
+
+def scrape_av_performer(url):
+    """Performer from an avhinban performer page: Japanese name, other
+    spellings, career years and the profile rows; when the page links to the
+    English JAV Mania page, its English name is added as an alias."""
+    m = AV_PERFORMER.match(url.strip() if isinstance(url, str) else "")
+    if not m:
+        return None
+    page_url = f"{AV}/performers/{m.group(1)}/"
+    final, page = fetch(page_url)
+    if not page or not same_page(page_url, final, AV_PERFORMER):
+        return None
+    h1 = re.search(r"<h1>(.*?)の出演作品</h1>", page, re.DOTALL)
+    dl = re.search(r'<dl class="info">(.*?)</dl>', page, re.DOTALL)
+    name = value(h1.group(1)) if h1 else None
+    if not name or not dl:
+        return None
+    info = {}
+    for dt, dd in re.findall(
+        r"<dt>(.*?)</dt>\s*<dd>(.*?)</dd>", dl.group(1), re.DOTALL
+    ):
+        info[text(dt)] = dd
+    span = re.findall(r"(\d{4})-\d{2}-\d{2}", text(info.get("出演作品")))
+    sizes = text(info.get("スリーサイズ"))
+    bwh = re.search(r"B(\d{2,3})\s*W(\d{2,3})\s*H(\d{2,3})", sizes)
+    cup = re.search(r"\(([A-Z]{1,2})カップ\)", sizes)
+    height = re.search(r"(\d{3})\s*cm", text(info.get("身長")))
+    aliases = [a for a in re.split(r"[、,]", text(info.get("別表記"))) if a.strip()]
+    jm = re.search(
+        r'href="(https://www\.jav-mania\.net/actress/[a-z0-9-]+/)"',
+        info.get("英語ページ", ""),
+    )
+    urls = [page_url]
+    if jm:
+        english = scrape_actress(jm.group(1))
+        if english:
+            aliases.insert(0, english["name"])
+            urls.append(english["urls"][0])
+    performer = {
+        "name": name,
+        "aliases": ", ".join(dict.fromkeys(a.strip() for a in aliases)) or None,
+        "gender": "Female",
+        "career_start": min(span) if span else None,
+        "career_end": max(span) if span else None,
+        "height": height.group(1) if height else None,
+        "measurements": (
+            f"{bwh.group(1)}{cup.group(1) if cup else ''}-{bwh.group(2)}-{bwh.group(3)}"
+            if bwh
+            else (cup.group(1) if cup else None)
+        ),
+        "birthdate": iso_date(text(info.get("生年月日"))),
+        "urls": urls,
+    }
+    return clean(performer)
+
+
+def av_performer_candidates(name):
+    """[{name, urls}] for a Japanese performer name via the avhinban search."""
+    query = (name or "").strip()
+    if not query:
+        return []
+    _, page = fetch(f"{AV}/search/?q={urllib.parse.quote(query[:100])}")
+    out = []
+    for href, label in re.findall(
+        r'href="(/performers/\d+/)"[^>]*>(.*?)</a>', page or "", re.DOTALL
+    ):
+        label = value(label)
+        if (
+            label
+            and (label == query or query in label)
+            and all(o["urls"][0] != AV + href for o in out)
+        ):
+            out.append({"name": label, "urls": [AV + href]})
+    out.sort(key=lambda o: o["name"] != query)  # exact name first
+    return out[:10]
+
+
+def scrape_performer_url(url):
+    if isinstance(url, str) and AV_PERFORMER.match(url):
+        return scrape_av_performer(url)
+    return scrape_actress(url)
 
 
 def first_url(fragment):
@@ -785,19 +909,27 @@ def main():
                 result = lookup(key)
         write_output(result)
     elif mode == "performerByURL":
-        write_output(scrape_actress(fragment.get("url")))
+        write_output(scrape_performer_url(fragment.get("url")))
     elif mode == "performerByName":
         query = fragment.get("name") if isinstance(fragment.get("name"), str) else ""
-        write_output(actress_candidates(query))
+        write_output(actress_candidates(query) + av_performer_candidates(query))
     elif mode == "performerByFragment":
         urls = [
             u
             for u in as_list(fragment.get("urls")) + [fragment.get("url")]
-            if isinstance(u, str) and ACTRESS_PAGE.match(u)
+            if isinstance(u, str) and (ACTRESS_PAGE.match(u) or AV_PERFORMER.match(u))
         ]
         if not urls and isinstance(fragment.get("name"), str):
-            urls = [c["urls"][0] for c in actress_candidates(fragment["name"])]
-        write_output(scrape_actress(urls[0]) if urls else None)
+            exact = [
+                c
+                for c in av_performer_candidates(fragment["name"])
+                if c["name"] == fragment["name"].strip()
+            ]
+            found = actress_candidates(fragment["name"]) or (
+                exact if len(exact) == 1 else []
+            )
+            urls = [c["urls"][0] for c in found]
+        write_output(scrape_performer_url(urls[0]) if urls else None)
     elif mode == "sceneByName":
         query = fragment.get("name") if isinstance(fragment.get("name"), str) else ""
         write_output(
