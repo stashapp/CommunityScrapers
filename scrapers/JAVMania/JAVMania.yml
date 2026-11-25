@@ -30,4 +30,24 @@ sceneByQueryFragment:
     - python
     - JAVMania.py
     - sceneByQueryFragment
+performerByURL:
+  - action: script
+    url:
+      - jav-mania.net/
+    script:
+      - python
+      - JAVMania.py
+      - performerByURL
+performerByName:
+  action: script
+  script:
+    - python
+    - JAVMania.py
+    - performerByName
+performerByFragment:
+  action: script
+  script:
+    - python
+    - JAVMania.py
+    - performerByFragment
 # Last Updated November 25, 2026

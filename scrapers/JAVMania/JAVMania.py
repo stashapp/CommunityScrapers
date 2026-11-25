@@ -5,9 +5,11 @@ Standard library only. Stash runs it as:
     python JAVMania.py <mode>
 with a JSON object on stdin and reads JSON from stdout (UTF-8 both ways).
 
-Modes: sceneByURL, sceneByFragment, sceneByName, sceneByQueryFragment
+Modes: sceneByURL, sceneByFragment, sceneByName, sceneByQueryFragment,
+       performerByURL, performerByName, performerByFragment
 """
 
+import datetime
 import html
 import http.client
 import json
@@ -202,9 +204,10 @@ def iso_date(raw):
     if not m:
         return None
     y, mo, d = (int(x) for x in m.groups())
-    if not (1 <= mo <= 12 and 1 <= d <= 31):
+    try:
+        return datetime.date(y, mo, d).isoformat()
+    except ValueError:  # e.g. 1999-02-29
         return None
-    return f"{y:04d}-{mo:02d}-{d:02d}"
 
 
 def meta(page, prop):
@@ -262,12 +265,72 @@ def performers_from(cell):
             text(j)
             for j in re.findall(r'<span lang="ja">【(.*?)】</span>', part, re.DOTALL)
         ]
+        hrefs = [
+            re.search(r'href="(/actress/[^"/]+/)"', seg)
+            for seg in strip_ja(part).split(",")
+        ]
+        hrefs = [
+            h.group(1) if h else None
+            for h, seg in zip(hrefs, strip_ja(part).split(","))
+            if value(seg)
+        ]
         for i, name in enumerate(names):
             p = {"name": name}
             if len(jas) == len(names) and jas[i]:
                 p["aliases"] = jas[i]
+            if len(hrefs) == len(names) and hrefs[i]:
+                p["urls"] = [JM + hrefs[i]]
             out.append(p)
     return out
+
+
+def profile_rows(page):
+    """[(japanese name or None, profile text)] from the work page's Profile
+    rows. With several performers each row starts with the Japanese name."""
+    out = []
+    for td in re.findall(
+        r"<tr>\s*<th>Profile</th>\s*<td>(.*?)</td>\s*</tr>", page, re.DOTALL
+    ):
+        ja = re.match(
+            r'\s*<span lang="ja">(.*?)</span>\s*(?:—|&mdash;|\u2014)?', td, re.DOTALL
+        )
+        out.append(
+            (text(ja.group(1)) if ja else None, text(td[ja.end() :] if ja else td))
+        )
+    return out
+
+
+def parse_profile(raw):
+    """Stash performer fields from '160cm (5'3") / G-cup / B94 W57 H90 / Born 1986-08-25'."""
+    p = {}
+    m = re.search(r"(\d{3})\s*cm", raw)
+    if m:
+        p["height"] = m.group(1)
+    cup = re.search(r"\b([A-Z]{1,2})-cup\b", raw)
+    bwh = re.search(r"B(\d{2,3})\s*W(\d{2,3})\s*H(\d{2,3})", raw)
+    if bwh:
+        b, w, h = bwh.groups()
+        p["measurements"] = f"{b}{cup.group(1) if cup else ''}-{w}-{h}"
+    elif cup:
+        p["measurements"] = cup.group(1)
+    born = iso_date((re.search(r"Born\s+([0-9/-]+)", raw) or [None, ""])[1])
+    if born:
+        p["birthdate"] = born
+    return p
+
+
+def attach_profiles(perf, page):
+    rows = profile_rows(page)
+    for ja, raw in rows:
+        target = None
+        if ja:
+            same = [p for p in perf if p.get("aliases") == ja]
+            target = same[0] if len(same) == 1 else None
+        elif len(rows) == 1 and len(perf) == 1:
+            target = perf[0]
+        if target is not None:
+            target.update(parse_profile(raw))
+    return perf
 
 
 def clean(scene):
@@ -309,7 +372,9 @@ def scrape_javmania(url, expect=None):
             re.DOTALL,
         )
     ]
-    perf = performers_from(rows.get("Performer") or rows.get("Performers"))
+    perf = attach_profiles(
+        performers_from(rows.get("Performer") or rows.get("Performers")), page
+    )
     if not perf:
         perf = [
             {"name": a["name"]}
@@ -608,6 +673,74 @@ def lookup(name):
     return found[0] if found else None
 
 
+ACTRESS_PAGE = re.compile(
+    r"^https?://(?:www\.)?jav-mania\.net/(?:[a-z]{2}(?:-[a-z]{2,4})?/)?actress/([a-z0-9-]+)/?(?:[?#].*)?$",
+    re.IGNORECASE,
+)
+
+
+def scrape_actress(url):
+    """Performer from a jav-mania actress page. The profile (height,
+    measurements, birthday) is printed on her uncensored work pages, so up to
+    two of them are read."""
+    m = ACTRESS_PAGE.match(url.strip() if isinstance(url, str) else "")
+    if not m:
+        return None
+    page_url = f"{JM}/actress/{m.group(1).lower()}/"
+    final, page = fetch(page_url)
+    if not page or not same_page(page_url, final, ACTRESS_PAGE):
+        return None
+    h1 = re.search(r"<h1>(.*?)</h1>", page, re.DOTALL)
+    name = value(h1.group(1)) if h1 else None
+    if not name:
+        return None
+    ja = re.search(r'\(<span lang="ja">(.*?)</span>\)\s*also appears', page, re.DOTALL)
+    years = re.search(r"active (\d{4})\s*[–-]\s*(\d{4})", page)
+    performer = {
+        "name": name,
+        "aliases": text(ja.group(1)) if ja else None,
+        "gender": "Female",
+        "career_length": f"{years.group(1)}-{years.group(2)}" if years else None,
+        "urls": [page_url],
+    }
+    works = []
+    for href in re.findall(r'href="(/movies/[^"/]+/[^"/]+/)"', page):
+        if href not in works:
+            works.append(href)
+    for href in works[:2]:
+        _, work = fetch(JM + href)
+        if not work:
+            continue
+        rows = detail_rows(work)
+        cast = attach_profiles(
+            performers_from(rows.get("Performer") or rows.get("Performers")), work
+        )
+        mine = next((p for p in cast if p.get("urls") == [page_url]), None)
+        if not mine:
+            continue
+        performer["aliases"] = performer["aliases"] or mine.get("aliases")
+        for key in ("height", "measurements", "birthdate"):
+            if mine.get(key):
+                performer[key] = mine[key]
+        if any(performer.get(k) for k in ("height", "measurements", "birthdate")):
+            break
+    return clean(performer)
+
+
+def actress_candidates(name):
+    """[{name, urls}] for a performer name, by the site's slug rule."""
+    slug = re.sub(r"[^a-z0-9]+", "-", (name or "").lower()).strip("-")
+    if not slug:
+        return []
+    url = f"{JM}/actress/{slug}/"
+    final, page = fetch(url)
+    h1 = re.search(r"<h1>(.*?)</h1>", page or "", re.DOTALL)
+    found = value(h1.group(1)) if h1 else None
+    if not page or not found or not same_page(url, final, ACTRESS_PAGE):
+        return []
+    return [{"name": found, "urls": [url]}]
+
+
 def first_url(fragment):
     for u in as_list(fragment.get("urls")) + [fragment.get("url")]:
         if isinstance(u, str) and (JM_PAGE.match(u) or AV_PAGE.match(u)):
@@ -651,6 +784,20 @@ def main():
             if result is None and isinstance(key, str) and key.strip():
                 result = lookup(key)
         write_output(result)
+    elif mode == "performerByURL":
+        write_output(scrape_actress(fragment.get("url")))
+    elif mode == "performerByName":
+        query = fragment.get("name") if isinstance(fragment.get("name"), str) else ""
+        write_output(actress_candidates(query))
+    elif mode == "performerByFragment":
+        urls = [
+            u
+            for u in as_list(fragment.get("urls")) + [fragment.get("url")]
+            if isinstance(u, str) and ACTRESS_PAGE.match(u)
+        ]
+        if not urls and isinstance(fragment.get("name"), str):
+            urls = [c["urls"][0] for c in actress_candidates(fragment["name"])]
+        write_output(scrape_actress(urls[0]) if urls else None)
     elif mode == "sceneByName":
         query = fragment.get("name") if isinstance(fragment.get("name"), str) else ""
         write_output(
