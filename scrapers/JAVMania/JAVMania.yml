@@ -1,12 +1,12 @@
 name: JAV Mania
 # English metadata for uncensored JAV (Caribbeancom, 1pondo, PacoPacoMama,
 # 10musume, HEYZO, Kin8tengoku, Nyoshin, ...) from https://www.jav-mania.net/
-# and censored JAV, with Japanese metadata from https://avhinban.com/ as a fallback.
+# and censored JAV; https://avhinban.com/ (Japanese) fills missing fields,
+# covers codes JAV Mania lacks and powers free-text scene search.
 sceneByURL:
   - action: script
     url:
-      - jav-mania.net/movies/
-      - jav-mania.net/jav/
+      - jav-mania.net/
       - avhinban.com/works/
     script:
       - python
