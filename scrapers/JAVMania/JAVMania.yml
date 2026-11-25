@@ -1,0 +1,33 @@
+name: JAV Mania
+# English metadata for uncensored JAV (Caribbeancom, 1pondo, PacoPacoMama,
+# 10musume, HEYZO, Kin8tengoku, Nyoshin, ...) from https://www.jav-mania.net/
+# and censored JAV, with Japanese metadata from https://avhinban.com/ as a fallback.
+sceneByURL:
+  - action: script
+    url:
+      - jav-mania.net/movies/
+      - jav-mania.net/jav/
+      - avhinban.com/works/
+    script:
+      - python
+      - JAVMania.py
+      - sceneByURL
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - JAVMania.py
+    - sceneByFragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - JAVMania.py
+    - sceneByName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - JAVMania.py
+    - sceneByQueryFragment
+# Last Updated November 25, 2026
