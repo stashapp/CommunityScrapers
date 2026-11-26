@@ -42,7 +42,12 @@ xPathScrapers:
             - replace:
                 - regex: ^/
                   with: https://www.hotmovies.com/
-      URLs: //meta[@name="og:url"]/@content
+      URLs:
+        selector: //meta[@name="og:url"]/@content
+        postProcess:
+          - replace:
+              - regex: \?.*
+                with: ""
       ProductionDate:
         selector: //li[strong[contains(text(), "Production Year")]]
         postProcess:
@@ -60,14 +65,7 @@ xPathScrapers:
             - replace:
                 - regex: ([?&])w=\d+&h=\d+
                   with: ${1}w=500&h=700
-        BackImage:
-          selector: $clipCover/img/@src
-          postProcess:
-            - replace:
-                - regex: ([?&])w=\d+&h=\d+
-                  with: ${1}w=500&h=700
-                - regex: $
-                  with: "&v=back"
+        BackImage: //a[@rel="boxcoverAlt"][contains(@href, "v=back")][//meta[@name="og:url" and contains(@content, "/adult-clips/")]]/@href
       Studio:
         Name: //a[@data-tl="studio"]
         URLs:
@@ -102,14 +100,7 @@ xPathScrapers:
       FrontImage:
         selector: //a[@id="front-cover"]/img/@src
         postProcess: *fullCover
-      BackImage:
-        selector: //a[@id="front-cover"]/img/@src
-        postProcess:
-          - replace:
-              - regex: ([?&])w=\d+&h=\d+
-                with: ${1}w=500&h=700
-              - regex: $
-                with: "&v=back"
+      BackImage: //a[@rel="boxcoverAlt"][contains(@href, "v=back")]/@href
       Date: //meta[@property="og:video:release_date"]/@content
       Tags:
         Name: //strong[contains(text(), "Categories:")]/following-sibling::a
@@ -119,7 +110,7 @@ xPathScrapers:
       URLs:
         selector: //div[@id="performerlist"]//a[@class="performer-grid-list__performer__thumb"]/@href
         postProcess: *baseUrl
-      Image: //div[@id="performerlist"]//picture/img/@src
+      Images: //div[@id="performerlist"]//picture/img/@src
   performerScraper:
     performer:
       URLs: //meta[@name="og:url"]/@content
@@ -154,7 +145,7 @@ xPathScrapers:
           - replace:
               - regex: '[ "]'
                 with: ""
-      Image: //a[@class="star__profile__headshot fancy"]/@href
+      Images: //a[@class="star__profile__headshot fancy"]/@href
       HairColor:
         selector: //title[contains(text(), ' hair')]
         postProcess:
