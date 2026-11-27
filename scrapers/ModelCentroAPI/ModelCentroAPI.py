@@ -68,7 +68,6 @@ studio_map = {
     "hurricanefury": "Hurricane Fury",
     "immoralfantasy": "Immoral Fantasy",
     "irenerouse": "Irene Rouse",
-    "isinxxx": "iSinXXX",
     "jenysmith.net": "Jeny Smith",
     "jerkoffwithme": "Jerk Off With Me",
     "kacytgirl": "Sexy Kacy",

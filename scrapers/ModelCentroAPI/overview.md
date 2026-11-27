@@ -42,7 +42,6 @@ Scraper has been tested on 2026-10-03
 | Hurricane Fury           | https://hurricanefury.com/scene/9921767          |
 | Immoral Fantasy          | https://immoralfantasy.com/scene/9563816         |
 | Irene Rouse              | https://irenerouse.com/scene/9923871             |
-| iSinXXX                  | https://isinxxx.com/scene/9928087                |
 | Jeny Smith               | https://jenysmith.net/scene/9930807              |
 | Jerk Off With Me         | https://jerkoffwithme.com/scene/8265511          |
 | Katrin Porto             | https://katrinporto.com/scene/9423853            |

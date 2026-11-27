@@ -274,6 +274,7 @@ Scraper has been tested on 2026-11-12
 | Houseofrae                | https://houseofrae.co.uk/291-this-is-halloween                                                                                           |
 | Housewifeswag             | https://mymember.site/housewifeswag/372-date-night-7312026                                                                               |
 | HunnyPot Club             | https://hunnypot.club/24-born-to-be-wild-oxana                                                                                           |
+| I SiN                     | https://isinxxx.com/56-double-trouble                                                                                                    |
 | IGF Mentors               | https://igfmentors.com/33-creating-an-effective-content-strategy-as-a-webcam-model                                                       |
 | Iamflexigirl              | https://iamflexigirl.com/221-knotty-girl                                                                                                 |
 | ImQueenHarley             | https://mymember.site/harleyqueen/21-twerkin-robin-slow-motion                                                                           |
