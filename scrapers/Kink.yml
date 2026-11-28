@@ -37,15 +37,13 @@ xPathScrapers:
       Title:
         selector: //head/script[@type='application/ld+json' and contains(text(), '"@type":"VideoObject"')]
         postProcess:
-          - replace:
-              - regex: '.+"name":"(.+?)","thumbnailUrl".+'
-                with: "$1"
+          - javascript: return JSON.parse(value).name
       Code: //div[@data-shootid]/@data-shootid
       Date:
-        selector: //div[@data-setup]/@data-setup
+        selector: //head/script[@type='application/ld+json' and contains(text(), '"@type":"VideoObject"')]
         postProcess:
           - replace:
-              - regex: ^.*"publishedDate":"([^"]+).*$
+              - regex: ^.*"uploadDate":"(\d{4}-\d{2}-\d{2}).*$
                 with: $1
           - parseDate: 2006-01-02
       Director: //span[contains(@class, "director-name")]
@@ -65,14 +63,15 @@ xPathScrapers:
                 # kink.com
                 behind-kink: Behind Kink
                 bondage-liberation: Bondage Liberation
-                bound-gang-bangs: Bound Gang Bangs
+                bound-gang-bangs: Bound Gangbangs
                 ddf-network: DDF Network
                 device-bondage: Device Bondage
                 divine-bitches: Divine Bitches
                 dungeon-sex: Dungeon Sex
-                electrosluts: Electrosluts
+                edged-and-bound: Edged and Bound
+                electrosluts: Electro Sluts
                 everything-butt: Everything Butt
-                evolved-fights-lesbian-edition: Evolved Fights Lesbian Edition
+                evolved-fights-lesbian-edition: Evolved Fights Lez
                 evolved-fights: Evolved Fights
                 families-tied: Families Tied
                 filthy-femdom: Filthy Femdom
@@ -81,13 +80,14 @@ xPathScrapers:
                 hardcore-gangbang: Hardcore Gangbang
                 harmony-fetish: Harmony Fetish
                 hogtied: Hogtied
-                hot-legs-and-feet: Hot Legs & Feet
-                house-of-taboo: House Of Taboo
+                hot-legs-and-feet: Hot Legs and Feet
+                house-of-taboo: House of Taboo
                 kink-classics: Kink Classics
                 kink-features: Kink Features
                 kink-test-shoots: Kink Test Shoots
                 kink-trans: Kink Trans
                 kink-university: Kink University
+                kink-vr: Kink VR
                 kinklive: KinkLive
                 kinky-bites: Kinky Bites
                 mean-bitch: Mean Bitch
@@ -97,11 +97,11 @@ xPathScrapers:
                 rubber-pervs: Rubber Pervs
                 savage-gangbang: Savage Gangbang
                 severe-sex-films: Severe Sex Films
-                sex-and-submission: Sex And Submission
+                sex-and-submission: Sex and Submission
                 submissed: Submissed
                 submissive-x: Submissive X
-                tease-and-thank-you: Tease And Thank You
-                the-training-of-o: The Training Of O
+                tease-and-thank-you: Kink x Tease and Thank You
+                the-training-of-o: The Training of O
                 the-upper-floor: The Upper Floor
                 tied-tales: Tied Tales
                 ultimate-surrender: Ultimate Surrender
@@ -110,36 +110,35 @@ xPathScrapers:
                 whipped-ass: Whipped Ass
                 wired-pussy: Wired Pussy
                 # kinkmen.com
-                30-minutes-of-torment: 30 Minutes Of Torment
+                30-minutes-of-torment: 30 Minutes of Torment
                 axel-abysse: Axel Abysse
-                bound-and-gagged: Bound And Gagged
+                bound-and-gagged: Bound & Gagged
                 bound-gods: Bound Gods
-                bound-in-public: Bound In Public
+                bound-in-public: Bound in Public
                 butt-machine-boys: Butt Machine Boys
-                kink-men-series: KinkMen Series
-                kinkmen-classics: KinkMen Classics
-                kinkmen-test-shoot: Kink Men Test Shoots
+                kink-men-series: Kink Men Series
+                kinkmen-classics: Kink Men Classics
+                kinkmen-test-shoot: KinkMen Test Shoots
                 kinky-bites-men: Kinky Bites Men
-                men-on-edge: Men On Edge
+                men-on-edge: Men on Edge
                 naked-kombat: Naked Kombat
                 str8hell: Str8Hell
                 taken-rough: Taken Rough
                 # kinktrans.com
       Performers:
         Name:
-          selector: //div[@data-setup]/@data-setup
+          selector: //h1/following-sibling::span/a[contains(@href, "/model/")]
           postProcess:
             - replace:
-                - regex: ^.*"modelNames":\[([^]]+).*$
-                  with: $1
-                - regex: \"
+                - regex: ',\s*$'
                   with: ""
-          split: ","
       Tags:
         Name:
-          selector: //div[@id="shootPage"]//p[text()="Categories"]/../following-sibling::div/a/@href
-          postProcess:
+          selector: //div[@id="shootPage"]//p[text()="Categories"]/../following-sibling::div/a[not(contains(., "*"))] | //div[@id="shootPage"]//p[text()="Categories"]/../following-sibling::div/a[contains(., "*")]/@href
+          postProcess: &tagName
             - replace:
+                - regex: ',\s*$'
+                  with: ""
                 - regex: ^.*?/tag/
                   with: ""
                 - regex: \?.*$
@@ -169,6 +168,7 @@ xPathScrapers:
                 "bbc": "BBC"
                 "bbw": "BBW"
                 "bdsm": "BDSM"
+                "beard": "Beard"
                 "belly-punching": "Belly Punching"
                 "big-ass": "Big Ass"
                 "big-dick": "Big Dick"
@@ -184,15 +184,18 @@ xPathScrapers:
                 "blonde": "Blonde"
                 "blowbang": "Blowbang"
                 "blowjob": "Blowjob"
+                "body-builder": "Body Builder"
                 "bondage": "Bondage"
                 "boot": "Boot"
                 "boot-worship": "Boot Worship"
+                "bottom": "Bottom"
                 "breast-abuse": "Breast Abuse"
                 "breast-bondage": "Breast Bondage"
                 "breeder": "Breeder"
                 "brunet": "Brunet"
                 "brunette": "Brunette"
                 "bush": "Bush"
+                "buttplug": "Butt Plug"
                 "cage": "Cage"
                 "caning": "Caning"
                 "cattle-prod": "Cattle Prod"
@@ -209,6 +212,7 @@ xPathScrapers:
                 "collar": "Collar"
                 "compilation": "Compilation"
                 "cop": "Cop"
+                "corporal": "Corporal"
                 "corporal-punishment": "Corporal Punishment"
                 "corset": "Corset"
                 "cosplay": "Cosplay"
@@ -219,6 +223,8 @@ xPathScrapers:
                 "crying": "Crying"
                 "cuckolding": "Cuckolding"
                 "curvy": "Curvy"
+                "daddy": "Daddy"
+                "deepthroat": "Deepthroat"
                 "deprivation": "Deprivation"
                 "destruction": "Destruction"
                 "dildo": "Dildo"
@@ -231,7 +237,10 @@ xPathScrapers:
                 "double-penetration": "Double Penetration"
                 "double-vaginal": "Double Vaginal"
                 "dragon-dildo": "Dragon Dildo"
+                "drool": "Drool"
+                "dungeon": "Dungeon"
                 "dunking": "Dunking"
+                "edging": "Edging"
                 "electrical-play": "Electrical Play"
                 "electric-dildo": "Electric Dildo"
                 "electrode-punishments": "Electrode Punishments"
@@ -241,13 +250,15 @@ xPathScrapers:
                 "extreme": "Extreme"
                 "extreme-torment": "Extreme Torment"
                 "facefucking": "Facefucking"
-                "face-sitting": "Face Sitting"
+                "face-sitting": "Facesitting"
                 "facial": "Facial"
+                "fake-boobs": "Fake Boobs"
                 "family-roleplay": "Family Roleplay"
                 "farts": "Farts"
                 "fear-play": "Fear Play"
                 "feet": "Feet"
                 "female-slave": "Female Slave"
+                "female-sub": "Female Sub"
                 "femdom": "Femdom"
                 "fetish": "Fetish"
                 "fingering": "Fingering"
@@ -257,6 +268,7 @@ xPathScrapers:
                 "first-fisting": "First Fisting"
                 "first-gangbang": "First Gangbang"
                 "first-porn-shoot": "First Porn Shoot"
+                "fishnets": "Fishnets"
                 "fisting": "Fisting"
                 "flogging": "Flogging"
                 "foot-torment": "Foot Torment"
@@ -267,18 +279,23 @@ xPathScrapers:
                 "gangbang": "Gangbang"
                 "gaping": "Gaping"
                 "gay": "Gay"
+                "gloves": "Gloves"
                 "group": "Group"
                 "hair-pulling": "Hair Pulling"
                 "hairy": "Hairy"
                 "hand-gagging": "Hand Gagging"
-                "hand-job": "Hand Job"
+                "hand-job": "Handjob"
+                "handcuffs": "Handcuffs"
                 "handler": "Handler"
                 "head-shaving": "Head Shaving"
+                "heavymetal": "Heavy Metal"
                 "heels": "High Heels"
                 "hitachi": "Hitachi"
+                "hood": "Hood"
                 "hot-wax": "Hot Wax"
                 "humiliation": "Humiliation"
                 "interracial": "Interracial"
+                "jock": "Jock"
                 "jockstrap": "Jockstrap"
                 "kinky": "Kinky"
                 "latex": "Latex"
@@ -290,17 +307,21 @@ xPathScrapers:
                 "leather-cuffs": "Leather Cuffs"
                 "leather-gloves": "Leather Gloves"
                 "lesbian": "Lesbian"
+                "lezdom": "LezDom"
                 "lift-and-carry": "Lift And Carry"
                 "lingerie": "Lingerie"
+                "male-handler": "Male Handler"
                 "male-sub": "Male Sub"
                 "mask": "Mask"
                 "massage": "Massage"
+                "master": "Master"
                 "medical-fetish": "Medical Fetish"
                 "metal-bondage": "Metal Bondage"
                 "metal-plug": "Metal Plug"
                 "milf": "MILF"
                 "mixed": "Mixed"
                 "mouth-spreader": "Mouth Spreader"
+                "multiple-orgasms": "Multiple Orgasms"
                 "muscle": "Muscle"
                 "muscle-worship": "Muscle Worship"
                 "muscular": "Muscular"
@@ -314,6 +335,7 @@ xPathScrapers:
                 "oral-sex": "Oral Sex"
                 "orgasm-denial": "Orgasm Denial"
                 "orgy": "Orgy"
+                "other-hair-color": "Other Hair Color"
                 "outdoors": "Outdoors"
                 "paddle": "Paddle"
                 "pain": "Pain"
@@ -324,7 +346,9 @@ xPathScrapers:
                 "pet-play": "Pet Play"
                 "pierced-nipples": "Pierced Nipples"
                 "pierced-pussy": "Pierced Pussy"
+                "piercedpenis": "Pierced Penis"
                 "piss-play": "Piss Play"
+                "piv": "PIV"
                 "pony-play": "Pony Play"
                 "pov": "POV"
                 "predicament-bondage": "Predicament Bondage"
@@ -332,18 +356,24 @@ xPathScrapers:
                 "prostate-stimulation": "Prostate Stimulation"
                 "public": "Public"
                 "punching": "Punching"
+                "punishment": "Punishment"
                 "puppy-play": "Puppy Play"
                 "pussy-eating": "Pussy Eating"
+                "real-naturals": "Real Naturals"
                 "redhead": "Redhead"
+                "remastered": "Remastered"
                 "reverse-gangbang": "Reverse Gangbang"
                 "rimming": "Rimming"
                 "role-play": "Role Play"
+                "romance": "Romance"
                 "rope-bondage": "Rope Bondage"
                 "rough-sex": "Rough Sex"
                 "sadism": "Sadism"
                 "savage-cuckolding": "Savage Cuckolding"
                 "scissoring": "Scissoring"
                 "shackle": "Shackle"
+                "shaped": "Shaped"
+                "shaved": "Shaved"
                 "shrimping": "Shrimping"
                 "single-tail": "Single Tail"
                 "sissification": "Sissification"
@@ -356,6 +386,7 @@ xPathScrapers:
                 "sounding": "Sounding"
                 "spanking": "Spanking"
                 "speculum": "Speculum"
+                "spit": "Spit"
                 "spit-roast": "Spit Roast"
                 "sploshing": "Sploshing"
                 "squirting": "Squirting"
@@ -363,12 +394,16 @@ xPathScrapers:
                 "straight-jacket": "Straight Jacket"
                 "straight-stud": "Straight Stud"
                 "strap-on": "Strap On"
+                "strapon": "Strapon"
+                "strokers": "Strokers"
                 "stud": "Stud"
                 "sub": "Sub"
                 "submission": "Submission"
+                "submissive": "Submissive"
                 "suspension": "Suspension"
                 "swallow": "Swallow"
                 "swingers": "Swingers"
+                "switch": "Switch"
                 "sybian": "Sybian"
                 "tag-team": "Tag Team"
                 "taser": "Taser"
@@ -376,14 +411,21 @@ xPathScrapers:
                 "teacher": "Teacher"
                 "teen-18-plus": "Teen (18+)"
                 "tens-unit": "Tens Unit"
+                "the-pope": "The Pope"
                 "threesome": "Threesome"
                 "tickling": "Tickling"
                 "titty-fucking": "Titty Fucking"
+                "toned": "Toned"
                 "top": "Top"
+                "trans": "Trans"
+                "trans-cock": "Trans Cock"
+                "trans-fucks-male": "Trans Fucks Male"
+                "trimmed": "Trimmed"
                 "ts": "TS"
                 "twink": "Twink"
                 "uncircumcised": "Uncircumcised"
                 "uniform": "Uniform"
+                "unshaved": "Unshaved"
                 "vaginal-fisting": "Vaginal Fisting"
                 "vaginal-penetration": "Vaginal Penetration"
                 "vibrator": "Vibrator"
@@ -393,28 +435,21 @@ xPathScrapers:
                 "water-tank": "Water Tank"
                 "weights": "Weights"
                 "whipping": "Whipping"
+                "white": "White"
                 "wrestling": "Wrestling"
                 "zapper": "Zapper"
                 "zipper": "Zipper"
       Details:
         selector: //head/script[@type='application/ld+json' and contains(text(), '"@type":"VideoObject"')]
         postProcess:
-          - replace:
-              - regex: '.+"description":"(.+?)","duration".+'
-                with: "$1"
-              - regex: '( ?)\\n'
-                with: "\n"
-              - regex: \\"
-                with: '"'
+          - javascript: return JSON.parse(value).description
       Image:
         selector: //head/script[@type='application/ld+json' and contains(text(), '"@type":"VideoObject"')]
         postProcess:
           - replace:
               - regex: '^.*"thumbnailUrl":"([^"]+)".*$'
                 with: $1
-      # Pages do not include canonical URL links as of 2024
-      # but I'm leaving this in case they change that back
-      URL: //link[@rel="canonical"]/@href
+      URLs: //link[@rel="canonical"][contains(@href, "/shoot/")]/@href
   performerSearch:
     common:
       # every result page also carries a fixed "featured models" carousel that
@@ -436,83 +471,16 @@ xPathScrapers:
                 with: https://www.kink.com
 
   performerScraper:
-    common:
-      # the tag row's hrefs differ per domain (/tag/<slug>-bdsm on kink.com,
-      # bare slugs on kinktrans.com), but the labels are identical everywhere
-      $tag: //span[contains(text(), "Tags")]/following-sibling::a/span
     performer:
-      Name:
-        selector: //h1
-        postProcess:
-          - replace:
-              # every model page titles itself "<name> BDSM"
-              - regex: '\s+BDSM$'
-                with: ""
-      Twitter: //a[contains(@href, "twitter.com")]/@href
+      Name: //button[@data-type="performer"][//link[@rel="canonical"][contains(@href, "/model/")]]/@data-title
       # two copies of the portrait are emitted, one per breakpoint
-      Image: (//div[contains(@class, "kink-slider-images")]//img/@data-src)[1]
+      Images: (//div[contains(@class, "kink-slider-images")]//img/@data-src)[1]
       Tags:
-        Name: $tag
-      Tattoos:
-        selector: $tag[normalize-space(text())="Tattoo"]
-        postProcess:
-          - replace:
-              - regex: .+
-                with: "Yes"
-      Piercings:
-        selector: $tag[normalize-space(text())="Pierced"]
-        concat: "\n"
-      FakeTits:
-        selector: $tag[normalize-space(text())="Fake Boobs" or normalize-space(text())="Natural Boobs"]
-        postProcess:
-          - replace:
-              - regex: .*?Fake.+
-                with: "Yes"
-              - regex: .*?Natural.+
-                with: "No"
-      HairColor:
-        selector: $tag[normalize-space(text())="Black Hair" or normalize-space(text())="Brunette" or normalize-space(text())="Blonde" or normalize-space(text())="Redhead"]
-        postProcess:
-          - replace:
-              - regex: \sHair
-                with: ""
-      Ethnicity:
-        selector: $tag[normalize-space(text())="White" or normalize-space(text())="Black" or normalize-space(text())="Latin" or normalize-space(text())="Asian" or normalize-space(text())="Mixed"]
-      Circumcised:
-        selector: $tag[normalize-space(text())="Circumcised" or normalize-space(text())="Uncircumcised"]
-        postProcess:
-          - replace:
-              - regex: Uncircumcised
-                with: "Uncut"
-              - regex: Circumcised
-                with: "Cut"
-      Details:
-        selector: //span[@id="bioDescription"]/text()
-        concat: "\n"
-      Gender:
-        selector: //script[contains(.,'KinkyTracking.all')]
-        postProcess:
-          - replace:
-              - regex: .+?"((modelGender)|(genderIds))":"((woman)|(man)|(nonbinary)|(tsman)|(tswoman)|(unknown))".+
-                with: "%%%$4" # This little trick will make sure we're left
-              - regex: ^[^%].+ # with an empty string if we don't match anything
-                with: "" # in the regex above.
-              - regex: ^%+
-                with: ""
-          - map:
-              woman: Female
-              man: Male
-              tswoman: Transgender Female
-              tsman: Transgender Male
-              nonbinary: Non-Binary
-              unknown: ""
-      URLs:
-        selector: //script[contains(.,'KinkyTracking.all')] | //button[@data-id]/@data-id
-        concat: "__SEP__"
-        postProcess:
-          - replace:
-              - regex: ^.+?multiSite:\s*'([^']+).+?__SEP__(.+)
-                with: https://$1/model/$2
+        Name:
+          # hrefs are /tag/<slug>-bdsm on kink.com and bare slugs on the other two
+          selector: //span[contains(text(), "Tags")]/following-sibling::a[not(contains(., "*"))] | //span[contains(text(), "Tags")]/following-sibling::a[contains(., "*")]/@href
+          postProcess: *tagName
+      URLs: //link[@rel="canonical"][contains(@href, "/model/")]/@href | //div[contains(@class, "model-social-links")]/a/@href
 
 driver:
   # TLS impersonation is enough to get past the bot check: pages are server-rendered
